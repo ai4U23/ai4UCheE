@@ -77,9 +77,9 @@ Implement the *Perry's 9th Ed.* Section 6, 8 & 10 Hydraulics Engine: commercial 
 
 ## Todo
 
-- [ ] Task 5.1: Implement Commercial Pipe Sizing (`ASME B36.10M`), Darcy/Fanning Guardrail & 3-Case Matrix (`solvers/hydraulics_pipe.py`)
-- [ ] Task 5.2: Implement Pump $\text{NPSH}_A$ Cavitation Solver & ISA/IEC Control Valve $C_v$ Choked-Flow Solver (`solvers/hydraulics_pump_valve.py`)
-- [ ] Task 5.3: Build Parametric Piping/Pump SVG Sketch & Workbench 3 (`HydraulicsWorkbench`)
+- [x] Task 5.1: Implement Commercial Pipe Sizing (`ASME B36.10M`), Darcy/Fanning Guardrail & 3-Case Matrix (`solvers/hydraulics_pipe.py`, 173 LOC) — `PIPE_3CASE_OK`
+- [x] Task 5.2: Implement Pump $\text{NPSH}_A$ Cavitation Solver & ISA/IEC Control Valve $C_v$ Choked-Flow Solver (`solvers/hydraulics_pump_valve.py`, 175 LOC + `routers/hydraulics_router.py`, 94 LOC) — 5/5 pytest passed (incl. live-PDF `verify_page_contains` for `6-10`, `10-70`, `10-24`, `8-71`)
+- [x] Task 5.3: Build Parametric Piping/Pump SVG Sketch (`piping-pump-svg-sketch.tsx`, 108 LOC) & Workbench 3 (`hydraulics-workbench.tsx`, 163 LOC + `run-hydraulics.ts`, 45 LOC) — `WB3_OK`
 
 ## Success Criteria
 
