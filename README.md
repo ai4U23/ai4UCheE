@@ -9,6 +9,7 @@ Bi-directional agent-native chemical engineering workbench grounded in *Perry's 
 - Governed under `control-plane (repo ai4u)`
 - Registry entry: `repos.yaml` -> `verticals.ai4UCheE`
 - Remote: `https://github.com/ai4U23/ai4UCheE.git`
+- Live URL: [https://chemie.ai4u.now](https://chemie.ai4u.now) (Tailnet: [http://chemie](http://chemie) / `100.64.56.26`)
 
 ## Core Workbenches
 1. **WB1: Visual Crop & Chart Verifier** — 25-section page indexing, composite table header/row cropper, calibrated SVG crosshair, and DeepTutor chart-reading practice.
