@@ -1,7 +1,7 @@
 ---
 title: "Perry's Intelligent Workbench (perrys-agent-workbench) — V1 Implementation Plan"
 description: "Complete 7-phase architectural & execution handover blueprint for an agent-native chemical engineering workbench combining BuilderIO/agent-native React 19 + motion/react UI with a local FastAPI + PyMuPDF + ChEDL/CoolProp/handcalcs Python sidecar grounded in Perry's 9th Ed."
-status: pending
+status: completed
 priority: P1
 effort: 28h
 issue: null
@@ -74,13 +74,13 @@ flowchart TB
 
 | # | Phase | Status |
 |---|-------|--------|
-| 1 | [Phase 1: Workspace Foundation, Monorepo Scaffolding & Python PerryEngine Sidecar Bootstrap](./phase-01-start.md) | Pending |
-| 2 | [Phase 2: Perry's 9th Ed. 25-Section Indexer, PyMuPDF Visual Crop Engine & Dual-Track Chart Verifier (WB1)](./phase-02-pdf-visual-crop-and-chart-verifier.md) | Pending |
-| 3 | [Phase 3: BuilderIO/agent-native Core Shell, Dual-Lens UI, useAgentSelectable & motion/react Design System](./phase-03-agent-native-shell-and-framer-motion-ui.md) | Pending |
-| 4 | [Phase 4: Sec 1, 2 & 4 DIPPR Thermophysical Property Engine, Mixed Field-Unit Normalizer & Carlson's Property Advisor (WB2)](./phase-04-dippr-thermo-pint-and-property-advisor.md) | Pending |
-| 5 | [Phase 5: Sec 6, 8 & 10 Fluid Hydraulics, Commercial Pipe Sizing, Pump NPSHa & Control Valve Cv Workbench (WB3)](./phase-05-hydraulics-pipe-pump-npsha-and-valve-cv.md) | Pending |
-| 6 | [Phase 6: Sec 13 & 14 Distillation Workbench: Bi-Directional McCabe-Thiele Canvas + Tray/Packing Flooding Hydraulics (WB4)](./phase-06-distillation-mccabe-thiele-and-flooding.md) | Pending |
-| 7 | [Phase 7: Senior-Engineer Calculation Sheet Exporter, Inline Generative UI Cards & End-to-End Verification](./phase-07-calc-sheet-exporter-inline-ui-and-e2e.md) | Pending |
+| 1 | [Phase 1: Workspace Foundation, Monorepo Scaffolding & Python PerryEngine Sidecar Bootstrap](./phase-01-start.md) | Completed (`813d773`) |
+| 2 | [Phase 2: Perry's 9th Ed. 25-Section Indexer, PyMuPDF Visual Crop Engine & Dual-Track Chart Verifier (WB1)](./phase-02-pdf-visual-crop-and-chart-verifier.md) | Completed (`b0402c6`) |
+| 3 | [Phase 3: BuilderIO/agent-native Core Shell, Dual-Lens UI, useAgentSelectable & motion/react Design System](./phase-03-agent-native-shell-and-framer-motion-ui.md) | Completed (`90e064e`) |
+| 4 | [Phase 4: Sec 1, 2 & 4 DIPPR Thermophysical Property Engine, Mixed Field-Unit Normalizer & Carlson's Property Advisor (WB2)](./phase-04-dippr-thermo-pint-and-property-advisor.md) | Completed (`743c172`) |
+| 5 | [Phase 5: Sec 6, 8 & 10 Fluid Hydraulics, Commercial Pipe Sizing, Pump NPSHa & Control Valve Cv Workbench (WB3)](./phase-05-hydraulics-pipe-pump-npsha-and-valve-cv.md) | Completed (`8ac5c9e`) |
+| 6 | [Phase 6: Sec 13 & 14 Distillation Workbench: Bi-Directional McCabe-Thiele Canvas + Tray/Packing Flooding Hydraulics (WB4)](./phase-06-distillation-mccabe-thiele-and-flooding.md) | Completed (`c6c9820`) |
+| 7 | [Phase 7: Senior-Engineer Calculation Sheet Exporter, Inline Generative UI Cards & End-to-End Verification](./phase-07-calc-sheet-exporter-inline-ui-and-e2e.md) | Completed |
 
 ## Ultra Verifier & Red-Team Summary (`--ultra --advice`)
 
@@ -93,10 +93,10 @@ flowchart TB
 
 ## Success Criteria
 
-- [ ] All 7 phase files pass `ak plan validate` and execute cleanly under `/ak:cook --advice`.
-- [ ] Python sidecar `pytest` suite (`test_phase1` through `test_phase7`) exits `0` with 100% pass rate against the 2,274-page *Perry's 9th Ed.* PDF.
-- [ ] Frontend `vitest` suite and `vite build` exit `0` with full `<current-screen>`, `useAgentSelectable`, and `agentNative.ui.output()` verification.
-- [ ] Zero `.ts`, `.tsx`, or `.py` source files exceed 200 lines of code.
+- [x] All 7 phase files pass `ak plan validate` and execute cleanly under `/ak:cook --advice`.
+- [x] Python sidecar `pytest` suite (`test_phase1` through `test_phase7`) exits `0` with 100% pass rate (40/40 passed) against the 2,274-page *Perry's 9th Ed.* PDF.
+- [x] Frontend `vitest` suite (8/8 passed) and `vite build` exit `0` with full `<current-screen>`, `useAgentSelectable`, and `agentNative.ui.output()` verification.
+- [x] Zero `.ts`, `.tsx`, or `.py` source files exceed 200 lines of code (`ALL_PHASES_AND_LINE_LIMITS_OK`).
 
 ## Validation Log
 
