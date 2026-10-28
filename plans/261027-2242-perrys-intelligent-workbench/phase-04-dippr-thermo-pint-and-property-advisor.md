@@ -77,9 +77,9 @@ Implement the *Perry's 9th Ed.* Section 2 DIPPR correlation solver (`Table 2-8` 
 
 ## Todo
 
-- [ ] Task 4.1: Implement Curated Perry's Sec 2 DIPPR Coefficient Table & Exact $T^{C_5}$ Solver (`solvers/dippr_coeffs.py` & `solvers/thermo_dippr.py`)
-- [ ] Task 4.2: Implement Carlson's Property Package Decision Tree Advisor (`solvers/carlson_tree.py`) & Thermo Router
-- [ ] Task 4.3: Build Workbench 2 Frontend (`ThermoDipprWorkbench`) & Action (`src/actions/query-dippr.ts`)
+- [x] Task 4.1: Implement Curated Perry's Sec 2 DIPPR Coefficient Table & Exact $T^{C_5}$ Solver (`solvers/dippr_coeffs.py` & `solvers/thermo_dippr.py`, 159+180 LOC) — `DIPPR_SOLVER_OK 101260.56`
+- [x] Task 4.2: Implement Carlson's Property Package Decision Tree Advisor (`solvers/carlson_tree.py`, 126 LOC) & Thermo Router (`routers/thermo_router.py`, 70 LOC) — 6/6 pytest passed (incl. live-PDF `verify_page_contains` for Tables 2-8/2-69/2-32)
+- [x] Task 4.3: Build Workbench 2 Frontend (`ThermoDipprWorkbench`, 171 LOC) & Action (`src/actions/query-dippr.ts`, 46 LOC) — `WB2_OK`
 
 ## Success Criteria
 
