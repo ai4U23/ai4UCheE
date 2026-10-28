@@ -1,5 +1,5 @@
-// AppShell: Dual-Lens header (Learn <-> Plant), Dual Theme toggle (#FAF8F5 <-> #0B101B),
-// motion/react layoutId shared-layout morphing, DoF badge, 4 Workbench tabs + Calc Sheet trigger.
+// AppShell: Dual-Lens header (Learn <-> Plant), Dual Theme toggle (Ivory #FBF6EC <-> Dark Navy #071A33),
+// ai4U logo + motion/react layoutId shared-layout morphing, DoF badge, 4 Workbench tabs + Calc Sheet trigger.
 import React from 'react';
 import { motion } from 'motion/react';
 import {
@@ -70,8 +70,17 @@ export const AppShell: React.FC<AppShellProps> = ({
   return (
     <div className="app-shell" data-testid="app-shell">
       <header className="shell-header">
-        <div>
-          <h1>Perry&apos;s Intelligent Workbench</h1>
+        <div className="brand-identity">
+          <img
+            src="/ai4u-logo.png"
+            alt="AI4U.now"
+            className="brand-logo"
+            data-testid="ai4u-logo"
+          />
+          <div className="brand-title-group">
+            <h1>Perry&apos;s Intelligent Workbench</h1>
+            <span className="brand-eyebrow">ai4UCheE · Chemical Engineering Intelligence</span>
+          </div>
           <span className="dof-badge" data-testid="dof-badge">
             {dofStatus}
           </span>
@@ -88,7 +97,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             data-testid="theme-toggle"
             onClick={() => setThemeMode(themeMode === 'paper' ? 'blueprint' : 'paper')}
           >
-            {themeMode === 'paper' ? '☀️ EPC Paper #FAF8F5' : '🌙 Blueprint #0B101B'}
+            {themeMode === 'paper' ? '☀️ Ivory #FBF6EC' : '🌙 Dark Navy #071A33'}
           </button>
           <button
             type="button"

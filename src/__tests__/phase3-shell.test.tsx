@@ -1,4 +1,4 @@
-// Phase 3 Vitest suite: Dual-Lens toggle, Theme toggle (#FAF8F5 vs #0B101B),
+// Phase 3 Vitest suite: Dual-Lens toggle, Theme toggle (#FBF6EC vs #071A33), ai4U logo,
 // useAgentSelectable chip attachment (`agent-select:`), and `<current-screen>` sync.
 import React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
@@ -36,16 +36,22 @@ describe('Phase 3 — Agent-Native Shell, Dual-Lens & Point-and-Ask', () => {
     expect(serializeCurrentScreenTag()).toContain('personaMode="learn"');
   });
 
-  it('toggles Dual Theme between #FAF8F5 paper and #0B101B blueprint', () => {
+  it('toggles Dual Theme between #FBF6EC ivory paper and #071A33 dark navy blueprint and renders ai4U logo', () => {
     render(
       <PersonaThemeProvider initialTheme="paper">
         <AppShell />
       </PersonaThemeProvider>,
     );
 
+    const logo = screen.getByTestId('ai4u-logo') as HTMLImageElement;
+    expect(logo).toBeTruthy();
+    expect(logo.getAttribute('src')).toBe('/ai4u-logo.png');
+
     expect(document.documentElement.getAttribute('data-theme')).toBe('paper');
+    expect(screen.getByTestId('theme-toggle').textContent).toContain('#FBF6EC');
     fireEvent.click(screen.getByTestId('theme-toggle'));
     expect(document.documentElement.getAttribute('data-theme')).toBe('blueprint');
+    expect(screen.getByTestId('theme-toggle').textContent).toContain('#071A33');
     expect(serializeCurrentScreenTag()).toContain('themeMode="blueprint"');
   });
 

@@ -1,4 +1,4 @@
-// Persona ('learn' | 'plant') + Dual Theme ('paper' #FAF8F5 | 'blueprint' #0B101B) context.
+// Persona ('learn' | 'plant') + Dual Theme ('paper' Ivory #FBF6EC | 'blueprint' Dark Navy #071A33) context.
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { writeClientAppState } from '../actions/view-screen';
 

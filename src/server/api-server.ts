@@ -23,8 +23,9 @@ async function proxyToSidecar(req: Request, res: Response, targetPath: string): 
       headers: { 'Content-Type': 'application/json' },
       body: req.method === 'GET' || req.method === 'HEAD' ? undefined : JSON.stringify(req.body ?? {}),
     });
-    const text = await upstream.text();
-    res.status(upstream.status).type('application/json').send(text);
+    const contentType = upstream.headers.get('content-type') ?? 'application/json';
+    const buf = Buffer.from(await upstream.arrayBuffer());
+    res.status(upstream.status).type(contentType).send(buf);
   } catch (err) {
     res.status(502).json({ error: `Sidecar unreachable: ${(err as Error).message}` });
   }
