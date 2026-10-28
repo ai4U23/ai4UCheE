@@ -29,7 +29,7 @@ Initialize `/Users/nad/ai4u/ai4UCheE`, configure the Node/TypeScript + SQLite/Dr
   - `/Users/nad/ai4u/ai4UCheE/src/db/client.ts` (`db`, `initDb`)
 - **Steps**:
   1. Create directory `/Users/nad/ai4u/ai4UCheE` and subdirectories `src/db`, `src/actions`, `src/components`, `src/hooks`, `src/context`, `src/server`, `src/__tests__`, and `services/perry-engine/core`, `services/perry-engine/pdf`, `services/perry-engine/solvers`, `services/perry-engine/routers`, `services/perry-engine/tests`.
-  2. Write `package.json` with dependencies: `react@^19.0.0`, `react-dom@^19.0.0`, `motion@^12.0.0`, `katex@^0.16.11`, `lucide-react@^0.468.0`, `zod@^3.24.1`, `drizzle-orm@^0.38.0`, `better-sqlite3@^11.7.0`, `express@^4.21.2`, `clsx@^2.1.1`, `tailwind-merge@^2.6.0`, and devDependencies: `vite@^6.0.0`, `@vitejs/plugin-react@^4.3.4`, `typescript@^5.7.2`, `vitest@^2.1.8`, `@testing-library/react@^16.1.0`, `jsdom@^25.0.1`, `tsx@^4.19.2`, `@types/better-sqlite3`, `@types/express`, `@types/katex`, `tailwindcss@^3.4.17`.
+  2. Write `package.json` with dependencies: `react@^19.0.0`, `react-dom@^19.0.0`, `motion@^12.0.0`, `katex@^0.16.11`, `lucide-react@^0.468.0`, `zod@^3.24.1`, `drizzle-orm@^0.38.0`, `better-sqlite3@^11.7.0`, `express@^4.21.2`, `clsx@^2.1.1`, and devDependencies: `vite@^6.0.0`, `@vitejs/plugin-react@^4.3.4`, `typescript@^5.7.2`, `vitest@^3.0.0` (vitest 2.x peer-requires Vite 5 and fails with Vite 6), `@testing-library/react@^16.1.0`, `jsdom@^25.0.1`, `tsx@^4.19.2`, `@types/better-sqlite3`, `@types/express`, `@types/katex`. Styling is plain CSS-variable tokens (`src/styles/theme-tokens.css`); Tailwind is deliberately NOT used (Validation Session 1).
   3. Write `src/db/schema.ts` defining three SQLite tables via `drizzle-orm/sqlite-core`:
      - `screenStates`: `id` (text PK), `activeWorkbench` (text), `personaMode` (text `'learn' | 'plant'`), `themeMode` (text `'paper' | 'blueprint'`), `selectedChipsJson` (text), `payloadJson` (text), `updatedAt` (integer).
      - `savedCalculations`: `id` (text PK), `projectCode` (text), `equipmentTag` (text), `workbenchType` (text), `revision` (text), `inputsJson` (text), `outputsJson` (text), `equationsJson` (text), `createdAt` (integer).
@@ -46,10 +46,11 @@ Initialize `/Users/nad/ai4u/ai4UCheE`, configure the Node/TypeScript + SQLite/Dr
   - `/Users/nad/ai4u/ai4UCheE/services/perry-engine/__init__.py`
 - **Steps**:
   1. Write `services/perry-engine/pyproject.toml` declaring project `perry-engine`, Python `>=3.10`, and dependencies: `fastapi>=0.115.0`, `uvicorn>=0.32.0`, `pymupdf>=1.24.0`, `chemicals>=1.3.0`, `fluids>=1.0.26`, `ht>=1.0.6`, `thermo>=0.4.0`, `CoolProp>=6.6.0`, `scipy>=1.14.0`, `pint>=0.24.0`, `pydantic>=2.10.0`, `pytest>=8.3.0`, `httpx>=0.28.0`.
-  2. Create a virtual environment at `/Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv` using `uv venv` (or `python3 -m venv .venv`) and install all packages via `uv pip install -e .` (or `.venv/bin/pip install -e .`).
-  3. Verify the PDF path `/Users/nad/ai4u/ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf` is readable by `fitz` (`PyMuPDF`) and reports `2274` pages.
+  2. Create a virtual environment at `/Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv` pinned to Python 3.12 using `uv venv --python 3.12` (the system Python is 3.15, where scientific wheels such as CoolProp lag) and install all packages via `uv pip install -e .` (or `.venv/bin/pip install -e .`).
+  3. In every Python module that needs PyMuPDF, use the idiom `import pymupdf as fitz` — the bare `import fitz` alias is deprecated under PyMuPDF 2.x (FutureWarning) even though it still works.
+  4. Verify the PDF path `/Users/nad/ai4u/ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf` is readable by `fitz` (`PyMuPDF`) and reports `2274` pages.
 - **Success criteria**: Python `.venv` imports `fitz`, `chemicals`, `fluids`, `ht`, `CoolProp`, `pint`, `scipy`, and `fastapi` without error and opens the 2,274-page PDF.
-- **Verify**: `/Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv/bin/python -c "import fitz, chemicals, fluids, ht, CoolProp, pint, scipy, fastapi; doc = fitz.open(\"/Users/nad/ai4u/ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf\"); assert len(doc) == 2274; print('PERRY_ENV_OK', len(doc))"` exits `0` and prints `PERRY_ENV_OK 2274`.
+- **Verify**: `/Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv/bin/python -c "import pymupdf as fitz, chemicals, fluids, ht, CoolProp, pint, scipy, fastapi; doc = fitz.open(\"/Users/nad/ai4u/ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf\"); assert len(doc) == 2274; print('PERRY_ENV_OK', len(doc))"` exits `0` and prints `PERRY_ENV_OK 2274`.
 
 ### Task 1.3 — Implement `pint` Field-Unit Registry & Explicit `psig`/`psia` Guardrail
 - **Goal**: Build `services/perry-engine/core/unit_registry.py` (`< 200` lines) handling mixed oilfield/plant units (`gpm`, `lb/hr`, `ft`, `in`, `cP`, `degF`, `degR`, `Btu/(hr*ft^2*degF)`, `psig`, `psia`, `bar`, `kPa`) with an explicit atmospheric pressure datum guardrail (`P_atm = 14.6959 psia` default, configurable for elevation).
@@ -75,7 +76,7 @@ Initialize `/Users/nad/ai4u/ai4UCheE`, configure the Node/TypeScript + SQLite/Dr
      - `symbolic_latex: str` (Stage 1: e.g., `Re = \frac{\rho \cdot v \cdot D}{\mu}`)
      - `substituted_latex: str` (Stage 2: e.g., `= \frac{998.2\;\text{kg/m}^3 \cdot 2.15\;\text{m/s} \cdot 0.1023\;\text{m}}{1.002 \times 10^{-3}\;\text{Pa}\cdot\text{s}}`)
      - `result_latex: str` (Stage 3: e.g., `= 2.191 \times 10^{5}\;\text{dimensionless}`)
-     - `citation: str` (Mandatory `# [Perry's 9th Ed., Eq. X-Y, p. S-P]` string)
+     - `citation: str` (Mandatory `# [Perry's 9th Ed., Eq. X-Y, p. S-P]` string, e.g. `[Perry's 9th Ed., Fig. 6-9 caption, p. 6-10]`)
      - `full_aligned_katex: str` (Combined `\begin{aligned} ... \end{aligned}` block with `\quad \text{[Perry's 9th Ed., ...]}`).
   2. Implement an `ast.NodeVisitor` in `ast_to_latex(expr_str: str, env: dict[str, tuple[float, str, str]])` where each variable maps to `(numeric_value, unit_latex, symbol_latex)`:
      - Convert `ast.BinOp(Add/Sub/Mult/Div/Pow)` into `\frac{a}{b}`, `a \cdot b`, `a^{b}`.
@@ -83,7 +84,7 @@ Initialize `/Users/nad/ai4u/ai4UCheE`, configure the Node/TypeScript + SQLite/Dr
      - Generate both the symbolic pass (using `symbol_latex`) and the numeric+unit substitution pass (formatting numbers to 4 significant figures or scientific notation `\times 10^{n}` with `\;\mathrm{unit}`).
   3. Enforce in `render_three_stage_equation()` that `citation` matches regex `^\[Perry's 9th Ed\., .*p\. \d+-\d+\]$`, raising `ValueError` if a calculation lacks a *Perry's 9th Ed.* section-page citation.
 - **Success criteria**: `render_three_stage_equation` produces all 3 stages plus citation and rejects uncited equations.
-- **Verify**: `PYTHONPATH=/Users/nad/ai4u/ai4UCheE/services/perry-engine /Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv/bin/python -c "from core.handcalcs_katex import render_three_stage_equation; step = render_three_stage_equation('Re', '(rho * v * D) / mu', {'rho': (998.2, 'kg/m^3', r'\rho'), 'v': (2.0, 'm/s', 'v'), 'D': (0.1, 'm', 'D'), 'mu': (0.001, 'Pa\\cdot s', r'\mu')}, 199640.0, 'dimensionless', \"[Perry's 9th Ed., Eq. 6-38, p. 6-10]\"); assert r'\frac' in step.symbolic_latex and '998.2' in step.substituted_latex; print('HANDCALCS_OK')"` exits `0` and prints `HANDCALCS_OK`.
+- **Verify**: `PYTHONPATH=/Users/nad/ai4u/ai4UCheE/services/perry-engine /Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv/bin/python -c "from core.handcalcs_katex import render_three_stage_equation; step = render_three_stage_equation('Re', '(rho * v * D) / mu', {'rho': (998.2, 'kg/m^3', r'\rho'), 'v': (2.0, 'm/s', 'v'), 'D': (0.1, 'm', 'D'), 'mu': (0.001, 'Pa\\cdot s', r'\mu')}, 199640.0, 'dimensionless', \"[Perry's 9th Ed., Fig. 6-9 caption, p. 6-10]\"); assert r'\frac' in step.symbolic_latex and '998.2' in step.substituted_latex; print('HANDCALCS_OK')"` exits `0` and prints `HANDCALCS_OK`.
 
 ### Task 1.5 — Wire `services/perry-engine/main.py` & Phase 1 Pytest Suite
 - **Goal**: Expose `GET /health`, `POST /api/v1/units/convert`, and `POST /api/v1/equations/render` on `127.0.0.1:8001` and verify with `pytest`.
@@ -103,11 +104,11 @@ Initialize `/Users/nad/ai4u/ai4UCheE`, configure the Node/TypeScript + SQLite/Dr
 
 ## Todo
 
-- [ ] Task 1.1: Initialize Root Node.js Workspace, TypeScript Config & SQLite/Drizzle Schema
-- [ ] Task 1.2: Bootstrap Python `services/perry-engine` Virtual Environment & Dependencies
-- [ ] Task 1.3: Implement `pint` Field-Unit Registry & Explicit `psig`/`psia` Guardrail
-- [ ] Task 1.4: Implement 3-Stage White-Box Equation Renderer (`handcalcs` AST-to-KaTeX)
-- [ ] Task 1.5: Wire `services/perry-engine/main.py` & Phase 1 Pytest Suite
+- [x] Task 1.1: Initialize Root Node.js Workspace, TypeScript Config & SQLite/Drizzle Schema — `SQLITE_OK`
+- [x] Task 1.2: Bootstrap Python `services/perry-engine` Virtual Environment & Dependencies — `PERRY_ENV_OK 2274`
+- [x] Task 1.3: Implement `pint` Field-Unit Registry & Explicit `psig`/`psia` Guardrail — `UNIT_GUARD_OK`
+- [x] Task 1.4: Implement 3-Stage White-Box Equation Renderer (`handcalcs` AST-to-KaTeX) — `HANDCALCS_OK` (one Failure-Protocol stop: sentinel-None BinOp bug + invisible-brace precedence fix per kongming counsel)
+- [x] Task 1.5: Wire `services/perry-engine/main.py` & Phase 1 Pytest Suite — 11 passed
 
 ## Success Criteria
 
@@ -126,3 +127,5 @@ Spawn the `kongming` subagent for next-step counsel and pass:
 Apply kongming's guidance, then re-run the Verify step.
 If `kongming` cannot be spawned in this environment, STOP and report the same
 failure evidence to the user. Never continue by self-reasoning.
+
+<!-- Updated: Validation Session 1 - vitest ^3 (Vite 6 peer fix), dropped Tailwind deps, uv venv --python 3.12 pin, pymupdf import idiom, Re example citation re-anchored to verified Fig. 6-9 caption p. 6-10 -->

@@ -25,4 +25,4 @@ Governance and architectural invariants for `ai4UCheE` (Perry's Intelligent Work
 - `docs/` — Ecosystem documentation suite.
 - `plans/` — Master implementation plans, phase blueprints, and validation reports.
 - `services/perry-engine/` — Deterministic Python ChE & PDF sidecar (FastAPI + PyMuPDF + CoolProp/SciPy/Pint).
-- `apps/` — React 19 + Tailwind + motion/react agent-native frontend.
+- `src/` — React 19 + motion/react agent-native frontend (repo root, Vite; plain CSS-variable dual-theme tokens — no Tailwind).
