@@ -8,9 +8,10 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-libra
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { App } from '../App';
 import { agentNative } from '../actions/define-action';
-import { setCalcSheetPersister } from '../actions/generate-calc-sheet';
+import { generateCalcSheetAction, setCalcSheetPersister } from '../actions/generate-calc-sheet';
 import { getClientAppState, serializeCurrentScreenTag } from '../actions/view-screen';
-import { closeDb, getConn, initDb } from '../db/client';
+import { closeDb, getConn } from '../db/client';
+import { createApiServer } from '../server/api-server';
 
 if (typeof globalThis.ResizeObserver === 'undefined') {
   globalThis.ResizeObserver = class {
@@ -21,26 +22,7 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
 }
 
 beforeAll(() => {
-  initDb(':memory:');
-  setCalcSheetPersister((rec) => {
-    getConn()
-      .prepare(
-        `INSERT OR REPLACE INTO saved_calculations
-         (id, project_code, equipment_tag, workbench_type, revision, inputs_json, outputs_json, equations_json, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      )
-      .run(
-        rec.id,
-        rec.projectCode,
-        rec.equipmentTag,
-        rec.workbenchType,
-        rec.revision,
-        rec.inputsJson,
-        rec.outputsJson,
-        rec.equationsJson,
-        rec.createdAt,
-      );
-  });
+  createApiServer(':memory:');
 });
 
 afterEach(() => {
@@ -120,5 +102,26 @@ describe('Phase 7 — End-to-End Workbench Integration, GenUI & SQLite Calc Shee
       .all('T-201-DIST') as Array<{ equipment_tag: string; revision: string }>;
     expect(rows.length).toBeGreaterThanOrEqual(1);
     expect(rows[0].revision).toContain('Rev 0');
+  });
+
+  it('converts WB2 temperature units (degC -> K) and pressure units (psig vs psia) and exposes WB1 crop trigger', async () => {
+    render(<App />);
+    expect(screen.getByTestId('load-pdf-crop-btn')).toBeTruthy();
+
+    fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
+    fireEvent.change(screen.getByLabelText('Temperature unit'), { target: { value: 'degC' } });
+    fireEvent.change(screen.getByLabelText('Temperature'), { target: { value: '100' } });
+    fireEvent.change(screen.getByLabelText('Pressure unit'), { target: { value: 'psig' } });
+
+    const vpText = screen.getByTestId('dippr-vp-result').textContent ?? '';
+    expect(vpText).toContain('373.15 K');
+    expect(vpText).toContain('101,325 Pa');
+    expect(vpText).toContain('0.00 psig (14.70 psia)');
+
+    let out: unknown;
+    await act(async () => {
+      out = await generateCalcSheetAction.run({ equipment_tag: 'E-102-HEX' });
+    });
+    expect((out as { record: { equipmentTag: string } }).record.equipmentTag).toBe('E-102-HEX');
   });
 });

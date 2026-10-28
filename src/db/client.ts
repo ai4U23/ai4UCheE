@@ -7,6 +7,7 @@ export type PerryDb = ReturnType<typeof drizzle<typeof schema>>;
 
 let db: PerryDb | null = null;
 let conn: Database.Database | null = null;
+let currentDbPath: string | null = null;
 
 const CREATE_SQL = `
 CREATE TABLE IF NOT EXISTS screen_states (
@@ -39,10 +40,12 @@ CREATE TABLE IF NOT EXISTS pdf_anchors (
 );
 `;
 
-/** Open (once) and initialize the SQLite backing store. */
+/** Open (once per path) and initialize the SQLite backing store. */
 export function initDb(dbPath = 'perry_workbench.sqlite'): PerryDb {
-  if (db) return db;
+  if (db && currentDbPath === dbPath) return db;
+  if (conn) conn.close();
   conn = new Database(dbPath);
+  currentDbPath = dbPath;
   conn.pragma('journal_mode = WAL');
   conn.exec(CREATE_SQL);
   db = drizzle(conn, { schema });
@@ -60,4 +63,5 @@ export function closeDb(): void {
   if (conn) conn.close();
   conn = null;
   db = null;
+  currentDbPath = null;
 }

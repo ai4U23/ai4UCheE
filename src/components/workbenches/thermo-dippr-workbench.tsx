@@ -23,21 +23,38 @@ export const ThermoDipprWorkbench: React.FC = () => {
   const [hasAssoc, setHasAssoc] = useState<boolean>(false);
 
   const fluid = FLUIDS[compound] ?? FLUIDS.water;
-  const tr = Math.min(tempK / fluid.tcK, 0.9999);
-  const vpPa = Math.round(fluid.vpAt373Pa * Math.exp(12.2 * (1 - 373.15 / Math.max(tempK, 200))));
+  const tKelvin =
+    tempUnit === 'degC'
+      ? tempK + 273.15
+      : tempUnit === 'degF'
+        ? (tempK - 32) * (5 / 9) + 273.15
+        : tempUnit === 'degR'
+          ? tempK * (5 / 9)
+          : tempK;
+  const tr = Math.min(Math.max(tKelvin / fluid.tcK, 0.01), 0.9999);
+  const vpPa = Math.round(fluid.vpAt373Pa * Math.exp(12.2 * (1 - 373.15 / Math.max(tKelvin, 200))));
+  const vpPsia = vpPa / 6894.757;
+  const vpDisplay =
+    pressureUnit === 'psig'
+      ? `${(vpPsia - 14.6959).toFixed(2)} psig (${vpPsia.toFixed(2)} psia)`
+      : pressureUnit === 'psia'
+        ? `${vpPsia.toFixed(2)} psia`
+        : pressureUnit === 'bar'
+          ? `${(vpPa / 1e5).toFixed(4)} bar`
+          : `${(vpPa / 1e3).toFixed(2)} kPa`;
   const hvap = Math.round(fluid.hvapAt373 * Math.pow((1 - tr) / (1 - 373.15 / fluid.tcK), 0.38));
 
   const eq101Select = useAgentSelectable(
     'equation',
     'dippr-eq-101',
     `DIPPR Eq. 101 Vapor Pressure (${fluid.label})`,
-    { compound, tempK, vpPa, citation: "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]" },
+    { compound, tempK: tKelvin, tempUnit, pressureUnit, vpPa, vpDisplay, citation: "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]" },
   );
   const eq106Select = useAgentSelectable(
     'equation',
     'dippr-eq-106',
     `DIPPR Eq. 106 ΔH_vap with T_r^C5 (${fluid.label})`,
-    { compound, tempK, hvap, citation: "[Perry's 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]" },
+    { compound, tempK: tKelvin, tempUnit, hvap, citation: "[Perry's 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]" },
   );
 
   const recommendedModel = hasAssoc
@@ -104,8 +121,8 @@ export const ThermoDipprWorkbench: React.FC = () => {
             label="Temperature"
             value={tempK}
             unit={tempUnit}
-            min={250}
-            max={640}
+            min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
+            max={tempUnit === 'degR' ? 1200 : 640}
             step={1}
             onChange={setTempK}
           />
@@ -113,8 +130,8 @@ export const ThermoDipprWorkbench: React.FC = () => {
           <div className="wb-panel" {...eq101Select.selectableProps}>
             <strong>Stage 1–3 · DIPPR Eq. 101 Vapor Pressure</strong>
             <div className="mono">Symbolic: P_vp = exp(C₁ + C₂/T + C₃·ln T + C₄·T^C₅)</div>
-            <div className="mono">
-              Result at T = {tempK} K: <strong>{vpPa.toLocaleString()} Pa</strong> ·{' '}
+            <div className="mono" data-testid="dippr-vp-result">
+              Result at T = {tKelvin.toFixed(2)} K: <strong>{vpPa.toLocaleString()} Pa</strong> ({vpDisplay}) ·{' '}
               <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
             </div>
           </div>

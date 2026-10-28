@@ -1,14 +1,17 @@
 // Express host API & production static server (port 3000):
-// Serves dist/ bundle, /api/screen-state, /api/actions/:actionName, and proxies /api/v1/* & /api/perry/* to :8001.
+// Serves dist/ bundle, /api/screen-state, /api/saved-calculations, /api/actions/:actionName,
+// wires SQLite persistence for screen_states & saved_calculations, and proxies /api/v1/* & /api/perry/* to :8001.
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { type Express, type Request, type Response } from 'express';
 import { ActionRegistry } from '../actions';
+import { setCalcSheetPersister } from '../actions/generate-calc-sheet';
 import {
   getClientAppState,
   serializeCurrentScreenTag,
   writeClientAppState,
 } from '../actions/view-screen';
+import { getConn, initDb } from '../db/client';
 
 const SIDECAR_BASE = process.env.PERRY_SIDECAR_URL ?? 'http://127.0.0.1:8001';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,7 +34,28 @@ async function proxyToSidecar(req: Request, res: Response, targetPath: string): 
   }
 }
 
-export function createApiServer(): Express {
+export function createApiServer(dbPath?: string): Express {
+  initDb(dbPath);
+  setCalcSheetPersister((rec) => {
+    getConn()
+      .prepare(
+        `INSERT OR REPLACE INTO saved_calculations
+         (id, project_code, equipment_tag, workbench_type, revision, inputs_json, outputs_json, equations_json, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      )
+      .run(
+        rec.id,
+        rec.projectCode,
+        rec.equipmentTag,
+        rec.workbenchType,
+        rec.revision,
+        rec.inputsJson,
+        rec.outputsJson,
+        rec.equationsJson,
+        rec.createdAt,
+      );
+  });
+
   const app = express();
   app.use(express.json({ limit: '10mb' }));
 
@@ -46,7 +70,29 @@ export function createApiServer(): Express {
 
   app.post('/api/screen-state', (req: Request, res: Response): void => {
     const next = writeClientAppState(req.body ?? {});
+    getConn()
+      .prepare(
+        `INSERT OR REPLACE INTO screen_states
+         (id, active_workbench, persona_mode, theme_mode, selected_chips_json, payload_json, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      )
+      .run(
+        'default',
+        next.activeWorkbench,
+        next.personaMode,
+        next.themeMode,
+        JSON.stringify(next.selectedChips),
+        JSON.stringify(next.payload),
+        next.updatedAt,
+      );
     res.json({ state: next, xml: serializeCurrentScreenTag(next) });
+  });
+
+  app.get('/api/saved-calculations', (_req: Request, res: Response): void => {
+    const rows = getConn()
+      .prepare('SELECT * FROM saved_calculations ORDER BY created_at DESC LIMIT 50')
+      .all();
+    res.json({ calculations: rows });
   });
 
   app.post('/api/actions/:actionName', async (req: Request, res: Response): Promise<void> => {

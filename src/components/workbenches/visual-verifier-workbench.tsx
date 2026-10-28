@@ -1,5 +1,6 @@
 // WB1: Perry's 9th Ed. 25-Section Visual Crop Verifier & DeepTutor Chart-Reading Practice.
 import React, { useState } from 'react';
+import { cropPerryPageAction } from '../../actions/search-perry-pdf';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 
@@ -40,6 +41,18 @@ export const VisualVerifierWorkbench: React.FC = () => {
     setExactValue(preset.exactVal);
     setRevealed(false);
     setCrosshair({ xPct: 50, yPct: 48 });
+  };
+
+  const handleLoadCrop = async () => {
+    try {
+      const res = (await cropPerryPageAction.run({ sec_page: secPage, dpi: 150 })) as {
+        image_base64?: string;
+        composite_image_base64?: string;
+      };
+      setCropDataUri(res.image_base64 ?? res.composite_image_base64 ?? null);
+    } catch {
+      setCropDataUri(null);
+    }
   };
 
   return (
@@ -140,6 +153,9 @@ export const VisualVerifierWorkbench: React.FC = () => {
           <div className="wb-actions-row">
             <button type="button" onClick={() => setRevealed(true)}>
               Verify &amp; Reveal Crosshair
+            </button>
+            <button type="button" data-testid="load-pdf-crop-btn" onClick={handleLoadCrop}>
+              Load High-DPI Crop
             </button>
             <button type="button" onClick={() => setCropDataUri(null)}>
               Reset Crop
