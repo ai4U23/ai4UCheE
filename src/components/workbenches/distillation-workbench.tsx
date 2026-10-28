@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { KaTeXBlock } from '../ui/katex-block';
+import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ColumnFloodingSvgSketch } from '../sketches/column-flooding-svg-sketch';
 import { McCabeThieleSvgCanvas } from '../sketches/mccabe-thiele-svg-canvas';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
@@ -71,6 +73,14 @@ export const DistillationWorkbench: React.FC = () => {
         </div>
       </header>
 
+      <LearnModeCallout
+        workbenchId="wb4"
+        title="McCabe-Thiele Stage Stepping & Column Flooding"
+        plainEnglish="Drag the feed thermal quality q or Reflux Ratio R/R_min. More reflux reduces the number of equilibrium stages (stairs) needed, but increases vapor boilup V and pushes the column closer to flooding."
+        commonTrap="Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, collapsing separation efficiency."
+        perryAnchor="[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37]"
+      />
+
       <div className="wb-split">
         <McCabeThieleSvgCanvas
           alpha={alpha}
@@ -111,6 +121,7 @@ export const DistillationWorkbench: React.FC = () => {
               ? '🎓 Tier 1 — Fenske-Underwood-Gilliland & Stage Stepping'
               : '🏭 Tier 2 — Sec 14 Fair Flooding & Eckert GPDC Rating'}
           </h3>
+          <KaTeXBlock latex={'N_{\\min} = \\frac{\\ln[(x_D/(1-x_D))\\cdot((1-x_B)/x_B)]}{\\ln \\alpha_{AB}}'} testId="katex-fenske" />
           <p className="mono">
             R_min = {rMin.toFixed(3)} · R_op = {rOp.toFixed(3)} · N_min = {nMin.toFixed(2)}{' '}
             <code>[Perry&apos;s 9th Ed., Sec. 13, p. 13-36]</code>

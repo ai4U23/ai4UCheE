@@ -44,3 +44,5 @@ coverage/
 # Local SQLite databases (runtime state)
 *.sqlite
 *.sqlite3
+*.sqlite-shm
+*.sqlite-wal

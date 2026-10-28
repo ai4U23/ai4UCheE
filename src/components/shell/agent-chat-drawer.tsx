@@ -1,8 +1,10 @@
-// AgentChatDrawer: Point-and-Ask chip tray, live `<current-screen>` badge, and inline GenUI stream.
+// AgentChatDrawer: Point-and-Ask chip tray, live `<current-screen>` badge, starter prompts, and inline GenUI stream.
 import React, { useEffect, useState } from 'react';
 import { agentNative, type GenUiPayload } from '../../actions/define-action';
+import { askPerryCopilot } from '../../actions/copilot-responder';
 import { serializeCurrentScreenTag } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
+import { getStarterPromptsForWorkbench } from './copilot-prompts';
 
 export interface AgentChatDrawerProps {
   renderInlineExtension?: (payload: GenUiPayload) => React.ReactNode;
@@ -48,27 +50,31 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
     payload: {},
   });
 
+  // Async Co-Pilot dispatcher: appends the user text, awaits askPerryCopilot, appends the reply.
+  // GenUI cards flow exclusively through agentNative.ui.subscribe — response.genUiCards is never
+  // re-rendered here, so no card can ever appear twice in the stream.
+  const submitQuestion = async (rawPrompt: string) => {
+    const chipList = selectedChips.map((c) => c.chipId).join(', ');
+    const text = chipList ? `[${chipList}] ${rawPrompt}` : rawPrompt;
+    setPrompt('');
+    setMessages((prev) => [...prev, { id: `u-${Date.now()}`, role: 'user', text }]);
+    const response = await askPerryCopilot({ prompt: rawPrompt, activeWorkbench, personaMode, selectedChips });
+    setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'agent', text: response.reply }]);
+  };
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!prompt.trim() && selectedChips.length === 0) return;
-    const chipList = selectedChips.map((c) => c.chipId).join(', ');
-    const text = chipList ? `[${chipList}] ${prompt}` : prompt;
-    setMessages((prev) => [
-      ...prev,
-      { id: `u-${Date.now()}`, role: 'user', text },
-      {
-        id: `a-${Date.now()}`,
-        role: 'agent',
-        text: `Synced with <current-screen workbench="${activeWorkbench}" personaMode="${personaMode}"> (${selectedChips.length} chip(s)).`,
-      },
-    ]);
-    setPrompt('');
+    void submitQuestion(prompt);
   };
 
   return (
     <aside className="chat-drawer" aria-label="Agent Co-Pilot Drawer" data-testid="agent-chat-drawer">
       <header className="wb-toolbar">
         <strong>🤖 Perry&apos;s Agent Co-Pilot</strong>
+        <span className="dof-badge" data-testid="copilot-model-badge">
+          ⚡ gemini-4-argon-low · gateway.ai4u.now
+        </span>
         <span className="mono" data-testid="current-screen-badge" title={currentScreenXml}>
           &lt;current-screen workbench=&quot;{activeWorkbench}&quot; mode=&quot;{personaMode}&quot;&gt;
         </span>
@@ -81,7 +87,9 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
           <>
             {selectedChips.map((chip) => (
               <span key={chip.chipId} className="composer-chip" data-testid={`chip-${chip.chipId}`}>
-                <code>{chip.chipId}</code>
+                <strong className="composer-chip-label" title={chip.chipId}>
+                  {chip.label || chip.chipId}
+                </strong>
                 <button
                   type="button"
                   aria-label={`Remove ${chip.chipId}`}
@@ -108,9 +116,26 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
 
       <div className="chat-messages">
         {messages.map((m) => (
-          <div key={m.id} className={`chat-msg chat-${m.role}`}>
+          <div
+            key={m.id}
+            className={`chat-msg chat-${m.role}`}
+            data-testid={m.role === 'agent' ? 'copilot-agent-message' : undefined}
+          >
             <strong>{m.role === 'user' ? 'You' : 'PerryAgent'}:</strong> {m.text}
           </div>
+        ))}
+      </div>
+
+      <div className="starter-prompts" data-testid="copilot-starter-prompts">
+        {getStarterPromptsForWorkbench(activeWorkbench).map((starter, idx) => (
+          <button
+            key={starter}
+            type="button"
+            data-testid={`starter-prompt-${idx}`}
+            onClick={() => void submitQuestion(starter)}
+          >
+            {starter}
+          </button>
         ))}
       </div>
 

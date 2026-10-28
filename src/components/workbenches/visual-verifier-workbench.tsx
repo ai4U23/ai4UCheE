@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { cropPerryPageAction } from '../../actions/search-perry-pdf';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { LearnModeCallout } from '../ui/learn-mode-callout';
+import { VisualVerifierTutorCard } from './visual-verifier-tutor-card';
 
 const PRESET_ANCHORS: Array<{ secPage: string; label: string; exactVal: number; xVal: number; yVal: number }> = [
   { secPage: '6-10', label: 'Fig. 6-9 — Fanning Friction Factor (p. 6-10)', exactVal: 0.0045, xVal: 1e5, yVal: 0.0045 },
@@ -45,10 +47,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
 
   const handleLoadCrop = async () => {
     try {
-      const res = (await cropPerryPageAction.run({ sec_page: secPage, dpi: 150 })) as {
-        image_base64?: string;
-        composite_image_base64?: string;
-      };
+      const res = (await cropPerryPageAction.run({ sec_page: secPage, dpi: 150 })) as { image_base64?: string; composite_image_base64?: string };
       setCropDataUri(res.image_base64 ?? res.composite_image_base64 ?? null);
     } catch {
       setCropDataUri(null);
@@ -77,19 +76,13 @@ export const VisualVerifierWorkbench: React.FC = () => {
               }}
             >
               {Array.from({ length: 25 }, (_, i) => i + 1).map((s) => (
-                <option key={s} value={s}>
-                  Sec {s}
-                </option>
+                <option key={s} value={s}>Sec {s}</option>
               ))}
             </select>
           </label>
           <label>
             Sec-Page:
-            <input
-              aria-label="Sec-Page code"
-              value={secPage}
-              onChange={(e) => setSecPage(e.target.value)}
-            />
+            <input aria-label="Sec-Page code" value={secPage} onChange={(e) => setSecPage(e.target.value)} />
           </label>
         </div>
       </header>
@@ -102,12 +95,16 @@ export const VisualVerifierWorkbench: React.FC = () => {
         ))}
       </div>
 
+      <LearnModeCallout
+        workbenchId="wb1"
+        title="How to Read Log-Log Perry Charts"
+        plainEnglish="Pick a preset figure chip above, read the curve at the target Reynolds or flow parameter, and type your estimate to check against the calibrated SVG crosshair."
+        commonTrap="Perry's Fig. 6-9 plots Fanning f_F, which is 4× smaller than the Moody Darcy friction factor f_D = 4·f_F."
+        perryAnchor="[Perry's 9th Ed., Fig. 6-9, p. 6-10]"
+      />
+
       <div className="wb-split">
-        <div
-          className="wb-crop-stage"
-          {...figSelectable.selectableProps}
-          data-agent-select="figure:perry-crop"
-        >
+        <div className="wb-crop-stage" {...figSelectable.selectableProps} data-agent-select="figure:perry-crop">
           {cropDataUri ? (
             <img src={cropDataUri} alt={`Perry's ${secPage} crop`} className="wb-crop-img" />
           ) : (
@@ -117,12 +114,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
             </div>
           )}
           {showCrosshair && (
-            <svg
-              className="wb-crosshair-svg"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              data-testid="calibrated-crosshair"
-            >
+            <svg className="wb-crosshair-svg" viewBox="0 0 100 100" preserveAspectRatio="none" data-testid="calibrated-crosshair">
               <line x1={crosshair.xPct} y1={0} x2={crosshair.xPct} y2={100} stroke="currentColor" strokeDasharray="2 2" />
               <line x1={0} y1={crosshair.yPct} x2={100} y2={crosshair.yPct} stroke="currentColor" strokeDasharray="2 2" />
               <circle cx={crosshair.xPct} cy={crosshair.yPct} r={2.2} fill="currentColor" />
@@ -130,51 +122,13 @@ export const VisualVerifierWorkbench: React.FC = () => {
           )}
         </div>
 
-        <aside className="wb-tutor-card">
-          <h3>
-            {personaMode === 'learn'
-              ? '🎓 DeepTutor Chart-Reading Challenge'
-              : '🏭 Plant Mode — Calibrated Operating Point'}
-          </h3>
-          <p>
-            Target anchor: <code>[Perry&apos;s 9th Ed., p. {secPage}]</code> · Exact value ={' '}
-            <strong>{showCrosshair ? exactValue : '🔒 hidden until verified'}</strong>
-          </p>
-          <label>
-            Your visually read value:
-            <input
-              aria-label="Chart reading value"
-              type="number"
-              step="any"
-              value={userReading}
-              onChange={(e) => setUserReading(e.target.value)}
-            />
-          </label>
-          <div className="wb-actions-row">
-            <button type="button" onClick={() => setRevealed(true)}>
-              Verify &amp; Reveal Crosshair
-            </button>
-            <button type="button" data-testid="load-pdf-crop-btn" onClick={handleLoadCrop}>
-              Load High-DPI Crop
-            </button>
-            <button type="button" onClick={() => setCropDataUri(null)}>
-              Reset Crop
-            </button>
-          </div>
-          {revealed && (
-            <div className={`wb-verdict ${pass ? 'pass' : 'fail'}`} data-testid="chart-verdict">
-              <strong>{pass ? 'PASS' : 'REVIEW'}</strong> — Error: {errPct.toFixed(2)}% (exact = {exactValue})
-              {fanning4xDetected && (
-                <p className="wb-coaching" data-testid="fanning-4x-coaching">
-                  ⚠️ <strong>Fanning vs. Darcy 4× trap detected:</strong> Perry&apos;s Fig. 6-9 (p. 6-10) plots{' '}
-                  <em>Fanning</em> friction factor f_F. Your reading ({numReading}) is ~4× f_F — i.e. the Moody{' '}
-                  <em>Darcy</em> factor f_D = 4·f_F. Divide by 4 when reading Fig. 6-9, or use f_D = 4·f_F in
-                  Darcy-Weisbach.
-                </p>
-              )}
-            </div>
-          )}
-        </aside>
+        <VisualVerifierTutorCard
+          personaMode={personaMode} secPage={secPage} exactValue={exactValue}
+          showCrosshair={showCrosshair} revealed={revealed} userReading={userReading}
+          onReadingChange={setUserReading} errPct={errPct} pass={pass}
+          fanning4xDetected={fanning4xDetected} numReading={numReading}
+          onVerify={() => setRevealed(true)} onLoadCrop={handleLoadCrop} onResetCrop={() => setCropDataUri(null)}
+        />
       </div>
     </section>
   );

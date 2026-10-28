@@ -1,6 +1,7 @@
 // Inline Generative UI extension renderer for agentNative.ui.output() payloads.
 import React from 'react';
 import type { GenUiPayload } from '../../actions/define-action';
+import { KaTeXBlock } from '../ui/katex-block';
 
 export interface RenderInlineExtensionProps {
   payload: GenUiPayload;
@@ -14,14 +15,17 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
   const { type, title, data } = payload;
 
   if (type === 'equation-proof-card') {
+    const substituted = String(data.substituted_latex ?? '');
     return (
       <div className="wb-panel" data-testid="genui-equation-proof-card">
         <strong>📐 {title ?? '3-Stage White-Box Equation Proof'}</strong>
-        <div className="mono">{String(data.symbolic_latex ?? 'Re = (ρ·v·D)/μ')}</div>
-        <div className="mono">{String(data.substituted_latex ?? '')}</div>
+        <KaTeXBlock latex={String(data.symbolic_latex ?? 'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu}')} />
+        {substituted && <KaTeXBlock latex={substituted} />}
         <div className="mono">
-          <strong>{String(data.result_latex ?? '')}</strong>{' '}
-          <code>{String(data.citation ?? "[Perry's 9th Ed., p. 6-10]")}</code>
+          <strong>
+            <KaTeXBlock latex={String(data.result_latex ?? '')} displayMode={false} />
+          </strong>{' '}
+          <code className="mono">{String(data.citation ?? "[Perry's 9th Ed., p. 6-10]")}</code>
         </div>
       </div>
     );

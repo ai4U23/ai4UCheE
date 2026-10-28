@@ -1,6 +1,7 @@
 // Barrel index registering all agent actions into ActionRegistry.
 export * from './define-action';
 export * from './view-screen';
+export * from './copilot-responder';
 export * from './query-dippr';
 export * from './run-hydraulics';
 export * from './run-distillation';

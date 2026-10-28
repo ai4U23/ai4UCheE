@@ -39,6 +39,16 @@ flowchart TB
     PDFEng -->|"fitz high-DPI crop"| PDF
 ```
 
+## Two-Tier AI Co-Pilot (`POST /api/copilot`)
+
+The Express host (`src/server/copilot-route.ts`) fronts a two-tier answering pipeline:
+
+1. **Tier 2 — `gateway.ai4u.now` LLM gateway (`gemini-4-argon-low`)**: when `GATEWAY_API_KEY` is configured (and outside Vitest), the route POSTs the `<current-screen>` state, selected chips, Tier-1 baseline, and user prompt to `https://gateway.ai4u.now/v1/chat/completions` with `model: gemini-4-argon-low` and a hard `AbortSignal.timeout(4500)` (4.5 s) budget.
+2. **Tier 1 — deterministic ChE Tutor fallback (`src/actions/copilot-responder.ts`)**: when no key is present, under `VITEST`, or on any upstream error/timeout, the route serves intent-matched tutoring (WB1 charts / WB2 DIPPR / WB3 hydraulics / WB4 distillation) grounded in exact Perry's 9th Ed. citations with white-box GenUI proof cards. On this fallback path `emitUi: false` — `genUiCards` travel only in the JSON response, never re-rendered client-side.
+
+- `GET /api/copilot/status` reports the active `{ gatewayUrl, model, tier2 }` state.
+- The browser drawer (`AgentChatDrawer`) runs Tier-1 locally first (emitting GenUI cards into the inline stream), then enriches the reply via `POST /api/copilot`; the vite dev proxy forwards `/api` to `http://127.0.0.1:3000` so `npm run dev` reaches the same Express route.
+
 ## Core Subsystems
 1. **Agent-Native Host**: Bridges the interactive web UI and LLM agent using typed schema actions and live UI state synchronization.
 2. **Deterministic ChE Solvers**: Replaces LLM numerical calculations with verified open-source engineering packages.

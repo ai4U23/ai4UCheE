@@ -35,3 +35,13 @@ All 7 phases of [`plans/261027-2242-perrys-intelligent-workbench/plan.md`](file:
   - Printable EPC QA/QC Calculation Sheet compiler (`@media print` HTML + Markdown/LaTeX) (`2/2 test_phase7_export.py` tests passing)
   - Inline generative UI cards (`RenderInlineExtension`) and SQLite `saved_calculations` persistence (4/4 `phase7-e2e.test.tsx` tests passing)
   - Strict `< 200` LOC modularity gate verified across all 38 `.py`, `.ts`, and `.tsx` source files (`ALL_PHASES_AND_LINE_LIMITS_OK`)
+
+## Student-Intuitive UX Overhaul & `gemini-4-argon-low` AI Co-Pilot (Completed 2026-10-29)
+
+All 5 phases of [`plans/261028-1420-chemie-ux-and-gemini-copilot/plan.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261028-1420-chemie-ux-and-gemini-copilot/plan.md) are implemented, verified, and docs-synced:
+
+- [x] **Phase 01: Sovereign CSS Split & Real KaTeX Math** — two-file CSS architecture (`theme-tokens.css` + `workbench-components.css`, cascade-pinned `.shell-workspace` after `.wb-split`), `<KaTeXBlock />` across WB2–WB4 and GenUI proof cards, `.modal-backdrop` overlay
+- [x] **Phase 02: Guided Student Missions & Learn UX** — `<GuidedMissionBar />` (4 one-click missions + instant proof cards), approachable tab titles, `<LearnModeCallout />` across WB1–WB4
+- [x] **Phase 03: Two-Tier AI Co-Pilot (`gateway.ai4u.now`)** — `POST /api/copilot` (`model: gemini-4-argon-low`, 4.5 s timeout) with the deterministic Tier-1 ChE Tutor fallback (`copilot-responder.ts`), `.env.example` contract, vite `/api` dev proxy
+- [x] **Phase 04: Point-and-Ask Drawer & Inline GenUI** — human-readable `chip.label` badges, 1-click starter prompts (`copilot-prompts.ts`), KaTeX `equation-proof-card` GenUI stream
+- [x] **Phase 05: E2E Verification & Docs Sync** — `phase8-ux-copilot.test.tsx` (4 tests; 13 total passing), repository-wide `< 200` LOC gate over `src/` + `services/perry-engine` (`ALL_SRC_UNDER_200_OK`, `.venv` excluded), clean `npm run build`, and this `./docs/` sync

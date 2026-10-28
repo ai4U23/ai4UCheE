@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { KaTeXBlock } from '../ui/katex-block';
+import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { PipingPumpSvgSketch } from '../sketches/piping-pump-svg-sketch';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 
@@ -85,11 +87,20 @@ export const HydraulicsWorkbench: React.FC = () => {
         </div>
       </header>
 
+      <LearnModeCallout
+        workbenchId="wb3"
+        title="Pipe Friction Loss, Pump Cavitation & Control Valves"
+        plainEnglish="Drag Flow Q or Suction Pressure to see how velocity, friction loss, and Available Net Positive Suction Head (NPSHa) respond across 70% / 100% / 120% operating cases."
+        commonTrap="If NPSHa drops below Pump NPSHr, liquid flashes into vapor bubbles that implode on the impeller (cavitation)."
+        perryAnchor="[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11 & Sec. 8, p. 8-71]"
+      />
+
       <div className="wb-panel" {...eqGuardrailSelect.selectableProps} data-testid="darcy-fanning-banner">
         <strong>🛡️ Darcy vs. Fanning Friction Guardrail:</strong> Perry&apos;s <code>Fig. 6-9 (p. 6-10)</code> plots{' '}
         <em>Fanning</em> <code>f_F = {caseNorm.fFanning.toFixed(5)}</code>, while Darcy-Weisbach head loss uses{' '}
         <em>Darcy</em> <code>f_D = 4·f_F = {caseNorm.fDarcy.toFixed(5)}</code>{' '}
         <code>[Perry&apos;s 9th Ed., Eqs. 6-37..6-39, p. 6-11]</code>.
+        <KaTeXBlock latex={'f_D = 4 f_F, \\quad h_f = f_D \\frac{L}{D} \\frac{v^2}{2g}'} testId="katex-darcy-fanning" />
       </div>
 
       <PipingPumpSvgSketch

@@ -9,12 +9,13 @@ import {
 } from '../../context/persona-theme-context';
 import { VisualVerifierWorkbench } from '../workbenches/visual-verifier-workbench';
 import { AgentChatDrawer } from './agent-chat-drawer';
+import { GuidedMissionBar } from './guided-mission-bar';
 
 const WORKBENCH_TABS: ReadonlyArray<{ id: WorkbenchId; label: string; short: string }> = [
-  { id: 'wb1-visual-verifier', label: "WB1: Perry's Visual Verifier", short: 'Sec 1–25 Crops' },
-  { id: 'wb2-thermo-dippr', label: 'WB2: Sec 1/2/4 DIPPR & Thermo', short: 'DIPPR + Carlson' },
-  { id: 'wb3-hydraulics', label: 'WB3: Sec 6/8/10 Fluid Hydraulics', short: 'Pipe + NPSHa + Cv' },
-  { id: 'wb4-distillation', label: 'WB4: Sec 13/14 Distillation', short: 'McCabe-Thiele + Flood' },
+  { id: 'wb1-visual-verifier', label: "WB1: Perry's Visual Verifier", short: 'Chart & Figure Verifier' },
+  { id: 'wb2-thermo-dippr', label: 'WB2: Sec 1/2/4 DIPPR & Thermo', short: 'Boiling, Vapor Pressure & Thermo' },
+  { id: 'wb3-hydraulics', label: 'WB3: Sec 6/8/10 Fluid Hydraulics', short: 'Pipe Loss, Pump NPSHa & Valves' },
+  { id: 'wb4-distillation', label: 'WB4: Sec 13/14 Distillation', short: 'Stage Stepping & Flooding Limits' },
 ];
 
 export interface AppShellProps {
@@ -81,7 +82,11 @@ export const AppShell: React.FC<AppShellProps> = ({
             <h1>Perry&apos;s Intelligent Workbench</h1>
             <span className="brand-eyebrow">ai4UCheE · Chemical Engineering Intelligence</span>
           </div>
-          <span className="dof-badge" data-testid="dof-badge">
+          <span
+            className="dof-badge"
+            data-testid="dof-badge"
+            title="Degrees of Freedom = 0: Every required input variable is specified so the solver has a unique physical answer."
+          >
             {dofStatus}
           </span>
         </div>
@@ -123,13 +128,16 @@ export const AppShell: React.FC<AppShellProps> = ({
               onClick={() => setActiveWorkbench(tab.id)}
             >
               {isActive && <motion.span layoutId="active-workbench-tab" className="motion-pill" />}
-              <span>{tab.label}</span>
+              <span className="wb-tab-title">{tab.label}</span>
+              <small className="wb-tab-sub">{tab.short}</small>
             </button>
           );
         })}
       </nav>
 
-      <main className="wb-split">
+      <GuidedMissionBar />
+
+      <main className="shell-workspace wb-split">
         <div>{(renderWorkbench ?? defaultRenderWorkbench)(activeWorkbench)}</div>
         {chatDrawer ?? <AgentChatDrawer />}
       </main>

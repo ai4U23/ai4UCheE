@@ -63,3 +63,16 @@ ssh chemie "sudo systemctl stop cloudflared-chemie.service"
    npm install
    npm run dev
    ```
+
+### Server-Only Environment Variables (Two-Tier AI Co-Pilot Gateway)
+
+`.env.example` documents the server-only contract — copy it to `.env` for local runs. Zero secrets are ever committed (repo invariant #3): `GATEWAY_API_KEY` is documented **empty** by default, which forces the deterministic Tier-1 ChE Tutor fallback (same behavior as zero-key / Vitest runs).
+
+| Variable | Default | Purpose |
+| :--- | :--- | :--- |
+| `GATEWAY_URL` | `https://gateway.ai4u.now` | Base URL of the Tier-2 OpenAI-compatible LLM gateway (`POST /v1/chat/completions`) |
+| `GATEWAY_API_KEY` | *(empty — server-only secret, never committed)* | Bearer key for the Tier-2 gateway; when unset the Express route serves the Tier-1 deterministic Perry tutor |
+| `GATEWAY_MODEL` | `gemini-4-argon-low` | Tier-2 chat-completion model ID (hard `4500 ms` `AbortSignal.timeout`) |
+
+- **Vite dev `/api` proxy**: `vite.config.ts` forwards `/api/*` to `http://127.0.0.1:3000`, so `npm run dev` reaches the Express host's `POST /api/copilot` and `GET /api/copilot/status`. In production Express serves `dist/` directly, so browser-relative `/api` calls hit the same host with no proxy.
+- `PERRY_SIDECAR_URL` (default `http://127.0.0.1:8001`) still routes `/api/v1/*` and `/api/perry/*` to the deterministic FastAPI sidecar.

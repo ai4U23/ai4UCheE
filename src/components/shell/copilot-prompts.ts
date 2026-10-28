@@ -1,0 +1,36 @@
+// Contextual 1-click starter prompt catalog per workbench (WB1..WB4) + human chip label formatter.
+import type { WorkbenchId } from '../../context/persona-theme-context';
+
+/** 3 student/engineer starter prompts per workbench (Point-and-Ask on-ramps). */
+const STARTER_PROMPTS: Record<WorkbenchId, readonly string[]> = {
+  'wb1-visual-verifier': [
+    'Why is Moody f_D = 4 × Fanning f_F?',
+    'How do I read Fig. 6-9 at Re = 10⁵?',
+    'Show the white-box Perry equation proof',
+  ],
+  'wb2-thermo-dippr': [
+    'Why convert psig to psia first?',
+    'Why does Wilson fail for LLE?',
+    'Derive DIPPR Eq. 101 at 100 °C',
+  ],
+  'wb3-hydraulics': [
+    'Is Pump P-101 safe from cavitation (NPSHa)?',
+    'Check if the control valve is choked (ISA-75.01)',
+    'Compare 70% / 100% / 120% flow cases',
+  ],
+  'wb4-distillation': [
+    'How does reflux ratio R/R_min affect flooding?',
+    'Explain the q-line slope for saturated liquid',
+    'Walk through Fenske N_min & Underwood R_min',
+  ],
+};
+
+/** Contextual 1-click starter prompts for the active workbench. */
+export function getStarterPromptsForWorkbench(workbench: WorkbenchId): readonly string[] {
+  return STARTER_PROMPTS[workbench] ?? STARTER_PROMPTS['wb1-visual-verifier'];
+}
+
+/** Human-readable Point-and-Ask chip label; falls back to the raw chipId. */
+export function formatChipDisplayLabel(label: string | undefined, chipId: string): string {
+  return label || chipId;
+}

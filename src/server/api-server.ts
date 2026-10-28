@@ -12,6 +12,7 @@ import {
   writeClientAppState,
 } from '../actions/view-screen';
 import { getConn, initDb } from '../db/client';
+import { registerCopilotRoute } from './copilot-route';
 
 const SIDECAR_BASE = process.env.PERRY_SIDECAR_URL ?? 'http://127.0.0.1:8001';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -110,6 +111,8 @@ export function createApiServer(dbPath?: string): Express {
       res.status(400).json({ ok: false, error: (err as Error).message });
     }
   });
+
+  registerCopilotRoute(app); // POST /api/copilot + GET /api/copilot/status (Tier-2 gateway, Tier-1 fallback)
 
   app.all('/api/perry/*', async (req: Request, res: Response): Promise<void> => {
     await proxyToSidecar(req, res, req.path.replace(/^\/api\/perry/, '/api/v1'));

@@ -2,7 +2,10 @@
 import React, { useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
+import { KaTeXBlock } from '../ui/katex-block';
+import { CarlsonAdvisorCard } from './carlson-advisor-card';
 
 const FLUIDS: Record<string, { label: string; tcK: number; vpAt373Pa: number; hvapAt373: number }> = {
   water: { label: 'Water (H₂O)', tcK: 647.096, vpAt373Pa: 101325, hvapAt373: 4.065e7 },
@@ -79,19 +82,13 @@ export const ThermoDipprWorkbench: React.FC = () => {
             Fluid:
             <select aria-label="DIPPR fluid" value={compound} onChange={(e) => setCompound(e.target.value)}>
               {Object.entries(FLUIDS).map(([k, v]) => (
-                <option key={k} value={k}>
-                  {v.label}
-                </option>
+                <option key={k} value={k}>{v.label}</option>
               ))}
             </select>
           </label>
           <label>
             T Unit:
-            <select
-              aria-label="Temperature unit"
-              value={tempUnit}
-              onChange={(e) => setTempUnit(e.target.value as typeof tempUnit)}
-            >
+            <select aria-label="Temperature unit" value={tempUnit} onChange={(e) => setTempUnit(e.target.value as typeof tempUnit)}>
               <option value="K">K</option>
               <option value="degC">°C</option>
               <option value="degF">°F</option>
@@ -100,11 +97,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
           </label>
           <label>
             P Datum:
-            <select
-              aria-label="Pressure unit"
-              value={pressureUnit}
-              onChange={(e) => setPressureUnit(e.target.value as typeof pressureUnit)}
-            >
+            <select aria-label="Pressure unit" value={pressureUnit} onChange={(e) => setPressureUnit(e.target.value as typeof pressureUnit)}>
               <option value="psig">psig (gauge +14.696 psia)</option>
               <option value="psia">psia (absolute)</option>
               <option value="bar">bar</option>
@@ -114,22 +107,25 @@ export const ThermoDipprWorkbench: React.FC = () => {
         </div>
       </header>
 
+      <LearnModeCallout
+        workbenchId="wb2"
+        title="Vapor Pressure, Boiling & Property Packages"
+        plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Use Carlson's decision tree on the right to pick the right thermodynamic model."
+        commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
+        perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
+      />
+
       <div className="wb-split">
         <div>
           <ScrubbableNumberInput
-            paramId="dippr-temp-k"
-            label="Temperature"
-            value={tempK}
-            unit={tempUnit}
+            paramId="dippr-temp-k" label="Temperature" value={tempK} unit={tempUnit}
             min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
-            max={tempUnit === 'degR' ? 1200 : 640}
-            step={1}
-            onChange={setTempK}
+            max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
 
           <div className="wb-panel" {...eq101Select.selectableProps}>
             <strong>Stage 1–3 · DIPPR Eq. 101 Vapor Pressure</strong>
-            <div className="mono">Symbolic: P_vp = exp(C₁ + C₂/T + C₃·ln T + C₄·T^C₅)</div>
+            <KaTeXBlock latex={'P_{\\mathrm{vp}} = \\exp\\!\\left(C_1 + \\frac{C_2}{T} + C_3 \\ln T + C_4 T^{C_5}\\right)'} testId="katex-dippr-101" />
             <div className="mono" data-testid="dippr-vp-result">
               Result at T = {tKelvin.toFixed(2)} K: <strong>{vpPa.toLocaleString()} Pa</strong> ({vpDisplay}) ·{' '}
               <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
@@ -138,7 +134,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
 
           <div className="wb-panel" {...eq106Select.selectableProps}>
             <strong>Stage 1–3 · DIPPR Eq. 106 ΔH_vap (Full C₂..C₅ Exponent)</strong>
-            <div className="mono">Symbolic: ΔH_vap = C₁·(1 − T_r)^(C₂ + C₃·T_r + C₄·T_r² + C₅·T_r³)</div>
+            <KaTeXBlock latex={'\\Delta H_{\\mathrm{vap}} = C_1 (1 - T_r)^{C_2 + C_3 T_r + C_4 T_r^2 + C_5 T_r^3}'} testId="katex-dippr-106" />
             <div className="mono">
               T_r = {tr.toFixed(4)} → <strong>{hvap.toExponential(3)} J/kmol</strong> ·{' '}
               <code>[Perry&apos;s 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]</code>
@@ -146,42 +142,11 @@ export const ThermoDipprWorkbench: React.FC = () => {
           </div>
         </div>
 
-        <aside className="wb-tutor-card" data-testid="carlson-advisor-panel">
-          <h3>🧭 Carlson&apos;s (1996) / Perry Sec 4 Property Package Advisor</h3>
-          <div className="wb-actions-row">
-            <label>
-              Polarity:
-              <select
-                aria-label="Mixture polarity"
-                value={polarity}
-                onChange={(e) => setPolarity(e.target.value as typeof polarity)}
-              >
-                <option value="nonpolar">Nonpolar / Hydrocarbon</option>
-                <option value="polar_non_electrolyte">Polar Non-Electrolyte</option>
-              </select>
-            </label>
-            <label>
-              <input type="checkbox" checked={hasLle} onChange={(e) => setHasLle(e.target.checked)} /> Two Liquid Phases (LLE)
-            </label>
-            <label>
-              <input type="checkbox" checked={hasAssoc} onChange={(e) => setHasAssoc(e.target.checked)} /> Carboxylic Acid Vapor Dimerization
-            </label>
-          </div>
-          <p>
-            Recommended Package: <strong data-testid="carlson-recommended">{recommendedModel}</strong>{' '}
-            <code>[Perry&apos;s 9th Ed., Sec. 4, p. 4-18]</code>
-          </p>
-          {hasLle && (
-            <p className="wb-coaching" data-testid="carlson-lle-warning">
-              ⚠️ <strong>LLE Trap:</strong> NEVER use <code>Wilson</code> for Liquid-Liquid Equilibrium — Wilson cannot
-              predict two liquid phases.
-            </p>
-          )}
-          <div className="wb-crop-placeholder">
-            <strong>Proof Crop · Perry&apos;s Table 2-8 (p. 2-53) &amp; Table 2-69 (p. 2-120)</strong>
-            <span>Mode: {personaMode.toUpperCase()}</span>
-          </div>
-        </aside>
+        <CarlsonAdvisorCard
+          personaMode={personaMode} polarity={polarity} onPolarityChange={setPolarity}
+          hasLle={hasLle} onHasLleChange={setHasLle} hasAssoc={hasAssoc}
+          onHasAssocChange={setHasAssoc} recommendedModel={recommendedModel}
+        />
       </div>
     </section>
   );
