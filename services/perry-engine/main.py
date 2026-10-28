@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 from core.handcalcs_katex import render_three_stage_equation
 from core.unit_registry import convert_field_unit, normalize_pressure_to_pa
+from routers.pdf_router import router as pdf_router
 
 PDF_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -16,6 +17,7 @@ PDF_PATH = os.path.join(
 )
 
 app = FastAPI(title="PerryEngine Sidecar", version="1.0.0")
+app.include_router(pdf_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"],
