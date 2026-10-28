@@ -28,7 +28,17 @@ app.include_router(distillation_router)
 app.include_router(export_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://chemie",
+        "http://chemie:3000",
+        "http://chemie:5173",
+        "http://100.64.56.26",
+        "http://100.64.56.26:3000",
+        "http://100.64.56.26:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
