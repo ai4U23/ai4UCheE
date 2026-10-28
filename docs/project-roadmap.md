@@ -1,41 +1,37 @@
 # Project Roadmap — ai4UCheE
 
-## 7-Phase Execution Plan
+## 7-Phase Execution Plan (V1 Completed)
 
-The project executes along the 7 phases established in [`plans/261027-2242-perrys-intelligent-workbench/plan.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261027-2242-perrys-intelligent-workbench/plan.md):
+All 7 phases of [`plans/261027-2242-perrys-intelligent-workbench/plan.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261027-2242-perrys-intelligent-workbench/plan.md) are implemented, verified, and committed on branch `feat/perrys-agent-workbench-v1`:
 
-- [ ] **Phase 1: Workspace Foundation & Sidecar Bootstrap**
-  - Project monorepo scaffolding
-  - Python FastAPI sidecar bootstrap with `pint`, `handcalcs`, `PyMuPDF`
-  - Health check and unit registry smoke tests
+- [x] **Phase 1: Workspace Foundation & Sidecar Bootstrap** (`813d773`)
+  - Repo-root React 19 + Vite 6 + Vitest 3 + Drizzle/SQLite scaffolding
+  - Python 3.12 FastAPI sidecar with `pint` (`psig`/`psia` datum guardrail) and 3-Stage White-Box `handcalcs` AST-to-KaTeX renderer
+  - 11/11 `test_phase1_core.py` tests passing
 
-- [ ] **Phase 2: 25-Section Indexer, Visual Crop & Chart Verifier (WB1)**
-  - PyMuPDF 25-section page indexer and anchor resolver
-  - High-DPI table header + row composite cropper
-  - Interactive SVG crosshair and chart-reading tutor
+- [x] **Phase 2: 25-Section Indexer, Visual Crop & Chart Verifier (WB1)** (`b0402c6`)
+  - TOC-ordered 25-Section + Index (`pp. 2244–2274`) `Sec-Page` resolver and `verify_page_contains` citation primitive
+  - Display-space rotation-safe (`page.rotation`) composite table header + row cropper & vector figure detector
+  - Interactive SVG crosshair and `DeepTutor` chart-reading verifier with `fanning_darcy_4x_detected` coaching (12/12 `test_phase2_pdf.py` tests passing)
 
-- [ ] **Phase 3: Agent-Native Core Shell & Design System**
-  - React 19 + `motion/react` AppShell
-  - Dual Theme (Paper vs. Blueprint)
-  - `useAgentSelectable` point-and-ask context integration
+- [x] **Phase 3: Agent-Native Core Shell & Design System** (`90e064e`)
+  - React 19 + `motion/react` `AppShell` with `layoutId` shared-layout morphing
+  - Dual Theme (`☀️ EPC Paper #FAF8F5` vs. `🌙 Control Room Blueprint #0B101B`)
+  - `<current-screen>` bi-directional state sync and `useAgentSelectable` Point-and-Ask chips (4/4 `phase3-shell.test.tsx` tests passing)
 
-- [ ] **Phase 4: DIPPR Property Engine & Carlson Advisor (WB2)**
-  - 5-parameter DIPPR equations with validity bounds
-  - Pint mixed-unit normalization
-  - Carlson property method selection decision tree
+- [x] **Phase 4: DIPPR Property Engine & Carlson Advisor (WB2)** (`743c172`)
+  - 5-parameter DIPPR Eq. 101 (`Table 2-8, p. 2-53`), Eq. 106 with $T_r^{C_5}$ (`Table 2-69, p. 2-120`), and Eq. 105 (`Table 2-32, p. 2-93`) with validity bounds and `CoolProp` reference fallback
+  - Carlson's (1996) / Perry's Sec 4 (`pp. 4-4, 4-12, 4-18`) property method decision tree with LLE `Wilson` trap and carboxylic acid `NRTL-HOC` warnings (6/6 `test_phase4_thermo.py` tests passing)
 
-- [ ] **Phase 5: Hydraulics, Pump NPSHa & Valve Cv (WB3)**
-  - ASME B36.10M commercial pipe schedule database (Sch 40/80)
-  - 3-Case operating matrix (70% / 100% / 120%)
-  - Pump NPSHa vs NPSHr margin checker
-  - ISA-75.01 control valve sizing and choked-flow warning
+- [x] **Phase 5: Hydraulics, Pump NPSHa & Valve Cv (WB3)** (`8ac5c9e`)
+  - `ASME B36.10M` commercial pipe sizing (`Table 10-22, p. 10-70`), explicit Darcy $f_D = 4 f_F$ guardrail (`Fig. 6-9, p. 6-10` & `Eqs. 6-37..6-39, p. 6-11`), and 3-Case (`70%/100%/120%`) matrix
+  - Pump $\text{NPSH}_A$ cavitation checker (`p. 10-24`, `1.35×` rule) and ISA-75.01 control valve $C_v$ with explicit $F_F$ and choked-flow $\Delta P_{\max}$ (`Eqs. 8-77..8-81, p. 8-71`) + parametric SVG sketch (5/5 `test_phase5_hydraulics.py` tests passing)
 
-- [ ] **Phase 6: Distillation & Column Hydraulics (WB4)**
-  - Bi-directional McCabe-Thiele canvas
-  - Souders-Brown flooding velocity and column diameter sizing
-  - Packed and tray hydraulic pressure drops
+- [x] **Phase 6: Distillation & Column Hydraulics (WB4)** (`c6c9820`)
+  - Bi-directional McCabe-Thiele SVG canvas with draggable $q$-line handle and Fenske-Underwood-Gilliland shortcut (`Sec. 13, pp. 13-14, 13-25, 13-36`)
+  - Fair's entrainment flooding $C_{sb}$ (`Fig. 14-32, p. 14-37`) and Eckert GPDC packed-column pressure drop (`Fig. 14-55, p. 14-57` & `Table 14-13, p. 14-58`) (4/4 `test_phase6_distillation.py` tests passing)
 
-- [ ] **Phase 7: Senior Calculation Sheet Exporter & E2E Verification**
-  - Printable QA/QC calculation sheets with KaTeX proofs
-  - Markdown/LaTeX export notes
-  - End-to-end verification across all workbenches
+- [x] **Phase 7: Senior Calculation Sheet Exporter & E2E Verification**
+  - Printable EPC QA/QC Calculation Sheet compiler (`@media print` HTML + Markdown/LaTeX) (`2/2 test_phase7_export.py` tests passing)
+  - Inline generative UI cards (`RenderInlineExtension`) and SQLite `saved_calculations` persistence (4/4 `phase7-e2e.test.tsx` tests passing)
+  - Strict `< 200` LOC modularity gate verified across all 38 `.py`, `.ts`, and `.tsx` source files (`ALL_PHASES_AND_LINE_LIMITS_OK`)

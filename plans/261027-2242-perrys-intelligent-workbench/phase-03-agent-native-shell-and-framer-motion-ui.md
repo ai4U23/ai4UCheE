@@ -71,9 +71,9 @@ Implement the `BuilderIO/agent-native` architectural primitives (`defineAction`,
 
 ## Todo
 
-- [ ] Task 3.1: Implement Dual Theme Tokens (`#FAF8F5` Paper vs. `#0B101B` Blueprint) & Persona Context
-- [ ] Task 3.2: Implement `defineAction`, `<current-screen>` Sync (`actions/view-screen.ts`) & `useAgentSelectable` Hook
-- [ ] Task 3.3: Build `ScrubbableNumberInput`, `AppShell` with `motion/react` `layoutId` Morphing & Express/Nitro Host API
+- [x] Task 3.1: Implement Dual Theme Tokens (`#FAF8F5` Paper vs. `#0B101B` Blueprint) & Persona Context — `THEME_TOKENS_OK`
+- [x] Task 3.2: Implement `defineAction`, `<current-screen>` Sync (`actions/view-screen.ts`) & `useAgentSelectable` Hook — `AGENT_SYNC_OK`
+- [x] Task 3.3: Build `ScrubbableNumberInput`, `AppShell` with `motion/react` `layoutId` Morphing & Express/Nitro Host API — `vitest` 4/4 passed (`80ms`)
 
 ## Success Criteria
 

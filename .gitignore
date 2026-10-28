@@ -40,3 +40,7 @@ test-results/
 .pytest_cache/
 .ruff_cache/
 coverage/
+
+# Local SQLite databases (runtime state)
+*.sqlite
+*.sqlite3

@@ -67,9 +67,9 @@ Build the formal EPC Senior-Engineer Calculation Sheet Exporter (`HTML / Print-t
 
 ## Todo
 
-- [ ] Task 7.1: Implement Senior-Engineer Calculation Sheet Compiler (`solvers/calc_sheet_exporter.py` & `routers/export_router.py`)
-- [ ] Task 7.2: Implement Inline Generative UI (`render-inline-extension.tsx`), Calc Sheet Modal & Export Action
-- [ ] Task 7.3: Full End-to-End Integration Suite & `< 200` Line Modularity Gate
+- [x] Task 7.1: Implement Senior-Engineer Calculation Sheet Compiler (`solvers/calc_sheet_exporter.py`, 160 LOC & `routers/export_router.py`, 34 LOC) — 2/2 pytest passed
+- [x] Task 7.2: Implement Inline Generative UI (`render-inline-extension.tsx`, 73 LOC), Calc Sheet Modal (`calc-sheet-preview-modal.tsx`, 127 LOC) & Export Action (`generate-calc-sheet.ts`, 132 LOC) — `GENUI_EXPORT_OK`
+- [x] Task 7.3: Full End-to-End Integration Suite (`phase7-e2e.test.tsx`, 122 LOC, `App.tsx`, 67 LOC, `main.tsx`, 14 LOC) & `< 200` Line Modularity Gate — 40/40 pytest + 8/8 vitest + `vite build` + `ALL_PHASES_AND_LINE_LIMITS_OK`
 
 ## Success Criteria
 
