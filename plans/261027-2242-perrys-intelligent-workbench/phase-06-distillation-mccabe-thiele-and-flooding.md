@@ -70,9 +70,9 @@ Implement the *Perry's 9th Ed.* Section 13 & 14 Distillation & Equipment Rating 
 
 ## Todo
 
-- [ ] Task 6.1: Implement Perry's Sec 13 McCabe-Thiele Stage-Stepping & FUG Shortcut Solver (`solvers/distillation_mccabe.py`)
-- [ ] Task 6.2: Implement Perry's Sec 14 Souders-Brown Tray Flooding & Eckert GPDC Packing Solver (`solvers/distillation_hydraulics.py`)
-- [ ] Task 6.3: Build Interactive McCabe-Thiele SVG Canvas, Column Flooding Sketch & Workbench 4 (`DistillationWorkbench`)
+- [x] Task 6.1: Implement Perry's Sec 13 McCabe-Thiele Stage-Stepping & FUG Shortcut Solver (`solvers/distillation_mccabe.py`, 168 LOC) — `MCCABE_OK 1.1414 14`
+- [x] Task 6.2: Implement Perry's Sec 14 Souders-Brown Tray Flooding & Eckert GPDC Packing Solver (`solvers/distillation_hydraulics.py`, 158 LOC + `routers/distillation_router.py`, 73 LOC) — 4/4 pytest passed (incl. live-PDF `verify_page_contains` for `14-37`, `14-57`, `14-58` and reflux surge `JET_FLOOD_DANGER`)
+- [x] Task 6.3: Build Interactive McCabe-Thiele SVG Canvas (`145 LOC`), Column Flooding Sketch (`86 LOC`) & Workbench 4 (`DistillationWorkbench`, 129 LOC + `run-distillation.ts`, 34 LOC) — `WB4_OK`
 
 ## Success Criteria
 
