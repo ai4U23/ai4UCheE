@@ -1,32 +1,55 @@
-# Deployment Guide — ai4UCheE
+# Deployment Guide — ai4UCheE (Perry's Intelligent Workbench)
 
-## Local Development Stack
+## 1. Live Production Deployment (`chemie` on Tailscale)
+
+Perry's Intelligent Workbench (`ai4UCheE`) is deployed on the **`chemie`** VPS (`InstaBox.sh`, Debian 13 amd64, 4 vCPU / 8 GiB RAM / 20 GiB `/data` persistent disk) on the `duc.a.nguyen@` tailnet.
+
+### Live Endpoints (Tailnet)
+- **Workbench Web UI & Unified API (Port 80)**: [http://chemie](http://chemie) / [http://100.64.56.26](http://100.64.56.26)
+- **Workbench Web UI & Unified API (Port 3000)**: [http://chemie:3000](http://chemie:3000) / [http://100.64.56.26:3000](http://100.64.56.26:3000)
+- **Python FastAPI PerryEngine Sidecar (Port 8001)**: [http://chemie:8001/health](http://chemie:8001/health) / [http://100.64.56.26:8001/docs](http://100.64.56.26:8001/docs)
+- **Public GitHub Repository**: [https://github.com/ai4U23/ai4UCheE](https://github.com/ai4U23/ai4UCheE)
+
+### Remote Directory & Systemd Units on `chemie`
+- **Checkout Path**: `/data/home/ai4UCheE`
+- **Reference PDF Path (gitignored)**: `/data/home/ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf` (225.6 MB, 2,274 pages)
+- **Systemd Services**:
+  - `perry-engine.service` — Python 3.12 Uvicorn FastAPI sidecar on `0.0.0.0:8001`
+  - `perry-workbench.service` — Express + Vite production bundle server on `0.0.0.0:3000` (proxies `/health`, `/api/v1/*`, `/api/perry/*` to `127.0.0.1:8001`)
+  - `perry-workbench-http.service` — Express + Vite production bundle server on `0.0.0.0:80` (`CAP_NET_BIND_SERVICE`)
+
+### Redeploy / Rollback Commands
+```bash
+# If chemie is auto-paused after idle timeout:
+instabox resume chemie
+
+# Deploy latest main branch to chemie:
+ssh chemie "cd /data/home/ai4UCheE && git pull origin main && npm install --no-audit --no-fund && npm run build && sudo systemctl restart perry-engine perry-workbench perry-workbench-http"
+
+# Verify health:
+curl -sS http://100.64.56.26/health
+```
+
+---
+
+## 2. Local Development Stack
 
 ### Prerequisites
-- Node.js 20+ and pnpm / npm
-- Python 3.11+ with `uv` or virtualenv
-- Local Perry's 9th Edition PDF located at `ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf` (or configured via `PERRY_PDF_PATH`)
+- Node.js 20+ and npm
+- Python 3.12 with `uv`
+- Local *Perry's Chemical Engineers' Handbook, 9th Edition.pdf* at repo root (or `PERRY_PDF_PATH` env var)
 
-### Services
+### Running Locally
 1. **Python Sidecar (`services/perry-engine`)**:
    ```bash
    cd services/perry-engine
-   python3 -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   uvicorn main:app --host 127.0.0.1 --port 8001 --reload
+   uv venv .venv --python 3.12
+   uv pip install --python .venv/bin/python -e .
+   PYTHONPATH=. .venv/bin/uvicorn main:app --host 127.0.0.1 --port 8001 --reload
    ```
 
-2. **Frontend App (`apps/web`)**:
+2. **Frontend Workbench (`src/`)**:
    ```bash
-   cd apps/web
-   pnpm install
-   pnpm dev
+   npm install
+   npm run dev
    ```
-
-## Production Deployment
-- **Container Strategy**: Multi-stage Docker container packaging both the static Vite/React build (served via Caddy/Nginx) and the Python FastAPI sidecar running Uvicorn.
-- **Port Mapping**:
-  - `5173 / 80`: Web frontend and reverse-proxy
-  - `8001`: Internal sidecar API bridge
-- **Governance**: Managed under control-plane (`ai4u`) ecosystem deployment standards.
