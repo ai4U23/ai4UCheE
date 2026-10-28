@@ -1,0 +1,42 @@
+# Reference documents & large assets (internal design reference only)
+*.pdf
+Perry's Chemical Engineers' Handbook, 9th Edition.pdf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs & temporary files
+*.log
+tmp/
+temp/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Dependencies & virtual environments
+node_modules/
+dist/
+build/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Local agent caches & media scratch
+.video_agent/
+.zcode/
+out/
+
+# Build & test artifacts
+.output/
+playwright-report/
+test-results/
+.pytest_cache/
+.ruff_cache/
+coverage/
