@@ -1,5 +1,6 @@
 // Persona ('learn' | 'plant') + Dual Theme ('paper' #FAF8F5 | 'blueprint' #0B101B) context.
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { writeClientAppState } from '../actions/view-screen';
 
 export type PersonaMode = 'learn' | 'plant';
 export type ThemeMode = 'paper' | 'blueprint';
@@ -53,7 +54,13 @@ export const PersonaThemeProvider: React.FC<{
       document.documentElement.setAttribute('data-theme', themeMode);
       document.documentElement.setAttribute('data-persona', personaMode);
     }
-  }, [themeMode, personaMode]);
+    writeClientAppState({
+      activeWorkbench,
+      personaMode,
+      themeMode,
+      selectedChips: selectedChips.map((c) => c.chipId),
+    });
+  }, [activeWorkbench, themeMode, personaMode, selectedChips]);
 
   const toggleChip = useCallback((chip: Omit<SelectedChip, 'chipId'>) => {
     const chipId = `agent-select:${chip.kind}:${chip.id}`;

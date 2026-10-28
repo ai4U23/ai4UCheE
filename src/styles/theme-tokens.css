@@ -1,0 +1,134 @@
+/* Dual Theme token system for Perry's Intelligent Workbench (ai4UCheE).
+ * Paper (#FAF8F5 EPC Calc-Pad) vs. Blueprint (#0B101B Control Room) — plain CSS
+ * variables, no Tailwind (Validation Session 1). */
+@import 'katex/dist/katex.min.css';
+
+:root,
+[data-theme="paper"] {
+  --bg-canvas: #FAF8F5;
+  --bg-panel: #F2EFE9;
+  --bg-elevated: #FFFFFF;
+  --ink-primary: #141413;
+  --ink-muted: #5C5852;
+  --border-grid: #DCD6CC;
+  --accent-primary: #B8332A;   /* Perry's Crimson */
+  --accent-secondary: #1D5B79; /* Steel Blue */
+  --status-pass: #1F7A4C;
+  --status-warn: #B45309;
+  --status-danger: #B91C1C;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+}
+
+[data-theme="blueprint"] {
+  --bg-canvas: #0B101B;
+  --bg-panel: #121A2B;
+  --bg-elevated: #172238;
+  --ink-primary: #E8F0FE;
+  --ink-muted: #8BA0C2;
+  --border-grid: #1E2D4A;
+  --accent-primary: #38BDF8;   /* Cyan Trace */
+  --accent-secondary: #F59E0B; /* Amber Alarm */
+  --status-pass: #34D399;
+  --status-warn: #FBBF24;
+  --status-danger: #F87171;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-canvas);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  line-height: 1.45;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.shell-header,
+.wb-toolbar,
+.wb-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.wb-panel,
+.wb-tutor-card,
+.chat-drawer {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-grid);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.wb-split {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.wb-crop-stage {
+  position: relative;
+  min-height: 260px;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border-grid);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--accent-primary);
+}
+
+.wb-crosshair-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+[data-agent-selected="true"] {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+button, select, input {
+  font: inherit;
+  color: var(--ink-primary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-grid);
+  border-radius: 5px;
+  padding: 0.35rem 0.65rem;
+}
+
+button {
+  cursor: pointer;
+}
+
+.dof-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--status-pass);
+  color: var(--status-pass);
+}
