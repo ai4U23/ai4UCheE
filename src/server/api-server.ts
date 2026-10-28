@@ -3,7 +3,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { type Express, type Request, type Response } from 'express';
-import { ActionRegistry } from '../actions/define-action';
+import { ActionRegistry } from '../actions';
 import {
   getClientAppState,
   serializeCurrentScreenTag,
