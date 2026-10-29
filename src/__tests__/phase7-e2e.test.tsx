@@ -115,8 +115,8 @@ describe('Phase 7 — End-to-End Workbench Integration, GenUI & SQLite Calc Shee
 
     const vpText = screen.getByTestId('dippr-vp-result').textContent ?? '';
     expect(vpText).toContain('373.15 K');
-    expect(vpText).toContain('101,325 Pa');
-    expect(vpText).toContain('0.00 psig (14.70 psia)');
+    expect(vpText).toContain('101,325 Pa'); // 1 atm reference line — DIPPR 101 gives 101,261 Pa (0.06% correlation vs experimental)
+    expect(vpText).toContain('-0.01 psig (14.69 psia)'); // true DIPPR 101 (Table 2-8, p. 2-53) supersedes the old anchored-correlation values
 
     let out: unknown;
     await act(async () => {

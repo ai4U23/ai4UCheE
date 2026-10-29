@@ -50,5 +50,19 @@ ai4UCheE/
 - `src/styles/workbench-components.css` — tactile component stylesheet (`theme-tokens.css` retains tokens + `@import`).
 - `src/__tests__/phase8-ux-copilot.test.tsx` — E2E UX & Co-Pilot suite (KaTeX, missions, chip labels, starter prompts, gateway route).
 
+## Interactive Intelligence Modules (Phase 9, 2026-10-30)
+- `src/actions/view-screen.ts` — bi-directional bus: `WorkbenchLivePayload`/`WorkbenchMutationCommand` types, `syncWorkbenchPayload` (per-workbench snapshots), `dispatchWorkbenchMutation`/`subscribeWorkbenchMutation`, structured `<payload live="true">` XML.
+- `src/hooks/use-workbench-mutations.ts` — one-line workbench subscription to targeted mutation commands.
+- `src/components/ui/white-box-equation-card.tsx` — 3-stage white-box KaTeX card (`eq-stage-symbolic/substituted/result-*`, citation badge, learn-mode note) with legacy-`testId` passthrough.
+- `src/components/workbenches/hydraulics-solver-math.ts` — pure WB3 solver (Swamee-Jain `f_D = 4·f_F`, explicit `psig → psia`, NPSH_A, 3-stage builders).
+- `src/components/workbenches/thermo-solver-math.ts` — true DIPPR Eq. 101/106 A–E coefficients ported from `services/perry-engine/solvers/dippr_coeffs.py` (Table 2-8, p. 2-53 / Table 2-69, p. 2-120).
+- `src/components/workbenches/distillation-solver-math.ts` — pure WB4 solver (Fenske/Underwood, Fair Souders-Brown flooding %, 3-stage builders).
+- `src/components/sketches/dippr-phase-envelope-svg.tsx` — interactive log-scaled `P_sat(T)` envelope with 1 atm reference, critical point, live crosshair + phase badge.
+- `src/components/shell/mission-scenarios.ts` — the 4 mission ids extended with solver-verified trap/rescue mutations + `checkSolved` payload probes.
+- `src/components/shell/mission-checklist-banner.tsx` — live 3-step rescue walkthrough + `mission-autofix-btn`.
+- `src/actions/copilot-scenario-parser.ts` — deterministic natural-language What-If parser returning `actionMutations` + live solver-grounded diagnostics.
+- `src/components/workbenches/calc-sheet-builder.ts` — live QA/QC sheet compiler feeding the existing `generateCalcSheetAction` flow (`inputs_summary`/`equations`) + Markdown export.
+- `src/__tests__/phase9-interactive-intelligence.test.tsx` — 6-test E2E interactive suite (19 total across 4 suites).
+
 ## `<200` LOC Modularity Gate (AGENTS.md Invariant #2)
 Every `.ts`, `.tsx`, `.css` file in `src/` and every `.py` file in `services/perry-engine/` (`.venv` excluded) is mechanically verified `< 200` lines via the phase-05 walk (`ALL_SRC_UNDER_200_OK`); the largest files sit at ≤ 195 lines after the subcomponent extractions above.

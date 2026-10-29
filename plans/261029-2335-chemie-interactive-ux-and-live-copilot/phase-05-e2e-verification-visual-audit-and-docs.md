@@ -3,7 +3,7 @@
 <!-- Updated: Validation Session 1 (2026-10-30) - test counts corrected (phase3=4, phase7=5, phase8=4, +6 new = 19), mission/WB2/WB3 testids and state keys corrected (mission-pump-npsha, compound/tempK, npsInch), thermo-solver-math.ts added to docs list -->
 
 - **Parent Plan**: [`plan.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/plan.md)
-- **Status**: Pending
+- **Status**: Completed
 - **Estimated Effort**: 2.5h
 - **Depends On**: [`phase-04-live-qaqc-calc-sheet-exporter.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-04-live-qaqc-calc-sheet-exporter.md)
 
@@ -50,8 +50,9 @@ This final phase locks in every interactive UX and AI-native capability with an 
   - Production build (`npm run build`) succeeds cleanly.
 - **Verify**:
   ```bash
-  npm run typecheck && npx vitest run && npm run build && for f in $(find src services/perry-engine -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.css" -o -name "*.py" \)); do lines=$(wc -l < "$f"); if [ "$lines" -ge 200 ]; then echo "LOC VIOLATION: $f ($lines)"; exit 1; fi; done
+  npm run typecheck && npx vitest run && npm run build && for f in $(find src services/perry-engine -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.css" -o -name "*.py" \) -not -path "*/.venv/*" -not -path "*/__pycache__/*" -not -path "*.egg-info*" -not -path "*/node_modules/*"); do lines=$(wc -l < "$f"); if [ "$lines" -ge 200 ]; then echo "LOC VIOLATION: $f ($lines)"; exit 1; fi; done
   ```
+  <!-- Updated: Validation Session 1 follow-up (2026-10-30) — LOC gate excludes .venv/__pycache__/egg-info (the original command swept site-packages and could never pass) -->
 
 ### Task 5.3: Synchronize `./docs/` Suite (`AGENTS.md` Invariant #6)
 

@@ -3,7 +3,7 @@
 <!-- Updated: Validation Session 1 (2026-10-30) - additive two-tier integration per user decision: payload into CopilotRequestSchema, optional actionMutations into CopilotResponse (keeps tier/genUiCards), parser inside Tier-1; corrected actual signatures (runCopilotResponder(input, options?), askPerryCopilot, callGeminiGateway, registerCopilotRoute); actual mutation keys; render-inline widget tags dropped -->
 
 - **Parent Plan**: [`plan.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/plan.md)
-- **Status**: Pending
+- **Status**: Completed
 - **Estimated Effort**: 3.5h
 - **Depends On**: [`phase-02-interactive-missions-and-svg-workbenches.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-02-interactive-missions-and-svg-workbenches.md)
 

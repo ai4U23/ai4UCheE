@@ -1,8 +1,15 @@
-// Senior-Engineer QA/QC Calculation Sheet Preview Modal with editable Document Control Header,
-// Print-to-PDF (`window.print()`), HTML download, and Markdown/LaTeX source view.
+// Senior-Engineer QA/QC Calculation Sheet Preview Modal: live per-workbench inputs & 3-stage
+// white-box equations from the <current-screen> payload bus, safety audit badge, Markdown copy,
+// and the existing Document Control Header / Print-to-PDF / compile-and-persist flow.
 import React, { useEffect, useState } from 'react';
+import { getClientAppState } from '../../actions/view-screen';
 import { generateCalcSheetAction } from '../../actions/generate-calc-sheet';
-import { KaTeXBlock } from '../ui/katex-block';
+import {
+  buildCalcSheetActionInput,
+  buildLiveCalcSheet,
+  type LiveCalcSheetDocument,
+} from './calc-sheet-builder';
+import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
 
 export interface CalcSheetPreviewModalProps {
   isOpen: boolean;
@@ -25,6 +32,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
   const [checkedBy, setCheckedBy] = useState<string>('Lead ChE / QA-QC');
   const [compiledHtml, setCompiledHtml] = useState<string>('');
   const [compiledMd, setCompiledMd] = useState<string>('');
+  const [copyState, setCopyState] = useState<string>('Copy Markdown QA/QC');
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -37,33 +45,26 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
 
   if (!isOpen) return null;
 
+  const sheet: LiveCalcSheetDocument = buildLiveCalcSheet(getClientAppState());
+
+  const handleCopyMarkdown = async () => {
+    try {
+      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(sheet.markdownReport);
+      else throw new Error('clipboard unavailable');
+      setCopyState('Copied Markdown!');
+    } catch {
+      setCopyState('Clipboard blocked — see Markdown pane');
+    } finally {
+      window.setTimeout(() => setCopyState('Copy Markdown QA/QC'), 2200);
+    }
+  };
+
   const handleGenerate = async () => {
-    const out = (await generateCalcSheetAction.run({
-      project_name: projectName,
-      project_no: projectNo,
-      equipment_tag: equipmentTag,
-      service_description: `${workbenchType.toUpperCase()} Design Verification`,
-      calc_no: `CALC-${equipmentTag}`,
-      revision,
-      prepared_by: preparedBy,
-      checked_by: checkedBy,
-      workbench_type: workbenchType,
-      inputs_summary: {
-        Workbench: workbenchType,
-        'Equipment Tag': equipmentTag,
-        'Pressure Datum': 'psig -> psia explicit',
-        'Friction Factor': 'Darcy f_D = 4 * Fanning f_F',
-      },
-      equations: [
-        {
-          lhs_symbol: 'Re',
-          symbolic_latex: 'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu}',
-          substituted_latex: '= \\frac{998.2 \\cdot 2.0 \\cdot 0.1023}{0.001}',
-          result_latex: '= 2.042 \\times 10^{5}',
-          citation: "[Perry's 9th Ed., Fig. 6-9 caption, p. 6-10]",
-        },
-      ],
-    })) as Record<string, unknown>;
+    const out = (await generateCalcSheetAction.run(
+      buildCalcSheetActionInput(sheet, {
+        projectName, projectNo, equipmentTag, revision, preparedBy, checkedBy, workbenchType,
+      }),
+    )) as Record<string, unknown>;
     setCompiledHtml(String(out.html_document ?? ''));
     setCompiledMd(String(out.markdown_latex ?? ''));
   };
@@ -112,9 +113,43 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
           </label>
         </div>
 
+        <div className={`wb-verdict ${sheet.safetyStatus === 'PASS' ? 'pass' : 'fail'}`} data-testid="calc-sheet-safety-badge">
+          {sheet.safetyStatus === 'PASS' ? '✅ SAFETY AUDIT: PASS' : '⛔ SAFETY AUDIT: ACTION REQUIRED'} — {sheet.safetyDetail}
+        </div>
+
+        <table className="mono" style={{ width: '100%', fontSize: '0.8rem' }} data-testid="calc-sheet-rows">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Symbol</th>
+              <th>Value</th>
+              <th>Units</th>
+              <th>Basis</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sheet.rows.map((r) => (
+              <tr key={`${r.parameter}-${r.symbol}`}>
+                <td>{r.parameter}</td>
+                <td>{r.symbol}</td>
+                <td>{r.value}</td>
+                <td>{r.units}</td>
+                <td style={{ textAlign: 'left', whiteSpace: 'normal' }}>{r.basis}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {sheet.equations.map((eq) => (
+          <WhiteBoxEquationCard key={eq.id} equation={eq} />
+        ))}
+
         <div className="wb-actions-row" style={{ marginTop: '0.6rem' }}>
           <button type="button" data-testid="compile-calc-sheet-btn" onClick={handleGenerate}>
             Compile &amp; Save QA/QC Calc Sheet
+          </button>
+          <button type="button" data-testid="copy-calc-sheet-md" onClick={() => void handleCopyMarkdown()}>
+            {copyState}
           </button>
           <button
             type="button"
@@ -133,10 +168,9 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
               <div className="mono" data-testid="calc-sheet-summary">
                 {projectName} · Tag: {equipmentTag} · {revision} · Prepared: {preparedBy} · Checked: {checkedBy}
               </div>
-              <KaTeXBlock
-                latex={'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu} = 2.042 \\times 10^{5}'}
-                testId="katex-calc-sheet"
-              />
+              <div className="mono" data-testid="calc-sheet-citation">
+                {sheet.citationHeader}
+              </div>
             </div>
             <div>
               <h4>Markdown / LaTeX Archive</h4>

@@ -18,7 +18,23 @@ const model = process.env.GATEWAY_MODEL || GATEWAY_DEFAULT_MODEL;
 const SYSTEM_PROMPT =
   "You are Perry's Intelligent Workbench Co-Pilot on Chemie.ai4U.now. Enforce psig vs psia (+14.696 psia), " +
   "Fanning f_F vs Darcy f_D = 4*f_F, and cite [Perry's 9th Ed., Eq./Table/Fig., p. S-P]. " +
-  'In learn mode, explain in clear student-friendly steps; in plant mode, give concise EPC engineering checks.';
+  'In learn mode, explain in clear student-friendly steps; in plant mode, give concise EPC engineering checks. ' +
+  'When the user asks to change parameters or fix a hazard, end the reply with one JSON line: ' +
+  '{"actionMutations": {"targetWorkbench": "<wb1-visual-verifier|wb2-thermo-dippr|wb3-hydraulics|wb4-distillation>", "params": {"<stateKey>": <number|string>}}}.';
+
+/** Extract the LLM's trailing {"actionMutations": ...} proposal, if any (defensive parse). */
+function extractActionMutations(text: string): Record<string, unknown> | undefined {
+  const match = /\{"actionMutations"[\s\S]*\}\s*$/.exec(text);
+  if (!match) return undefined;
+  try {
+    const obj = JSON.parse(match[0]) as { actionMutations?: Record<string, unknown> };
+    const m = obj.actionMutations;
+    if (m && typeof m === 'object' && m.params && typeof m.params === 'object') return m;
+  } catch {
+    /* malformed JSON → deterministic Tier-1 mutations stand */
+  }
+  return undefined;
+}
 
 function tier2Eligible(): boolean {
   return Boolean(apiKey) && !(process.env.VITEST && process.env.GATEWAY_LIVE_TEST !== '1');
@@ -54,8 +70,12 @@ export async function callGeminiGateway(
   const tier1 = await runCopilotResponder(parsed, { emitUi: false });
   if (tier2Eligible()) {
     const chips = parsed.selectedChips.map((c) => c.label ?? c.chipId).join(', ') || 'none';
+    const live = (parsed.payload ?? {}) as { inputs?: unknown; metrics?: unknown; summary?: unknown };
     const userContent = [
       `<current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`,
+      live.summary ? `Live summary: ${String(live.summary)}` : 'Live summary: (payload empty — scrub a control to ground the copilot)',
+      `Live inputs: ${JSON.stringify(live.inputs ?? {})}`,
+      `Live metrics: ${JSON.stringify(live.metrics ?? {})}`,
       `Selected chips: ${chips}`,
       `Tier-1 deterministic baseline: ${tier1.reply}`,
       `User prompt: ${parsed.prompt}`,
@@ -70,6 +90,7 @@ export async function callGeminiGateway(
         tier: 'tier2-gemini-4-argon-low',
         citations: tier1.citations,
         genUiCards: tier1.genUiCards,
+        actionMutations: (extractActionMutations(llmText) as typeof tier1.actionMutations) ?? tier1.actionMutations,
       };
     }
   }

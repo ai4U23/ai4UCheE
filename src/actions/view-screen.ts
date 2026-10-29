@@ -1,6 +1,42 @@
-// Bi-directional `<current-screen>` state serializer & viewScreenAction.
+// Bi-directional `<current-screen>` state serializer, live workbench payload bus & mutation pub/sub.
 import { z } from 'zod';
 import { defineAction } from './define-action';
+
+/** Long workbench ids — mirrors `persona-theme-context` `WorkbenchId` (structurally identical). */
+export type WorkbenchId =
+  | 'wb1-visual-verifier'
+  | 'wb2-thermo-dippr'
+  | 'wb3-hydraulics'
+  | 'wb4-distillation';
+
+/** One 3-stage white-box derivation (Symbolic → Live Substitution → Evaluated Result). */
+export interface WhiteBoxStageEquation {
+  id: string;
+  title: string;
+  citation: string;
+  symbolicLatex: string;
+  substitutedLatex: string;
+  resultLatex: string;
+  plainExplanation?: string;
+  warningText?: string;
+}
+
+/** Live snapshot a workbench publishes into the `<current-screen>` payload bus. */
+export interface WorkbenchLivePayload {
+  summary?: string;
+  inputs?: Record<string, number | string | boolean>;
+  metrics?: Record<string, number | string | boolean>;
+  equations?: WhiteBoxStageEquation[];
+  statusBanner?: string;
+  [key: string]: unknown;
+}
+
+/** Parameter mutation dispatched by Guided Missions or the Co-Pilot (`actionMutations`). */
+export interface WorkbenchMutationCommand {
+  targetWorkbench?: WorkbenchId;
+  params: Record<string, number | string>;
+  reason?: string;
+}
 
 export interface ClientScreenState {
   id?: string;
@@ -13,6 +49,7 @@ export interface ClientScreenState {
 }
 
 type ScreenListener = (state: ClientScreenState) => void;
+type MutationListener = (command: WorkbenchMutationCommand) => void;
 
 let currentState: ClientScreenState = {
   id: 'default-screen',
@@ -25,9 +62,13 @@ let currentState: ClientScreenState = {
 };
 
 const listeners = new Set<ScreenListener>();
+const mutationListeners = new Set<MutationListener>();
+const workbenchPayloads = new Map<WorkbenchId, WorkbenchLivePayload>();
 
 /** Mutate the shared screen state and notify subscribers. */
 export function writeClientAppState(update: Partial<ClientScreenState>): ClientScreenState {
+  const switching =
+    update.activeWorkbench !== undefined && update.activeWorkbench !== currentState.activeWorkbench;
   currentState = {
     ...currentState,
     ...update,
@@ -35,6 +76,12 @@ export function writeClientAppState(update: Partial<ClientScreenState>): ClientS
     payload: update.payload ? { ...currentState.payload, ...update.payload } : currentState.payload,
     updatedAt: Date.now(),
   };
+  if (switching && !update.payload) {
+    currentState = {
+      ...currentState,
+      payload: { ...(workbenchPayloads.get(update.activeWorkbench as WorkbenchId) ?? {}) },
+    };
+  }
   listeners.forEach((fn) => fn(currentState));
   return currentState;
 }
@@ -48,6 +95,24 @@ export function subscribeClientAppState(fn: ScreenListener): () => void {
   return () => listeners.delete(fn);
 }
 
+/** Publish a workbench's live snapshot: always cached; exposed in `payload` when it is active. */
+export function syncWorkbenchPayload(workbench: WorkbenchId, payload: WorkbenchLivePayload): void {
+  workbenchPayloads.set(workbench, payload);
+  if (currentState.activeWorkbench !== workbench) return;
+  currentState = { ...currentState, payload: { ...payload }, updatedAt: Date.now() };
+  listeners.forEach((fn) => fn(currentState));
+}
+
+/** Broadcast a parameter mutation to every subscribed workbench (synchronous). */
+export function dispatchWorkbenchMutation(command: WorkbenchMutationCommand): void {
+  mutationListeners.forEach((fn) => fn(command));
+}
+
+export function subscribeWorkbenchMutation(fn: MutationListener): () => void {
+  mutationListeners.add(fn);
+  return () => mutationListeners.delete(fn);
+}
+
 function escapeAttr(val: string): string {
   return val.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 }
@@ -57,13 +122,25 @@ export function serializeCurrentScreenTag(state: ClientScreenState = currentStat
   const chipsXml = state.selectedChips
     .map((c) => `    <chip id="${escapeAttr(c)}" />`)
     .join('\n');
-  const payloadJson = JSON.stringify(state.payload ?? {});
+  const payload = (state.payload ?? {}) as WorkbenchLivePayload;
+  const payloadXml =
+    payload.inputs || payload.metrics
+      ? [
+          '  <payload live="true">',
+          `    <summary>${escapeAttr(String(payload.summary ?? ''))}</summary>`,
+          `    <inputs>${JSON.stringify(payload.inputs ?? {})}</inputs>`,
+          `    <metrics>${JSON.stringify(payload.metrics ?? {})}</metrics>`,
+          `    <equations>${JSON.stringify((payload.equations ?? []).map((e) => ({ id: e.id, citation: e.citation })))}</equations>`,
+          `    ${`<raw>${JSON.stringify(payload)}</raw>`}`,
+          '  </payload>',
+        ].join('\n')
+      : `  <payload>${JSON.stringify(payload)}</payload>`;
   return [
     `<current-screen workbench="${escapeAttr(state.activeWorkbench)}" personaMode="${escapeAttr(state.personaMode)}" themeMode="${escapeAttr(state.themeMode)}">`,
     '  <selected-chips>',
     chipsXml || '    <!-- none -->',
     '  </selected-chips>',
-    `  <payload>${payloadJson}</payload>`,
+    payloadXml,
     '</current-screen>',
   ].join('\n');
 }

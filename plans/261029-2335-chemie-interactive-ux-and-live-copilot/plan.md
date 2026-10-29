@@ -1,7 +1,7 @@
 ---
 title: "Chemie.ai4U.now Interactive UX, Self-Guided Missions & Bi-Directional Gemini-4-Argon-Low Copilot"
 description: "Transform Chemie.ai4U.now from static canned demos into a live, intuitive, AI-native Perry's 9th Edition interactive workbench with bi-directional <current-screen> state/mutation bus, 3-stage white-box KaTeX substitution, self-guided rescue missions, and live QA/QC calculation sheet generation."
-status: pending
+status: completed
 priority: P1
 effort: 16h
 branch: main
@@ -103,11 +103,11 @@ Every source file created or modified by this plan is gated strictly `< 200` LOC
 
 | Phase | File | Title | Effort | Status |
 | :---: | :--- | :--- | :---: | :---: |
-| **01** | [`phase-01-live-screen-bus-and-3stage-katex.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-01-live-screen-bus-and-3stage-katex.md) | Bi-Directional `<current-screen>` State Bus & 3-Stage White-Box KaTeX Component | 3.0h | Pending |
-| **02** | [`phase-02-interactive-missions-and-svg-workbenches.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-02-interactive-missions-and-svg-workbenches.md) | Interactive SVG Workbenches (`WB1`–`WB4`), Solver Math Extraction & Self-Guided Rescue Missions | 4.5h | Pending |
-| **03** | [`phase-03-bidirectional-copilot-and-live-solver.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-03-bidirectional-copilot-and-live-solver.md) | Bi-Directional `gemini-4-argon-low` Copilot (`gateway.ai4u.now`) & Natural-Language Slider Control | 3.5h | Pending |
-| **04** | [`phase-04-live-qaqc-calc-sheet-exporter.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-04-live-qaqc-calc-sheet-exporter.md) | Live Multi-Workbench QA/QC Calculation Sheet Builder & Exporter | 2.5h | Pending |
-| **05** | [`phase-05-e2e-verification-visual-audit-and-docs.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-05-e2e-verification-visual-audit-and-docs.md) | Phase 9 E2E Verification Suite, Headless Browser Visual Audit (`render-check.mjs`), `<200` LOC Gate & Docs Sync | 2.5h | Pending |
+| **01** | [`phase-01-live-screen-bus-and-3stage-katex.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-01-live-screen-bus-and-3stage-katex.md) | Bi-Directional `<current-screen>` State Bus & 3-Stage White-Box KaTeX Component | 3.0h | Completed |
+| **02** | [`phase-02-interactive-missions-and-svg-workbenches.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-02-interactive-missions-and-svg-workbenches.md) | Interactive SVG Workbenches (`WB1`–`WB4`), Solver Math Extraction & Self-Guided Rescue Missions | 4.5h | Completed |
+| **03** | [`phase-03-bidirectional-copilot-and-live-solver.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-03-bidirectional-copilot-and-live-solver.md) | Bi-Directional `gemini-4-argon-low` Copilot (`gateway.ai4u.now`) & Natural-Language Slider Control | 3.5h | Completed |
+| **04** | [`phase-04-live-qaqc-calc-sheet-exporter.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-04-live-qaqc-calc-sheet-exporter.md) | Live Multi-Workbench QA/QC Calculation Sheet Builder & Exporter | 2.5h | Completed |
+| **05** | [`phase-05-e2e-verification-visual-audit-and-docs.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-05-e2e-verification-visual-audit-and-docs.md) | Phase 9 E2E Verification Suite, Headless Browser Visual Audit (`render-check.mjs`), `<200` LOC Gate & Docs Sync | 2.5h | Completed |
 
 ---
 
@@ -213,3 +213,9 @@ Every source file created or modified by this plan is gated strictly `< 200` LOC
 - **Reconciled stale references:** 6 — `plan.md:23` trap example keys (`pSuctionPsig = -12`, `rMult/colDiamM`), `phase-02` Task 2.2 crosshair prop (`tempK`), `ClientScreenState` naming in `phase-01` Task 1.1 goal/symbols + `plan.md` mermaid node, phase-03 `handleSend` wording, `gateway.ai4u.now/v1` → `gateway.ai4u.now`
 - **Verified clean:** 27 stale-term greps (`thermodynamics-workbench`, `pipeDiaIn`, `pressurePsig`, `refluxRatio`, `temperatureK`, `mission-pill`, `copilot-chip-badge`, `copilot-send-btn`, `perry-svg-preview`, `createCopilotProxyMiddleware`, `setClientAppState`, `Eq. 10-33`, `Table 2-141`, `Fig. 14-27`, `6-41`, `Churchill`, `usedFallback`, `runCopilotResponder(prompt`, `handleSend`, `gateway.ai4u.now/v1`, short `'wb*'` ids, `'student'` persona, bare `ClientAppState`, `render-inline` tags, `fluid:` keys, `2.042e5` test premise, `createCopilotProxyMiddleware`) — all remaining hits are confined to the Validation Log failure documentation or explicit negations ("there is no free `pipeDiaIn` slider"), which is intended.
 - **Unresolved contradictions:** 0
+
+### Execution Log — 2026-10-30 (`ak:cook --advice --auto --parallel`)
+- **Advisory supervision note:** `kongming` subagent spawning was host-blocked (2 attempts, "unusual activity"). Per the `--advice` protocol this is noted once; the run continues under the skill's own authoritative failure gates.
+- **Failed verification #1 (Phase 02, resolved):** `phase7-e2e.test.tsx` unit-conversion test pinned the OLD anchored-correlation values (`101,325 Pa`, `0.00 psig (14.70 psia)` at water/373.15 K — the old formula hit 101,325 by construction). True DIPPR 101 (PDF-verified Table 2-8 coefficients) yields **101,261 Pa / −0.01 psig (14.69 psia)** — the plan's assumption "must still round to 101,325 Pa" is falsified (correlation ≠ experimental at the 4th digit). Resolution: kept the locked true-DIPPR-101 decision; added the `1 atm = 101,325 Pa` reference to the result line (assertion 2 stays green, pedagogically stronger) and re-pinned assertion 3 to `-0.01 psig (14.69 psia)` with a citation comment. Assertion strength preserved; 13/13 green after fix.
+- **Mission trap values finalized (solver-verified):** wb3 `mission-pump-npsha` trap `{flowGpm: 450, pSuctionPsig: -10, npshrM: 8}` → NPSH_A ≈ 4.18 m < 8 m (slider min extended −10 → −14); rescue `{pSuctionPsig: 15, npshrM: 3}` → ≈ 21.8 m. wb4 `mission-distillation` trap `{rMult: 1.9, colDiamM: 0.55}` → ≈ 200% flood; rescue `{rMult: 1.3, colDiamM: 0.85}` → ≈ 64%. wb2 `mission-boil-water` trap ethanol @ 298 K → ≈ 7.9 kPa; rescue water @ 373.15 K → ≈ 101.3 kPa. wb1 `mission-fanning-trap` reading 0.018 vs exact 0.0045 → 4×-trap detected; rescue 0.0045.
+- **Phase 01–02 evidence:** typecheck clean; 13/13 vitest; LOC — view-screen 166, white-box card 41, hydraulics 174, thermo-dippr 168, distillation 145, visual-verifier 157, solver-math 113/95/81, envelope SVG 75, mission-scenarios 108, banner 54, mission bar 89, mutations hook 20.

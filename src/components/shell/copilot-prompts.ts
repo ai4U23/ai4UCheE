@@ -30,6 +30,19 @@ export function getStarterPromptsForWorkbench(workbench: WorkbenchId): readonly 
   return STARTER_PROMPTS[workbench] ?? STARTER_PROMPTS['wb1-visual-verifier'];
 }
 
+/** 1-tap "What-If" quick actions per workbench — dispatch mutation commands via the copilot. */
+const QUICK_ACTIONS: Record<WorkbenchId, readonly string[]> = {
+  'wb1-visual-verifier': ['⚡ Correct Chart Reading to Perry-Exact (0.0045)'],
+  'wb2-thermo-dippr': ['⚡ Switch to Ethanol @ 351.5 K'],
+  'wb3-hydraulics': ['⚡ Fix Cavitation (6 in pipe, 15 psig)'],
+  'wb4-distillation': ['⚡ Stop Column Flooding (R = 1.3 × Rmin, D = 0.85 m)'],
+};
+
+/** Contextual 1-tap What-If quick actions for the active workbench. */
+export function getQuickActionsForWorkbench(workbench: WorkbenchId): readonly string[] {
+  return QUICK_ACTIONS[workbench] ?? QUICK_ACTIONS['wb1-visual-verifier'];
+}
+
 /** Human-readable Point-and-Ask chip label; falls back to the raw chipId. */
 export function formatChipDisplayLabel(label: string | undefined, chipId: string): string {
   return label || chipId;

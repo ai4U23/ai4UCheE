@@ -1,19 +1,15 @@
 // WB2: Perry's Sec 1, 2 & 4 DIPPR Thermophysical Property Engine & Carlson Decision Tree.
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
+import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
-import { KaTeXBlock } from '../ui/katex-block';
+import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
+import { DipprPhaseEnvelopeSvg } from '../sketches/dippr-phase-envelope-svg';
 import { CarlsonAdvisorCard } from './carlson-advisor-card';
-
-const FLUIDS: Record<string, { label: string; tcK: number; vpAt373Pa: number; hvapAt373: number }> = {
-  water: { label: 'Water (H₂O)', tcK: 647.096, vpAt373Pa: 101325, hvapAt373: 4.065e7 },
-  benzene: { label: 'Benzene (C₆H₆)', tcK: 562.05, vpAt373Pa: 180100, hvapAt373: 2.94e7 },
-  toluene: { label: 'Toluene (C₇H₈)', tcK: 591.75, vpAt373Pa: 74200, hvapAt373: 3.41e7 },
-  ethanol: { label: 'Ethanol (C₂H₆O)', tcK: 514.0, vpAt373Pa: 225800, hvapAt373: 3.62e7 },
-  acetone: { label: 'Acetone (C₃H₆O)', tcK: 508.2, vpAt373Pa: 372000, hvapAt373: 2.61e7 },
-};
+import { DIPPR_COMPOUNDS, solveThermo } from './thermo-solver-math';
 
 export const ThermoDipprWorkbench: React.FC = () => {
   const { personaMode } = usePersonaTheme();
@@ -25,7 +21,6 @@ export const ThermoDipprWorkbench: React.FC = () => {
   const [hasLle, setHasLle] = useState<boolean>(true);
   const [hasAssoc, setHasAssoc] = useState<boolean>(false);
 
-  const fluid = FLUIDS[compound] ?? FLUIDS.water;
   const tKelvin =
     tempUnit === 'degC'
       ? tempK + 273.15
@@ -34,30 +29,46 @@ export const ThermoDipprWorkbench: React.FC = () => {
         : tempUnit === 'degR'
           ? tempK * (5 / 9)
           : tempK;
-  const tr = Math.min(Math.max(tKelvin / fluid.tcK, 0.01), 0.9999);
-  const vpPa = Math.round(fluid.vpAt373Pa * Math.exp(12.2 * (1 - 373.15 / Math.max(tKelvin, 200))));
-  const vpPsia = vpPa / 6894.757;
+  const solved = solveThermo({ compound, tempK: tKelvin });
+  const { pSatPa, pSatPsia, hVapJkmol } = solved;
   const vpDisplay =
     pressureUnit === 'psig'
-      ? `${(vpPsia - 14.6959).toFixed(2)} psig (${vpPsia.toFixed(2)} psia)`
+      ? `${(pSatPsia - 14.6959).toFixed(2)} psig (${pSatPsia.toFixed(2)} psia)`
       : pressureUnit === 'psia'
-        ? `${vpPsia.toFixed(2)} psia`
+        ? `${pSatPsia.toFixed(2)} psia`
         : pressureUnit === 'bar'
-          ? `${(vpPa / 1e5).toFixed(4)} bar`
-          : `${(vpPa / 1e3).toFixed(2)} kPa`;
-  const hvap = Math.round(fluid.hvapAt373 * Math.pow((1 - tr) / (1 - 373.15 / fluid.tcK), 0.38));
+          ? `${(pSatPa / 1e5).toFixed(4)} bar`
+          : `${(pSatPa / 1e3).toFixed(2)} kPa`;
+
+  useWorkbenchMutations('wb2-thermo-dippr', (p) => {
+    if (p.compound !== undefined) setCompound(String(p.compound));
+    if (p.tempK !== undefined) setTempK(Number(p.tempK));
+  });
+
+  useEffect(() => {
+    syncWorkbenchPayload('wb2-thermo-dippr', {
+      summary: `WB2 DIPPR: ${solved.label} @ ${tKelvin.toFixed(2)} K → P_sat ${solved.pSatKpa.toFixed(2)} kPa`,
+      inputs: { compound, tempK: tKelvin, tempUnit, pressureUnit },
+      metrics: {
+        tempC: solved.tempC, tr: solved.tr, pSatPa: Math.round(pSatPa),
+        pSatKpa: solved.pSatKpa, pSatPsia, hVapKjMol: solved.hVapKjMol,
+      },
+      equations: solved.equations,
+      statusBanner: Math.abs(solved.pSatKpa - 101.325) < 5 ? '💧 At the 1 atm normal boiling point' : `P_sat ${solved.pSatKpa.toFixed(2)} kPa`,
+    });
+  });
 
   const eq101Select = useAgentSelectable(
     'equation',
     'dippr-eq-101',
-    `DIPPR Eq. 101 Vapor Pressure (${fluid.label})`,
-    { compound, tempK: tKelvin, tempUnit, pressureUnit, vpPa, vpDisplay, citation: "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]" },
+    `DIPPR Eq. 101 Vapor Pressure (${solved.label})`,
+    { compound, tempK: tKelvin, tempUnit, pressureUnit, pSatPa: Math.round(pSatPa), vpDisplay, citation: "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]" },
   );
   const eq106Select = useAgentSelectable(
     'equation',
     'dippr-eq-106',
-    `DIPPR Eq. 106 ΔH_vap with T_r^C5 (${fluid.label})`,
-    { compound, tempK: tKelvin, tempUnit, hvap, citation: "[Perry's 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]" },
+    `DIPPR Eq. 106 ΔH_vap with T_r^C5 (${solved.label})`,
+    { compound, tempK: tKelvin, tempUnit, hVapJkmol, citation: "[Perry's 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]" },
   );
 
   const recommendedModel = hasAssoc
@@ -81,8 +92,8 @@ export const ThermoDipprWorkbench: React.FC = () => {
           <label>
             Fluid:
             <select aria-label="DIPPR fluid" value={compound} onChange={(e) => setCompound(e.target.value)}>
-              {Object.entries(FLUIDS).map(([k, v]) => (
-                <option key={k} value={k}>{v.label}</option>
+              {Object.values(DIPPR_COMPOUNDS).map((f) => (
+                <option key={f.key} value={f.key}>{f.label}</option>
               ))}
             </select>
           </label>
@@ -123,20 +134,24 @@ export const ThermoDipprWorkbench: React.FC = () => {
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
 
+          <DipprPhaseEnvelopeSvg compound={compound} tempK={tKelvin} />
+
           <div className="wb-panel" {...eq101Select.selectableProps}>
-            <strong>Stage 1–3 · DIPPR Eq. 101 Vapor Pressure</strong>
-            <KaTeXBlock latex={'P_{\\mathrm{vp}} = \\exp\\!\\left(C_1 + \\frac{C_2}{T} + C_3 \\ln T + C_4 T^{C_5}\\right)'} testId="katex-dippr-101" />
+            <WhiteBoxEquationCard
+              equation={solved.equations[0]}
+              personaMode={personaMode}
+              katexTestIds={{ symbolic: 'katex-dippr-101' }}
+            />
             <div className="mono" data-testid="dippr-vp-result">
-              Result at T = {tKelvin.toFixed(2)} K: <strong>{vpPa.toLocaleString()} Pa</strong> ({vpDisplay}) ·{' '}
+              Result at T = {tKelvin.toFixed(2)} K: <strong>{Math.round(pSatPa).toLocaleString()} Pa</strong> ({vpDisplay}) · 1 atm = 101,325 Pa ·{' '}
               <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
             </div>
           </div>
 
           <div className="wb-panel" {...eq106Select.selectableProps}>
-            <strong>Stage 1–3 · DIPPR Eq. 106 ΔH_vap (Full C₂..C₅ Exponent)</strong>
-            <KaTeXBlock latex={'\\Delta H_{\\mathrm{vap}} = C_1 (1 - T_r)^{C_2 + C_3 T_r + C_4 T_r^2 + C_5 T_r^3}'} testId="katex-dippr-106" />
+            <WhiteBoxEquationCard equation={solved.equations[1]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-dippr-106' }} />
             <div className="mono">
-              T_r = {tr.toFixed(4)} → <strong>{hvap.toExponential(3)} J/kmol</strong> ·{' '}
+              T_r = {solved.tr.toFixed(4)} → <strong>{hVapJkmol.toExponential(3)} J/kmol</strong> ·{' '}
               <code>[Perry&apos;s 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]</code>
             </div>
           </div>

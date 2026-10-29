@@ -1,10 +1,15 @@
-// AgentChatDrawer: Point-and-Ask chip tray, live `<current-screen>` badge, starter prompts, and inline GenUI stream.
+// AgentChatDrawer: Point-and-Ask chip tray, live `<current-screen>` badge, starter prompts,
+// What-If quick actions, inline GenUI stream, and copilot `actionMutations` → slider scrubbing.
 import React, { useEffect, useState } from 'react';
 import { agentNative, type GenUiPayload } from '../../actions/define-action';
 import { askPerryCopilot } from '../../actions/copilot-responder';
-import { serializeCurrentScreenTag } from '../../actions/view-screen';
+import {
+  dispatchWorkbenchMutation,
+  getClientAppState,
+  serializeCurrentScreenTag,
+} from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
-import { getStarterPromptsForWorkbench } from './copilot-prompts';
+import { getQuickActionsForWorkbench, getStarterPromptsForWorkbench } from './copilot-prompts';
 
 export interface AgentChatDrawerProps {
   renderInlineExtension?: (payload: GenUiPayload) => React.ReactNode;
@@ -32,7 +37,9 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
   const { activeWorkbench, personaMode, themeMode, selectedChips, removeChip, clearChips } =
     usePersonaTheme();
   const [prompt, setPrompt] = useState<string>('');
-  const [messages, setMessages] = useState<Array<{ id: string; role: 'user' | 'agent'; text: string }>>([]);
+  const [messages, setMessages] = useState<
+    Array<{ id: string; role: 'user' | 'agent'; text: string; appliedMutations?: Record<string, number | string> }>
+  >([]);
   const [genUiCards, setGenUiCards] = useState<GenUiPayload[]>(() => agentNative.ui.getHistory());
 
   useEffect(() => {
@@ -47,19 +54,28 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
     personaMode,
     themeMode,
     selectedChips: selectedChips.map((c) => c.chipId),
-    payload: {},
+    payload: getClientAppState().payload,
   });
 
   // Async Co-Pilot dispatcher: appends the user text, awaits askPerryCopilot, appends the reply.
   // GenUI cards flow exclusively through agentNative.ui.subscribe — response.genUiCards is never
-  // re-rendered here, so no card can ever appear twice in the stream.
+  // re-rendered here, so no card can ever appear twice in the stream. When the copilot returns
+  // `actionMutations`, they are dispatched onto the active workbench's sliders immediately.
   const submitQuestion = async (rawPrompt: string) => {
     const chipList = selectedChips.map((c) => c.label || c.chipId).join(', ');
     const text = chipList ? `[${chipList}] ${rawPrompt}` : rawPrompt;
     setPrompt('');
     setMessages((prev) => [...prev, { id: `u-${Date.now()}`, role: 'user', text }]);
-    const response = await askPerryCopilot({ prompt: rawPrompt, activeWorkbench, personaMode, selectedChips });
-    setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'agent', text: response.reply }]);
+    const response = await askPerryCopilot({
+      prompt: rawPrompt,
+      activeWorkbench,
+      personaMode,
+      selectedChips,
+      payload: getClientAppState().payload,
+    });
+    const appliedMutations = response.actionMutations?.params;
+    if (response.actionMutations) dispatchWorkbenchMutation(response.actionMutations);
+    setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'agent', text: response.reply, appliedMutations }]);
   };
 
   const handleSend = (e: React.FormEvent) => {
@@ -129,7 +145,28 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
             data-testid={m.role === 'agent' ? 'copilot-agent-message' : undefined}
           >
             <strong>{m.role === 'user' ? 'You' : 'PerryAgent'}:</strong> {m.text}
+            {m.appliedMutations && (
+              <span className="copilot-mutation-pill" data-testid="copilot-mutation-pill">
+                ⚡ Applied to Workbench:{' '}
+                {Object.entries(m.appliedMutations)
+                  .map(([k, v]) => `${k}=${v}`)
+                  .join(', ')}
+              </span>
+            )}
           </div>
+        ))}
+      </div>
+
+      <div className="starter-prompts" data-testid="copilot-quick-actions">
+        {getQuickActionsForWorkbench(activeWorkbench).map((action, idx) => (
+          <button
+            key={action}
+            type="button"
+            data-testid={`copilot-quick-action-${idx}`}
+            onClick={() => void submitQuestion(action)}
+          >
+            {action}
+          </button>
         ))}
       </div>
 

@@ -48,6 +48,15 @@ The Express host (`src/server/copilot-route.ts`) fronts a two-tier answering pip
 
 - `GET /api/copilot/status` reports the active `{ gatewayUrl, model, tier2 }` state.
 - The browser drawer (`AgentChatDrawer`) runs Tier-1 locally first (emitting GenUI cards into the inline stream), then enriches the reply via `POST /api/copilot`; the vite dev proxy forwards `/api` to `http://127.0.0.1:3000` so `npm run dev` reaches the same Express route.
+- **Live-state grounding & What-If control (Phase 9, 2026-10-30)**: `CopilotRequestSchema` carries the live `payload` snapshot; Tier-2 user content embeds `Live inputs`/`Live metrics` and the system prompt instructs the model to close with a `{"actionMutations": ...}` JSON line, which `callGeminiGateway` extracts defensively. Tier-1 runs `parseCopilotScenario` (`src/actions/copilot-scenario-parser.ts`) — a deterministic natural-language What-If parser that overlays matched params (gpm / inches / psig / compound / Kelvin / reflux / alpha / rescue intents) onto the live payload, recomputes before/after diagnostics with the pure solver modules, and returns `actionMutations` + citations. The drawer dispatches `actionMutations` via `dispatchWorkbenchMutation` and renders a `copilot-mutation-pill`.
+
+## Bi-Directional `<current-screen>` Payload & Mutation Bus (`src/actions/view-screen.ts`)
+
+The screen store is a two-way bus, not a read-only serializer:
+
+1. **Publish (workbench → store)**: every workbench calls `syncWorkbenchPayload(workbenchId, { summary, inputs, metrics, equations, statusBanner })` on mount and on every slider change. Snapshots are cached per workbench; the active workbench's snapshot is exposed as `ClientScreenState.payload`, and tab switches swap in the cached snapshot of the newly active workbench.
+2. **Serialize (store → LLM)**: `serializeCurrentScreenTag()` emits `<payload live="true">` with `<summary>/<inputs>/<metrics>/<equations>/<raw>` whenever inputs/metrics exist — the copilot and `view-screen` agent action reason over exact live numbers.
+3. **Mutate (missions/copilot → workbench)**: `dispatchWorkbenchMutation({ targetWorkbench, params, reason })` synchronously notifies all `subscribeWorkbenchMutation` listeners; each workbench applies matched keys to its React state (sliders animate immediately). Guided Missions preset trap scenarios this way (`mission-scenarios.ts`), and the `MissionChecklistBanner` watches the payload via `subscribeClientAppState` to auto-check the 3-step Observe → Scrub → Verify walkthrough.
 
 ## Core Subsystems
 1. **Agent-Native Host**: Bridges the interactive web UI and LLM agent using typed schema actions and live UI state synchronization.

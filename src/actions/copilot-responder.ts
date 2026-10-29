@@ -1,7 +1,11 @@
 // Tier-1 deterministic ChE Tutor & Action Responder: intent-matched tutoring grounded in
 // Perry's 9th Ed. with white-box rigor (psia = psig + 14.696; Darcy f_D = 4 · Fanning f_F).
+// Additive (Validation Session 1): live `payload` in the request, natural-language What-If
+// parsing via copilot-scenario-parser, and optional `actionMutations` in the response.
 import { z } from 'zod';
 import { agentNative, defineAction, type GenUiPayload } from './define-action';
+import { parseCopilotScenario } from './copilot-scenario-parser';
+import type { WorkbenchMutationCommand } from './view-screen';
 
 export const CopilotRequestSchema = z.object({
   prompt: z.string().default(''),
@@ -13,6 +17,7 @@ export const CopilotRequestSchema = z.object({
     kind: z.string().optional(),
     payload: z.record(z.unknown()).optional(),
   })).default([]),
+  payload: z.record(z.unknown()).optional(),
 });
 
 export type CopilotRequest = z.infer<typeof CopilotRequestSchema>;
@@ -23,6 +28,7 @@ export interface CopilotResponse {
   tier: 'tier1-deterministic' | 'tier2-gemini-4-argon-low';
   citations: string[];
   genUiCards: GenUiPayload[];
+  actionMutations?: WorkbenchMutationCommand;
 }
 
 type Intent = 'wb2-thermo' | 'wb3-hydraulics' | 'wb4-distillation' | 'wb1-charts';
@@ -130,13 +136,28 @@ const KNOWLEDGE: Record<Intent, () => Tier1Knowledge> = {
 /** Deterministic Tier-1 responder: intent-matched tutoring + exact citations + GenUI cards. */
 export function runCopilotResponder(input: unknown, options?: { emitUi?: boolean }): CopilotResponse {
   const parsed = CopilotRequestSchema.parse(input);
+  const scenario = parseCopilotScenario(parsed.prompt, {
+    activeWorkbench: parsed.activeWorkbench,
+    personaMode: parsed.personaMode,
+    payload: parsed.payload ?? {},
+  });
   const { learn, plant, citations, cards } = KNOWLEDGE[detectIntent(parsed)]();
-  const tail = `Citations: ${citations.join(' | ')}`;
-  const reply = parsed.personaMode === 'learn'
-    ? `🎓 Student Intuition:\n${learn}\n\n${tail}`
-    : `🏭 EPC Verification:\n${plant}\nSynced with <current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">\n\n${tail}`;
-  if (options?.emitUi !== false) cards.forEach((c) => agentNative.ui.output(c));
-  return { reply, model: 'perry-tier1-deterministic', tier: 'tier1-deterministic', citations, genUiCards: cards };
+  const allCitations = [...citations, ...scenario.citations];
+  const allCards = [...cards, ...scenario.cards];
+  const tail = `Citations: ${allCitations.join(' | ')}`;
+  const base = parsed.personaMode === 'learn'
+    ? `🎓 Student Intuition:\n${learn}`
+    : `🏭 EPC Verification:\n${plant}\nSynced with <current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`;
+  const reply = scenario.liveReply ? `${scenario.liveReply}\n\n${base}\n\n${tail}` : `${base}\n\n${tail}`;
+  if (options?.emitUi !== false) allCards.forEach((c) => agentNative.ui.output(c));
+  return {
+    reply,
+    model: 'perry-tier1-deterministic',
+    tier: 'tier1-deterministic',
+    citations: allCitations,
+    genUiCards: allCards,
+    actionMutations: scenario.mutations,
+  };
 }
 
 /** Browser helper: Tier-1 first (cards emitted locally), then enrich via POST /api/copilot. */

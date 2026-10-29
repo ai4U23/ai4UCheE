@@ -1,0 +1,57 @@
+[
+  {
+    "viewport": "375x812",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/render-check/375x812.png",
+    "outline": [
+      "div#root \"Perry's Intelligent Workbench AI4UCHEE ·\" @ x0 y0 375x2869",
+      "  div.app-shell \"Perry's Intelligent Workbench AI4UCHEE ·\" @ x0 y0 375x2869",
+      "    header.shell-header \"Perry's Intelligent Workbench AI4UCHEE  @ x0 y0 375x355",
+      "      div.brand-identity \"Perry's Intelligent Workbench AI4UCHEE · @ x24 y14 327x154",
+      "      div.wb-actions-row \"🎓 Learn Mode 🏭 Plant Mode\" @ x24 y183 281x44",
+      "      div.wb-actions-row \"☀️ Ivory #FBF6EC Export Senior Calc Shee @ x24 y243 327x97",
+      "    nav.wb-toolbar \"WB1: Perry's Visual Verifier Chart & Fig\" @ x20 y368 335x275",
+      "      button.wb-tab.active \"WB1: Perry's Visual Verifier Chart & F @ x20 y368 335x61",
+      "      button.wb-tab \"WB2: Sec 1/2/4 DIPPR & Thermo Boiling, V\" @ x20 y439 335x61",
+      "      button.wb-tab \"WB3: Sec 6/8/10 Fluid Hydraulics Pipe Lo\" @ x20 y511 335x61",
+      "      button.wb-tab \"WB4: Sec 13/14 Distillation Stage Steppi\" @ x20 y582 335x61",
+      "    div.mission-bar \"🧭 Guided Student Missions — 1-click sta\" @ x20 y657 335x247",
+      "    main.shell-workspace.wb-split \"WB1 · Perry's 25-Section Visu @ x20 y917 335x1931",
+      "      div \"WB1 · Perry's 25-Section Visual Crop & C\" @ x20 y917 335x1290",
+      "      aside.chat-drawer \"🤖 Perry's Agent Co-Pilot ⚡ gemini-4-arg\" @ x20 y2225 335x624"
+    ],
+    "findings": [],
+    "height": 2869
+  },
+  {
+    "viewport": "768x1024",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/render-check/768x1024.png",
+    "outline": [
+      "div#root \"Perry's Intelligent Workbench AI4UCHEE ·\" @ x0 y0 768x1570",
+      "  div.app-shell \"Perry's Intelligent Workbench AI4UCHEE ·\" @ x0 y0 768x1570",
+      "    header.shell-header \"Perry's Intelligent Workbench AI4UCHEE  @ x0 y0 768x129",
+      "    nav.wb-toolbar \"WB1: Perry's Visual Verifier Chart & Fig\" @ x20 y143 728x132",
+      "    div.mission-bar \"🧭 Guided Student Missions — 1-click sta\" @ x20 y288 728x49",
+      "    main.shell-workspace.wb-split \"WB1 · Perry's 25-Section Visu @ x20 y352 728x1198",
+      "      div \"WB1 · Perry's 25-Section Visual Crop & C\" @ x20 y352 728x785",
+      "      aside.chat-drawer \"🤖 Perry's Agent Co-Pilot ⚡ gemini-4-arg\" @ x20 y1154 728x396"
+    ],
+    "findings": [],
+    "height": 1570
+  },
+  {
+    "viewport": "1440x900",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/render-check/1440x900.png",
+    "outline": [
+      "div#root \"Perry's Intelligent Workbench AI4UCHEE ·\" @ x0 y0 1440x900",
+      "  div.app-shell \"Perry's Intelligent Workbench AI4UCHEE ·\" @ x0 y0 1440x900",
+      "    header.shell-header \"Perry's Intelligent Workbench AI4UCHEE  @ x0 y0 1440x74",
+      "    nav.wb-toolbar \"WB1: Perry's Visual Verifier Chart & Fig\" @ x20 y88 1400x61",
+      "    div.mission-bar \"🧭 Guided Student Missions — 1-click sta\" @ x20 y162 1400x49",
+      "    main.shell-workspace.wb-split \"WB1 · Perry's 25-Section Visu @ x20 y225 1400x655",
+      "      div \"WB1 · Perry's 25-Section Visual Crop & C\" @ x20 y225 893x583",
+      "      aside.chat-drawer \"🤖 Perry's Agent Co-Pilot ⚡ gemini-4-arg\" @ x931 y225 489x466"
+    ],
+    "findings": [],
+    "height": 900
+  }
+]

@@ -102,3 +102,29 @@ span.katex-block { display: inline-block; margin: 0.15rem 0; padding: 0.1rem 0.3
 /* Fixed modal backdrop + dialog shell (QA/QC Calc Sheet exporter). */
 .modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgb(7 26 51 / 0.68); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
 .modal-dialog { max-width: 880px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+/* 3-Stage White-Box equation cards (Symbolic → Live Substitution → Evaluated Result). */
+.white-box-eq-card { margin-top: 0.65rem; padding: 0.75rem 0.9rem; background: var(--bg-elevated); border: 1px solid var(--border-grid); border-radius: 9px; }
+.white-box-eq-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.4rem; margin-bottom: 0.45rem; }
+.white-box-citation-badge { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600; padding: 0.18rem 0.55rem; border-radius: 999px; border: 1px solid var(--accent-secondary); background: rgba(232, 197, 71, 0.18); color: var(--ink-primary); white-space: nowrap; }
+.white-box-stage-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.55rem; }
+.white-box-stage-pill { padding: 0.5rem 0.6rem; border: 1px dashed var(--border-grid); border-radius: 8px; background: var(--bg-panel); min-width: 0; }
+.white-box-stage-label { display: block; font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; color: var(--accent-secondary); margin-bottom: 0.2rem; }
+.white-box-plain-note { margin: 0.5rem 0 0; padding: 0.5rem 0.7rem; border-left: 3px solid var(--maize); background: rgba(232, 197, 71, 0.13); border-radius: 0 6px 6px 0; font-size: 0.84rem; color: var(--ink-primary); }
+.white-box-warning-note { margin: 0.5rem 0 0; padding: 0.5rem 0.7rem; border-left: 3px solid var(--status-danger); background: rgba(185, 28, 28, 0.1); border-radius: 0 6px 6px 0; font-size: 0.84rem; color: var(--status-danger); font-weight: 600; }
+@media (max-width: 900px) { .white-box-stage-grid { grid-template-columns: 1fr; } }
+
+/* Mission checklist banner (Observe Trap → Scrub Control → Verify Proof). */
+.mission-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-top: 0.4rem; padding: 0.6rem 0.85rem; background: var(--bg-elevated); border: 1px solid var(--accent-secondary); border-radius: 9px; box-shadow: var(--shadow-lift); }
+.mission-banner-head { display: flex; align-items: center; gap: 0.5rem; flex: 1 1 100%; }
+.mission-banner-head button { margin-left: auto; padding: 0.1rem 0.5rem; }
+.mission-steps { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; list-style: none; margin: 0; padding: 0; font-size: 0.8rem; font-weight: 600; }
+.mission-step { color: var(--ink-muted); }
+.mission-step.done { color: var(--status-pass); }
+.mission-banner > button[data-testid="mission-autofix-btn"] { background: var(--maize); color: var(--navy-deep); border-color: var(--maize); font-size: 0.78rem; }
+
+/* Co-Pilot mutation pill (applied What-If parameters on assistant messages). */
+.copilot-mutation-pill { display: inline-block; margin-top: 0.35rem; padding: 0.22rem 0.6rem; border-radius: 999px; border: 1px solid var(--status-pass); background: rgba(21, 128, 61, 0.12); color: var(--status-pass); font-size: 0.74rem; font-weight: 700; }
+
+/* DIPPR phase envelope figure. */
+.dippr-envelope { background: var(--bg-elevated); border: 1px solid var(--border-grid); border-radius: 9px; padding: 0.55rem 0.65rem 0.35rem; }

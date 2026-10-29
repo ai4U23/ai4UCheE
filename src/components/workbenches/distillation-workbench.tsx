@@ -1,12 +1,15 @@
 // WB4: Perry's Sec 13 & 14 Distillation Workbench — Bi-Directional McCabe-Thiele + Tray/Packing Flooding.
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
-import { KaTeXBlock } from '../ui/katex-block';
+import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
+import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ColumnFloodingSvgSketch } from '../sketches/column-flooding-svg-sketch';
 import { McCabeThieleSvgCanvas } from '../sketches/mccabe-thiele-svg-canvas';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
+import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
+import { solveDistillation } from './distillation-solver-math';
 
 export const DistillationWorkbench: React.FC = () => {
   const { personaMode } = usePersonaTheme();
@@ -19,32 +22,37 @@ export const DistillationWorkbench: React.FC = () => {
   const [traySpacingM, setTraySpacingM] = useState<number>(0.61);
   const [colDiamM, setColDiamM] = useState<number>(0.85);
 
-  // Pinch & FUG calculations
-  const yPinch = (alpha * xf) / (1 + (alpha - 1) * xf);
-  const rMin = Math.max((xd - yPinch) / Math.max(yPinch - xf, 0.02), 0.1);
-  const rOp = rMult * rMin;
-  const nMin = Math.log((xd * (1 - xb)) / Math.max(xb * (1 - xd), 1e-6)) / Math.log(Math.max(alpha, 1.05));
-  const totalStages = Math.max(Math.round(nMin * 2.1), 6);
-  const feedStage = Math.max(Math.round(totalStages * 0.5), 2);
+  const solved = solveDistillation({ alpha, xf, xd, xb, q, rMult, traySpacingM, colDiamM });
+  const { rMin, rOp, nMin, floodPercent, isFlooding } = solved;
 
-  // Sec 14 Fair's Souders-Brown & Eckert GPDC hydraulics coupled to V = (R+1)*D
-  const distillateKmolHr = 100 * ((xf - xb) / Math.max(xd - xb, 0.05));
-  const vRectKmolHr = (rOp + 1) * distillateKmolHr;
-  const lRectKmolHr = rOp * distillateKmolHr;
-  const fLv = (lRectKmolHr / Math.max(vRectKmolHr, 1)) * Math.sqrt(2.85 / 815.0);
-  const cSbMs = (0.0105 + 0.1496 * Math.pow(traySpacingM, 0.755)) * Math.pow(10, -0.14 * Math.log10(Math.max(fLv, 0.02)));
-  const uFloodMs = cSbMs * Math.pow(21.0 / 20.0, 0.2) * Math.sqrt((815 - 2.85) / 2.85);
-  const qVaporM3s = (vRectKmolHr * 82.0) / 3600 / 2.85;
-  const aNet = ((Math.PI * colDiamM * colDiamM) / 4) * 0.88;
-  const uActualMs = qVaporM3s / Math.max(aNet, 0.05);
-  const pctFlood = (uActualMs / Math.max(uFloodMs, 0.05)) * 100;
-  const dpPacking = 42.0 * Math.pow(uActualMs / 1.1, 1.85);
+  useWorkbenchMutations('wb4-distillation', (p) => {
+    if (p.alpha !== undefined) setAlpha(Number(p.alpha));
+    if (p.xf !== undefined) setXf(Number(p.xf));
+    if (p.xd !== undefined) setXd(Number(p.xd));
+    if (p.xb !== undefined) setXb(Number(p.xb));
+    if (p.q !== undefined) setQ(Number(p.q));
+    if (p.rMult !== undefined) setRMult(Number(p.rMult));
+    if (p.colDiamM !== undefined) setColDiamM(Number(p.colDiamM));
+  });
+
+  useEffect(() => {
+    syncWorkbenchPayload('wb4-distillation', {
+      summary: `WB4 distillation: α ${alpha.toFixed(2)}, R/R_min ${rMult.toFixed(2)} → ${floodPercent.toFixed(1)}% of Fair flood`,
+      inputs: { alpha, xf, xd, xb, q, rMult, traySpacingM, colDiamM },
+      metrics: {
+        rMin, rOp, nMin, totalStages: solved.totalStages, floodPercent,
+        isFlooding, vRectKmolHr: solved.vRectKmolHr,
+      },
+      equations: solved.equations,
+      statusBanner: isFlooding ? `⚠️ FLOODING at ${floodPercent.toFixed(1)}%` : `✅ ${floodPercent.toFixed(1)}% of flood`,
+    });
+  });
 
   const fenskeSelect = useAgentSelectable(
     'equation',
     'eq-13-fenske',
     'Fenske N_min & Underwood R_min (Perry Sec 13, p. 13-36)',
-    { rMin, rOp, nMin, totalStages },
+    { rMin, rOp, nMin, totalStages: solved.totalStages },
   );
 
   return (
@@ -95,12 +103,12 @@ export const DistillationWorkbench: React.FC = () => {
         <ColumnFloodingSvgSketch
           columnDiameterM={colDiamM}
           traySpacingM={traySpacingM}
-          totalStages={totalStages}
-          feedStage={feedStage}
-          fLv={fLv}
-          cSbMs={cSbMs}
-          percentFlood={pctFlood}
-          dpPackingMmH2oM={dpPacking}
+          totalStages={solved.totalStages}
+          feedStage={solved.feedStage}
+          fLv={solved.fLv}
+          cSbMs={solved.cSbMs}
+          percentFlood={floodPercent}
+          dpPackingMmH2oM={solved.dpPackingMmH2oM}
         />
       </div>
 
@@ -121,13 +129,10 @@ export const DistillationWorkbench: React.FC = () => {
               ? '🎓 Tier 1 — Fenske-Underwood-Gilliland & Stage Stepping'
               : '🏭 Tier 2 — Sec 14 Fair Flooding & Eckert GPDC Rating'}
           </h3>
-          <KaTeXBlock latex={'N_{\\min} = \\frac{\\ln[(x_D/(1-x_D))\\cdot((1-x_B)/x_B)]}{\\ln \\alpha_{AB}}'} testId="katex-fenske" />
+          <WhiteBoxEquationCard equation={solved.equations[0]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-fenske' }} />
+          <WhiteBoxEquationCard equation={solved.equations[1]} personaMode={personaMode} />
           <p className="mono">
-            R_min = {rMin.toFixed(3)} · R_op = {rOp.toFixed(3)} · N_min = {nMin.toFixed(2)}{' '}
-            <code>[Perry&apos;s 9th Ed., Sec. 13, p. 13-36]</code>
-          </p>
-          <p className="mono">
-            V_rect = {vRectKmolHr.toFixed(1)} kmol/h · L_rect = {lRectKmolHr.toFixed(1)} kmol/h · F_LV = {fLv.toFixed(3)}{' '}
+            V_rect = {solved.vRectKmolHr.toFixed(1)} kmol/h · L_rect = {solved.lRectKmolHr.toFixed(1)} kmol/h · F_LV = {solved.fLv.toFixed(3)}{' '}
             <code>[Perry&apos;s 9th Ed., Fig. 14-32, p. 14-37]</code>
           </p>
           <p className="mono">

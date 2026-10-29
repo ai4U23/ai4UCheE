@@ -1,8 +1,10 @@
 // WB1: Perry's 9th Ed. 25-Section Visual Crop Verifier & DeepTutor Chart-Reading Practice.
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { cropPerryPageAction } from '../../actions/search-perry-pdf';
+import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { PerryFigureSvgPreview } from './perry-figure-svg-preview';
 import { VisualVerifierTutorCard } from './visual-verifier-tutor-card';
@@ -37,6 +39,25 @@ export const VisualVerifierWorkbench: React.FC = () => {
   const fourXErr = exactValue !== 0 ? (Math.abs(numReading - 4 * exactValue) / (4 * exactValue)) * 100 : 100;
   const fanning4xDetected = secPage === '6-10' && fourXErr <= 15.0 && !pass;
   const showCrosshair = personaMode === 'plant' || revealed;
+
+  useWorkbenchMutations('wb1-visual-verifier', (p) => {
+    if (p.secPage !== undefined) setSecPage(String(p.secPage));
+    if (p.userReading !== undefined) setUserReading(String(p.userReading));
+    if (p.exactValue !== undefined) setExactValue(Number(p.exactValue));
+  });
+
+  useEffect(() => {
+    syncWorkbenchPayload('wb1-visual-verifier', {
+      summary: `WB1 chart verifier: Perry p. ${secPage}, reading ${userReading} vs exact ${exactValue}`,
+      inputs: { secPage, userReading, exactValue },
+      metrics: { errPct, pass, fanning4xDetected },
+      statusBanner: pass
+        ? '✅ Reading within 5% of the Perry-exact value'
+        : fanning4xDetected
+          ? '⚠️ 4× Fanning/Darcy trap detected — re-read the chart'
+          : '❌ Reading off — re-check the crosshair',
+    });
+  });
 
   const applyPreset = (preset: (typeof PRESET_ANCHORS)[number]) => {
     setSecPage(preset.secPage);

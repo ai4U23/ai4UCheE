@@ -3,7 +3,7 @@
 <!-- Updated: Validation Session 1 (2026-10-30) - WB1 re-scoped (no new sliders; chart-reading mission), mutation keys corrected to actual state vars (compound/tempK, npsInch/schedule/pSuctionPsig, rMult/q), solver extraction preserves in-repo Swamee-Jain math (no Churchill swap), mission ids preserved (mission-fanning-trap etc.), Perry citations locked to PDF-verified ground truths, added thermo-solver-math.ts -->
 
 - **Parent Plan**: [`plan.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/plan.md)
-- **Status**: Pending
+- **Status**: Completed
 - **Estimated Effort**: 4.5h
 - **Depends On**: [`phase-01-live-screen-bus-and-3stage-katex.md`](file:///Users/nad/ai4u/ai4UCheE/plans/261029-2335-chemie-interactive-ux-and-live-copilot/phase-01-live-screen-bus-and-3stage-katex.md)
 
