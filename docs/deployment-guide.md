@@ -40,6 +40,17 @@ curl -sS http://100.64.56.26/health
 ssh chemie "sudo systemctl stop cloudflared-chemie.service"
 ```
 
+### Keep-Alive (Free-Plan Constraints & 15-Min Watchdog)
+
+The `chemie` sandbox runs on the **InstaBox Free plan**, which enforces two immutable limits:
+
+- **Idle auto-suspend: 30 minutes** (locked; `instabox auto-suspend chemie 0` returns `permission_denied` on Free).
+- **Max runtime: 480 minutes** (8 h) — the sandbox stops even under active traffic.
+
+Consequence: `chemie` periodically goes down (Cloudflare **Error 530/1033**) and must be resumed with `instabox resume chemie` (fallback `instabox start chemie` after a hard stop). A keep-alive watchdog automation (ZCode cron `automation-f7a1acdc-717f-42c8-9a9d-9cad0231284d`, every 15 min) checks `https://chemie.ai4u.now/health`, auto-resumes the sandbox on failure, and re-verifies `/health` + `/api/copilot/status`. Worst-case downtime after a pause is therefore ~15–20 min. systemd units (`perry-engine`, `perry-workbench`, `perry-workbench-http`, `cloudflared-chemie`) start automatically at sandbox boot, so a resume needs no manual deploy.
+
+**True always-on requires Pro**: `instabox workspace subscribe <workspace> --plan pro`, then `instabox auto-suspend chemie 0` (unlocks idle-pause off and unlimited max runtime). The watchdog remains useful as a safety net either way.
+
 ---
 
 ## 2. Local Development Stack
