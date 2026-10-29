@@ -4,6 +4,7 @@ import { cropPerryPageAction } from '../../actions/search-perry-pdf';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
+import { PerryFigureSvgPreview } from './perry-figure-svg-preview';
 import { VisualVerifierTutorCard } from './visual-verifier-tutor-card';
 
 const PRESET_ANCHORS: Array<{ secPage: string; label: string; exactVal: number; xVal: number; yVal: number }> = [
@@ -109,14 +110,14 @@ export const VisualVerifierWorkbench: React.FC = () => {
             <img src={cropDataUri} alt={`Perry's ${secPage} crop`} className="wb-crop-img" />
           ) : (
             <div className="wb-crop-placeholder">
-              <strong>[Perry&apos;s 9th Ed., p. {secPage}]</strong>
-              <span>Vector chart canvas · Point-and-Ask enabled ({figSelectable.chipId})</span>
+              <PerryFigureSvgPreview secPage={secPage} exactValue={exactValue} showCrosshair={showCrosshair} />
+              <span>Click chart to attach Point-and-Ask chip · [Perry&apos;s 9th Ed., p. {secPage}]</span>
             </div>
           )}
           {showCrosshair && (
             <svg className="wb-crosshair-svg" viewBox="0 0 100 100" preserveAspectRatio="none" data-testid="calibrated-crosshair">
-              <line x1={crosshair.xPct} y1={0} x2={crosshair.xPct} y2={100} stroke="currentColor" strokeDasharray="2 2" />
-              <line x1={0} y1={crosshair.yPct} x2={100} y2={crosshair.yPct} stroke="currentColor" strokeDasharray="2 2" />
+              <line x1={crosshair.xPct} y1={0} x2={crosshair.xPct} y2={100} stroke="currentColor" strokeDasharray="2 2" strokeOpacity="0.6" />
+              <line x1={0} y1={crosshair.yPct} x2={100} y2={crosshair.yPct} stroke="currentColor" strokeDasharray="2 2" strokeOpacity="0.6" />
               <circle cx={crosshair.xPct} cy={crosshair.yPct} r={2.2} fill="currentColor" />
             </svg>
           )}

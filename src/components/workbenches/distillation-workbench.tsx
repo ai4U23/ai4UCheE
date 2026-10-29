@@ -17,7 +17,7 @@ export const DistillationWorkbench: React.FC = () => {
   const [q, setQ] = useState<number>(1.0);
   const [rMult, setRMult] = useState<number>(1.3);
   const [traySpacingM, setTraySpacingM] = useState<number>(0.61);
-  const [colDiamM, setColDiamM] = useState<number>(1.2);
+  const [colDiamM, setColDiamM] = useState<number>(0.85);
 
   // Pinch & FUG calculations
   const yPinch = (alpha * xf) / (1 + (alpha - 1) * xf);

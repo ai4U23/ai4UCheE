@@ -54,7 +54,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
   // GenUI cards flow exclusively through agentNative.ui.subscribe — response.genUiCards is never
   // re-rendered here, so no card can ever appear twice in the stream.
   const submitQuestion = async (rawPrompt: string) => {
-    const chipList = selectedChips.map((c) => c.chipId).join(', ');
+    const chipList = selectedChips.map((c) => c.label || c.chipId).join(', ');
     const text = chipList ? `[${chipList}] ${rawPrompt}` : rawPrompt;
     setPrompt('');
     setMessages((prev) => [...prev, { id: `u-${Date.now()}`, role: 'user', text }]);
@@ -75,8 +75,8 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
         <span className="dof-badge" data-testid="copilot-model-badge">
           ⚡ gemini-4-argon-low · gateway.ai4u.now
         </span>
-        <span className="mono" data-testid="current-screen-badge" title={currentScreenXml}>
-          &lt;current-screen workbench=&quot;{activeWorkbench}&quot; mode=&quot;{personaMode}&quot;&gt;
+        <span className="mono screen-sync-pill" data-testid="current-screen-badge" title={currentScreenXml}>
+          Live Sync: {activeWorkbench.toUpperCase()} ({personaMode.toUpperCase()})
         </span>
       </header>
 
@@ -107,7 +107,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
       </div>
 
       <div className="genui-stream" data-testid="genui-stream">
-        {genUiCards.map((card) =>
+        {genUiCards.slice(-2).map((card) =>
           renderInlineExtension
             ? renderInlineExtension(card)
             : defaultInlineCard(card, onOpenCalcSheet),
@@ -115,6 +115,13 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
       </div>
 
       <div className="chat-messages">
+        {messages.length === 0 && (
+          <div className="chat-msg chat-agent">
+            <strong>PerryAgent:</strong> Ready to coach <strong>{activeWorkbench.toUpperCase()}</strong> in{' '}
+            <strong>{personaMode === 'learn' ? '🎓 Learn Mode' : '🏭 Plant Mode'}</strong>. Click a starter question
+            below or any equation/equipment on the left to inspect its step-by-step Perry derivation.
+          </div>
+        )}
         {messages.map((m) => (
           <div
             key={m.id}

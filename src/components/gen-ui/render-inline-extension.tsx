@@ -22,6 +22,7 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
         <KaTeXBlock latex={String(data.symbolic_latex ?? 'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu}')} />
         {substituted && <KaTeXBlock latex={substituted} />}
         <div className="mono">
+          <strong>Result: </strong>
           <strong>
             <KaTeXBlock latex={String(data.result_latex ?? '')} displayMode={false} />
           </strong>{' '}

@@ -5,14 +5,14 @@ import katex from 'katex';
 export interface KaTeXBlockProps {
   /** Raw LaTeX source string. */
   latex: string;
-  /** Render as block-level <div> when true; inline <span> otherwise (default). */
+  /** Render as block-level <div> when true (default); inline <span> when false. */
   displayMode?: boolean;
   className?: string;
   testId?: string;
   ariaLabel?: string;
 }
 
-export const KaTeXBlock: React.FC<KaTeXBlockProps> = ({ latex, displayMode = false, className, testId, ariaLabel }) => {
+export const KaTeXBlock: React.FC<KaTeXBlockProps> = ({ latex, displayMode = true, className, testId, ariaLabel }) => {
   const html = useMemo(() => {
     try {
       return katex.renderToString(latex, { displayMode, throwOnError: false, output: 'htmlAndMathml' });

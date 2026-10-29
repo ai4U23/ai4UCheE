@@ -87,6 +87,21 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
         </button>
       </div>
       <div className="scrubbable-row">
+        {min !== undefined && max !== undefined && (
+          <input
+            type="range"
+            className="scrubbable-slider"
+            aria-label={`Slide ${label}`}
+            min={min}
+            max={max}
+            step={step}
+            value={Math.min(Math.max(value, min), max)}
+            onChange={(e) => {
+              const parsed = parseFloat(e.target.value);
+              if (!Number.isNaN(parsed)) onChange(clamp(parsed));
+            }}
+          />
+        )}
         <input
           aria-label={label}
           type="number"

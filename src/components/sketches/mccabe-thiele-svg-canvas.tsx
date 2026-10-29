@@ -97,22 +97,22 @@ export const McCabeThieleSvgCanvas: React.FC<McCabeThieleSvgCanvasProps> = ({
       <svg
         viewBox="0 0 500 500"
         width="100%"
-        height="340"
+        height="310"
         onPointerMove={handlePointerMove}
         onPointerUp={() => {
           draggingRef.current = false;
         }}
       >
-        <rect x={PAD} y={PAD} width={SPAN} height={SPAN} fill="none" stroke="currentColor" strokeOpacity="0.4" />
+        <rect x={PAD} y={PAD} width={SPAN} height={SPAN} fill="var(--bg-canvas)" stroke="currentColor" strokeOpacity="0.4" />
         {/* 45 deg diagonal y = x */}
         <line x1={toSvgX(0)} y1={toSvgY(0)} x2={toSvgX(1)} y2={toSvgY(1)} stroke="currentColor" strokeDasharray="3 3" />
         {/* VLE equilibrium curve */}
-        <polyline points={vlePts.join(' ')} fill="none" stroke="var(--accent-primary)" strokeWidth="2.5" />
+        <polyline points={vlePts.join(' ')} fill="none" stroke="var(--accent-primary)" strokeWidth="2.8" />
         {/* Rectifying & Stripping Operating Lines */}
-        <line x1={toSvgX(xd)} y1={toSvgY(xd)} x2={toSvgX(xInt)} y2={toSvgY(yInt)} stroke="var(--accent-secondary)" strokeWidth="2" />
-        <line x1={toSvgX(xInt)} y1={toSvgY(yInt)} x2={toSvgX(xb)} y2={toSvgY(xb)} stroke="var(--accent-secondary)" strokeWidth="2" />
+        <line x1={toSvgX(xd)} y1={toSvgY(xd)} x2={toSvgX(xInt)} y2={toSvgY(yInt)} stroke="var(--accent-secondary)" strokeWidth="2.2" />
+        <line x1={toSvgX(xInt)} y1={toSvgY(yInt)} x2={toSvgX(xb)} y2={toSvgY(xb)} stroke="var(--accent-secondary)" strokeWidth="2.2" />
         {/* Draggable q-line */}
-        <line x1={toSvgX(xf)} y1={toSvgY(xf)} x2={toSvgX(xInt)} y2={toSvgY(yInt)} stroke="var(--status-warn)" strokeWidth="2" strokeDasharray="4 2" />
+        <line x1={toSvgX(xf)} y1={toSvgY(xf)} x2={toSvgX(xInt)} y2={toSvgY(yInt)} stroke="var(--status-warn)" strokeWidth="2.2" strokeDasharray="4 2" />
         <circle
           cx={toSvgX(xInt)}
           cy={toSvgY(yInt)}
@@ -136,8 +136,14 @@ export const McCabeThieleSvgCanvas: React.FC<McCabeThieleSvgCanvasProps> = ({
             yIn={st.yIn}
           />
         ))}
-        <text x={PAD + 8} y={PAD + 18} fontSize="11" fill="currentColor">
+        <text x={PAD + 8} y={PAD + 18} fontSize="11.5" fontWeight="700" fill="currentColor">
           McCabe-Thiele · α={alpha} · q={q.toFixed(2)} · N={stageCoords.length} stages [Perry Sec 13, p. 13-14]
+        </text>
+        <text x={PAD + SPAN / 2} y={488} fontSize="11" fontWeight="600" textAnchor="middle" fill="currentColor">
+          Liquid Mole Fraction x (Light Key) →
+        </text>
+        <text x={15} y={PAD + SPAN / 2} fontSize="11" fontWeight="600" textAnchor="middle" fill="currentColor" transform={`rotate(-90 15 ${PAD + SPAN / 2})`}>
+          Vapor Mole Fraction y →
         </text>
       </svg>
     </div>

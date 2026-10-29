@@ -43,41 +43,44 @@ export const ColumnFloodingSvgSketch: React.FC<ColumnFloodingSvgSketchProps> = (
 
   return (
     <div className="wb-panel" data-testid="column-flooding-svg-sketch">
-      <svg viewBox="0 0 460 220" width="100%" height="210" role="img" aria-label="Distillation Column Flooding Hydraulics Sketch">
+      <svg viewBox="0 0 495 270" width="100%" height="310" role="img" aria-label="Distillation Column Flooding Hydraulics Sketch">
         {/* Column Shell T-201 */}
         <g {...colSelect.selectableProps} style={{ cursor: 'pointer' }} data-testid="sketch-column-node">
-          <rect x="45" y="20" width="90" height="175" rx="28" fill="none" stroke={statusColor} strokeWidth="3" />
-          {[55, 85, 115, 145, 170].map((y, idx) => (
-            <line key={y} x1="48" y1={y} x2="132" y2={y} stroke="currentColor" strokeDasharray={idx === 2 ? 'none' : '4 2'} />
+          <rect x="34" y="22" width="96" height="218" rx="30" fill="var(--bg-canvas)" stroke={statusColor} strokeWidth="3" />
+          {[62, 96, 130, 164, 198].map((y, idx) => (
+            <line key={y} x1="38" y1={y} x2="126" y2={y} stroke="currentColor" strokeDasharray={idx === 2 ? 'none' : '4 2'} />
           ))}
-          <text x="56" y="42" fontSize="10" fill="currentColor">T-201 ({totalStages} stg)</text>
-          <text x="52" y="108" fontSize="9" fill="currentColor">Feed #{feedStage}</text>
-          <text x="52" y="190" fontSize="9" fill="currentColor">D_c={columnDiameterM.toFixed(2)}m</text>
+          <text x="82" y="45" fontSize="10.5" fontWeight="700" textAnchor="middle" fill="currentColor">T-201 ({totalStages} stg)</text>
+          <text x="82" y="122" fontSize="10" fontWeight="600" textAnchor="middle" fill="currentColor">Feed #{feedStage}</text>
+          <text x="82" y="224" fontSize="10" fontWeight="600" textAnchor="middle" fill="currentColor">D_c = {columnDiameterM.toFixed(2)} m</text>
         </g>
 
         {/* Hydraulic Operating Window Gauge Bar */}
-        <g transform="translate(175, 28)">
-          <text x="0" y="14" fontSize="11" fill="currentColor">
+        <g transform="translate(154, 28)">
+          <text x="0" y="14" fontSize="11.5" fontWeight="700" fill="currentColor">
             Sec 14 Fair&apos;s Entrainment Flooding (Fig. 14-32, p. 14-37)
           </text>
-          <text x="0" y="34" fontSize="10" fill="currentColor">
+          <text x="0" y="36" fontSize="10.5" fill="currentColor">
             F_LV = {fLv.toFixed(3)} · C_sb = {cSbMs.toFixed(3)} m/s · h_t = {(traySpacingM * 1000).toFixed(0)} mm
           </text>
 
           {/* Zones: 0-50 Weeping, 50-85 Normal, 85-120 Flooding */}
-          <rect x="0" y="50" width="250" height="22" rx="4" fill="none" stroke="currentColor" />
-          <rect x="104" y="51" width="73" height="20" fill="var(--status-pass)" fillOpacity="0.22" />
-          <rect x="0" y="51" width={(barPct / 120) * 250} height="20" fill={statusColor} fillOpacity="0.65" />
+          <rect x="0" y="54" width="285" height="26" rx="5" fill="var(--bg-canvas)" stroke="currentColor" />
+          <rect x="118" y="55" width="84" height="24" fill="var(--status-pass)" fillOpacity="0.22" />
+          <rect x="0" y="55" width={(barPct / 120) * 285} height="24" rx="4" fill={statusColor} fillOpacity="0.72" />
 
-          <text x="4" y="88" fontSize="9" fill="currentColor">Weeping (&lt;50%)</text>
-          <text x="95" y="88" fontSize="9" fill="currentColor">Normal (50–85%)</text>
-          <text x="188" y="88" fontSize="9" fill="currentColor">Jet Flood (&gt;85%)</text>
+          <text x="4" y="96" fontSize="9.5" fontWeight="600" fill="currentColor">Weeping (&lt;50%)</text>
+          <text x="112" y="96" fontSize="9.5" fontWeight="600" fill="currentColor">Normal (50–85%)</text>
+          <text x="214" y="96" fontSize="9.5" fontWeight="600" fill="currentColor">Jet Flood (&gt;85%)</text>
 
-          <text x="0" y="116" fontSize="12" fill={statusColor} data-testid="column-flood-status">
+          <text x="0" y="128" fontSize="13" fontWeight="700" fill={statusColor} data-testid="column-flood-status">
             % Flood = {percentFlood.toFixed(1)}% · {status}
           </text>
-          <text x="0" y="142" fontSize="10" fill="currentColor">
+          <text x="0" y="156" fontSize="10.5" fill="currentColor">
             Eckert GPDC ΔP/Z = {dpPackingMmH2oM.toFixed(1)} mmH₂O/m [Fig. 14-55, p. 14-57]
+          </text>
+          <text x="0" y="182" fontSize="10" fill="currentColor">
+            Target Window: 65–82% of C_sb flood (Active Area = 88% A_col)
           </text>
         </g>
       </svg>
