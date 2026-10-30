@@ -7,27 +7,15 @@ import {
   dispatchWorkbenchMutation,
   getClientAppState,
   serializeCurrentScreenTag,
+  subscribeClientAppState,
 } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { getQuickActionsForWorkbench, getStarterPromptsForWorkbench } from './copilot-prompts';
+import { GenUiDefaultCard } from './genui-default-card';
 
 export interface AgentChatDrawerProps {
   renderInlineExtension?: (payload: GenUiPayload) => React.ReactNode;
   onOpenCalcSheet?: (data: Record<string, unknown>) => void;
-}
-
-function defaultInlineCard(payload: GenUiPayload, onOpen?: (d: Record<string, unknown>) => void) {
-  return (
-    <div key={payload.id} className="genui-card" data-testid={`genui-${payload.type}`}>
-      <strong>{payload.title ?? payload.type}</strong>
-      <pre className="mono">{JSON.stringify(payload.data, null, 2)}</pre>
-      {payload.type === 'calc-sheet-card' && onOpen && (
-        <button type="button" onClick={() => onOpen(payload.data)}>
-          Open Print-to-PDF Sheet
-        </button>
-      )}
-    </div>
-  );
 }
 
 export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
@@ -41,6 +29,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
     Array<{ id: string; role: 'user' | 'agent'; text: string; appliedMutations?: Record<string, number | string> }>
   >([]);
   const [genUiCards, setGenUiCards] = useState<GenUiPayload[]>(() => agentNative.ui.getHistory());
+  const [livePayload, setLivePayload] = useState<Record<string, unknown>>(() => getClientAppState().payload);
 
   useEffect(() => {
     setGenUiCards(agentNative.ui.getHistory());
@@ -49,12 +38,16 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
     });
   }, []);
 
+  // Subscribe to the payload bus so the <current-screen> badge/XML re-renders the moment any
+  // workbench syncs fresh metrics (without this, the badge goes stale until an unrelated render).
+  useEffect(() => subscribeClientAppState((s) => setLivePayload(s.payload)), []);
+
   const currentScreenXml = serializeCurrentScreenTag({
     activeWorkbench,
     personaMode,
     themeMode,
     selectedChips: selectedChips.map((c) => c.chipId),
-    payload: getClientAppState().payload,
+    payload: livePayload,
   });
 
   // Async Co-Pilot dispatcher: appends the user text, awaits askPerryCopilot, appends the reply.
@@ -124,9 +117,11 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
 
       <div className="genui-stream" data-testid="genui-stream">
         {genUiCards.slice(-2).map((card) =>
-          renderInlineExtension
-            ? renderInlineExtension(card)
-            : defaultInlineCard(card, onOpenCalcSheet),
+          renderInlineExtension ? (
+            renderInlineExtension(card)
+          ) : (
+            <GenUiDefaultCard key={card.id} payload={card} onOpen={onOpenCalcSheet} />
+          ),
         )}
       </div>
 

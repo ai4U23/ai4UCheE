@@ -111,4 +111,40 @@ describe('Phase 8 — Sovereign Academic-Tactile UX & Two-Tier gemini-4-argon-lo
     expect(res.reply).toContain("Perry's 9th Ed.");
     expect(res.genUiCards.length).toBeGreaterThanOrEqual(1);
   });
+
+  it('chip-tray Clear all empties every Point-and-Ask chip (mission chips included)', async () => {
+    render(<App />);
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('mission-fanning-trap'));
+    });
+    expect(screen.getByTestId('chip-agent-select:figure:perry-crop')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Clear all' }));
+    expect(screen.queryByTestId('chip-agent-select:figure:perry-crop')).toBeNull();
+    expect(screen.getByTestId('composer-chip-tray').textContent).toContain('Click any equation');
+  });
+
+  it('Live-Sync badge <current-screen> XML follows the payload bus (no stale WB1 payload on WB2)', async () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
+    await act(async () => {}); // flush context write + WB2 payload sync effects
+
+    const xml = screen.getByTestId('current-screen-badge').getAttribute('title') ?? '';
+    expect(xml).toContain('workbench="wb2-thermo-dippr"');
+    expect(xml).toContain('WB2 DIPPR');
+  });
+
+  it('WB2 temperature input shows a human unit symbol (°C), not the raw enum (degC)', () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
+    fireEvent.change(screen.getByLabelText('Temperature unit'), { target: { value: 'degC' } });
+
+    const unitLabel = screen
+      .getByTestId('scrub-dippr-temp-k')
+      .querySelector('.scrubbable-unit')?.textContent;
+    expect(unitLabel).toBe('°C');
+  });
 });

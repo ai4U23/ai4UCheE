@@ -11,6 +11,8 @@ import { DipprPhaseEnvelopeSvg } from '../sketches/dippr-phase-envelope-svg';
 import { CarlsonAdvisorCard } from './carlson-advisor-card';
 import { DIPPR_COMPOUNDS, solveThermo } from './thermo-solver-math';
 
+const TEMP_UNIT_SYMBOLS = { K: 'K', degC: '°C', degF: '°F', degR: '°R' } as const;
+
 export const ThermoDipprWorkbench: React.FC = () => {
   const { personaMode } = usePersonaTheme();
   const [compound, setCompound] = useState<string>('water');
@@ -129,7 +131,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
       <div className="wb-split">
         <div>
           <ScrubbableNumberInput
-            paramId="dippr-temp-k" label="Temperature" value={tempK} unit={tempUnit}
+            paramId="dippr-temp-k" label="Temperature" value={tempK} unit={TEMP_UNIT_SYMBOLS[tempUnit]}
             min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
