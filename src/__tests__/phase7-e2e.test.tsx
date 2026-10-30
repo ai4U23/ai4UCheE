@@ -3,6 +3,8 @@
 // - Clicking selectable equations/equipment attaches agent-select:<kind>:<id> chips
 // - Calling agentNative.ui.output({ type: 'calc-sheet-card', ... }) mounts inline GenUI card
 // - Compiling a Senior-Engineer Calculation Sheet populates QA/QC header and persists to SQLite saved_calculations.
+import fs from 'node:fs';
+import path from 'node:path';
 import React from 'react';
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -21,8 +23,10 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
   } as unknown as typeof ResizeObserver;
 }
 
+let apiApp: ReturnType<typeof createApiServer>;
+
 beforeAll(() => {
-  createApiServer(':memory:');
+  apiApp = createApiServer(':memory:');
 });
 
 afterEach(() => {
@@ -123,5 +127,13 @@ describe('Phase 7 — End-to-End Workbench Integration, GenUI & SQLite Calc Shee
       out = await generateCalcSheetAction.run({ equipment_tag: 'E-102-HEX' });
     });
     expect((out as { record: { equipmentTag: string } }).record.equipmentTag).toBe('E-102-HEX');
+  });
+
+  it('disables Express x-powered-by header and enforces minmax(0, 1fr) mobile grid guards', () => {
+    expect(apiApp.get('x-powered-by')).toBe(false);
+    const themeCss = fs.readFileSync(path.resolve(__dirname, '../styles/theme-tokens.css'), 'utf8');
+    expect(themeCss.indexOf('.wb-split')).toBeLessThan(themeCss.indexOf('.shell-workspace'));
+    expect(themeCss).toContain('grid-template-columns: minmax(0, 1fr)');
+    expect(themeCss).toContain('.app-shell > :not(.shell-header)');
   });
 });

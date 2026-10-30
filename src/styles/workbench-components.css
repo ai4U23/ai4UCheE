@@ -13,6 +13,7 @@
 .wb-actions-row, .wb-presets, .wb-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 0.55rem; }
 .wb-presets { margin-top: 0.65rem; margin-bottom: 0.65rem; }
 .wb-panel, .wb-tutor-card, .chat-drawer { background: var(--bg-panel); border: 1px solid var(--border-grid); border-radius: 10px; padding: 1.05rem; box-shadow: var(--shadow-lift); }
+.wb-panel, .wb-tutor-card { overflow-x: auto; max-width: 100%; }
 .wb-split > div > .wb-panel { background: var(--bg-elevated); margin-top: 0.65rem; cursor: pointer; transition: border-color 150ms ease, box-shadow 150ms ease; }
 .wb-split > div > .wb-panel:hover { border-color: var(--maize); }
 .wb-subtitle { margin: 0.2rem 0 0; font-size: 0.84rem; color: var(--ink-muted); }
@@ -112,7 +113,7 @@ span.katex-block { display: inline-block; margin: 0.15rem 0; padding: 0.1rem 0.3
 .white-box-stage-label { display: block; font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; color: var(--accent-secondary); margin-bottom: 0.2rem; }
 .white-box-plain-note { margin: 0.5rem 0 0; padding: 0.5rem 0.7rem; border-left: 3px solid var(--maize); background: rgba(232, 197, 71, 0.13); border-radius: 0 6px 6px 0; font-size: 0.84rem; color: var(--ink-primary); }
 .white-box-warning-note { margin: 0.5rem 0 0; padding: 0.5rem 0.7rem; border-left: 3px solid var(--status-danger); background: rgba(185, 28, 28, 0.1); border-radius: 0 6px 6px 0; font-size: 0.84rem; color: var(--status-danger); font-weight: 600; }
-@media (max-width: 900px) { .white-box-stage-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .white-box-stage-grid { grid-template-columns: 1fr; } .white-box-citation-badge { white-space: normal; word-break: break-word; } }
 
 /* Mission checklist banner (Observe Trap → Scrub Control → Verify Proof). */
 .mission-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 0.55rem; margin-top: 0.4rem; padding: 0.6rem 0.85rem; background: var(--bg-elevated); border: 1px solid var(--accent-secondary); border-radius: 9px; box-shadow: var(--shadow-lift); }

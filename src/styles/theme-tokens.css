@@ -100,7 +100,7 @@ code, pre, .mono {
 /* Inner workbench 2-column split. CASCADE PIN: the outer AppShell grid rule below MUST
  * stay AFTER this rule — both selectors are single-class with equal specificity, so
  * source order decides `grid-template-columns` on the outer <main> that carries both. */
-.wb-split { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; margin-top: 0.75rem; align-items: start; }
+.wb-split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1rem; margin-top: 0.75rem; align-items: start; }
 
 /* Outer AppShell workspace grid (deliberately pinned after the inner split rule above). */
 .shell-workspace {
@@ -111,11 +111,15 @@ code, pre, .mono {
   margin-top: 0;
 }
 
+/* Prevent CSS Grid tracks from expanding beyond viewport width on narrow screens while preserving full-bleed .shell-header. */
+.app-shell > * { min-width: 0; }
+.app-shell > :not(.shell-header), .shell-workspace > *, .wb-split > * { min-width: 0; max-width: 100%; }
+
 /* Stack the outer workspace grid and inner splits on narrow viewports. */
 @media (max-width: 1080px) {
   .shell-workspace,
   .wb-split {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

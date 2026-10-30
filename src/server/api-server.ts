@@ -58,6 +58,7 @@ export function createApiServer(dbPath?: string): Express {
   });
 
   const app = express();
+  app.disable('x-powered-by');
   app.use(express.json({ limit: '10mb' }));
 
   app.get('/health', async (req: Request, res: Response): Promise<void> => {
