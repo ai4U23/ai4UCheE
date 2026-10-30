@@ -109,5 +109,11 @@ ai4UCheE/
 - `src/lib/kinetics-lhhw-bioreactor-math.ts`, `src/components/sketches/lhhw-bioreactor-svg.tsx`, & `src/components/workbenches/kinetics-diagram-gallery.tsx` — Subject 4 (`WB6`) Langmuir-Hinshelwood (LHHW) Dual-Site Catalytic Rate Roof $-r'_A(P_A)$ & Sintering Decay $a(t)$ + Monod Chemostat Bioreactor Productivity $D\cdot C_X(D)$ with Washout Cliff $D_{\text{wash}}$ (*Fogler 7th Ed. Ch. 9 & 10 · Perry's Sec. 7, 19, 20*).
 - `src/__tests__/phase14-diagram-switcher-and-advanced-charts.test.tsx` — 4-test E2E suite verifying all 4 Diagram Mode switchers and dual-panel scrubbing across all 8 new diagrams (**45/45 Vitest tests across 9 suites + 46/46 Pytest tests**).
 
+## Framer "Luxurious Three" Motion & Surface Choreography (Phase 15, 2026-10-30)
+- `src/lib/framer-motion-tokens.ts` — exact Framer MCP (`bPWSkk20pwfxzXmKGtRh`) easing curves (`[0.22, 1, 0.36, 1]`, `0.65s`), layout spring (`500/60/1`), bounce spring (`0.4s, bounce 0.2`), `60ms` stagger helper, and `1.4s` mirror Swarm Pulse loop.
+- `src/components/ui/framer-motion-primitives.tsx` — enter-only `<FramerEntranceStage />` (zero exit hold for `0ms` synchronous Vitest unmounts), `<SwarmPulseDot />`, `<MotionPillButton />`, and `<FramerModalShell />`.
+- `src/styles/framer-motion-surfaces.css` — dual-theme radial spotlights, `.framer-pill-glow`, `.swarm-pulse-dot` beacons, SVG handle drop-shadow halos (preserving the SVG Scrub Guard), and `@media (prefers-reduced-motion: reduce)`.
+- `src/__tests__/phase15-framer-luxurious-motion.test.tsx` — 3-test E2E suite verifying Framer token fidelity, Swarm Pulse beacons, synchronous stage unmounts, and ubiquitous `MotionPillButton` / `FramerModalShell` choreography (**48/48 Vitest tests across 10 suites + 46/46 Pytest tests**).
+
 ## `<200` LOC Modularity Gate (AGENTS.md Invariant #2)
 Every `.ts`, `.tsx`, `.css` file in `src/` and every `.py` file in `services/perry-engine/` (`.venv` excluded) is mechanically verified `< 200` lines (`ALL_SRC_UNDER_200_OK`); the largest file sits at 199 lines.
