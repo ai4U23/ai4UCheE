@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from core.unit_registry import normalize_pressure_to_pa
 from solvers.hydraulics_pipe import solve_pipe_hydraulics_3case
@@ -16,28 +16,28 @@ router = APIRouter(prefix="/api/v1/hydraulics", tags=["hydraulics"])
 
 
 class HydraulicsEvaluateRequest(BaseModel):
-    nps_inch: float = 4.0
+    nps_inch: float = Field(default=4.0, gt=0)
     schedule: str = "40"
-    flow_gpm: float = 250.0
-    length_m: float = 100.0
-    roughness_mm: float = 0.045
-    rho_kg_m3: float = 998.2
-    mu_cp: float = 1.0
-    k_fittings: float = 4.5
+    flow_gpm: float = Field(default=250.0, gt=0, le=100000.0)
+    length_m: float = Field(default=100.0, gt=0)
+    roughness_mm: float = Field(default=0.045, ge=0)
+    rho_kg_m3: float = Field(default=998.2, gt=0)
+    mu_cp: float = Field(default=1.0, gt=0)
+    k_fittings: float = Field(default=4.5, ge=0)
     elev_m: float = 5.0
     p_suction_val: float = 2.0
     p_suction_unit: str = "psig"
-    patm_psia: float = 14.6959
+    patm_psia: float = Field(default=14.6959, gt=0)
     z_suction_m: float = 2.0
-    hf_suction_m: float = 0.8
-    p_vapor_pa: float = 3169.0
-    p_crit_pa: float = 22064000.0
-    npshr_m: float = 3.0
+    hf_suction_m: float = Field(default=0.8, ge=0)
+    p_vapor_pa: float = Field(default=3169.0, ge=0)
+    p_crit_pa: float = Field(default=22064000.0, gt=0)
+    npshr_m: float = Field(default=3.0, gt=0)
     valve_p1_val: float = 65.0
     valve_p1_unit: str = "psig"
     valve_p2_val: float = 35.0
     valve_p2_unit: str = "psig"
-    fl_factor: float = 0.9
+    fl_factor: float = Field(default=0.9, ge=0.3, le=1.0)
 
 
 @router.post("/evaluate")

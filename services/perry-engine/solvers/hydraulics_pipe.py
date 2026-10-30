@@ -93,6 +93,8 @@ def solve_pipe_hydraulics_3case(
     elev_m: float = 5.0,
 ) -> dict[str, Any]:
     """Solve ASME B36.10M pipe sizing across Min (70%), Normal (100%), and Rated (120%) cases."""
+    if flow_gpm <= 0 or length_m <= 0 or rho_kg_m3 <= 0 or mu_cp <= 0:
+        raise ValueError("flow_gpm, length_m, rho_kg_m3, and mu_cp must be strictly positive")
     nps, d_inner_m, d_outer_m, wall_t_m = nearest_pipe(NPS=nps_inch, schedule=str(schedule))
     q_normal_m3_s = float(ureg.Quantity(flow_gpm, "gpm").to("m^3/s").magnitude)
     roughness_m = roughness_mm / 1000.0

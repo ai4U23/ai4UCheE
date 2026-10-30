@@ -54,6 +54,10 @@ def solve_mccabe_thiele(
     feed_kmol_hr: float = 100.0,
 ) -> dict[str, Any]:
     """Solve binary McCabe-Thiele stage-stepping, FUG shortcut, and 3-stage white-box equations."""
+    if not (0.0 < xb < xf < xd < 1.0):
+        raise ValueError(f"Infeasible binary split: require 0 < x_B ({xb}) < z_F ({xf}) < x_D ({xd}) < 1")
+    if alpha <= 1.0 or r_mult <= 1.0 or feed_kmol_hr <= 0.0:
+        raise ValueError("Require alpha > 1.0, r_mult > 1.0, and feed_kmol_hr > 0")
     distillate = feed_kmol_hr * (xf - xb) / max(xd - xb, 1e-6)
     bottoms = feed_kmol_hr - distillate
 
