@@ -1,9 +1,9 @@
 // Tier-1 deterministic ChE Tutor & Action Responder: intent-matched tutoring grounded in
-// Perry's 9th Ed. with white-box rigor (psia = psig + 14.696; Darcy f_D = 4 · Fanning f_F).
-// Additive (Validation Session 1): live `payload` in the request, natural-language What-If
-// parsing via copilot-scenario-parser, and optional `actionMutations` in the response.
+// Perry's 9th Ed. with white-box rigor (psia = psig + 14.696; Darcy f_D = 4 · Fanning f_F),
+// live What-If parsing (`copilot-scenario-parser`), and per-student adaptive coaching (`copilot-adaptive-tutor`).
 import { z } from 'zod';
 import { agentNative, defineAction, type GenUiPayload } from './define-action';
+import { buildAdaptiveCopilotCoaching, type AdaptiveCopilotMeta } from './copilot-adaptive-tutor';
 import { parseCopilotScenario } from './copilot-scenario-parser';
 import type { WorkbenchMutationCommand } from './view-screen';
 
@@ -13,6 +13,8 @@ export const CopilotRequestSchema = z.object({
   personaMode: z.enum(['learn', 'plant']).default('learn'),
   selectedChips: z.array(z.object({ chipId: z.string(), label: z.string().optional(), kind: z.string().optional(), payload: z.record(z.unknown()).optional() })).default([]),
   payload: z.record(z.unknown()).optional(),
+  scaffoldingOverride: z.enum(['guided', 'socratic', 'challenge']).optional(),
+  studentProfile: z.record(z.unknown()).optional(),
 });
 
 export type CopilotRequest = z.infer<typeof CopilotRequestSchema>;
@@ -24,6 +26,7 @@ export interface CopilotResponse {
   citations: string[];
   genUiCards: GenUiPayload[];
   actionMutations?: WorkbenchMutationCommand;
+  adaptiveMeta?: AdaptiveCopilotMeta;
 }
 
 type Intent = 'wb2-thermo' | 'wb3-hydraulics' | 'wb4-distillation' | 'wb6-kinetics' | 'wb1-charts';
@@ -138,31 +141,33 @@ function wb1Charts(): Tier1Knowledge {
 }
 
 const KNOWLEDGE: Record<Intent, () => Tier1Knowledge> = {
-  'wb2-thermo': wb2Thermo,
-  'wb3-hydraulics': wb3Hydraulics,
-  'wb4-distillation': wb4Distillation,
-  'wb6-kinetics': wb6Kinetics,
-  'wb1-charts': wb1Charts,
+  'wb2-thermo': wb2Thermo, 'wb3-hydraulics': wb3Hydraulics, 'wb4-distillation': wb4Distillation,
+  'wb6-kinetics': wb6Kinetics, 'wb1-charts': wb1Charts,
 };
 
-/** Deterministic Tier-1 responder: intent-matched tutoring + exact citations + GenUI cards. */
+/** Deterministic Tier-1 responder: intent-matched tutoring + exact citations + GenUI cards + adaptive coaching. */
 export function runCopilotResponder(input: unknown, options?: { emitUi?: boolean }): CopilotResponse {
   const parsed = CopilotRequestSchema.parse(input);
   const scenario = parseCopilotScenario(parsed.prompt, {
-    activeWorkbench: parsed.activeWorkbench,
-    personaMode: parsed.personaMode,
-    payload: parsed.payload ?? {},
+    activeWorkbench: parsed.activeWorkbench, personaMode: parsed.personaMode, payload: parsed.payload ?? {},
+  });
+  const adaptive = buildAdaptiveCopilotCoaching({
+    prompt: parsed.prompt, activeWorkbench: parsed.activeWorkbench, personaMode: parsed.personaMode,
+    payload: parsed.payload, scaffoldingOverride: parsed.scaffoldingOverride, studentProfile: parsed.studentProfile,
   });
   const { learn, plant, citations, cards } = KNOWLEDGE[detectIntent(parsed)]();
   const allCitations = [...citations, ...scenario.citations];
   const allCards = [...cards, ...scenario.cards];
   const tail = `Citations: ${allCitations.join(' | ')}`;
   const base = parsed.personaMode === 'learn'
-    ? `🎓 Student Intuition:\n${learn}`
-    : `🏭 EPC Verification:\n${plant}\nSynced with <current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`;
+    ? `🎓 Student Intuition (${adaptive.meta.scaffoldingLevel.toUpperCase()}):\n${adaptive.coachingBlock}\n\n${learn}`
+    : `🏭 EPC Verification:\n${plant}\n${adaptive.coachingBlock}\nSynced with <current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`;
   const reply = scenario.liveReply ? `${scenario.liveReply}\n\n${base}\n\n${tail}` : `${base}\n\n${tail}`;
   if (options?.emitUi !== false) allCards.forEach((c) => agentNative.ui.output(c));
-  return { reply, model: 'perry-tier1-deterministic', tier: 'tier1-deterministic', citations: allCitations, genUiCards: allCards, actionMutations: scenario.mutations };
+  return {
+    reply, model: 'perry-tier1-deterministic', tier: 'tier1-deterministic',
+    citations: allCitations, genUiCards: allCards, actionMutations: scenario.mutations, adaptiveMeta: adaptive.meta,
+  };
 }
 
 /** Browser helper: Tier-1 first (cards emitted locally), then enrich via POST /api/copilot. */

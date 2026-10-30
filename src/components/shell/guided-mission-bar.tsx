@@ -1,22 +1,53 @@
-// GuidedMissionBar: 4 one-click student missions below the nav — switches to 🎓 Learn Mode,
+// GuidedMissionBar: 5 one-click student missions below the nav — switches to 🎓 Learn Mode,
 // selects the target workbench, attaches the mission's Point-and-Ask chip, emits an instant
-// `equation-proof-card` into the Co-Pilot drawer's GenUI stream, presets the dramatic trap
-// scenario onto the workbench via the mutation bus, and mounts the live MissionChecklistBanner.
-import React, { useState } from 'react';
+// `equation-proof-card`, presets the trap scenario via the mutation bus, tracks DIY (+35%) vs
+// Auto-Fix (+12%) mastery in `student-adaptive-model.ts`, and mounts `AdaptiveRecommendationRail`.
+import React, { useEffect, useRef, useState } from 'react';
 import { agentNative } from '../../actions/define-action';
-import { dispatchWorkbenchMutation } from '../../actions/view-screen';
-import { GUIDED_MISSIONS, type GuidedMissionScenario } from './mission-scenarios';
-import { MissionChecklistBanner } from './mission-checklist-banner';
+import {
+  dispatchWorkbenchMutation,
+  getClientAppState,
+  subscribeClientAppState,
+  type WorkbenchLivePayload,
+} from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
+import { buildAdaptiveRecommendations } from '../../lib/adaptive-recommendation-engine';
+import {
+  getStudentProfile,
+  recordMissionOutcome,
+  recordPayloadObservation,
+  subscribeStudentProfile,
+  type StudentProfileState,
+} from '../../lib/student-adaptive-model';
+import { AdaptiveRecommendationRail } from './adaptive-recommendation-rail';
+import { MissionChecklistBanner } from './mission-checklist-banner';
+import { GUIDED_MISSIONS, getMissionById, type GuidedMissionScenario } from './mission-scenarios';
 
 export const GuidedMissionBar: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [activeMission, setActiveMission] = useState<GuidedMissionScenario | null>(null);
-  const { setPersonaMode, setActiveWorkbench, clearChips, toggleChip } = usePersonaTheme();
+  const [profile, setProfile] = useState<StudentProfileState>(() => getStudentProfile());
+  const usedAutoFixRef = useRef<boolean>(false);
+  const solvedRecordedRef = useRef<string | null>(null);
+  const { activeWorkbench, setPersonaMode, setActiveWorkbench, clearChips, toggleChip } = usePersonaTheme();
+
+  useEffect(() => subscribeStudentProfile((p) => setProfile({ ...p })), []);
+
+  // Observe live payload transitions: debounce continuous slider trap checks (600ms) and record DIY mission solves.
+  useEffect(() => {
+    return subscribeClientAppState((state) => {
+      const payload = (state.payload ?? {}) as WorkbenchLivePayload;
+      recordPayloadObservation(state.activeWorkbench as GuidedMissionScenario['workbench'], payload, 600);
+      if (activeMission && state.activeWorkbench === activeMission.workbench && activeMission.checkSolved(payload)) {
+        if (solvedRecordedRef.current !== activeMission.id && !usedAutoFixRef.current) {
+          solvedRecordedRef.current = activeMission.id;
+          recordMissionOutcome(activeMission.id, false);
+        }
+      }
+    });
+  }, [activeMission]);
 
   const applyMutations = (mission: GuidedMissionScenario, params: Record<string, number | string>) => {
-    // When switching tabs the target workbench mounts after this click — defer the dispatch so
-    // its mutation subscription is live before the trap values arrive.
     const dispatch = () =>
       dispatchWorkbenchMutation({ targetWorkbench: mission.workbench, params, reason: mission.id });
     if (typeof window === 'undefined') {
@@ -27,6 +58,8 @@ export const GuidedMissionBar: React.FC = () => {
   };
 
   const runMission = (mission: GuidedMissionScenario, params: Record<string, number | string>) => {
+    usedAutoFixRef.current = false;
+    solvedRecordedRef.current = null;
     setPersonaMode('learn');
     setActiveWorkbench(mission.workbench);
     clearChips();
@@ -37,18 +70,39 @@ export const GuidedMissionBar: React.FC = () => {
   };
 
   const handleAutoFix = (mission: GuidedMissionScenario) => {
+    usedAutoFixRef.current = true;
+    solvedRecordedRef.current = mission.id;
+    recordMissionOutcome(mission.id, true);
     applyMutations(mission, mission.rescueMutations);
     agentNative.ui.output({
       type: 'equation-proof-card',
-      title: `Auto-Fix Applied — ${mission.buttonLabel}`,
+      title: `Auto-Fix Applied (+12% Assisted Mastery) — ${mission.buttonLabel}`,
       data: {
         symbolic_latex: Object.entries(mission.rescueMutations).map(([k, v]) => `${k} = ${v}`).join(',\\; '),
-        substituted_latex: '\\text{rescue mutations dispatched to the workbench}',
+        substituted_latex: '\\text{Rescue applied — retry scrubbing sliders yourself for full +35\\% mastery}',
         result_latex: '\\text{Ask the Co-Pilot why this operating point is safe}',
         citation: "[Perry's 9th Ed., Sec. 10, pp. 10-24..25]",
       },
     });
   };
+
+  const handleSocraticHint = (mission: GuidedMissionScenario) => {
+    agentNative.ui.output({
+      type: 'equation-proof-card',
+      title: `💡 Socratic Clue — ${mission.buttonLabel}`,
+      data: {
+        symbolic_latex: String(mission.proofCard.data.symbolic_latex ?? ''),
+        substituted_latex: '\\text{Clue: inspect the governing physical term before changing sliders}',
+        result_latex: `\\text{Target zone: } ${Object.keys(mission.rescueMutations).join(', ')}`,
+        citation: String(mission.proofCard.data.citation ?? "[Perry's 9th Ed.]"),
+      },
+    });
+  };
+
+  const bundle = buildAdaptiveRecommendations(profile, {
+    activeWorkbench,
+    payload: getClientAppState().payload,
+  });
 
   return (
     <>
@@ -56,14 +110,21 @@ export const GuidedMissionBar: React.FC = () => {
         {!collapsed && (
           <>
             <span className="mission-pill">🧭 Guided Student Missions — 1-click start</span>
-            {GUIDED_MISSIONS.map((mission) => (
+            {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
               <button
                 key={mission.id}
                 type="button"
                 data-testid={mission.id}
+                title={reasonBadge}
                 onClick={() => runMission(mission, mission.initialMutations)}
               >
+                {solved ? '✓ ' : ''}
                 {mission.buttonLabel}
+                {isRecommendedNext && (
+                  <span data-testid="recommended-mission-badge" style={{ marginLeft: '0.3rem' }}>
+                    ⭐
+                  </span>
+                )}
               </button>
             ))}
           </>
@@ -78,11 +139,20 @@ export const GuidedMissionBar: React.FC = () => {
         </button>
       </div>
       {!collapsed && (
-        <MissionChecklistBanner
-          mission={activeMission}
-          onAutoFix={handleAutoFix}
-          onDismiss={() => setActiveMission(null)}
-        />
+        <>
+          <AdaptiveRecommendationRail
+            onRunRecommendedMission={(id) => {
+              const target = getMissionById(id);
+              if (target) runMission(target, target.initialMutations);
+            }}
+          />
+          <MissionChecklistBanner
+            mission={activeMission}
+            onAutoFix={handleAutoFix}
+            onSocraticHint={handleSocraticHint}
+            onDismiss={() => setActiveMission(null)}
+          />
+        </>
       )}
     </>
   );

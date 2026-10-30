@@ -1,5 +1,11 @@
-// Contextual 1-click starter prompt catalog per workbench (WB1..WB4) + human chip label formatter.
+// Contextual 1-click starter prompt catalog per workbench (WB1..WB6) + adaptive prompt selector.
+import type { WorkbenchLivePayload } from '../../actions/view-screen';
 import type { WorkbenchId } from '../../context/persona-theme-context';
+import {
+  detectLivePayloadTraps,
+  getEffectiveScaffoldingLevel,
+  type StudentProfileState,
+} from '../../lib/student-adaptive-model';
 
 /** 3 student/engineer starter prompts per workbench (Point-and-Ask on-ramps). */
 const STARTER_PROMPTS: Record<WorkbenchId, readonly string[]> = {
@@ -35,9 +41,32 @@ const STARTER_PROMPTS: Record<WorkbenchId, readonly string[]> = {
   ],
 };
 
-/** Contextual 1-click starter prompts for the active workbench. */
-export function getStarterPromptsForWorkbench(workbench: WorkbenchId): readonly string[] {
-  return STARTER_PROMPTS[workbench] ?? STARTER_PROMPTS['wb1-visual-verifier'];
+/** Contextual 1-click starter prompts for the active workbench (adapts to student level & active traps). */
+export function getStarterPromptsForWorkbench(
+  workbench: WorkbenchId,
+  profile?: StudentProfileState,
+  payload?: WorkbenchLivePayload,
+): readonly string[] {
+  const base = STARTER_PROMPTS[workbench] ?? STARTER_PROMPTS['wb1-visual-verifier'];
+  if (!profile) return base;
+  const traps = payload ? detectLivePayloadTraps(workbench, payload) : profile.activeTraps;
+  if (traps.includes('npsha_cavitation_trap') || traps.includes('psig_psia_trap')) {
+    return ['🕵️ Socratic Hint: Why does -10 psig cause P-101 cavitation?', base[0], base[1]];
+  }
+  if (traps.includes('fanning_4x_trap')) {
+    return ['🕵️ Socratic Hint: Why is my Fig. 6-9 reading 4× higher than Perry?', base[0], base[1]];
+  }
+  if (traps.includes('flooding_trap')) {
+    return ['🕵️ Socratic Hint: Which knob lowers Fair % flood fastest?', base[0], base[1]];
+  }
+  if (traps.includes('semenov_runaway_trap') || traps.includes('thiele_diffusion_trap')) {
+    return ['🕵️ Socratic Hint: How do I stabilize ψ ≤ 0.368 and Thiele φ ≤ 2?', base[0], base[1]];
+  }
+  const level = getEffectiveScaffoldingLevel(profile, workbench);
+  if (level === 'challenge') {
+    return [`🏆 Challenge: Stress-test ${workbench.toUpperCase()} design margins`, base[0], base[1]];
+  }
+  return base;
 }
 
 /** 1-tap "What-If" quick actions per workbench — dispatch mutation commands via the copilot. */

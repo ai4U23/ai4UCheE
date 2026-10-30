@@ -12,6 +12,7 @@ import {
 } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
+import { getStudentProfile, subscribeStudentProfile, type StudentProfileState } from '../../lib/student-adaptive-model';
 import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { getQuickActionsForWorkbench, getStarterPromptsForWorkbench } from './copilot-prompts';
 import { GenUiDefaultCard } from './genui-default-card';
@@ -29,6 +30,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
   >([]);
   const [genUiCards, setGenUiCards] = useState<GenUiPayload[]>(() => agentNative.ui.getHistory());
   const [livePayload, setLivePayload] = useState<Record<string, unknown>>(() => getClientAppState().payload);
+  const [studentProfile, setStudentProfile] = useState<StudentProfileState>(() => getStudentProfile());
 
   useEffect(() => {
     setGenUiCards(agentNative.ui.getHistory());
@@ -36,6 +38,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
   }, []);
 
   useEffect(() => subscribeClientAppState((s) => setLivePayload(s.payload)), []);
+  useEffect(() => subscribeStudentProfile((p) => setStudentProfile({ ...p })), []);
 
   const currentScreenXml = serializeCurrentScreenTag({
     activeWorkbench,
@@ -151,7 +154,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
       </div>
 
       <div className="starter-prompts" data-testid="copilot-starter-prompts">
-        {getStarterPromptsForWorkbench(activeWorkbench).map((starter, idx) => (
+        {getStarterPromptsForWorkbench(activeWorkbench, studentProfile, livePayload).map((starter, idx) => (
           <button key={starter} type="button" data-testid={`starter-prompt-${idx}`} onClick={() => void submitQuestion(starter)}>
             {starter}
           </button>
