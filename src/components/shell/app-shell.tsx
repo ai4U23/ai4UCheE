@@ -3,11 +3,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { dispatchWorkbenchMutation } from '../../actions/view-screen';
-import {
-  usePersonaTheme,
-  type PersonaMode,
-  type WorkbenchId,
-} from '../../context/persona-theme-context';
+import { usePersonaTheme, type PersonaMode, type WorkbenchId } from '../../context/persona-theme-context';
+import { FRAMER_LAYOUT_SPRING } from '../../lib/framer-motion-tokens';
+import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { VisualVerifierWorkbench } from '../workbenches/visual-verifier-workbench';
 import { AgentChatDrawer } from './agent-chat-drawer';
 import { GuidedMissionBar } from './guided-mission-bar';
@@ -41,18 +39,9 @@ export const AppShell: React.FC<AppShellProps> = ({
   chatDrawer,
   dofStatus = 'DoF = 0 · Fully Specified',
 }) => {
-  const {
-    personaMode,
-    setPersonaMode,
-    themeMode,
-    setThemeMode,
-    activeWorkbench,
-    setActiveWorkbench,
-  } = usePersonaTheme();
+  const { personaMode, setPersonaMode, themeMode, setThemeMode, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
   const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');
-  if (activeWorkbench !== 'wb1-visual-verifier') {
-    lastSubjectRef.current = activeWorkbench;
-  }
+  if (activeWorkbench !== 'wb1-visual-verifier') lastSubjectRef.current = activeWorkbench;
 
   const openVisualVerifierTool = () => {
     if (activeWorkbench === 'wb1-visual-verifier') {
@@ -92,7 +81,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         className={`persona-btn ${active ? 'active' : ''}`}
         onClick={() => setPersonaMode(mode)}
       >
-        {active && <motion.span layoutId="active-persona-pill" className="motion-pill" />}
+        {active && <motion.span layoutId="active-persona-pill" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
         <span>{label}</span>
       </button>
     );
@@ -104,12 +93,7 @@ export const AppShell: React.FC<AppShellProps> = ({
     <div className="app-shell" data-testid="app-shell">
       <header className="shell-header">
         <div className="brand-identity">
-          <img
-            src="/ai4u-logo.png"
-            alt="AI4U.now"
-            className="brand-logo"
-            data-testid="ai4u-logo"
-          />
+          <img src="/ai4u-logo.png" alt="AI4U.now" className="brand-logo" data-testid="ai4u-logo" />
           <div className="brand-title-group">
             <h1>ChemEng&apos;s Intelligent Workbench</h1>
             <span className="brand-eyebrow">ai4UCheE · Chemical Engineering Intelligence</span>
@@ -119,6 +103,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             data-testid="dof-badge"
             title="Degrees of Freedom = 0: Every required input variable is specified so the solver has a unique physical answer."
           >
+            <SwarmPulseDot tone="emerald" />
             {dofStatus}
           </span>
         </div>
@@ -137,20 +122,13 @@ export const AppShell: React.FC<AppShellProps> = ({
             title="Cross-subject utility tool: inspect calibrated Perry's/BSL/Seader charts & high-DPI PDF page crops for any subject"
             onClick={openVisualVerifierTool}
           >
-            📐 Charts &amp; Page Verifier
+            {isVerifierActive && <motion.span layoutId="active-verifier-pill" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
+            <span>📐 Charts &amp; Page Verifier</span>
           </button>
-          <button
-            type="button"
-            data-testid="theme-toggle"
-            onClick={() => setThemeMode(themeMode === 'paper' ? 'blueprint' : 'paper')}
-          >
+          <button type="button" data-testid="theme-toggle" onClick={() => setThemeMode(themeMode === 'paper' ? 'blueprint' : 'paper')}>
             {themeMode === 'paper' ? '☀️ Ivory #FBF6EC' : '🌙 Dark Navy #071A33'}
           </button>
-          <button
-            type="button"
-            data-testid="export-calc-sheet-btn"
-            onClick={onExportCalcSheet}
-          >
+          <button type="button" data-testid="export-calc-sheet-btn" onClick={onExportCalcSheet}>
             Export Senior Calc Sheet
           </button>
         </div>
@@ -169,7 +147,7 @@ export const AppShell: React.FC<AppShellProps> = ({
               className={`wb-tab ${isActive ? 'active' : ''}`}
               onClick={() => setActiveWorkbench(tab.id)}
             >
-              {isActive && <motion.span layoutId="active-workbench-tab" className="motion-pill" />}
+              {isActive && <motion.span layoutId="active-workbench-tab" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
               <span className="wb-tab-title">{tab.label}</span>
               <small className="wb-tab-sub">{tab.short}</small>
             </button>

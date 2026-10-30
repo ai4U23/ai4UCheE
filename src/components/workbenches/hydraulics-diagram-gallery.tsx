@@ -8,6 +8,7 @@ import { HeatExchangerBoilingSvg } from '../sketches/heat-exchanger-boiling-svg'
 import { IsaControlValveChokedSvg } from '../sketches/isa-control-valve-choked-svg';
 import { ProcessSafetyFlammabilityPlumeSvg } from '../sketches/process-safety-flammability-plume-svg';
 import { DiagramModeBar, type DiagramModeOption } from '../ui/diagram-mode-bar';
+import { FramerEntranceStage } from '../ui/framer-motion-primitives';
 
 export type HydraulicsDiagramMode = 'all' | 'mode-hydraulics' | 'mode-heat-boiling' | 'mode-safety';
 
@@ -61,7 +62,7 @@ export const HydraulicsDiagramGallery: React.FC<HydraulicsDiagramGalleryProps> =
       />
 
       {showHydraulics && (
-        <div className="wb-split">
+        <FramerEntranceStage key={`wb3-hyd-${diagramMode}`} className="wb-split">
           <BslPipeVelocityBoundarySvg
             powerLawN={powerLawN}
             prandtlPr={prandtlPr}
@@ -74,11 +75,11 @@ export const HydraulicsDiagramGallery: React.FC<HydraulicsDiagramGalleryProps> =
             cvRated={cvRated}
             onChangeValveDpPsi={onChangeValveDpPsi}
           />
-        </div>
+        </FramerEntranceStage>
       )}
 
       {(showHeatBoiling || showSafety) && (
-        <div className="wb-split">
+        <FramerEntranceStage key={`wb3-hb-saf-${diagramMode}`} className="wb-split" delay={0.06}>
           {showHeatBoiling && (
             <HeatExchangerBoilingSvg
               tColdOutC={tColdOutC}
@@ -103,7 +104,7 @@ export const HydraulicsDiagramGallery: React.FC<HydraulicsDiagramGalleryProps> =
               }}
             />
           )}
-        </div>
+        </FramerEntranceStage>
       )}
     </div>
   );

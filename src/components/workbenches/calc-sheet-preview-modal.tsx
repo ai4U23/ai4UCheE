@@ -9,6 +9,7 @@ import {
   buildLiveCalcSheet,
   type LiveCalcSheetDocument,
 } from './calc-sheet-builder';
+import { FramerModalShell, SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
 
 export interface CalcSheetPreviewModalProps {
@@ -70,15 +71,12 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
   };
 
   return (
-    <div className="modal-backdrop" data-testid="calc-sheet-backdrop" onClick={onClose}>
-      <div
-        className="wb-panel modal-dialog"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Senior-Engineer QA/QC Calculation Sheet Modal"
-        data-testid="calc-sheet-modal"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <FramerModalShell
+      backdropTestId="calc-sheet-backdrop"
+      dialogTestId="calc-sheet-modal"
+      ariaLabel="Senior-Engineer QA/QC Calculation Sheet Modal"
+      onClose={onClose}
+    >
         <header className="wb-toolbar">
           <h3>📋 Senior-Engineer QA/QC Calculation Sheet Exporter</h3>
           <button type="button" onClick={onClose} data-testid="close-calc-sheet-modal">
@@ -114,6 +112,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
         </div>
 
         <div className={`wb-verdict ${sheet.safetyStatus === 'PASS' ? 'pass' : 'fail'}`} data-testid="calc-sheet-safety-badge">
+          <SwarmPulseDot tone={sheet.safetyStatus === 'PASS' ? 'emerald' : 'danger'} />
           {sheet.safetyStatus === 'PASS' ? '✅ SAFETY AUDIT: PASS' : '⛔ SAFETY AUDIT: ACTION REQUIRED'} — {sheet.safetyDetail}
         </div>
 
@@ -178,7 +177,6 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </FramerModalShell>
   );
 };

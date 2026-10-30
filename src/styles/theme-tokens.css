@@ -4,6 +4,7 @@
  * and Maize Gold (#e8c547 / #f7dca6) with Cormorant Garamond + Karla + JetBrains Mono. */
 @import 'katex/dist/katex.min.css';
 @import './workbench-components.css';
+@import './framer-motion-surfaces.css';
 
 :root,
 [data-theme="paper"] {

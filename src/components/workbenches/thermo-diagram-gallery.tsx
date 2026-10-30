@@ -6,6 +6,7 @@ import { BinaryVleTxySvg } from '../sketches/binary-vle-txy-svg';
 import { PengRobinsonEosSvg } from '../sketches/peng-robinson-eos-svg';
 import { RankineRxnEquilibriumSvg } from '../sketches/rankine-rxn-equilibrium-svg';
 import { DiagramModeBar, type DiagramModeOption } from '../ui/diagram-mode-bar';
+import { FramerEntranceStage } from '../ui/framer-motion-primitives';
 
 export type ThermoDiagramMode = 'all' | 'mode-phase' | 'mode-cycles-eq';
 
@@ -51,27 +52,29 @@ export const ThermoDiagramGallery: React.FC<ThermoDiagramGalleryProps> = ({
       />
 
       {showPhase && (
-        <div className="wb-split">
+        <FramerEntranceStage key={`wb2-phase-${diagramMode}`} className="wb-split">
           <BinaryVleTxySvg x1={vleX1} a12={vleA12} onChangeVle={onChangeVle} />
           <PengRobinsonEosSvg pr={prReducedP} tr={prReducedT} onChangePrTr={onChangePrTr} />
-        </div>
+        </FramerEntranceStage>
       )}
 
       {showCyclesEq && (
-        <RankineRxnEquilibriumSvg
-          etaIsentropic={etaIsentropic}
-          pBoilerRatio={pBoilerRatio}
-          rxnTInletK={rxnTInletK}
-          deltaHrxnKjMol={deltaHrxnKjMol}
-          onChangeCycle={(ne, np) => {
-            setEtaIsentropic(ne);
-            setPBoilerRatio(np);
-          }}
-          onChangeRxnEq={(nt, ndh) => {
-            setRxnTInletK(nt);
-            setDeltaHrxnKjMol(ndh);
-          }}
-        />
+        <FramerEntranceStage key={`wb2-cycles-${diagramMode}`} delay={0.06}>
+          <RankineRxnEquilibriumSvg
+            etaIsentropic={etaIsentropic}
+            pBoilerRatio={pBoilerRatio}
+            rxnTInletK={rxnTInletK}
+            deltaHrxnKjMol={deltaHrxnKjMol}
+            onChangeCycle={(ne, np) => {
+              setEtaIsentropic(ne);
+              setPBoilerRatio(np);
+            }}
+            onChangeRxnEq={(nt, ndh) => {
+              setRxnTInletK(nt);
+              setDeltaHrxnKjMol(ndh);
+            }}
+          />
+        </FramerEntranceStage>
       )}
     </div>
   );

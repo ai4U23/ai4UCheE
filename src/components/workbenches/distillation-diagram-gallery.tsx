@@ -9,6 +9,7 @@ import { McCabeThieleSvgCanvas } from '../sketches/mccabe-thiele-svg-canvas';
 import { PsychrometricMembraneSvg } from '../sketches/psychrometric-membrane-svg';
 import { TernaryLleBreakthroughSvg } from '../sketches/ternary-lle-breakthrough-svg';
 import { DiagramModeBar, type DiagramModeOption } from '../ui/diagram-mode-bar';
+import { FramerEntranceStage } from '../ui/framer-motion-primitives';
 
 export type DistillationDiagramMode =
   | 'all'
@@ -106,7 +107,7 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
       />
 
       {showDistillation && (
-        <div className="wb-split">
+        <FramerEntranceStage key={`wb4-dist-${diagramMode}`} className="wb-split">
           <McCabeThieleSvgCanvas
             alpha={alpha} xf={xf} xd={xd} xb={xb} q={q} rOp={rOp} rMin={rMin}
             onChangeQ={onChangeQ} onChangeXd={onChangeXd} onChangeXf={onChangeXf}
@@ -119,11 +120,11 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
             onChangeColDiamM={onChangeColDiamM} onChangeTraySpacingM={onChangeTraySpacingM}
             onChangeRMult={onChangeRMult}
           />
-        </div>
+        </FramerEntranceStage>
       )}
 
       {showKremserLle && (
-        <div className="wb-split">
+        <FramerEntranceStage key={`wb4-krem-${diagramMode}`} className="wb-split" delay={0.06}>
           <KremserAbsorptionSvg
             absorptionA={absorptionA} recoveryFrac={recoveryFrac}
             onChangeKremser={onChangeKremser}
@@ -132,24 +133,26 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
             soluteFeedZ={soluteFeedZ} peNumber={peNumber}
             onChangeLleAndPe={onChangeLleAndPe}
           />
-        </div>
+        </FramerEntranceStage>
       )}
 
       {showPsychMembrane && (
-        <PsychrometricMembraneSvg
-          tDryBulbC={tDryBulbC}
-          relHumidityPct={relHumidityPct}
-          stageCutTheta={stageCutTheta}
-          selectivityAlpha={selectivityAlpha}
-          onChangePsychrometry={(nt, nrh) => {
-            setTDryBulbC(nt);
-            setRelHumidityPct(nrh);
-          }}
-          onChangeMembrane={(nth, na) => {
-            setStageCutTheta(nth);
-            setSelectivityAlpha(na);
-          }}
-        />
+        <FramerEntranceStage key={`wb4-psych-${diagramMode}`} delay={0.12}>
+          <PsychrometricMembraneSvg
+            tDryBulbC={tDryBulbC}
+            relHumidityPct={relHumidityPct}
+            stageCutTheta={stageCutTheta}
+            selectivityAlpha={selectivityAlpha}
+            onChangePsychrometry={(nt, nrh) => {
+              setTDryBulbC(nt);
+              setRelHumidityPct(nrh);
+            }}
+            onChangeMembrane={(nth, na) => {
+              setStageCutTheta(nth);
+              setSelectivityAlpha(na);
+            }}
+          />
+        </FramerEntranceStage>
       )}
     </div>
   );

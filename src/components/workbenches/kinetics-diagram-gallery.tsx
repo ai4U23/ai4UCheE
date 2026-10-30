@@ -8,6 +8,7 @@ import { LhhwBioreactorSvg } from '../sketches/lhhw-bioreactor-svg';
 import { SemenovThermalRunawaySvg } from '../sketches/semenov-thermal-runaway-svg';
 import { SeriesSelectivityRtdSvg } from '../sketches/series-selectivity-rtd-svg';
 import { DiagramModeBar, type DiagramModeOption } from '../ui/diagram-mode-bar';
+import { FramerEntranceStage } from '../ui/framer-motion-primitives';
 
 export type KineticsDiagramMode =
   | 'all'
@@ -65,7 +66,7 @@ export const KineticsDiagramGallery: React.FC<KineticsDiagramGalleryProps> = ({
       />
 
       {showSemenovRtd && (
-        <div className="wb-split">
+        <FramerEntranceStage key={`wb6-sem-${diagramMode}`} className="wb-split">
           <SemenovThermalRunawaySvg
             tcK={coolantTcK}
             semenovPsi={semenovPsi}
@@ -76,32 +77,36 @@ export const KineticsDiagramGallery: React.FC<KineticsDiagramGalleryProps> = ({
             tanksN={rtdTanksN}
             onChangeTauAndTanks={onChangeTauAndTanks}
           />
-        </div>
+        </FramerEntranceStage>
       )}
 
       {showLhhwBio && (
-        <LhhwBioreactorSvg
-          pReactantBar={pReactantBar}
-          catalystTimeHr={catalystTimeHr}
-          dilutionRateHr={dilutionRateHr}
-          feedSubstrateGPerL={feedSubstrateGPerL}
-          onChangeLhhw={(np, nt) => {
-            setPReactantBar(np);
-            setCatalystTimeHr(nt);
-          }}
-          onChangeBioreactor={(nd, ns) => {
-            setDilutionRateHr(nd);
-            setFeedSubstrateGPerL(ns);
-          }}
-        />
+        <FramerEntranceStage key={`wb6-lhhw-${diagramMode}`} delay={0.06}>
+          <LhhwBioreactorSvg
+            pReactantBar={pReactantBar}
+            catalystTimeHr={catalystTimeHr}
+            dilutionRateHr={dilutionRateHr}
+            feedSubstrateGPerL={feedSubstrateGPerL}
+            onChangeLhhw={(np, nt) => {
+              setPReactantBar(np);
+              setCatalystTimeHr(nt);
+            }}
+            onChangeBioreactor={(nd, ns) => {
+              setDilutionRateHr(nd);
+              setFeedSubstrateGPerL(ns);
+            }}
+          />
+        </FramerEntranceStage>
       )}
 
       {showElectro && (
-        <ButlerVolmerPolarizationSvg
-          overpotentialV={overpotentialV}
-          iLimMaCm2={iLimMaCm2}
-          onChangeElectro={onChangeElectro}
-        />
+        <FramerEntranceStage key={`wb6-elec-${diagramMode}`} delay={0.12}>
+          <ButlerVolmerPolarizationSvg
+            overpotentialV={overpotentialV}
+            iLimMaCm2={iLimMaCm2}
+            onChangeElectro={onChangeElectro}
+          />
+        </FramerEntranceStage>
       )}
     </div>
   );

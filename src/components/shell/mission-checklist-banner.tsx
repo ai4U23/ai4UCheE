@@ -1,20 +1,29 @@
 // MissionChecklistBanner: live 3-step rescue walkthrough (Observe Trap → Scrub Control → Verify
 // Proof) fed by the <current-screen> payload bus, with a one-click "Auto-Fix & Ask Copilot" CTA.
 import React, { useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import {
   getClientAppState,
   subscribeClientAppState,
   type WorkbenchLivePayload,
 } from '../../actions/view-screen';
+import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
+import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import type { GuidedMissionScenario } from './mission-scenarios';
 
 export interface MissionChecklistBannerProps {
   mission: GuidedMissionScenario | null;
   onAutoFix: (mission: GuidedMissionScenario) => void;
+  onSocraticHint?: (mission: GuidedMissionScenario) => void;
   onDismiss: () => void;
 }
 
-export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({ mission, onAutoFix, onDismiss }) => {
+export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
+  mission,
+  onAutoFix,
+  onSocraticHint,
+  onDismiss,
+}) => {
   const [payload, setPayload] = useState<WorkbenchLivePayload>(
     () => getClientAppState().payload as WorkbenchLivePayload,
   );
@@ -32,23 +41,45 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({ 
   ];
 
   return (
-    <div className="mission-banner" data-testid="mission-checklist-banner">
+    <motion.div
+      className="mission-banner"
+      data-testid="mission-checklist-banner"
+      initial={{ opacity: 0, y: 12, scale: 0.99 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={FRAMER_BOUNCE_SPRING}
+    >
       <div className="mission-banner-head">
-        <strong>{solved ? '🏆 Mission Solved' : '🧭 Mission Active'} — {mission.buttonLabel}</strong>
+        <strong>
+          <SwarmPulseDot tone={solved ? 'emerald' : 'gold'} />
+          {solved ? '🏆 Mission Solved' : '🧭 Mission Active'} — {mission.buttonLabel}
+        </strong>
         <button type="button" onClick={onDismiss} aria-label="Dismiss mission">✕</button>
       </div>
       <ol className="mission-steps">
         {steps.map((s) => (
-          <li key={s.label} className={s.done ? 'mission-step done' : 'mission-step'}>
+          <motion.li
+            key={s.label}
+            className={s.done ? 'mission-step done' : 'mission-step'}
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={FRAMER_BOUNCE_SPRING}
+          >
             {s.done ? '☑' : '☐'} {s.label}
-          </li>
+          </motion.li>
         ))}
       </ol>
       {!solved && (
-        <button type="button" data-testid="mission-autofix-btn" onClick={() => onAutoFix(mission)}>
-          ⚡ Auto-Fix &amp; Ask Copilot ({Object.entries(mission.rescueMutations).map(([k, v]) => `${k}=${v}`).join(', ')})
-        </button>
+        <>
+          {onSocraticHint && (
+            <button type="button" data-testid="mission-socratic-hint-btn" onClick={() => onSocraticHint(mission)}>
+              💡 Socratic Hint (Keep Full +35% Mastery)
+            </button>
+          )}
+          <button type="button" data-testid="mission-autofix-btn" onClick={() => onAutoFix(mission)}>
+            ⚡ Auto-Fix &amp; Ask Copilot ({Object.entries(mission.rescueMutations).map(([k, v]) => `${k}=${v}`).join(', ')})
+          </button>
+        </>
       )}
-    </div>
+    </motion.div>
   );
 };

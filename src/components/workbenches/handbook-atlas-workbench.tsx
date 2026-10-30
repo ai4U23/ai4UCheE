@@ -8,6 +8,7 @@ import { ALL_25_PERRY_SECTIONS, PERRY_CLUSTERS, getPerrySectionByNumber } from '
 import type { PerryClusterId } from '../../lib/perry-sections/perry-section-types';
 import { TEXTBOOK_CORPUS_CATALOG } from '../../lib/textbook-corpus-registry';
 import { PerrySectionInteractiveSvg } from '../sketches/perry-section-interactive-svg';
+import { MotionPillButton, SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
@@ -85,21 +86,21 @@ export const HandbookAtlasWorkbench: React.FC = () => {
       </header>
 
       <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.45rem' }}>
-        <button type="button" data-testid="atlas-cluster-all" className={clusterFilter === 'all' ? 'active' : ''} onClick={() => setClusterFilter('all')}>
+        <MotionPillButton layoutId="wb5-cluster-pill" isActive={clusterFilter === 'all'} testId="atlas-cluster-all" onClick={() => setClusterFilter('all')}>
           All 25 Sections ({ALL_25_PERRY_SECTIONS.length})
-        </button>
+        </MotionPillButton>
         {PERRY_CLUSTERS.map((c) => (
-          <button key={c.id} type="button" data-testid={`atlas-cluster-${c.id}`} className={clusterFilter === c.id ? 'active' : ''} onClick={() => setClusterFilter(c.id)}>
+          <MotionPillButton key={c.id} layoutId="wb5-cluster-pill" isActive={clusterFilter === c.id} testId={`atlas-cluster-${c.id}`} onClick={() => setClusterFilter(c.id)}>
             {c.label}
-          </button>
+          </MotionPillButton>
         ))}
       </div>
 
       <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.65rem' }} data-testid="atlas-section-pills">
         {visibleSections.map((s) => (
-          <button key={s.secNum} type="button" data-testid={`atlas-sec-pill-${s.secNum}`} className={s.secNum === solved.secNum ? 'active' : ''} onClick={() => selectSection(s.secNum)}>
+          <MotionPillButton key={s.secNum} layoutId="wb5-sec-pill" isActive={s.secNum === solved.secNum} testId={`atlas-sec-pill-${s.secNum}`} onClick={() => selectSection(s.secNum)}>
             Sec {s.secNum}: {s.secTitle.split('(')[0].trim()}
-          </button>
+          </MotionPillButton>
         ))}
       </div>
 
@@ -130,6 +131,7 @@ export const HandbookAtlasWorkbench: React.FC = () => {
           />
 
           <div className="wb-panel" data-testid="atlas-status-banner">
+            <SwarmPulseDot tone={solved.isAlert ? 'danger' : 'emerald'} />
             <strong>{solved.isAlert ? '⚠️ Engineering Alert: ' : '✅ Operating Verdict: '}</strong>
             <span className="mono">{solved.statusBanner}</span>
             {solved.deepDiveWorkbench && (

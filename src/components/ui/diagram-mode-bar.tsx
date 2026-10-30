@@ -2,6 +2,7 @@
 // Defaults to 'all' so every interactive chart renders on initial mount while letting
 // students and engineers filter to a focused diagram group with one click.
 import React from 'react';
+import { MotionPillButton } from './framer-motion-primitives';
 
 export interface DiagramModeOption<M extends string = string> {
   id: M;
@@ -43,12 +44,13 @@ export function DiagramModeBar<M extends string = string>({
         {options.map((opt) => {
           const isActive = opt.id === activeMode;
           return (
-            <button
+            <MotionPillButton
               key={opt.id}
-              type="button"
+              layoutId={`${testId}-pill`}
+              isActive={isActive}
               role="tab"
               aria-selected={isActive}
-              data-testid={opt.testId}
+              testId={opt.testId}
               onClick={() => onSelectMode(opt.id)}
               style={{
                 fontWeight: isActive ? 700 : 500,
@@ -57,7 +59,7 @@ export function DiagramModeBar<M extends string = string>({
               }}
             >
               {opt.label}
-            </button>
+            </MotionPillButton>
           );
         })}
       </div>

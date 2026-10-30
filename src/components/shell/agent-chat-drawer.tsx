@@ -1,6 +1,7 @@
 // AgentChatDrawer: Point-and-Ask chip tray, live `<current-screen>` badge, starter prompts,
 // What-If quick actions, inline GenUI stream, and copilot `actionMutations` → slider scrubbing.
 import React, { useEffect, useState } from 'react';
+import { motion } from 'motion/react';
 import { agentNative, type GenUiPayload } from '../../actions/define-action';
 import { askPerryCopilot } from '../../actions/copilot-responder';
 import {
@@ -10,6 +11,8 @@ import {
   subscribeClientAppState,
 } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
+import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
+import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { getQuickActionsForWorkbench, getStarterPromptsForWorkbench } from './copilot-prompts';
 import { GenUiDefaultCard } from './genui-default-card';
 
@@ -18,10 +21,7 @@ export interface AgentChatDrawerProps {
   onOpenCalcSheet?: (data: Record<string, unknown>) => void;
 }
 
-export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
-  renderInlineExtension,
-  onOpenCalcSheet,
-}) => {
+export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineExtension, onOpenCalcSheet }) => {
   const { activeWorkbench, setActiveWorkbench, personaMode, themeMode, selectedChips, removeChip, clearChips } = usePersonaTheme();
   const [prompt, setPrompt] = useState<string>('');
   const [messages, setMessages] = useState<
@@ -32,13 +32,9 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
 
   useEffect(() => {
     setGenUiCards(agentNative.ui.getHistory());
-    return agentNative.ui.subscribe((card) => {
-      setGenUiCards((prev) => [...prev, card]);
-    });
+    return agentNative.ui.subscribe((card) => setGenUiCards((prev) => [...prev, card]));
   }, []);
 
-  // Subscribe to the payload bus so the <current-screen> badge/XML re-renders the moment any
-  // workbench syncs fresh metrics (without this, the badge goes stale until an unrelated render).
   useEffect(() => subscribeClientAppState((s) => setLivePayload(s.payload)), []);
 
   const currentScreenXml = serializeCurrentScreenTag({
@@ -49,10 +45,6 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
     payload: livePayload,
   });
 
-  // Async Co-Pilot dispatcher: appends the user text, awaits askPerryCopilot, appends the reply.
-  // GenUI cards flow exclusively through agentNative.ui.subscribe — response.genUiCards is never
-  // re-rendered here, so no card can ever appear twice in the stream. When the copilot returns
-  // `actionMutations`, they are dispatched onto the active workbench's sliders immediately.
   const submitQuestion = async (rawPrompt: string) => {
     const chipList = selectedChips.map((c) => c.label || c.chipId).join(', ');
     const text = chipList ? `[${chipList}] ${rawPrompt}` : rawPrompt;
@@ -87,10 +79,10 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
       <header className="wb-toolbar">
         <strong>🤖 Perry&apos;s Agent Co-Pilot</strong>
         <span className="dof-badge" data-testid="copilot-model-badge">
-          ⚡ gemini-4-argon-low · gateway.ai4u.now
+          <SwarmPulseDot tone="gold" />⚡ gemini-4-argon-low · gateway.ai4u.now
         </span>
         <span className="mono screen-sync-pill" data-testid="current-screen-badge" title={currentScreenXml}>
-          Live Sync: {activeWorkbench.toUpperCase()} ({personaMode.toUpperCase()})
+          <SwarmPulseDot tone="emerald" />Live Sync: {activeWorkbench.toUpperCase()} ({personaMode.toUpperCase()})
         </span>
       </header>
 
@@ -100,12 +92,17 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
         ) : (
           <>
             {selectedChips.map((chip) => (
-              <span key={chip.chipId} className="composer-chip" data-testid={`chip-${chip.chipId}`}>
-                <strong className="composer-chip-label" title={chip.chipId}>
-                  {chip.label || chip.chipId}
-                </strong>
+              <motion.span
+                key={chip.chipId}
+                className="composer-chip"
+                data-testid={`chip-${chip.chipId}`}
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={FRAMER_BOUNCE_SPRING}
+              >
+                <strong className="composer-chip-label" title={chip.chipId}>{chip.label || chip.chipId}</strong>
                 <button type="button" aria-label={`Remove ${chip.chipId}`} onClick={() => removeChip(chip.chipId)}>×</button>
-              </span>
+              </motion.span>
             ))}
             <button type="button" onClick={clearChips}>Clear all</button>
           </>
@@ -114,11 +111,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
 
       <div className="genui-stream" data-testid="genui-stream">
         {genUiCards.slice(-2).map((card) =>
-          renderInlineExtension ? (
-            renderInlineExtension(card)
-          ) : (
-            <GenUiDefaultCard key={card.id} payload={card} onOpen={onOpenCalcSheet} />
-          ),
+          renderInlineExtension ? renderInlineExtension(card) : <GenUiDefaultCard key={card.id} payload={card} onOpen={onOpenCalcSheet} />,
         )}
       </div>
 
@@ -131,32 +124,27 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
           </div>
         )}
         {messages.map((m) => (
-          <div
+          <motion.div
             key={m.id}
             className={`chat-msg chat-${m.role}`}
             data-testid={m.role === 'agent' ? 'copilot-agent-message' : undefined}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={FRAMER_BOUNCE_SPRING}
           >
             <strong>{m.role === 'user' ? 'You' : 'PerryAgent'}:</strong> {m.text}
             {m.appliedMutations && (
               <span className="copilot-mutation-pill" data-testid="copilot-mutation-pill">
-                ⚡ Applied to Workbench:{' '}
-                {Object.entries(m.appliedMutations)
-                  .map(([k, v]) => `${k}=${v}`)
-                  .join(', ')}
+                ⚡ Applied to Workbench: {Object.entries(m.appliedMutations).map(([k, v]) => `${k}=${v}`).join(', ')}
               </span>
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
 
       <div className="starter-prompts" data-testid="copilot-quick-actions">
         {getQuickActionsForWorkbench(activeWorkbench).map((action, idx) => (
-          <button
-            key={action}
-            type="button"
-            data-testid={`copilot-quick-action-${idx}`}
-            onClick={() => void submitQuestion(action)}
-          >
+          <button key={action} type="button" data-testid={`copilot-quick-action-${idx}`} onClick={() => void submitQuestion(action)}>
             {action}
           </button>
         ))}
@@ -164,12 +152,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
 
       <div className="starter-prompts" data-testid="copilot-starter-prompts">
         {getStarterPromptsForWorkbench(activeWorkbench).map((starter, idx) => (
-          <button
-            key={starter}
-            type="button"
-            data-testid={`starter-prompt-${idx}`}
-            onClick={() => void submitQuestion(starter)}
-          >
+          <button key={starter} type="button" data-testid={`starter-prompt-${idx}`} onClick={() => void submitQuestion(starter)}>
             {starter}
           </button>
         ))}

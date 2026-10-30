@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { RenderInlineExtension } from './components/gen-ui/render-inline-extension';
 import { AgentChatDrawer } from './components/shell/agent-chat-drawer';
 import { AppShell } from './components/shell/app-shell';
+import { FramerEntranceStage } from './components/ui/framer-motion-primitives';
 import { CalcSheetPreviewModal } from './components/workbenches/calc-sheet-preview-modal';
 import { DistillationWorkbench } from './components/workbenches/distillation-workbench';
 import { HandbookAtlasWorkbench } from './components/workbenches/handbook-atlas-workbench';
@@ -22,20 +23,27 @@ const WorkbenchSurface: React.FC = () => {
   const [calcSheetOpen, setCalcSheetOpen] = useState<boolean>(false);
 
   const renderWorkbench = (wb: WorkbenchId) => {
-    switch (wb) {
-      case 'wb1-visual-verifier':
-        return <VisualVerifierWorkbench />;
-      case 'wb2-thermo-dippr':
-        return <ThermoDipprWorkbench />;
-      case 'wb3-hydraulics':
-        return <HydraulicsWorkbench />;
-      case 'wb4-distillation':
-        return <DistillationWorkbench />;
-      case 'wb6-kinetics-reactors':
-        return <KineticsReactorWorkbench />;
-      case 'wb5-handbook-atlas':
-        return <HandbookAtlasWorkbench />;
-    }
+    const view = (() => {
+      switch (wb) {
+        case 'wb1-visual-verifier':
+          return <VisualVerifierWorkbench />;
+        case 'wb2-thermo-dippr':
+          return <ThermoDipprWorkbench />;
+        case 'wb3-hydraulics':
+          return <HydraulicsWorkbench />;
+        case 'wb4-distillation':
+          return <DistillationWorkbench />;
+        case 'wb6-kinetics-reactors':
+          return <KineticsReactorWorkbench />;
+        case 'wb5-handbook-atlas':
+          return <HandbookAtlasWorkbench />;
+      }
+    })();
+    return (
+      <FramerEntranceStage key={wb} testId={`stage-${wb}`}>
+        {view}
+      </FramerEntranceStage>
+    );
   };
 
   return (
@@ -65,12 +73,10 @@ const WorkbenchSurface: React.FC = () => {
   );
 };
 
-export const App: React.FC = () => {
-  return (
-    <PersonaThemeProvider>
-      <WorkbenchSurface />
-    </PersonaThemeProvider>
-  );
-};
+export const App: React.FC = () => (
+  <PersonaThemeProvider>
+    <WorkbenchSurface />
+  </PersonaThemeProvider>
+);
 
 export default App;

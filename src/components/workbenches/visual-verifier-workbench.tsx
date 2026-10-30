@@ -8,6 +8,7 @@ import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { PRESET_ANCHORS, type PerryPresetAnchor } from '../../lib/perry-figure-chart-meta';
 import { samplePerryCurveAtPct, type PerryCurveSampleResult } from '../../lib/perry-figure-curve-sampler';
 import { clientPointToViewBox, safeSetPointerCapture } from '../../lib/svg-drag-math';
+import { MotionPillButton } from '../ui/framer-motion-primitives';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { PerryFigureSvgPreview } from './perry-figure-svg-preview';
 import { VisualVerifierTutorCard } from './visual-verifier-tutor-card';
@@ -120,15 +121,16 @@ export const VisualVerifierWorkbench: React.FC = () => {
 
       <div className="wb-presets" data-testid="wb1-preset-chips">
         {PRESET_ANCHORS.map((p) => (
-          <button
+          <MotionPillButton
             key={p.secPage}
-            type="button"
-            className={`wb-chip ${secPage === p.secPage ? 'active' : ''}`}
-            data-testid={`wb1-preset-${p.secPage}`}
+            layoutId="wb1-preset-pill"
+            isActive={secPage === p.secPage}
+            className="wb-chip"
+            testId={`wb1-preset-${p.secPage}`}
             onClick={() => applyPreset(p)}
           >
             {p.label}
-          </button>
+          </MotionPillButton>
         ))}
       </div>
 
