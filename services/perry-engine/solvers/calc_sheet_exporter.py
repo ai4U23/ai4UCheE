@@ -18,7 +18,7 @@ from pydantic import BaseModel, Field
 
 
 class CalcSheetMetadata(BaseModel):
-    project_name: str = "Perry's Intelligent Workbench — Process Design Package"
+    project_name: str = "ChemEng's Intelligent Workbench — Process Design Package"
     project_no: str = "AI4U-CHE-2026"
     equipment_tag: str = Field(default="P-101A/B", examples=["P-101A/B", "T-201"])
     service_description: str = "Process Fluid Transfer / Separation Unit"

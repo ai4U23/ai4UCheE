@@ -1,6 +1,6 @@
 # AGENTS.md — ai4UCheE repo invariants
 
-Governance and architectural invariants for `ai4UCheE` (Perry's Intelligent Workbench / Chemical Engineering vertical).
+Governance and architectural invariants for `ai4UCheE` (ChemEng's Intelligent Workbench / Chemical Engineering vertical).
 
 ## Invariants (non-negotiable)
 

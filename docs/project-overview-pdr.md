@@ -1,7 +1,7 @@
 # Project Overview (PDR) — ai4UCheE
 
 ## Purpose
-`ai4UCheE` (Perry's Intelligent Workbench) is an agent-native chemical engineering calculation and learning workspace within the ai4u ecosystem (`ai4U23`). It transforms *Perry's Chemical Engineers' Handbook, 9th Edition* (2,274 pages across 25 sections) from a passive reference volume into an interactive, verifiable engineering partner.
+`ai4UCheE` (ChemEng's Intelligent Workbench) is an agent-native chemical engineering calculation and learning workspace within the ai4u ecosystem (`ai4U23`). It transforms *Perry's Chemical Engineers' Handbook, 9th Edition* (2,274 pages across 25 sections) from a passive reference volume into an interactive, verifiable engineering partner.
 
 The platform bridges two distinct personas:
 1. **Chemical Engineering Students (`🎓 Learn Mode`)**: Pedagogical guidance, first-principles derivations, deep tutoring on charts and nomographs (such as Fanning vs. Darcy friction factors), and unit-conversion guardrails.

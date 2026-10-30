@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Perry's Intelligent Workbench — bi-directional agent-native chemical engineering workbench grounded in Perry's 9th Ed.",
+  "description": "ChemEng's Intelligent Workbench — bi-directional agent-native chemical engineering workbench grounded in Perry's 9th Ed.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -1,8 +1,8 @@
-# Deployment Guide — ai4UCheE (Perry's Intelligent Workbench)
+# Deployment Guide — ai4UCheE (ChemEng's Intelligent Workbench)
 
 ## 1. Live Production Deployment (`chemie.ai4u.now` & `chemie` on Tailscale)
 
-Perry's Intelligent Workbench (`ai4UCheE`) is deployed on the **`chemie`** VPS (`InstaBox.sh`, Debian 13 amd64, 4 vCPU / 8 GiB RAM / 20 GiB `/data` persistent disk) on the `duc.a.nguyen@` tailnet and publicly routed at **`https://chemie.ai4u.now`** via Cloudflare Tunnel (`chemie-workbench`).
+ChemEng's Intelligent Workbench (`ai4UCheE`) is deployed on the **`chemie`** VPS (`InstaBox.sh`, Debian 13 amd64, 4 vCPU / 8 GiB RAM / 20 GiB `/data` persistent disk) on the `duc.a.nguyen@` tailnet and publicly routed at **`https://chemie.ai4u.now`** via Cloudflare Tunnel (`chemie-workbench`).
 
 ### Live Endpoints
 - **Public HTTPS Endpoint (Cloudflare Tunnel)**: [https://chemie.ai4u.now](https://chemie.ai4u.now) / [https://chemie.ai4u.now/health](https://chemie.ai4u.now/health)

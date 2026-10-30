@@ -1,4 +1,4 @@
-// Browser entrypoint for Perry's Intelligent Workbench (ai4UCheE).
+// Browser entrypoint for ChemEng's Intelligent Workbench (ai4UCheE).
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';

@@ -79,7 +79,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             data-testid="ai4u-logo"
           />
           <div className="brand-title-group">
-            <h1>Perry&apos;s Intelligent Workbench</h1>
+            <h1>ChemEng&apos;s Intelligent Workbench</h1>
             <span className="brand-eyebrow">ai4UCheE · Chemical Engineering Intelligence</span>
           </div>
           <span

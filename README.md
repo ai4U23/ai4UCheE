@@ -1,4 +1,4 @@
-# ai4UCheE — Perry's Intelligent Workbench
+# ai4UCheE — ChemEng's Intelligent Workbench
 
 Bi-directional agent-native chemical engineering workbench grounded in *Perry's Chemical Engineers' Handbook, 9th Edition*.
 

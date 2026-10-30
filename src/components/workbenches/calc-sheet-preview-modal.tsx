@@ -23,7 +23,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
   onClose,
 }) => {
   const [projectName, setProjectName] = useState<string>(
-    "Perry's Intelligent Workbench — Process Design Package",
+    "ChemEng's Intelligent Workbench — Process Design Package",
   );
   const [projectNo, setProjectNo] = useState<string>('AI4U-CHE-2026');
   const [equipmentTag, setEquipmentTag] = useState<string>('P-101A/B');

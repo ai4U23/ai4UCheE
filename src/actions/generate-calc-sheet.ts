@@ -73,7 +73,7 @@ export const generateCalcSheetAction = defineAction({
   description:
     'Compile a Senior-Engineer QA/QC Calculation Sheet (Print-to-PDF HTML + Markdown/LaTeX), save to SQLite saved_calculations, and emit an inline calc-sheet-card.',
   schema: z.object({
-    project_name: z.string().default("Perry's Intelligent Workbench — Process Package"),
+    project_name: z.string().default("ChemEng's Intelligent Workbench — Process Package"),
     project_no: z.string().default('AI4U-CHE-2026'),
     equipment_tag: z.string().default('P-101A/B'),
     service_description: z.string().default('Process Fluid Transfer / Separation Unit'),

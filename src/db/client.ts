@@ -1,4 +1,4 @@
-// SQLite client + idempotent bootstrap for Perry's Intelligent Workbench.
+// SQLite client + idempotent bootstrap for ChemEng's Intelligent Workbench.
 import Database from 'better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema';
