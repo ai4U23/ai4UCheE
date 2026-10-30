@@ -7,7 +7,9 @@ export type WorkbenchId =
   | 'wb1-visual-verifier'
   | 'wb2-thermo-dippr'
   | 'wb3-hydraulics'
-  | 'wb4-distillation';
+  | 'wb4-distillation'
+  | 'wb6-kinetics-reactors'
+  | 'wb5-handbook-atlas';
 
 /** One 3-stage white-box derivation (Symbolic → Live Substitution → Evaluated Result). */
 export interface WhiteBoxStageEquation {
@@ -64,6 +66,7 @@ let currentState: ClientScreenState = {
 const listeners = new Set<ScreenListener>();
 const mutationListeners = new Set<MutationListener>();
 const workbenchPayloads = new Map<WorkbenchId, WorkbenchLivePayload>();
+const pendingMutations = new Map<WorkbenchId, WorkbenchMutationCommand>();
 
 /** Mutate the shared screen state and notify subscribers. */
 export function writeClientAppState(update: Partial<ClientScreenState>): ClientScreenState {
@@ -103,9 +106,18 @@ export function syncWorkbenchPayload(workbench: WorkbenchId, payload: WorkbenchL
   listeners.forEach((fn) => fn(currentState));
 }
 
-/** Broadcast a parameter mutation to every subscribed workbench (synchronous). */
+/** Broadcast a parameter mutation to every subscribed workbench (or queue if target not yet mounted). */
 export function dispatchWorkbenchMutation(command: WorkbenchMutationCommand): void {
+  if (command.targetWorkbench) {
+    pendingMutations.set(command.targetWorkbench, command);
+  }
   mutationListeners.forEach((fn) => fn(command));
+}
+
+export function consumePendingMutation(workbench: WorkbenchId): WorkbenchMutationCommand | undefined {
+  const cmd = pendingMutations.get(workbench);
+  if (cmd) pendingMutations.delete(workbench);
+  return cmd;
 }
 
 export function subscribeWorkbenchMutation(fn: MutationListener): () => void {

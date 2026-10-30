@@ -12,6 +12,7 @@ from core.unit_registry import convert_field_unit, normalize_pressure_to_pa
 from routers.distillation_router import router as distillation_router
 from routers.export_router import router as export_router
 from routers.hydraulics_router import router as hydraulics_router
+from routers.kinetics_router import router as kinetics_router
 from routers.pdf_router import router as pdf_router
 from routers.thermo_router import router as thermo_router
 
@@ -25,6 +26,7 @@ app.include_router(pdf_router)
 app.include_router(thermo_router)
 app.include_router(hydraulics_router)
 app.include_router(distillation_router)
+app.include_router(kinetics_router)
 app.include_router(export_router)
 app.add_middleware(
     CORSMiddleware,

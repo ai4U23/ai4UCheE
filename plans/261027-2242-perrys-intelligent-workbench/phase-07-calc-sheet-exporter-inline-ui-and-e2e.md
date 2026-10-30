@@ -1,6 +1,6 @@
 ---
 title: "Phase 7: Senior-Engineer Calculation Sheet Exporter, Inline Generative UI Cards & End-to-End Verification"
-status: todo
+status: completed
 ---
 
 # Phase 7: Senior-Engineer Calculation Sheet Exporter, Inline Generative UI Cards & End-to-End Verification
@@ -11,9 +11,9 @@ Build the formal EPC Senior-Engineer Calculation Sheet Exporter (`HTML / Print-t
 
 ## Requirements
 
-- [ ] Senior-Engineer Calculation Sheet compiler (`solvers/calc_sheet_exporter.py` & `routers/export_router.py`) producing both print-ready EPC HTML (`@media print`) and Markdown/LaTeX notes + `tests/test_phase7_export.py`.
-- [ ] Inline Generative UI extension renderer (`src/components/gen-ui/render-inline-extension.tsx`), `CalcSheetPreviewModal` (`src/components/workbenches/calc-sheet-preview-modal.tsx`), and `generateCalcSheetAction` (`src/actions/generate-calc-sheet.ts`).
-- [ ] Full application assembly (`src/App.tsx`, `src/main.tsx`), End-to-End integration test suite (`src/__tests__/phase7-e2e.test.tsx`), and mechanical `< 200` line verification across all `.py`, `.ts`, and `.tsx` source files.
+- [x] Senior-Engineer Calculation Sheet compiler (`solvers/calc_sheet_exporter.py` & `routers/export_router.py`) producing both print-ready EPC HTML (`@media print`) and Markdown/LaTeX notes + `tests/test_phase7_export.py`.
+- [x] Inline Generative UI extension renderer (`src/components/gen-ui/render-inline-extension.tsx`), `CalcSheetPreviewModal` (`src/components/workbenches/calc-sheet-preview-modal.tsx`), and `generateCalcSheetAction` (`src/actions/generate-calc-sheet.ts`).
+- [x] Full application assembly (`src/App.tsx`, `src/main.tsx`), End-to-End integration test suite (`src/__tests__/phase7-e2e.test.tsx`), and mechanical `< 200` line verification across all `.py`, `.ts`, and `.tsx` source files.
 
 ## Implementation Steps
 

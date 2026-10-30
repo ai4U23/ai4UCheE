@@ -176,7 +176,7 @@ flowchart TB
 - [x] Add `verify_page_contains()` + per-phase citation pytest assertions.
 - [x] Dependency fixes (vitest ^3, Tailwind removal, Python 3.12 pin, pymupdf idiom).
 - [x] AGENTS.md Structure reconciliation.
-- [ ] NPSH cavitation ratio threshold aligned to Perry's 1.35× rule (done in Task 5.2; keep 1.0 m absolute-margin flag).
+- [x] NPSH cavitation ratio threshold aligned to Perry's 1.35× rule (done in Task 5.2; keep 1.0 m absolute-margin flag).
 
 #### Impact on Phases
 - Phase 1: deps + venv + import idiom + example citation.

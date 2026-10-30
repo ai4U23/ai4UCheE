@@ -1,6 +1,6 @@
 ---
 title: "Phase 2: Perry's 9th Ed. 25-Section Indexer, PyMuPDF Visual Crop Engine & Dual-Track Chart Verifier (WB1)"
-status: todo
+status: completed
 ---
 
 # Phase 2: Perry's 9th Ed. 25-Section Indexer, PyMuPDF Visual Crop Engine & Dual-Track Chart Verifier (WB1)
@@ -11,10 +11,10 @@ Build the deterministic `Sec-Page` (`S-P`, e.g., `2-165`, `6-10`, `13-28`, `14-5
 
 ## Requirements
 
-- [ ] 25-Section + Index (`pp. 2244–2274`) offset cache and `resolve_sec_page()` verifier (`pdf/section_map.py`) with `±2` page header/footer token confirmation (`verified_header: True`).
-- [ ] `PyMuPDF` vector figure detector (`len(page.get_drawings()) >= 8`), high-DPI calibrated crop renderer, and **Composite Table Header + Highlighted Row Cropper** (`pdf/crop_engine.py`).
-- [ ] FastAPI PDF router (`routers/pdf_router.py`) exposing `/api/v1/pdf/resolve`, `/api/v1/pdf/search-index`, `/api/v1/pdf/crop`, and `/api/v1/pdf/verify-chart-reading` (with `fanning_darcy_4x_detected` diagnostic when a user enters $4 \times f_F$ on Fig. 6-9).
-- [ ] Workbench 1 frontend (`src/components/workbenches/visual-verifier-workbench.tsx`) & Zod action (`src/actions/search-perry-pdf.ts`).
+- [x] 25-Section + Index (`pp. 2244–2274`) offset cache and `resolve_sec_page()` verifier (`pdf/section_map.py`) with `±2` page header/footer token confirmation (`verified_header: True`).
+- [x] `PyMuPDF` vector figure detector (`len(page.get_drawings()) >= 8`), high-DPI calibrated crop renderer, and **Composite Table Header + Highlighted Row Cropper** (`pdf/crop_engine.py`).
+- [x] FastAPI PDF router (`routers/pdf_router.py`) exposing `/api/v1/pdf/resolve`, `/api/v1/pdf/search-index`, `/api/v1/pdf/crop`, and `/api/v1/pdf/verify-chart-reading` (with `fanning_darcy_4x_detected` diagnostic when a user enters $4 \times f_F$ on Fig. 6-9).
+- [x] Workbench 1 frontend (`src/components/workbenches/visual-verifier-workbench.tsx`) & Zod action (`src/actions/search-perry-pdf.ts`).
 
 ## Implementation Steps
 

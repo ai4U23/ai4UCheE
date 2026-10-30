@@ -1,6 +1,6 @@
 ---
 title: "Phase 4: Sec 1, 2 & 4 DIPPR Thermophysical Property Engine, Mixed Field-Unit Normalizer & Carlson's Property Advisor (WB2)"
-status: todo
+status: completed
 ---
 
 # Phase 4: Sec 1, 2 & 4 DIPPR Thermophysical Property Engine, Mixed Field-Unit Normalizer & Carlson's Property Advisor (WB2)
@@ -11,10 +11,10 @@ Implement the *Perry's 9th Ed.* Section 2 DIPPR correlation solver (`Table 2-8` 
 
 ## Requirements
 
-- [ ] Curated *Perry's* Sec 2 DIPPR coefficients (`solvers/dippr_coeffs.py`) and exact 5-parameter $T^{C_5}$ solver (`solvers/thermo_dippr.py`) with 3-stage `handcalcs` KaTeX steps and `[T_min, T_max]` range validation.
-- [ ] Carlson's (1996) / Perry's Sec 4 Property Package Decision Tree (`solvers/carlson_tree.py`) with explicit warnings against `Wilson` for LLE and `NRTL-HOC` recommendation for carboxylic acid vapor dimerization.
-- [ ] FastAPI Thermo Router (`routers/thermo_router.py`) + `tests/test_phase4_thermo.py`.
-- [ ] Workbench 2 frontend (`src/components/workbenches/thermo-dippr-workbench.tsx`) & Zod action (`src/actions/query-dippr.ts`).
+- [x] Curated *Perry's* Sec 2 DIPPR coefficients (`solvers/dippr_coeffs.py`) and exact 5-parameter $T^{C_5}$ solver (`solvers/thermo_dippr.py`) with 3-stage `handcalcs` KaTeX steps and `[T_min, T_max]` range validation.
+- [x] Carlson's (1996) / Perry's Sec 4 Property Package Decision Tree (`solvers/carlson_tree.py`) with explicit warnings against `Wilson` for LLE and `NRTL-HOC` recommendation for carboxylic acid vapor dimerization.
+- [x] FastAPI Thermo Router (`routers/thermo_router.py`) + `tests/test_phase4_thermo.py`.
+- [x] Workbench 2 frontend (`src/components/workbenches/thermo-dippr-workbench.tsx`) & Zod action (`src/actions/query-dippr.ts`).
 
 ## Implementation Steps
 

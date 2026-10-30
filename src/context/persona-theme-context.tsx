@@ -8,7 +8,9 @@ export type WorkbenchId =
   | 'wb1-visual-verifier'
   | 'wb2-thermo-dippr'
   | 'wb3-hydraulics'
-  | 'wb4-distillation';
+  | 'wb4-distillation'
+  | 'wb6-kinetics-reactors'
+  | 'wb5-handbook-atlas';
 
 export interface SelectedChip {
   chipId: string;

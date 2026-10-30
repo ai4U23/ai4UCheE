@@ -1,6 +1,6 @@
 ---
 title: "Phase 3: BuilderIO/agent-native Core Shell, Dual-Lens UI, useAgentSelectable & motion/react Design System"
-status: todo
+status: completed
 ---
 
 # Phase 3: BuilderIO/agent-native Core Shell, Dual-Lens UI, useAgentSelectable & motion/react Design System
@@ -11,9 +11,9 @@ Implement the `BuilderIO/agent-native` architectural primitives (`defineAction`,
 
 ## Requirements
 
-- [ ] Dual Theme CSS tokens (`src/styles/theme-tokens.css`) and `PersonaThemeProvider` (`src/context/persona-theme-context.tsx`) supporting `personaMode: 'learn' | 'plant'` and `themeMode: 'paper' | 'blueprint'`.
-- [ ] `BuilderIO/agent-native` action registry (`src/actions/define-action.ts`), bi-directional `<current-screen>` state serializer (`src/actions/view-screen.ts`), and `useAgentSelectable` Point-and-Ask hook (`src/hooks/use-agent-selectable.ts`).
-- [ ] Tactile `ScrubbableNumberInput` (`src/components/ui/scrubbable-number-input.tsx`), `AppShell` (`src/components/shell/app-shell.tsx`) with `motion/react` `layoutId` transitions and Degrees-of-Freedom (`DoF`) status badge, `AgentChatDrawer`, and Express/Nitro API bridge (`src/server/api-server.ts`).
+- [x] Dual Theme CSS tokens (`src/styles/theme-tokens.css`) and `PersonaThemeProvider` (`src/context/persona-theme-context.tsx`) supporting `personaMode: 'learn' | 'plant'` and `themeMode: 'paper' | 'blueprint'`.
+- [x] `BuilderIO/agent-native` action registry (`src/actions/define-action.ts`), bi-directional `<current-screen>` state serializer (`src/actions/view-screen.ts`), and `useAgentSelectable` Point-and-Ask hook (`src/hooks/use-agent-selectable.ts`).
+- [x] Tactile `ScrubbableNumberInput` (`src/components/ui/scrubbable-number-input.tsx`), `AppShell` (`src/components/shell/app-shell.tsx`) with `motion/react` `layoutId` transitions and Degrees-of-Freedom (`DoF`) status badge, `AgentChatDrawer`, and Express/Nitro API bridge (`src/server/api-server.ts`).
 
 ## Implementation Steps
 

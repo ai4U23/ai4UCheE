@@ -1,4 +1,4 @@
-// WB2: Perry's Sec 1, 2 & 4 DIPPR Thermophysical Property Engine & Carlson Decision Tree.
+// WB2: Perry's Sec 1, 2 & 4 DIPPR Thermophysical Property Engine, Binary VLE Lens, PR EOS & Carlson Advisor.
 import React, { useEffect, useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
@@ -9,6 +9,7 @@ import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
 import { DipprPhaseEnvelopeSvg } from '../sketches/dippr-phase-envelope-svg';
 import { CarlsonAdvisorCard } from './carlson-advisor-card';
+import { ThermoDiagramGallery } from './thermo-diagram-gallery';
 import { DIPPR_COMPOUNDS, solveThermo } from './thermo-solver-math';
 
 const TEMP_UNIT_SYMBOLS = { K: 'K', degC: '°C', degF: '°F', degR: '°R' } as const;
@@ -22,6 +23,10 @@ export const ThermoDipprWorkbench: React.FC = () => {
   const [polarity, setPolarity] = useState<'nonpolar' | 'polar_non_electrolyte'>('polar_non_electrolyte');
   const [hasLle, setHasLle] = useState<boolean>(true);
   const [hasAssoc, setHasAssoc] = useState<boolean>(false);
+  const [vleX1, setVleX1] = useState<number>(0.45);
+  const [vleA12, setVleA12] = useState<number>(1.35);
+  const [prReducedP, setPrReducedP] = useState<number>(1.5);
+  const [prReducedT, setPrReducedT] = useState<number>(1.15);
 
   const tKelvin =
     tempUnit === 'degC'
@@ -45,12 +50,16 @@ export const ThermoDipprWorkbench: React.FC = () => {
   useWorkbenchMutations('wb2-thermo-dippr', (p) => {
     if (p.compound !== undefined) setCompound(String(p.compound));
     if (p.tempK !== undefined) setTempK(Number(p.tempK));
+    if (p.vleX1 !== undefined) setVleX1(Number(p.vleX1));
+    if (p.vleA12 !== undefined) setVleA12(Number(p.vleA12));
+    if (p.prReducedP !== undefined) setPrReducedP(Number(p.prReducedP));
+    if (p.prReducedT !== undefined) setPrReducedT(Number(p.prReducedT));
   });
 
   useEffect(() => {
     syncWorkbenchPayload('wb2-thermo-dippr', {
       summary: `WB2 DIPPR: ${solved.label} @ ${tKelvin.toFixed(2)} K → P_sat ${solved.pSatKpa.toFixed(2)} kPa`,
-      inputs: { compound, tempK: tKelvin, tempUnit, pressureUnit },
+      inputs: { compound, tempK: tKelvin, tempUnit, pressureUnit, vleX1, vleA12, prReducedP, prReducedT },
       metrics: {
         tempC: solved.tempC, tr: solved.tr, pSatPa: Math.round(pSatPa),
         pSatKpa: solved.pSatKpa, pSatPsia, hVapKjMol: solved.hVapKjMol,
@@ -61,14 +70,12 @@ export const ThermoDipprWorkbench: React.FC = () => {
   });
 
   const eq101Select = useAgentSelectable(
-    'equation',
-    'dippr-eq-101',
+    'equation', 'dippr-eq-101',
     `DIPPR Eq. 101 Vapor Pressure (${solved.label})`,
     { compound, tempK: tKelvin, tempUnit, pressureUnit, pSatPa: Math.round(pSatPa), vpDisplay, citation: "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]" },
   );
   const eq106Select = useAgentSelectable(
-    'equation',
-    'dippr-eq-106',
+    'equation', 'dippr-eq-106',
     `DIPPR Eq. 106 ΔH_vap with T_r^C5 (${solved.label})`,
     { compound, tempK: tKelvin, tempUnit, hVapJkmol, citation: "[Perry's 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]" },
   );
@@ -85,9 +92,9 @@ export const ThermoDipprWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb2-thermo-dippr">
       <header className="wb-toolbar">
         <div>
-          <h2>WB2 · Sec 1, 2 &amp; 4 DIPPR Property Engine &amp; Carlson Advisor</h2>
-          <p className="wb-subtitle">
-            Exact 5-parameter <code>T^C5</code> correlations · Mixed field-unit normalizer · Property package decision tree
+          <h2>Subject 1 · Thermodynamics, Phase Equilibria &amp; DIPPR Engine</h2>
+          <p className="wb-subtitle" data-testid="wb2-blended-sources-badge">
+            📚 Blended Sources: <code>Perry&apos;s Sec 1/2/4/24 · Smith-Van Ness-Abbott 9th Ed. Ch. 3/8/9/10/12/14 · Fogler Ch. 11 · Seader Ch. 2</code>
           </p>
         </div>
         <div className="wb-actions-row">
@@ -102,19 +109,13 @@ export const ThermoDipprWorkbench: React.FC = () => {
           <label>
             T Unit:
             <select aria-label="Temperature unit" value={tempUnit} onChange={(e) => setTempUnit(e.target.value as typeof tempUnit)}>
-              <option value="K">K</option>
-              <option value="degC">°C</option>
-              <option value="degF">°F</option>
-              <option value="degR">°R</option>
+              <option value="K">K</option><option value="degC">°C</option><option value="degF">°F</option><option value="degR">°R</option>
             </select>
           </label>
           <label>
             P Datum:
             <select aria-label="Pressure unit" value={pressureUnit} onChange={(e) => setPressureUnit(e.target.value as typeof pressureUnit)}>
-              <option value="psig">psig (gauge +14.696 psia)</option>
-              <option value="psia">psia (absolute)</option>
-              <option value="bar">bar</option>
-              <option value="kPa">kPa</option>
+              <option value="psig">psig (gauge +14.696 psia)</option><option value="psia">psia (absolute)</option><option value="bar">bar</option><option value="kPa">kPa</option>
             </select>
           </label>
         </div>
@@ -122,8 +123,8 @@ export const ThermoDipprWorkbench: React.FC = () => {
 
       <LearnModeCallout
         workbenchId="wb2"
-        title="Vapor Pressure, Boiling & Property Packages"
-        plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Use Carlson's decision tree on the right to pick the right thermodynamic model."
+        title="Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium"
+        plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T)."
         commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
         perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
       />
@@ -135,21 +136,14 @@ export const ThermoDipprWorkbench: React.FC = () => {
             min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
-
-          <DipprPhaseEnvelopeSvg compound={compound} tempK={tKelvin} />
-
+          <DipprPhaseEnvelopeSvg compound={compound} tempK={tKelvin} onChangeTempK={(nextK) => { setTempUnit('K'); setTempK(nextK); }} />
           <div className="wb-panel" {...eq101Select.selectableProps}>
-            <WhiteBoxEquationCard
-              equation={solved.equations[0]}
-              personaMode={personaMode}
-              katexTestIds={{ symbolic: 'katex-dippr-101' }}
-            />
+            <WhiteBoxEquationCard equation={solved.equations[0]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-dippr-101' }} />
             <div className="mono" data-testid="dippr-vp-result">
               Result at T = {tKelvin.toFixed(2)} K: <strong>{Math.round(pSatPa).toLocaleString()} Pa</strong> ({vpDisplay}) · 1 atm = 101,325 Pa ·{' '}
               <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
             </div>
           </div>
-
           <div className="wb-panel" {...eq106Select.selectableProps}>
             <WhiteBoxEquationCard equation={solved.equations[1]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-dippr-106' }} />
             <div className="mono">
@@ -163,8 +157,15 @@ export const ThermoDipprWorkbench: React.FC = () => {
           personaMode={personaMode} polarity={polarity} onPolarityChange={setPolarity}
           hasLle={hasLle} onHasLleChange={setHasLle} hasAssoc={hasAssoc}
           onHasAssocChange={setHasAssoc} recommendedModel={recommendedModel}
+          tempK={tKelvin} onChangeTempK={(nextK) => { setTempUnit('K'); setTempK(nextK); }}
         />
       </div>
+
+      <ThermoDiagramGallery
+        vleX1={vleX1} vleA12={vleA12} prReducedP={prReducedP} prReducedT={prReducedT}
+        onChangeVle={(nx, na) => { setVleX1(nx); setVleA12(na); }}
+        onChangePrTr={(np, nt) => { setPrReducedP(np); setPrReducedT(nt); }}
+      />
     </section>
   );
 };

@@ -1,6 +1,14 @@
-// Interactive 500x500 SVG McCabe-Thiele Canvas with draggable q-line handle & selectable stages.
-import React, { useRef } from 'react';
+// Interactive 500x500 SVG McCabe-Thiele Canvas (Chart 9) with 5 draggable handles & selectable stages.
+import React, { useRef, useState } from 'react';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import {
+  clampMcCabeComposition,
+  solveQFromSvgNorm,
+  solveRMultFromInterceptNormY,
+  type ActiveMtHandle,
+} from '../../lib/mccabe-thiele-svg-handles';
+import { clientPointToViewBox, safeSetPointerCapture, type ViewBoxRect } from '../../lib/svg-drag-math';
+import { McCabeThieleHandlesOverlay } from './mccabe-thiele-handles-overlay';
 
 export interface McCabeThieleSvgCanvasProps {
   alpha: number;
@@ -9,8 +17,17 @@ export interface McCabeThieleSvgCanvasProps {
   xb: number;
   q: number;
   rOp: number;
+  rMin?: number;
   onChangeQ?: (nextQ: number) => void;
+  onChangeXd?: (nextXd: number) => void;
+  onChangeXf?: (nextXf: number) => void;
+  onChangeXb?: (nextXb: number) => void;
+  onChangeRMult?: (nextRMult: number) => void;
 }
+
+const PAD = 38;
+const SPAN = 424;
+const MT_BOX: ViewBoxRect = { width: 500, height: 500, plotX: PAD, plotY: PAD, plotW: SPAN, plotH: SPAN };
 
 const StagePointSelectable: React.FC<{
   stageNum: number;
@@ -18,38 +35,35 @@ const StagePointSelectable: React.FC<{
   cy: number;
   xEq: number;
   yIn: number;
-}> = ({ stageNum, cx, cy, xEq, yIn }) => {
+  onHoverStage: (s: { x: number; y: number; stage: number }) => void;
+}> = ({ stageNum, cx, cy, xEq, yIn, onHoverStage }) => {
   const sel = useAgentSelectable('stage', `stage-${stageNum}`, `Theoretical Stage ${stageNum}`, {
     stage: stageNum,
     xEq,
     yIn,
   });
   return (
-    <g {...sel.selectableProps} style={{ cursor: 'pointer' }} data-testid={`mt-stage-${stageNum}`}>
+    <g
+      {...sel.selectableProps}
+      style={{ cursor: 'pointer' }}
+      data-testid={`mt-stage-${stageNum}`}
+      onPointerEnter={() => onHoverStage({ x: xEq, y: yIn, stage: stageNum })}
+    >
       <circle cx={cx} cy={cy} r={5} fill="var(--accent-primary)" />
-      <text x={cx + 6} y={cy - 5} fontSize="9" fill="currentColor">
-        {stageNum}
-      </text>
+      <text x={cx + 6} y={cy - 5} fontSize="9" fill="currentColor">{stageNum}</text>
     </g>
   );
 };
 
 export const McCabeThieleSvgCanvas: React.FC<McCabeThieleSvgCanvasProps> = ({
-  alpha,
-  xf,
-  xd,
-  xb,
-  q,
-  rOp,
-  onChangeQ,
+  alpha, xf, xd, xb, q, rOp, rMin = 1.15,
+  onChangeQ, onChangeXd, onChangeXf, onChangeXb, onChangeRMult,
 }) => {
-  const draggingRef = useRef<boolean>(false);
-  const PAD = 38;
-  const SPAN = 424;
+  const activeHandleRef = useRef<ActiveMtHandle>(null);
+  const [hoverCoords, setHoverCoords] = useState<{ x: number; y: number; stage?: number } | null>(null);
   const toSvgX = (x: number) => PAD + Math.min(Math.max(x, 0), 1) * SPAN;
   const toSvgY = (y: number) => PAD + (1 - Math.min(Math.max(y, 0), 1)) * SPAN;
 
-  // Build VLE polyline
   const vlePts: string[] = [];
   for (let i = 0; i <= 50; i += 1) {
     const x = i / 50;
@@ -57,14 +71,12 @@ export const McCabeThieleSvgCanvas: React.FC<McCabeThieleSvgCanvasProps> = ({
     vlePts.push(`${toSvgX(x).toFixed(1)},${toSvgY(y).toFixed(1)}`);
   }
 
-  // q-line intersection with ROL
   const yInt =
     Math.abs(q - 1) < 1e-4
       ? (rOp / (rOp + 1)) * xf + xd / (rOp + 1)
       : (xf * (rOp + 1) + (q - 1) * xd) / Math.max(rOp + q, 0.1);
   const xInt = Math.min(Math.max(((rOp + 1) * yInt - xd) / Math.max(rOp, 0.05), 0.05), 0.95);
 
-  // Step off stages for rendering
   const stageCoords: Array<{ stage: number; xEq: number; yIn: number }> = [];
   const stairPts: string[] = [`${toSvgX(xd).toFixed(1)},${toSvgY(xd).toFixed(1)}`];
   let yCurr = xd;
@@ -85,57 +97,81 @@ export const McCabeThieleSvgCanvas: React.FC<McCabeThieleSvgCanvasProps> = ({
   }
 
   const handlePointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
-    if (!draggingRef.current || !onChangeQ) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const normX = (e.clientX - rect.left - PAD) / SPAN;
-    const nextQ = Math.min(Math.max(Number((1.0 + (xf - normX) * 2.5).toFixed(2)), -0.5), 1.5);
-    onChangeQ(nextQ);
+    const pt = clientPointToViewBox(e, e.currentTarget, MT_BOX);
+    const normX = pt.u;
+    const normY = 1 - pt.v;
+    setHoverCoords({ x: normX, y: normY });
+    const h = activeHandleRef.current;
+    if (!h) return;
+    if (h === 'q') onChangeQ?.(solveQFromSvgNorm(xf, normX));
+    else if (h === 'xd') onChangeXd?.(clampMcCabeComposition('xd', normX, { xd, xf, xb }));
+    else if (h === 'zf') onChangeXf?.(clampMcCabeComposition('zf', normX, { xd, xf, xb }));
+    else if (h === 'xb') onChangeXb?.(clampMcCabeComposition('xb', normX, { xd, xf, xb }));
+    else if (h === 'rol') onChangeRMult?.(solveRMultFromInterceptNormY(xd, rMin, normY));
   };
 
   return (
     <div className="wb-panel" data-testid="mccabe-thiele-canvas">
       <svg
-        viewBox="0 0 500 500"
-        width="100%"
-        height="310"
+        viewBox="0 0 500 500" width="100%" height="310"
+        style={{ touchAction: 'none' }}
         onPointerMove={handlePointerMove}
-        onPointerUp={() => {
-          draggingRef.current = false;
-        }}
+        onPointerUp={() => { activeHandleRef.current = null; }}
       >
         <rect x={PAD} y={PAD} width={SPAN} height={SPAN} fill="var(--bg-canvas)" stroke="currentColor" strokeOpacity="0.4" />
-        {/* 45 deg diagonal y = x */}
         <line x1={toSvgX(0)} y1={toSvgY(0)} x2={toSvgX(1)} y2={toSvgY(1)} stroke="currentColor" strokeDasharray="3 3" />
-        {/* VLE equilibrium curve */}
-        <polyline points={vlePts.join(' ')} fill="none" stroke="var(--accent-primary)" strokeWidth="2.8" />
-        {/* Rectifying & Stripping Operating Lines */}
-        <line x1={toSvgX(xd)} y1={toSvgY(xd)} x2={toSvgX(xInt)} y2={toSvgY(yInt)} stroke="var(--accent-secondary)" strokeWidth="2.2" />
-        <line x1={toSvgX(xInt)} y1={toSvgY(yInt)} x2={toSvgX(xb)} y2={toSvgY(xb)} stroke="var(--accent-secondary)" strokeWidth="2.2" />
-        {/* Draggable q-line */}
-        <line x1={toSvgX(xf)} y1={toSvgY(xf)} x2={toSvgX(xInt)} y2={toSvgY(yInt)} stroke="var(--status-warn)" strokeWidth="2.2" strokeDasharray="4 2" />
-        <circle
-          cx={toSvgX(xInt)}
-          cy={toSvgY(yInt)}
-          r={7}
-          fill="var(--status-warn)"
-          style={{ cursor: 'grab' }}
-          data-testid="q-line-handle"
-          onPointerDown={() => {
-            draggingRef.current = true;
+        {/* Interactive VLE Curve (drag to scrub z_F along equilibrium locus) */}
+        <polyline
+          points={vlePts.join(' ')} fill="none" stroke="var(--accent-primary)" strokeWidth="3.2"
+          style={{ cursor: 'ew-resize' }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            activeHandleRef.current = 'zf';
+            safeSetPointerCapture(e.currentTarget.ownerSVGElement ?? e.currentTarget, e.pointerId);
           }}
         />
-        {/* Stage staircase */}
+        {/* Interactive Rectifying Operating Line (drag to adjust R / R_min) */}
+        <line
+          x1={toSvgX(xd)} y1={toSvgY(xd)} x2={toSvgX(xInt)} y2={toSvgY(yInt)}
+          stroke="var(--accent-secondary)" strokeWidth="3.2" style={{ cursor: 'ns-resize' }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            activeHandleRef.current = 'rol';
+            safeSetPointerCapture(e.currentTarget.ownerSVGElement ?? e.currentTarget, e.pointerId);
+          }}
+        />
+        {/* Interactive Stripping Operating Line (drag to adjust bottoms x_B) */}
+        <line
+          x1={toSvgX(xInt)} y1={toSvgY(yInt)} x2={toSvgX(xb)} y2={toSvgY(xb)}
+          stroke="var(--accent-secondary)" strokeWidth="3.2" style={{ cursor: 'ew-resize' }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            activeHandleRef.current = 'xb';
+            safeSetPointerCapture(e.currentTarget.ownerSVGElement ?? e.currentTarget, e.pointerId);
+          }}
+        />
+        {/* Interactive Feed q-Line (drag directly on line to tilt q) */}
+        <line
+          x1={toSvgX(xf)} y1={toSvgY(xf)} x2={toSvgX(xInt)} y2={toSvgY(yInt)}
+          stroke="var(--status-warn)" strokeWidth="3.2" strokeDasharray="4 2" style={{ cursor: 'grab' }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            activeHandleRef.current = 'q';
+            safeSetPointerCapture(e.currentTarget.ownerSVGElement ?? e.currentTarget, e.pointerId);
+          }}
+        />
         <polyline points={stairPts.join(' ')} fill="none" stroke="currentColor" strokeWidth="1.6" />
         {stageCoords.slice(0, 14).map((st) => (
           <StagePointSelectable
-            key={st.stage}
-            stageNum={st.stage}
-            cx={toSvgX(st.xEq)}
-            cy={toSvgY(st.yIn)}
-            xEq={st.xEq}
-            yIn={st.yIn}
+            key={st.stage} stageNum={st.stage} cx={toSvgX(st.xEq)} cy={toSvgY(st.yIn)}
+            xEq={st.xEq} yIn={st.yIn} onHoverStage={setHoverCoords}
           />
         ))}
+        <McCabeThieleHandlesOverlay
+          alpha={alpha} xf={xf} xd={xd} xb={xb} rOp={rOp} xInt={xInt} yInt={yInt}
+          hoverCoords={hoverCoords} toSvgX={toSvgX} toSvgY={toSvgY}
+          onStartDrag={(handle) => { activeHandleRef.current = handle; }}
+        />
         <text x={PAD + 8} y={PAD + 18} fontSize="11.5" fontWeight="700" fill="currentColor">
           McCabe-Thiele · α={alpha} · q={q.toFixed(2)} · N={stageCoords.length} stages [Perry Sec 13, p. 13-14]
         </text>

@@ -1,6 +1,6 @@
 ---
 title: "Phase 6: Sec 13 & 14 Distillation Workbench: Bi-Directional McCabe-Thiele Canvas + Tray/Packing Flooding Hydraulics (WB4)"
-status: todo
+status: completed
 ---
 
 # Phase 6: Sec 13 & 14 Distillation Workbench: Bi-Directional McCabe-Thiele Canvas + Tray/Packing Flooding Hydraulics (WB4)
@@ -11,9 +11,9 @@ Implement the *Perry's 9th Ed.* Section 13 & 14 Distillation & Equipment Rating 
 
 ## Requirements
 
-- [ ] Binary McCabe-Thiele stage-stepping & FUG shortcut solver (`solvers/distillation_mccabe.py`) with 3-stage `handcalcs` derivations and exact stage staircase coordinates.
-- [ ] Section 14 Fair's entrainment flooding ($C_{sb}$, `Fig. 14-32`, `p. 14-37`) and Eckert GPDC packed-column flooding (`Fig. 14-55`, `p. 14-57`) solver (`solvers/distillation_hydraulics.py`) + FastAPI router (`routers/distillation_router.py`) + `tests/test_phase6_distillation.py`.
-- [ ] Interactive `McCabeThieleSvgCanvas` (`src/components/sketches/mccabe-thiele-svg-canvas.tsx`) with draggable $q$-line handle, `ColumnFloodingSvgSketch` (`src/components/sketches/column-flooding-svg-sketch.tsx`), and `DistillationWorkbench` (`src/components/workbenches/distillation-workbench.tsx`) with 2-Tier Progressive Disclosure (`Tier 1: Shortcut` $\leftrightarrow$ `Tier 2: Datasheet Rating`).
+- [x] Binary McCabe-Thiele stage-stepping & FUG shortcut solver (`solvers/distillation_mccabe.py`) with 3-stage `handcalcs` derivations and exact stage staircase coordinates.
+- [x] Section 14 Fair's entrainment flooding ($C_{sb}$, `Fig. 14-32`, `p. 14-37`) and Eckert GPDC packed-column flooding (`Fig. 14-55`, `p. 14-57`) solver (`solvers/distillation_hydraulics.py`) + FastAPI router (`routers/distillation_router.py`) + `tests/test_phase6_distillation.py`.
+- [x] Interactive `McCabeThieleSvgCanvas` (`src/components/sketches/mccabe-thiele-svg-canvas.tsx`) with draggable $q$-line handle, `ColumnFloodingSvgSketch` (`src/components/sketches/column-flooding-svg-sketch.tsx`), and `DistillationWorkbench` (`src/components/workbenches/distillation-workbench.tsx`) with 2-Tier Progressive Disclosure (`Tier 1: Shortcut` $\leftrightarrow$ `Tier 2: Datasheet Rating`).
 
 ## Implementation Steps
 

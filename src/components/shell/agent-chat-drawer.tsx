@@ -22,8 +22,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
   renderInlineExtension,
   onOpenCalcSheet,
 }) => {
-  const { activeWorkbench, personaMode, themeMode, selectedChips, removeChip, clearChips } =
-    usePersonaTheme();
+  const { activeWorkbench, setActiveWorkbench, personaMode, themeMode, selectedChips, removeChip, clearChips } = usePersonaTheme();
   const [prompt, setPrompt] = useState<string>('');
   const [messages, setMessages] = useState<
     Array<{ id: string; role: 'user' | 'agent'; text: string; appliedMutations?: Record<string, number | string> }>
@@ -67,7 +66,13 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
       payload: getClientAppState().payload,
     });
     const appliedMutations = response.actionMutations?.params;
-    if (response.actionMutations) dispatchWorkbenchMutation(response.actionMutations);
+    if (response.actionMutations) {
+      const cmd = response.actionMutations;
+      dispatchWorkbenchMutation(cmd);
+      if (cmd.targetWorkbench && cmd.targetWorkbench !== activeWorkbench) {
+        setActiveWorkbench(cmd.targetWorkbench);
+      }
+    }
     setMessages((prev) => [...prev, { id: `a-${Date.now()}`, role: 'agent', text: response.reply, appliedMutations }]);
   };
 
@@ -99,18 +104,10 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({
                 <strong className="composer-chip-label" title={chip.chipId}>
                   {chip.label || chip.chipId}
                 </strong>
-                <button
-                  type="button"
-                  aria-label={`Remove ${chip.chipId}`}
-                  onClick={() => removeChip(chip.chipId)}
-                >
-                  ×
-                </button>
+                <button type="button" aria-label={`Remove ${chip.chipId}`} onClick={() => removeChip(chip.chipId)}>×</button>
               </span>
             ))}
-            <button type="button" onClick={clearChips}>
-              Clear all
-            </button>
+            <button type="button" onClick={clearChips}>Clear all</button>
           </>
         )}
       </div>

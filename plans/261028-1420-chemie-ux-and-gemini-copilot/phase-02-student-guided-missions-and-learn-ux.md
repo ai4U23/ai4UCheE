@@ -1,7 +1,7 @@
 ---
 title: "Phase 02 — Student Guided Mission Bar, Approachable Workbench Tabs & Learn-Mode Plain-English Callouts"
 description: "Add a 4-mission GuidedMissionBar with instant GenUI proof card reward, plain-English LearnModeCallout banners across WB1-WB4, and approachable workbench tab subtitles."
-status: done
+status: completed
 priority: P1
 effort: 2.0h
 branch: main

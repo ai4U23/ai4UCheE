@@ -198,7 +198,7 @@ Every source file created or modified by this plan is gated strictly `< 200` LOC
 #### Action Items
 - [x] Rewrite §1 diagnosis, §3 LOC matrix, §5 locked contracts with actual file names / signatures / testids / state keys / counts.
 - [x] Propagate corrections into phase-01..phase-05 (markers `<!-- Updated: Validation Session 1 -->`).
-- [ ] Before `/ak:cook`: commit or stash the current uncommitted working-tree changes (`git status` shows 12 modified files + untracked `perry-figure-svg-preview.tsx`) so plan execution starts from a clean, rollback-able state.
+- [x] Before `/ak:cook`: commit or stash the current uncommitted working-tree changes (`git status` shows 12 modified files + untracked `perry-figure-svg-preview.tsx`) so plan execution starts from a clean, rollback-able state.
 
 #### Impact on Phases
 - Phase 01: export names fixed (`ClientScreenState`, `writeClientAppState`, existing `subscribeClientAppState` extended); long workbench ids; `personaMode === 'learn'` (not `'student'`).

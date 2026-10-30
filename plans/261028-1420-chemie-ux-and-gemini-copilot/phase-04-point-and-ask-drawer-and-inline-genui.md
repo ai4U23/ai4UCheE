@@ -1,7 +1,7 @@
 ---
 title: "Phase 04 — Point-and-Ask Co-Pilot Drawer, Human-Readable Chip Badges, Starter Prompts & KaTeX GenUI Cards"
 description: "Upgrade RenderInlineExtension with KaTeX math, extract copilot-prompts.ts, and upgrade AgentChatDrawer with human chip labels, 1-click starter prompts, and Two-Tier Co-Pilot execution."
-status: done
+status: completed
 priority: P1
 effort: 1.5h
 branch: main

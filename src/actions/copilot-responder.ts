@@ -11,12 +11,7 @@ export const CopilotRequestSchema = z.object({
   prompt: z.string().default(''),
   activeWorkbench: z.string().default('wb1-visual-verifier'),
   personaMode: z.enum(['learn', 'plant']).default('learn'),
-  selectedChips: z.array(z.object({
-    chipId: z.string(),
-    label: z.string().optional(),
-    kind: z.string().optional(),
-    payload: z.record(z.unknown()).optional(),
-  })).default([]),
+  selectedChips: z.array(z.object({ chipId: z.string(), label: z.string().optional(), kind: z.string().optional(), payload: z.record(z.unknown()).optional() })).default([]),
   payload: z.record(z.unknown()).optional(),
 });
 
@@ -31,12 +26,13 @@ export interface CopilotResponse {
   actionMutations?: WorkbenchMutationCommand;
 }
 
-type Intent = 'wb2-thermo' | 'wb3-hydraulics' | 'wb4-distillation' | 'wb1-charts';
+type Intent = 'wb2-thermo' | 'wb3-hydraulics' | 'wb4-distillation' | 'wb6-kinetics' | 'wb1-charts';
 
 const INTENT_KEYWORDS: ReadonlyArray<[Intent, readonly string[]]> = [
-  ['wb2-thermo', ['wb2', 'dippr', 'vapor', 'vapour', 'carlson', 'psig', 'psia', 'boiling', 'wilson', 'lle']],
-  ['wb3-hydraulics', ['wb3', 'hydraulics', 'cavitation', 'npsha', 'npshr', 'valve', ' cv', 'cv ']],
-  ['wb4-distillation', ['wb4', 'distillation', 'mccabe', 'flooding', 'r_min', 'n_min', 'reflux', 'fenske', 'underwood']],
+  ['wb6-kinetics', ['wb6', 'fogler', 'levenspiel', 'cstr', 'pfr', 'thiele', 'semenov', 'runaway', 'ergun', 'catalyst']],
+  ['wb2-thermo', ['wb2', 'dippr', 'vapor', 'vapour', 'carlson', 'psig', 'psia', 'boiling', 'wilson', 'lle', 'van ness']],
+  ['wb3-hydraulics', ['wb3', 'hydraulics', 'cavitation', 'npsha', 'npshr', 'valve', ' cv', 'cv ', 'bsl']],
+  ['wb4-distillation', ['wb4', 'distillation', 'mccabe', 'flooding', 'r_min', 'n_min', 'reflux', 'fenske', 'underwood', 'seader']],
 ];
 
 function detectIntent(input: CopilotRequest): Intent {
@@ -61,9 +57,9 @@ interface Tier1Knowledge {
 }
 
 function wb2Thermo(): Tier1Knowledge {
-  const citation = "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]";
+  const citation = "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53; Smith, Van Ness & Abbott 9th Ed., Ch. 10 & 12]";
   return {
-    learn: 'Water boils at 100 °C = 373.15 K. DIPPR Eq. 101 (Perry Table 2-8 constants) gives P_vp = 101,325 Pa — the vapor pressure exactly balances 1 atm, the normal boiling point.\n1) Gauge pressure (psig) reads relative to the surrounding atmosphere; absolute (psia) reads from vacuum.\n2) Conversion: psia = psig + 14.696, so 101,325 Pa = 14.70 psia = 0.00 psig at this boiling point.\n3) Never use the Wilson equation for LLE: Wilson local-composition G^E always yields a single liquid phase, so it cannot predict a liquid split — use NRTL or UNIQUAC.',
+    learn: 'Water boils at 100 °C = 373.15 K. DIPPR Eq. 101 (Perry Table 2-8 constants) gives P_vp = 101,325 Pa — the vapor pressure exactly balances 1 atm, the normal boiling point.\n1) Gauge pressure (psig) reads relative to the surrounding atmosphere; absolute (psia) reads from vacuum.\n2) Conversion: psia = psig + 14.696, so 101,325 Pa = 14.70 psia = 0.00 psig at this boiling point.\n3) Never use the Wilson equation for LLE (Smith, Van Ness & Abbott Ch. 12): Wilson local-composition G^E always yields a single liquid phase, so it cannot predict a liquid split — use NRTL or UNIQUAC.',
     plant: 'Check: T = 373.15 K → P_vp(water) = 101,325 Pa = 14.70 psia = 0.00 psig (psia = psig + 14.696).\nMargin: rated design pressure must exceed P_vp at the maximum attainable process temperature.\nLLE: Wilson G^E cannot predict a liquid split — re-run the property package with NRTL/UNIQUAC.',
     citations: [citation],
     cards: [card('equation-proof-card', 'DIPPR Eq. 101 — Vapor-Pressure White-Box Proof', {
@@ -76,9 +72,9 @@ function wb2Thermo(): Tier1Knowledge {
 }
 
 function wb3Hydraulics(): Tier1Knowledge {
-  const citation = "[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11]";
+  const citation = "[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11; BSL Transport Phenomena 2nd Ed., Ch. 6]";
   return {
-    learn: '1) Perry publishes TWO friction factors: Fanning f_F and Darcy f_D — they differ by exactly 4.\n2) Head loss uses the Darcy factor: h_f = f_D (L/D) v²/(2g). Mixing conventions skews ΔP by 4×.\n3) Cavitation guard: NPSHa must exceed NPSHr with at least 1.0 m margin, or the pump flashes and cavitates.\n4) Valve Cv: convert units first, then size — a wrong Cv floods or starves the control loop.',
+    learn: '1) Perry & Bird-Stewart-Lightfoot publish TWO friction factors: Fanning f_F and Darcy f_D — they differ by exactly 4.\n2) Head loss uses the Darcy factor: h_f = f_D (L/D) v²/(2g). Mixing conventions skews ΔP by 4×.\n3) Cavitation guard: NPSHa must exceed NPSHr with at least 1.0 m margin, or the pump flashes and cavitates.\n4) Valve Cv: convert units first, then size — a wrong Cv floods or starves the control loop.',
     plant: 'Check: f_D = 4·f_F (never mix conventions); h_f = f_D (L/D) v²/(2g) per Eqs. 6-37..6-39.\nMargin: require NPSHa ≥ NPSHr + 1.0 m at max flow and max process temperature.\nVerify valve Cv against the required Cv at the specified % opening before datasheet issue.',
     citations: [citation],
     cards: [
@@ -97,9 +93,9 @@ function wb3Hydraulics(): Tier1Knowledge {
 }
 
 function wb4Distillation(): Tier1Knowledge {
-  const citation = "[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37]";
+  const citation = "[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37; Seader, Henley & Roper 4th Ed., Ch. 7 & 9]";
   return {
-    learn: '1) N_min is Fenske at total reflux: the log of the separation ratio divided by the log of α_AB.\n2) R_min comes from Underwood, and it depends on the feed thermal quality q.\n3) q = 1 is saturated liquid, q = 0 is saturated vapor; q bends the q-line on McCabe-Thiele.\n4) Capacity ceiling: Fair’s entrainment flooding correlation (Perry Fig. 14-32) caps vapor velocity.',
+    learn: '1) N_min is Fenske at total reflux (Seader Ch. 9): the log of the separation ratio divided by the log of α_AB.\n2) R_min comes from Underwood, and it depends on the feed thermal quality q.\n3) q = 1 is saturated liquid, q = 0 is saturated vapor; q bends the q-line on McCabe-Thiele (Seader Ch. 7).\n4) Capacity ceiling: Fair’s entrainment flooding correlation (Perry Fig. 14-32) caps vapor velocity.',
     plant: 'Check: bound the design with N_min (Fenske, total reflux) and R_min (Underwood with feed quality q).\nMargin: operate at R ≈ 1.2–1.5 × R_min and keep vapor loading ≤ 80 % of Fair flooding (Fig. 14-32).',
     citations: [citation],
     cards: [card('equation-proof-card', 'Fenske N_min — Minimum-Stages White-Box Proof', {
@@ -111,10 +107,25 @@ function wb4Distillation(): Tier1Knowledge {
   };
 }
 
-function wb1Charts(): Tier1Knowledge {
-  const citation = "[Perry's 9th Ed., Fig. 6-9, p. 6-10]";
+function wb6Kinetics(): Tier1Knowledge {
+  const citation = "[Fogler 7th Ed., Ch. 2, 5, 12, 15; BSL Transport 2nd Ed., Ch. 18; Crowl & Louvar 4th Ed., Ch. 8; Perry's 9th Ed., Sec. 7 & 19, p. 19-6]";
   return {
-    learn: '1) Perry log-log friction charts: each decade is a fixed power of ten — count grid lines, then interpolate.\n2) Enter with Reynolds number on the x-axis and relative roughness ε/D to pick the curve family.\n3) The classic trap: Perry Fig. 6-9 plots the Fanning factor f_F, while many texts plot the Darcy factor f_D — they differ by 4×.\n4) If your ΔP is off by a factor of 4, you mixed the two conventions somewhere in the chain.',
+    learn: '1) On a Fogler Levenspiel plot of F_A0/(-r_A) vs. X, a CSTR operates at the exit concentration (rectangle area), whereas a PFR integrates along the concentration profile (shaded area under the curve).\n2) Gas-phase Packed-Bed Reactors (PBR) experience both volume expansion ε_A and Ergun pressure drop y = P/P_0 (always convert inlet psig → psia + 14.696 first).\n3) Inside porous catalyst pellets (Fogler Ch. 15 & BSL Ch. 18), a large Thiele modulus φ > 2 starves the pellet core and drops effectiveness η.\n4) Nonisothermal reactors (Fogler Ch. 12 & Crowl Ch. 8) must stay below Semenov ψ_crit = 1/e ≈ 0.368 to prevent thermal runaway.',
+    plant: 'Check: convert P_in(psig) + 14.696 → psia before evaluating gas concentration C_A0 and Ergun pressure ratio y = P/P_0.\nVerify porous catalyst effectiveness η = (3/φ²)(φ coth φ - 1) and keep Semenov number ψ ≤ 0.368 (Crowl & Louvar Ch. 8).',
+    citations: [citation],
+    cards: [card('equation-proof-card', 'Fogler Levenspiel CSTR/PFR, Thiele η & Semenov Runaway Proof', {
+      symbolic_latex: '\\eta_{\\mathrm{cat}} = \\frac{3}{\\phi^2}(\\phi \\coth \\phi - 1), \\quad \\psi \\le \\psi_{\\mathrm{crit}} = e^{-1} \\approx 0.368',
+      substituted_latex: 'P_{\\mathrm{abs}} = P_{\\mathrm{psig}} + 14.696\\text{ psia}, \\quad f_D = 4 f_F \\; (\\text{vs. } f_{\\mathrm{Ergun}})',
+      result_latex: 'V_{\\mathrm{CSTR}} > V_{\\mathrm{PFR}} \\text{ for positive-order kinetics}',
+      citation,
+    })],
+  };
+}
+
+function wb1Charts(): Tier1Knowledge {
+  const citation = "[Perry's 9th Ed., Fig. 6-9, p. 6-10; BSL Transport Phenomena 2nd Ed., Ch. 6]";
+  return {
+    learn: '1) Perry log-log friction charts: each decade is a fixed power of ten — count grid lines, then interpolate.\n2) Enter with Reynolds number on the x-axis and relative roughness ε/D to pick the curve family.\n3) The classic trap: Perry Fig. 6-9 and BSL Ch. 6 define the Fanning factor f_F, while Moody plots the Darcy factor f_D — they differ by 4×.\n4) If your ΔP is off by a factor of 4, you mixed the two conventions somewhere in the chain.',
     plant: 'Check: read f_F from Fig. 6-9 at the correct Re and ε/D (Fanning convention), then f_D = 4·f_F for h_f = f_D (L/D) v²/(2g).\nMargin: a 4× ΔP discrepancy means Fanning/Darcy mixing (f_D = 4·f_F) — re-derive before sign-off.',
     citations: [citation],
     cards: [card('equation-proof-card', 'Fig. 6-9 Chart-Reading White-Box Proof', {
@@ -130,6 +141,7 @@ const KNOWLEDGE: Record<Intent, () => Tier1Knowledge> = {
   'wb2-thermo': wb2Thermo,
   'wb3-hydraulics': wb3Hydraulics,
   'wb4-distillation': wb4Distillation,
+  'wb6-kinetics': wb6Kinetics,
   'wb1-charts': wb1Charts,
 };
 
@@ -150,14 +162,7 @@ export function runCopilotResponder(input: unknown, options?: { emitUi?: boolean
     : `🏭 EPC Verification:\n${plant}\nSynced with <current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`;
   const reply = scenario.liveReply ? `${scenario.liveReply}\n\n${base}\n\n${tail}` : `${base}\n\n${tail}`;
   if (options?.emitUi !== false) allCards.forEach((c) => agentNative.ui.output(c));
-  return {
-    reply,
-    model: 'perry-tier1-deterministic',
-    tier: 'tier1-deterministic',
-    citations: allCitations,
-    genUiCards: allCards,
-    actionMutations: scenario.mutations,
-  };
+  return { reply, model: 'perry-tier1-deterministic', tier: 'tier1-deterministic', citations: allCitations, genUiCards: allCards, actionMutations: scenario.mutations };
 }
 
 /** Browser helper: Tier-1 first (cards emitted locally), then enrich via POST /api/copilot. */
@@ -165,11 +170,7 @@ export async function askPerryCopilot(input: unknown): Promise<CopilotResponse> 
   const tier1 = await runCopilotResponder(input, { emitUi: true });
   if (import.meta.env?.MODE === 'test') return tier1;
   try {
-    const res = await fetch('/api/copilot', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(input),
-    });
+    const res = await fetch('/api/copilot', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
     if (!res.ok) return tier1;
     const data = (await res.json()) as Partial<CopilotResponse> | null;
     if (!data || typeof data.reply !== 'string' || data.reply.length === 0) return tier1;
@@ -183,7 +184,5 @@ export const askPerryCopilotAction = defineAction({
   name: 'ask_perry_copilot',
   description: 'Deterministic ChE Tutor: Perry 9th Ed. citations, solver guidance, and inline GenUI proof cards.',
   schema: CopilotRequestSchema,
-  handler(input) {
-    return runCopilotResponder(input);
-  },
+  handler: (input) => runCopilotResponder(input),
 });

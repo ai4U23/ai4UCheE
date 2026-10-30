@@ -1,14 +1,13 @@
-// WB4: Perry's Sec 13 & 14 Distillation Workbench — Bi-Directional McCabe-Thiele + Tray/Packing Flooding.
+// WB4: Perry's Sec 13–16 Separation Workbench — McCabe-Thiele, Fair Flooding, Kremser Absorption & Ternary LLE/Adsorption.
 import React, { useEffect, useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
-import { ColumnFloodingSvgSketch } from '../sketches/column-flooding-svg-sketch';
-import { McCabeThieleSvgCanvas } from '../sketches/mccabe-thiele-svg-canvas';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
+import { DistillationDiagramGallery } from './distillation-diagram-gallery';
 import { solveDistillation } from './distillation-solver-math';
 
 export const DistillationWorkbench: React.FC = () => {
@@ -21,6 +20,10 @@ export const DistillationWorkbench: React.FC = () => {
   const [rMult, setRMult] = useState<number>(1.3);
   const [traySpacingM, setTraySpacingM] = useState<number>(0.61);
   const [colDiamM, setColDiamM] = useState<number>(0.85);
+  const [absorptionA, setAbsorptionA] = useState<number>(1.4);
+  const [recoveryFrac, setRecoveryFrac] = useState<number>(0.95);
+  const [soluteFeedZ, setSoluteFeedZ] = useState<number>(0.26);
+  const [peNumber, setPeNumber] = useState<number>(45);
 
   const solved = solveDistillation({ alpha, xf, xd, xb, q, rMult, traySpacingM, colDiamM });
   const { rMin, rOp, nMin, floodPercent, isFlooding } = solved;
@@ -33,12 +36,16 @@ export const DistillationWorkbench: React.FC = () => {
     if (p.q !== undefined) setQ(Number(p.q));
     if (p.rMult !== undefined) setRMult(Number(p.rMult));
     if (p.colDiamM !== undefined) setColDiamM(Number(p.colDiamM));
+    if (p.absorptionA !== undefined) setAbsorptionA(Number(p.absorptionA));
+    if (p.recoveryFrac !== undefined) setRecoveryFrac(Number(p.recoveryFrac));
+    if (p.soluteFeedZ !== undefined) setSoluteFeedZ(Number(p.soluteFeedZ));
+    if (p.peNumber !== undefined) setPeNumber(Number(p.peNumber));
   });
 
   useEffect(() => {
     syncWorkbenchPayload('wb4-distillation', {
       summary: `WB4 distillation: α ${alpha.toFixed(2)}, R/R_min ${rMult.toFixed(2)} → ${floodPercent.toFixed(1)}% of Fair flood`,
-      inputs: { alpha, xf, xd, xb, q, rMult, traySpacingM, colDiamM },
+      inputs: { alpha, xf, xd, xb, q, rMult, traySpacingM, colDiamM, absorptionA, recoveryFrac, soluteFeedZ, peNumber },
       metrics: {
         rMin, rOp, nMin, totalStages: solved.totalStages, floodPercent,
         isFlooding, vRectKmolHr: solved.vRectKmolHr,
@@ -49,8 +56,7 @@ export const DistillationWorkbench: React.FC = () => {
   });
 
   const fenskeSelect = useAgentSelectable(
-    'equation',
-    'eq-13-fenske',
+    'equation', 'eq-13-fenske',
     'Fenske N_min & Underwood R_min (Perry Sec 13, p. 13-36)',
     { rMin, rOp, nMin, totalStages: solved.totalStages },
   );
@@ -59,20 +65,15 @@ export const DistillationWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb4-distillation">
       <header className="wb-toolbar">
         <div>
-          <h2>WB4 · Sec 13 &amp; 14 Distillation: McCabe-Thiele &amp; Column Flooding Hydraulics</h2>
-          <p className="wb-subtitle">
-            Draggable <code>q</code>-line · Fair&apos;s <code>Fig. 14-32 (p. 14-37)</code> tray flooding · Eckert GPDC{' '}
-            <code>Fig. 14-55 (p. 14-57)</code>
+          <h2>Subject 3 · Separation Processes, McCabe-Thiele &amp; Column Hydraulics</h2>
+          <p className="wb-subtitle" data-testid="wb4-blended-sources-badge">
+            📚 Blended Sources: <code>Seader, Henley &amp; Roper 4th Ed. Ch. 6/7/8/9/14/15/18 · Perry&apos;s Sec 12–16/20 · SVNA Ch. 10</code>
           </p>
         </div>
         <div className="wb-actions-row">
           <label>
             Tray Spacing h_t:
-            <select
-              aria-label="Tray spacing"
-              value={traySpacingM}
-              onChange={(e) => setTraySpacingM(Number(e.target.value))}
-            >
+            <select aria-label="Tray spacing" value={traySpacingM} onChange={(e) => setTraySpacingM(Number(e.target.value))}>
               <option value={0.305}>12 in (0.305 m)</option>
               <option value={0.457}>18 in (0.457 m)</option>
               <option value={0.61}>24 in (0.610 m)</option>
@@ -83,34 +84,24 @@ export const DistillationWorkbench: React.FC = () => {
 
       <LearnModeCallout
         workbenchId="wb4"
-        title="McCabe-Thiele Stage Stepping & Column Flooding"
-        plainEnglish="Drag the feed thermal quality q or Reflux Ratio R/R_min. More reflux reduces the number of equilibrium stages (stairs) needed, but increases vapor boilup V and pushes the column closer to flooding."
-        commonTrap="Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, collapsing separation efficiency."
+        title="McCabe-Thiele Stage Stepping, Column Flooding, Kremser, LLE/Adsorption, Psychrometry & Membranes"
+        plainEnglish="Drag McCabe-Thiele handles, column diameter D_c, Kremser A = L/(mV), Ternary LLE/adsorption, or Psychrometric T_db/RH and Membrane stage cut θ."
+        commonTrap="Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, and operating an absorber at A < 1 pinches solute recovery."
         perryAnchor="[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37]"
       />
 
-      <div className="wb-split">
-        <McCabeThieleSvgCanvas
-          alpha={alpha}
-          xf={xf}
-          xd={xd}
-          xb={xb}
-          q={q}
-          rOp={rOp}
-          onChangeQ={setQ}
-        />
-
-        <ColumnFloodingSvgSketch
-          columnDiameterM={colDiamM}
-          traySpacingM={traySpacingM}
-          totalStages={solved.totalStages}
-          feedStage={solved.feedStage}
-          fLv={solved.fLv}
-          cSbMs={solved.cSbMs}
-          percentFlood={floodPercent}
-          dpPackingMmH2oM={solved.dpPackingMmH2oM}
-        />
-      </div>
+      <DistillationDiagramGallery
+        alpha={alpha} xf={xf} xd={xd} xb={xb} q={q} rOp={rOp} rMin={rMin} rMult={rMult}
+        colDiamM={colDiamM} traySpacingM={traySpacingM} totalStages={solved.totalStages}
+        feedStage={solved.feedStage} fLv={solved.fLv} cSbMs={solved.cSbMs}
+        floodPercent={floodPercent} dpPackingMmH2oM={solved.dpPackingMmH2oM}
+        absorptionA={absorptionA} recoveryFrac={recoveryFrac}
+        soluteFeedZ={soluteFeedZ} peNumber={peNumber}
+        onChangeQ={setQ} onChangeXd={setXd} onChangeXf={setXf} onChangeXb={setXb}
+        onChangeRMult={setRMult} onChangeColDiamM={setColDiamM} onChangeTraySpacingM={setTraySpacingM}
+        onChangeKremser={(na, nr) => { setAbsorptionA(na); setRecoveryFrac(nr); }}
+        onChangeLleAndPe={(nz, npe) => { setSoluteFeedZ(nz); setPeNumber(npe); }}
+      />
 
       <div className="wb-split">
         <div>

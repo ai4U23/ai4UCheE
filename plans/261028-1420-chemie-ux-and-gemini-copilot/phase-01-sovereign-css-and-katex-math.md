@@ -1,7 +1,7 @@
 ---
 title: "Phase 01 — Sovereign CSS Design System, Tactile Controls, Modal Backdrop & Real KaTeX Math"
 description: "Split CSS below 200 LOC, style all 18+ missing component classes, extract WB1/WB2 subcomponents for LOC safety, wrap CalcSheetPreviewModal in a fixed backdrop, and render equations with KaTeX."
-status: done
+status: completed
 priority: P1
 effort: 2.5h
 branch: main

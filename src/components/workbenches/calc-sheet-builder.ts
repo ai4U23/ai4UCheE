@@ -5,6 +5,8 @@ import type { ClientScreenState, WhiteBoxStageEquation } from '../../actions/vie
 import { solveHydraulics, type HydraulicsInputs } from './hydraulics-solver-math';
 import { solveThermo } from './thermo-solver-math';
 import { solveDistillation, type DistillationInputs } from './distillation-solver-math';
+import { solveKineticsReactor, type KineticsReactorInputs } from './kinetics-solver-math';
+import { buildAtlasCalcSheetSection } from '../../lib/perry-sections/perry-atlas-registry';
 
 export interface CalcSheetRow {
   parameter: string;
@@ -30,6 +32,8 @@ const WB_TITLES: Record<string, string> = {
   'wb2-thermo-dippr': 'WB2 · DIPPR Thermophysical Property Engine',
   'wb3-hydraulics': 'WB3 · Fluid Hydraulics, Pipe Sizing & Pump NPSH',
   'wb4-distillation': 'WB4 · Distillation: McCabe-Thiele & Fair Flooding',
+  'wb6-kinetics-reactors': 'WB6 · Kinetics, Catalysis & Chemical Reactor Design (Fogler 7th Ed. + Perry Sec 7/19)',
+  'wb5-handbook-atlas': 'WB5 · 25-Section Perry Handbook Atlas',
 };
 
 function rowsFromInputs(inputs: Record<string, unknown>, labels: Record<string, [string, string]>): CalcSheetRow[] {
@@ -76,7 +80,7 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
       { parameter: 'npshrM', symbol: 'NPSH_r', value: npshr.toFixed(1), units: 'm', basis: 'pump datasheet' },
     ];
     if (s.isCavitating) { safetyStatus = 'ACTION REQUIRED'; safetyDetail = `CAVITATION — NPSH_A ${s.npshAvailableM.toFixed(2)} m < NPSH_r ${npshr.toFixed(1)} m.`; }
-    citationHeader = "[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11; Sec. 10, pp. 10-24..25]";
+    citationHeader = "[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11; Sec. 10, pp. 10-24..25; BSL 2nd Ed., Ch. 6]";
   } else if (wb === 'wb2-thermo-dippr') {
     const s = solveThermo({ compound: String(inputs.compound ?? 'water'), tempK: Number(inputs.tempK ?? 373.15) });
     equations = s.equations;
@@ -88,7 +92,7 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
       { parameter: 'pSatKpa', symbol: 'P^sat', value: s.pSatKpa.toFixed(2), units: 'kPa (1 atm = 101.325)', basis: 'DIPPR Eq. 101, Table 2-8, p. 2-53' },
       { parameter: 'hVapKjMol', symbol: 'ΔH_vap', value: s.hVapKjMol.toFixed(2), units: 'MJ/kmol', basis: 'DIPPR Eq. 106, Table 2-69, p. 2-120' },
     ];
-    citationHeader = "[Perry's 9th Ed., Table 2-8, p. 2-53; Table 2-69, p. 2-120]";
+    citationHeader = "[Perry's 9th Ed., Table 2-8, p. 2-53; Table 2-69, p. 2-120; Smith, Van Ness & Abbott 9th Ed., Ch. 10 & 12]";
   } else if (wb === 'wb4-distillation') {
     const s = solveDistillation({
       alpha: Number(inputs.alpha ?? 2.45), xf: Number(inputs.xf ?? 0.5), xd: Number(inputs.xd ?? 0.95),
@@ -103,7 +107,36 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
       { parameter: 'floodPercent', symbol: '%flood', value: s.floodPercent.toFixed(1), units: '%', basis: "Fair's Souders-Brown, Fig. 14-32, p. 14-37" },
     ];
     if (s.isFlooding) { safetyStatus = 'ACTION REQUIRED'; safetyDetail = `FLOODING at ${s.floodPercent.toFixed(1)}% of Fair flood velocity.`; }
-    citationHeader = "[Perry's 9th Ed., Sec. 13, p. 13-36; Fig. 14-32, p. 14-37]";
+    citationHeader = "[Perry's 9th Ed., Sec. 13, p. 13-36; Fig. 14-32, p. 14-37; Seader 4th Ed., Ch. 7 & 9]";
+  } else if (wb === 'wb6-kinetics-reactors') {
+    const s = solveKineticsReactor({
+      conversionX: Number(inputs.conversionX ?? 0.80), tempK: Number(inputs.tempK ?? 450),
+      pInletPsig: Number(inputs.pInletPsig ?? 45), epsilonA: Number(inputs.epsilonA ?? 0.25),
+      alphaErgun: Number(inputs.alphaErgun ?? 0.015), thielePhi: Number(inputs.thielePhi ?? 1.4),
+      semenovPsi: Number(inputs.semenovPsi ?? 0.28),
+    } satisfies KineticsReactorInputs);
+    equations = s.equations;
+    rows = [
+      { parameter: 'conversionX', symbol: 'X', value: s.conversionX.toFixed(2), units: 'mol/mol', basis: 'Fogler Ch. 2 Levenspiel target conversion' },
+      { parameter: 'pInletAbs', symbol: 'P_in,abs', value: `${s.pInletPsia.toFixed(2)} psia (${s.pInletPsig.toFixed(1)} psig)`, units: 'psia = psig + 14.696', basis: 'explicit gauge→absolute conversion' },
+      { parameter: 'vRatioCstrPfr', symbol: 'V_CSTR / V_PFR', value: s.vRatioCstrPfr.toFixed(2), units: '×', basis: 'Fogler Ch. 2 & Perry Sec. 19, p. 19-6' },
+      { parameter: 'effectivenessEta', symbol: 'η_cat(φ)', value: s.effectivenessEta.toFixed(3), units: '-', basis: 'Fogler Ch. 15 Eq. 15-23 & BSL Ch. 18' },
+      { parameter: 'semenovPsi', symbol: 'ψ_Semenov', value: s.semenovPsi.toFixed(3), units: 'ψ_crit = 0.368', basis: 'Fogler Ch. 12 & Crowl & Louvar Ch. 8' },
+    ];
+    if (s.isRunaway || s.isDiffusionLimited) {
+      safetyStatus = 'ACTION REQUIRED';
+      safetyDetail = s.isRunaway
+        ? `SEMENOV THERMAL RUNAWAY — ψ = ${s.semenovPsi.toFixed(3)} > 0.368.`
+        : `PORE DIFFUSION LIMITATION — Thiele φ = ${s.thielePhi.toFixed(2)} drops η to ${(s.effectivenessEta * 100).toFixed(1)}%.`;
+    }
+    citationHeader = "[Fogler 7th Ed., Ch. 2, 5, 12, 15; BSL 2nd Ed., Ch. 18; Crowl & Louvar 4th Ed., Ch. 8; Perry's 9th Ed., Sec. 7 & 19]";
+  } else if (wb === 'wb5-handbook-atlas') {
+    const atlas = buildAtlasCalcSheetSection(state.payload);
+    rows = atlas.inputs;
+    equations = atlas.equations;
+    safetyStatus = atlas.safetyStatus;
+    safetyDetail = atlas.safetyDetail;
+    citationHeader = atlas.citationHeader;
   } else {
     rows = [
       ...rowsFromInputs(inputs, { secPage: ['Sec-Page', '-'], userReading: ['student reading', '-'], exactValue: ['Perry-exact', '-'] }),
@@ -132,16 +165,7 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
     'Prepared by: ____________  |  Checked by: ____________  |  Date: ____________',
   ].join('\n');
 
-  return {
-    docId: `CALC-${wb.toUpperCase()}`,
-    workbenchTitle: title,
-    citationHeader,
-    safetyStatus,
-    safetyDetail,
-    rows,
-    equations,
-    markdownReport,
-  };
+  return { docId: `CALC-${wb.toUpperCase()}`, workbenchTitle: title, citationHeader, safetyStatus, safetyDetail, rows, equations, markdownReport };
 }
 
 /** Shape `generateCalcSheetAction.run()` expects — feeds the existing compile/persist flow. */
@@ -150,22 +174,11 @@ export function buildCalcSheetActionInput(sheet: LiveCalcSheetDocument, header: 
   preparedBy: string; checkedBy: string; workbenchType: string;
 }): Record<string, unknown> {
   return {
-    project_name: header.projectName,
-    project_no: header.projectNo,
-    equipment_tag: header.equipmentTag,
-    service_description: `${sheet.workbenchTitle} Design Verification`,
-    calc_no: `CALC-${header.equipmentTag}`,
-    revision: header.revision,
-    prepared_by: header.preparedBy,
-    checked_by: header.checkedBy,
+    project_name: header.projectName, project_no: header.projectNo, equipment_tag: header.equipmentTag,
+    service_description: `${sheet.workbenchTitle} Design Verification`, calc_no: `CALC-${header.equipmentTag}`,
+    revision: header.revision, prepared_by: header.preparedBy, checked_by: header.checkedBy,
     workbench_type: header.workbenchType,
     inputs_summary: Object.fromEntries(sheet.rows.map((r) => [`${r.parameter} (${r.symbol})`, `${r.value} ${r.units}`])),
-    equations: sheet.equations.map((e) => ({
-      lhs_symbol: e.id,
-      symbolic_latex: e.symbolicLatex,
-      substituted_latex: e.substitutedLatex,
-      result_latex: e.resultLatex,
-      citation: e.citation,
-    })),
+    equations: sheet.equations.map((e) => ({ lhs_symbol: e.id, symbolic_latex: e.symbolicLatex, substituted_latex: e.substitutedLatex, result_latex: e.resultLatex, citation: e.citation })),
   };
 }

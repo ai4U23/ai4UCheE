@@ -1,6 +1,6 @@
 ---
 title: "Phase 5: Sec 6, 8 & 10 Fluid Hydraulics, Commercial Pipe Sizing, Pump NPSHa & Control Valve Cv Workbench (WB3)"
-status: todo
+status: completed
 ---
 
 # Phase 5: Sec 6, 8 & 10 Fluid Hydraulics, Commercial Pipe Sizing, Pump NPSHa & Control Valve Cv Workbench (WB3)
@@ -11,10 +11,10 @@ Implement the *Perry's 9th Ed.* Section 6, 8 & 10 Hydraulics Engine: commercial 
 
 ## Requirements
 
-- [ ] Commercial `ASME B36.10M` pipe schedule resolver (`solvers/hydraulics_pipe.py`) computing `Min 70% / Normal 100% / Rated 120%` cases, both Fanning $f_F$ and Darcy $f_D = 4 f_F$, velocity erosion guardrails, and calibrated `(Re, f_F)` crosshair for Perry's `Fig. 6-9` (`p. 6-10`).
-- [ ] Pump $\text{NPSH}_A$ vs. $\text{NPSH}_R$ solver & ISA-75.01 Control Valve $C_v$ solver (`solvers/hydraulics_pump_valve.py`) rendering explicit 3-stage `handcalcs` steps for $F_F = 0.96 - 0.28\sqrt{P_v / P_c}$, $\Delta P_{\max} = F_L^2(P_1 - F_F P_v)$, and $C_v$.
-- [ ] FastAPI Hydraulics Router (`routers/hydraulics_router.py`) + `tests/test_phase5_hydraulics.py`.
-- [ ] Parametric `PipingPumpSvgSketch` (`src/components/sketches/piping-pump-svg-sketch.tsx`), `HydraulicsWorkbench` (`src/components/workbenches/hydraulics-workbench.tsx`), and Zod action (`src/actions/run-hydraulics.ts`).
+- [x] Commercial `ASME B36.10M` pipe schedule resolver (`solvers/hydraulics_pipe.py`) computing `Min 70% / Normal 100% / Rated 120%` cases, both Fanning $f_F$ and Darcy $f_D = 4 f_F$, velocity erosion guardrails, and calibrated `(Re, f_F)` crosshair for Perry's `Fig. 6-9` (`p. 6-10`).
+- [x] Pump $\text{NPSH}_A$ vs. $\text{NPSH}_R$ solver & ISA-75.01 Control Valve $C_v$ solver (`solvers/hydraulics_pump_valve.py`) rendering explicit 3-stage `handcalcs` steps for $F_F = 0.96 - 0.28\sqrt{P_v / P_c}$, $\Delta P_{\max} = F_L^2(P_1 - F_F P_v)$, and $C_v$.
+- [x] FastAPI Hydraulics Router (`routers/hydraulics_router.py`) + `tests/test_phase5_hydraulics.py`.
+- [x] Parametric `PipingPumpSvgSketch` (`src/components/sketches/piping-pump-svg-sketch.tsx`), `HydraulicsWorkbench` (`src/components/workbenches/hydraulics-workbench.tsx`), and Zod action (`src/actions/run-hydraulics.ts`).
 
 ## Implementation Steps
 

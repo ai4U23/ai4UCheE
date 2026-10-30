@@ -101,6 +101,33 @@ export const GUIDED_MISSIONS: ReadonlyArray<GuidedMissionScenario> = [
     rescueMutations: { rMult: 1.3, colDiamM: 0.85 },
     checkSolved: (payload) => payload.metrics?.isFlooding === false,
   },
+  {
+    id: 'mission-kinetics-runaway',
+    workbench: 'wb6-kinetics-reactors',
+    buttonLabel: '🧪 Rescue Reactor Runaway & Pore Diffusion (Fogler)',
+    chip: {
+      kind: 'equation',
+      id: 'fogler-cre-reactor-sizing',
+      label: 'Fogler Ch. 2/5/12/15 & Crowl Ch. 8 Reactor Sizing',
+      payload: { conversionX: 0.80, semenovPsi: 0.24 },
+    },
+    proofCard: {
+      type: 'equation-proof-card',
+      title: 'Mission 5 — Fogler Levenspiel CSTR/PFR, Thiele η & Semenov Runaway',
+      data: {
+        symbolic_latex: '\\eta_{\\mathrm{cat}} = \\frac{3}{\\phi^2}(\\phi \\coth \\phi - 1), \\quad \\psi \\le \\psi_{\\mathrm{crit}} = e^{-1} \\approx 0.368',
+        substituted_latex: '\\phi = 1.1 \\Rightarrow \\eta = 0.927, \\quad \\psi = 0.24 < 0.368',
+        result_latex: '\\text{STABLE REACTOR (No Thermal Runaway / High Pellet Effectiveness)}',
+        citation: "[Fogler 7th Ed., Ch. 12 & 15; Crowl & Louvar 4th Ed., Ch. 8; Perry's 9th Ed., Sec. 19, p. 19-40]",
+      },
+    },
+    initialMutations: { conversionX: 0.88, thielePhi: 5.5, semenovPsi: 0.52 },
+    rescueMutations: { conversionX: 0.80, thielePhi: 1.1, semenovPsi: 0.24 },
+    checkSolved: (payload) =>
+      payload.metrics?.isRunaway === false &&
+      payload.metrics?.isDiffusionLimited === false &&
+      Number(payload.metrics?.effectivenessEta) >= 0.75,
+  },
 ];
 
 export function getMissionById(id: string): GuidedMissionScenario | undefined {

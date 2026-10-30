@@ -1,7 +1,7 @@
 ---
 title: "Phase 03 — Two-Tier AI Co-Pilot: gateway.ai4u.now (gemini-4-argon-low) + Deterministic Tier-1 ChE Tutor"
 description: "Implement the Tier-1 deterministic ChE Tutor & Action Responder (copilot-responder.ts) and the Tier-2 gateway.ai4u.now (gemini-4-argon-low) server route (POST /api/copilot in copilot-route.ts)."
-status: done
+status: completed
 priority: P1
 effort: 2.5h
 branch: main

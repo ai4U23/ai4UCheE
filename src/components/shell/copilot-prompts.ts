@@ -23,6 +23,16 @@ const STARTER_PROMPTS: Record<WorkbenchId, readonly string[]> = {
     'Explain the q-line slope for saturated liquid',
     'Walk through Fenske N_min & Underwood R_min',
   ],
+  'wb6-kinetics-reactors': [
+    'Why is CSTR volume larger than PFR on a Levenspiel plot (Fogler Ch. 2)?',
+    'How does Thiele modulus φ limit catalyst effectiveness η (Fogler Ch. 15 / BSL Ch. 18)?',
+    'Explain the Semenov thermal runaway limit ψ_crit = 1/e (Crowl & Louvar Ch. 8)',
+  ],
+  'wb5-handbook-atlas': [
+    'Test Sec 11 LMTD temperature cross at P=0.72, R=1.6',
+    'Check Sec 19 CSTR vs PFR & Semenov runaway criteria',
+    'Check Sec 23 API 520 relief valve sizing at 150 psig',
+  ],
 };
 
 /** Contextual 1-click starter prompts for the active workbench. */
@@ -36,6 +46,8 @@ const QUICK_ACTIONS: Record<WorkbenchId, readonly string[]> = {
   'wb2-thermo-dippr': ['⚡ Switch to Ethanol @ 351.5 K'],
   'wb3-hydraulics': ['⚡ Fix Cavitation (6 in pipe, 15 psig)'],
   'wb4-distillation': ['⚡ Stop Column Flooding (R = 1.3 × Rmin, D = 0.85 m)'],
+  'wb6-kinetics-reactors': ['⚡ Rescue Reactor Runaway (X = 0.80, φ = 1.1, ψ = 0.24)'],
+  'wb5-handbook-atlas': ['⚡ Check Sec 23 relief valve sizing at 150 psig'],
 };
 
 /** Contextual 1-tap What-If quick actions for the active workbench. */

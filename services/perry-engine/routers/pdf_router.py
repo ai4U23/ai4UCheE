@@ -12,9 +12,36 @@ from pdf.crop_engine import (
     render_calibrated_crop,
     render_table_row_composite_crop,
 )
-from pdf.section_map import resolve_pdf_page_to_sec_page, resolve_sec_page, search_index_entries
+from pdf.section_map import (
+    INDEX_PDF_RANGE,
+    SECTION_TITLES,
+    build_or_load_section_offsets,
+    resolve_pdf_page_to_sec_page,
+    resolve_sec_page,
+    search_index_entries,
+)
 
 router = APIRouter(prefix="/api/v1/pdf", tags=["pdf"])
+
+
+@router.get("/sections")
+def pdf_list_sections() -> dict:
+    offsets = build_or_load_section_offsets()
+    sections = []
+    for sec in range(1, 26):
+        start = offsets[sec]
+        end = (offsets[sec + 1] - 1) if sec < 25 else (INDEX_PDF_RANGE[0] - 1)
+        sections.append({
+            "section": sec,
+            "title": SECTION_TITLES[sec],
+            "pdf_start": start,
+            "pdf_end": end,
+            "page_count": end - start + 1,
+        })
+    return {
+        "sections": sections,
+        "index_pdf_range": list(INDEX_PDF_RANGE),
+    }
 
 
 @router.get("/resolve")

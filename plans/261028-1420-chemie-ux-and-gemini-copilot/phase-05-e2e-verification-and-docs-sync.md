@@ -1,7 +1,7 @@
 ---
 title: "Phase 05 — E2E Vitest Suite, <200 LOC Modularity Gate, Production Build & ./docs/ Sync"
 description: "Prove all 4 UX and Co-Pilot pillars with phase8-ux-copilot.test.tsx, enforce the <200 LOC repository invariant, verify npm run build, and synchronize ./docs/."
-status: done
+status: completed
 priority: P1
 effort: 1.5h
 branch: main

@@ -1,6 +1,10 @@
 # Reference documents & large assets (internal design reference only)
 *.pdf
+*.epub
+*.mobi
+*.djvu
 Perry's Chemical Engineers' Handbook, 9th Edition.pdf
+Elements of Chemical Reaction Engineering*.epub
 
 # OS files
 .DS_Store

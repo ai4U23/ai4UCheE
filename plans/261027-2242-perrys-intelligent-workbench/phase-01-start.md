@@ -1,6 +1,6 @@
 ---
 title: "Phase 1: Workspace Foundation, Monorepo Scaffolding & Python PerryEngine Sidecar Bootstrap"
-status: todo
+status: completed
 ---
 
 # Phase 1: Workspace Foundation, Monorepo Scaffolding & Python PerryEngine Sidecar Bootstrap
@@ -11,11 +11,11 @@ Initialize `/Users/nad/ai4u/ai4UCheE`, configure the Node/TypeScript + SQLite/Dr
 
 ## Requirements
 
-- [ ] Root Node.js/TypeScript + Vite + Vitest + Drizzle/SQLite workspace initialized at `/Users/nad/ai4u/ai4UCheE`.
-- [ ] Local Python virtual environment initialized at `/Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv` with `fastapi`, `pymupdf` (`fitz`), `chemicals`, `fluids`, `ht`, `thermo`, `CoolProp`, `scipy`, `pint`, and `pytest`.
-- [ ] `pint` Field-Unit Registry (`core/unit_registry.py`) enforces explicit `psig`/`psia` pressure datum conversion and rejects bare ambiguous `"psi"`.
-- [ ] 3-Stage White-Box Equation Renderer (`core/handcalcs_katex.py`) serializes Python AST expressions + `pint` quantities into `Symbolic -> Substituted w/ Units -> Result + [Perry's 9th Ed., Eq. X-Y, p. S-P]`.
-- [ ] FastAPI sidecar (`services/perry-engine/main.py`) exposes `GET /health`, `POST /api/v1/units/convert`, and `POST /api/v1/equations/render` and passes `tests/test_phase1_core.py`.
+- [x] Root Node.js/TypeScript + Vite + Vitest + Drizzle/SQLite workspace initialized at `/Users/nad/ai4u/ai4UCheE`.
+- [x] Local Python virtual environment initialized at `/Users/nad/ai4u/ai4UCheE/services/perry-engine/.venv` with `fastapi`, `pymupdf` (`fitz`), `chemicals`, `fluids`, `ht`, `thermo`, `CoolProp`, `scipy`, `pint`, and `pytest`.
+- [x] `pint` Field-Unit Registry (`core/unit_registry.py`) enforces explicit `psig`/`psia` pressure datum conversion and rejects bare ambiguous `"psi"`.
+- [x] 3-Stage White-Box Equation Renderer (`core/handcalcs_katex.py`) serializes Python AST expressions + `pint` quantities into `Symbolic -> Substituted w/ Units -> Result + [Perry's 9th Ed., Eq. X-Y, p. S-P]`.
+- [x] FastAPI sidecar (`services/perry-engine/main.py`) exposes `GET /health`, `POST /api/v1/units/convert`, and `POST /api/v1/equations/render` and passes `tests/test_phase1_core.py`.
 
 ## Implementation Steps
 

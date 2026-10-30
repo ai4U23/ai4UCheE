@@ -1,7 +1,8 @@
 // AppShell: Dual-Lens header (Learn <-> Plant), Dual Theme toggle (Ivory #FBF6EC <-> Dark Navy #071A33),
-// ai4U logo + motion/react layoutId shared-layout morphing, DoF badge, 4 Workbench tabs + Calc Sheet trigger.
+// ai4U logo + motion/react layoutId shared-layout morphing, DoF badge, 5 ChE Subject tabs + Cross-Subject Charts & Page Verifier tool + Calc Sheet trigger.
 import React from 'react';
 import { motion } from 'motion/react';
+import { dispatchWorkbenchMutation } from '../../actions/view-screen';
 import {
   usePersonaTheme,
   type PersonaMode,
@@ -12,11 +13,20 @@ import { AgentChatDrawer } from './agent-chat-drawer';
 import { GuidedMissionBar } from './guided-mission-bar';
 
 const WORKBENCH_TABS: ReadonlyArray<{ id: WorkbenchId; label: string; short: string }> = [
-  { id: 'wb1-visual-verifier', label: "WB1: Perry's Visual Verifier", short: 'Chart & Figure Verifier' },
-  { id: 'wb2-thermo-dippr', label: 'WB2: Sec 1/2/4 DIPPR & Thermo', short: 'Boiling, Vapor Pressure & Thermo' },
-  { id: 'wb3-hydraulics', label: 'WB3: Sec 6/8/10 Fluid Hydraulics', short: 'Pipe Loss, Pump NPSHa & Valves' },
-  { id: 'wb4-distillation', label: 'WB4: Sec 13/14 Distillation', short: 'Stage Stepping & Flooding Limits' },
+  { id: 'wb2-thermo-dippr', label: 'Thermodynamics & Phase', short: "Perry's DIPPR · Smith-Van Ness-Abbott" },
+  { id: 'wb3-hydraulics', label: 'Fluid & Transport Hydraulics', short: "BSL Transport · Perry's Sec 6/8/10" },
+  { id: 'wb4-distillation', label: 'Separations & Distillation', short: "Seader 4th Ed. · Perry's Sec 13–16" },
+  { id: 'wb6-kinetics-reactors', label: 'Kinetics & Reactor Design', short: "Fogler 7th Ed. · Perry's Sec 7/19 · Crowl" },
+  { id: 'wb5-handbook-atlas', label: '6-Book & 25-Sec ChE Atlas', short: 'All 6 Textbooks & Perry Sec 1–25 Index' },
 ];
+
+const SUBJECT_DEFAULT_FIGURE: Partial<Record<WorkbenchId, { secPage: string; exactValue: number }>> = {
+  'wb2-thermo-dippr': { secPage: '2-53', exactValue: 101325 },
+  'wb3-hydraulics': { secPage: '6-10', exactValue: 0.0045 },
+  'wb4-distillation': { secPage: '14-37', exactValue: 0.082 },
+  'wb6-kinetics-reactors': { secPage: '19-6', exactValue: 2.45 },
+  'wb5-handbook-atlas': { secPage: '6-10', exactValue: 0.0045 },
+};
 
 export interface AppShellProps {
   renderWorkbench?: (active: WorkbenchId) => React.ReactNode;
@@ -39,6 +49,26 @@ export const AppShell: React.FC<AppShellProps> = ({
     activeWorkbench,
     setActiveWorkbench,
   } = usePersonaTheme();
+  const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');
+  if (activeWorkbench !== 'wb1-visual-verifier') {
+    lastSubjectRef.current = activeWorkbench;
+  }
+
+  const openVisualVerifierTool = () => {
+    if (activeWorkbench === 'wb1-visual-verifier') {
+      setActiveWorkbench(lastSubjectRef.current);
+      return;
+    }
+    const preset = SUBJECT_DEFAULT_FIGURE[activeWorkbench];
+    if (preset) {
+      dispatchWorkbenchMutation({
+        targetWorkbench: 'wb1-visual-verifier',
+        params: { secPage: preset.secPage, exactValue: preset.exactValue },
+        reason: `Cross-subject Visual Verifier opened from ${activeWorkbench}`,
+      });
+    }
+    setActiveWorkbench('wb1-visual-verifier');
+  };
 
   const defaultRenderWorkbench = (wb: WorkbenchId) => {
     if (wb === 'wb1-visual-verifier') return <VisualVerifierWorkbench />;
@@ -67,6 +97,8 @@ export const AppShell: React.FC<AppShellProps> = ({
       </button>
     );
   };
+
+  const isVerifierActive = activeWorkbench === 'wb1-visual-verifier';
 
   return (
     <div className="app-shell" data-testid="app-shell">
@@ -99,6 +131,16 @@ export const AppShell: React.FC<AppShellProps> = ({
         <div className="wb-actions-row">
           <button
             type="button"
+            data-testid="tab-wb1-visual-verifier"
+            aria-pressed={isVerifierActive}
+            className={`persona-btn ${isVerifierActive ? 'active' : ''}`}
+            title="Cross-subject utility tool: inspect calibrated Perry's/BSL/Seader charts & high-DPI PDF page crops for any subject"
+            onClick={openVisualVerifierTool}
+          >
+            📐 Charts &amp; Page Verifier
+          </button>
+          <button
+            type="button"
             data-testid="theme-toggle"
             onClick={() => setThemeMode(themeMode === 'paper' ? 'blueprint' : 'paper')}
           >
@@ -114,7 +156,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         </div>
       </header>
 
-      <nav className="wb-toolbar" role="tablist" aria-label="Engineering Workbenches">
+      <nav className="wb-toolbar" role="tablist" aria-label="Engineering Subject Workbenches">
         {WORKBENCH_TABS.map((tab) => {
           const isActive = activeWorkbench === tab.id;
           return (

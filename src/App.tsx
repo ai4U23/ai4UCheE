@@ -6,7 +6,9 @@ import { AgentChatDrawer } from './components/shell/agent-chat-drawer';
 import { AppShell } from './components/shell/app-shell';
 import { CalcSheetPreviewModal } from './components/workbenches/calc-sheet-preview-modal';
 import { DistillationWorkbench } from './components/workbenches/distillation-workbench';
+import { HandbookAtlasWorkbench } from './components/workbenches/handbook-atlas-workbench';
 import { HydraulicsWorkbench } from './components/workbenches/hydraulics-workbench';
+import { KineticsReactorWorkbench } from './components/workbenches/kinetics-reactor-workbench';
 import { ThermoDipprWorkbench } from './components/workbenches/thermo-dippr-workbench';
 import { VisualVerifierWorkbench } from './components/workbenches/visual-verifier-workbench';
 import {
@@ -29,6 +31,10 @@ const WorkbenchSurface: React.FC = () => {
         return <HydraulicsWorkbench />;
       case 'wb4-distillation':
         return <DistillationWorkbench />;
+      case 'wb6-kinetics-reactors':
+        return <KineticsReactorWorkbench />;
+      case 'wb5-handbook-atlas':
+        return <HandbookAtlasWorkbench />;
     }
   };
 

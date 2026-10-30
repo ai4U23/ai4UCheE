@@ -1,14 +1,15 @@
-// WB3: Perry's Sec 6, 8 & 10 Fluid Hydraulics, Pipe Sizing (Sch 40/80), Pump NPSHa & Control Valve Cv.
+// WB3: Perry's Sec 6, 8 & 10 Fluid Hydraulics, Pipe Sizing (Sch 40/80), Pump NPSHa, BSL Velocity/BL & ISA-75.01 Valve.
 import React, { useEffect, useState } from 'react';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
+import { PipingPumpSvgSketch } from '../sketches/piping-pump-svg-sketch';
 import { KaTeXBlock } from '../ui/katex-block';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
-import { PipingPumpSvgSketch } from '../sketches/piping-pump-svg-sketch';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
+import { HydraulicsDiagramGallery } from './hydraulics-diagram-gallery';
 import { solveHydraulics } from './hydraulics-solver-math';
 
 export const HydraulicsWorkbench: React.FC = () => {
@@ -21,6 +22,8 @@ export const HydraulicsWorkbench: React.FC = () => {
   const [zSuctionM, setZSuctionM] = useState<number>(2.0);
   const [npshrM, setNpshrM] = useState<number>(3.0);
   const [valveDpPsi, setValveDpPsi] = useState<number>(30.0);
+  const [powerLawN, setPowerLawN] = useState<number>(0.75);
+  const [prandtlPr, setPrandtlPr] = useState<number>(7.0);
 
   const solved = solveHydraulics({ flowGpm, npsInch, schedule, lengthM, pSuctionPsig, zSuctionM, npshrM, valveDpPsi });
   const { caseNorm, npshAvailableM, isCavitating } = solved;
@@ -32,12 +35,15 @@ export const HydraulicsWorkbench: React.FC = () => {
     if (p.pSuctionPsig !== undefined) setPSuctionPsig(Number(p.pSuctionPsig));
     if (p.zSuctionM !== undefined) setZSuctionM(Number(p.zSuctionM));
     if (p.npshrM !== undefined) setNpshrM(Number(p.npshrM));
+    if (p.valveDpPsi !== undefined) setValveDpPsi(Number(p.valveDpPsi));
+    if (p.powerLawN !== undefined) setPowerLawN(Number(p.powerLawN));
+    if (p.prandtlPr !== undefined) setPrandtlPr(Number(p.prandtlPr));
   });
 
   useEffect(() => {
     syncWorkbenchPayload('wb3-hydraulics', {
       summary: `WB3 hydraulics @ ${flowGpm} gpm, ${npsInch}" Sch ${schedule}: NPSH_A ${npshAvailableM.toFixed(2)} m vs NPSH_r ${npshrM.toFixed(1)} m`,
-      inputs: { flowGpm, npsInch, schedule, lengthM, pSuctionPsig, zSuctionM, npshrM, valveDpPsi },
+      inputs: { flowGpm, npsInch, schedule, lengthM, pSuctionPsig, zSuctionM, npshrM, valveDpPsi, powerLawN, prandtlPr },
       metrics: {
         reynolds: caseNorm.re, fDarcy: caseNorm.fDarcy, fFanning: caseNorm.fFanning,
         pAbsPa: solved.pAbsPa, npshAvailableM, npshrM, isCavitating,
@@ -48,8 +54,7 @@ export const HydraulicsWorkbench: React.FC = () => {
   });
 
   const eqGuardrailSelect = useAgentSelectable(
-    'equation',
-    'eq-6-38-fanning-darcy',
+    'equation', 'eq-6-38-fanning-darcy',
     'Darcy f_D = 4·f_F Guardrail (Perry Fig. 6-9, p. 6-10)',
     { re: caseNorm.re, fDarcy: caseNorm.fDarcy, fFanning: caseNorm.fFanning },
   );
@@ -58,26 +63,22 @@ export const HydraulicsWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb3-hydraulics">
       <header className="wb-toolbar">
         <div>
-          <h2>WB3 · Sec 6, 8 &amp; 10 Fluid Hydraulics, Pipe Sizing, Pump NPSHa &amp; Valve Cv</h2>
-          <p className="wb-subtitle">
-            ASME B36.10M <code>Table 10-22 (p. 10-70)</code> · Explicit <code>f_D = 4·f_F</code> guardrail · 3-Case <code>70%/100%/120%</code> matrix
+          <h2>Subject 2 · Fluid Mechanics, Transport &amp; Piping Hydraulics</h2>
+          <p className="wb-subtitle" data-testid="wb3-blended-sources-badge">
+            📚 Blended Sources: <code>BSL Transport 2nd Ed. Ch. 2/6/7/10/14 · Perry&apos;s Sec 5/6/8/10/11/23 · Crowl &amp; Louvar Ch. 4/5/6</code> · Explicit <code>f_D = 4·f_F</code>
           </p>
         </div>
         <div className="wb-actions-row">
           <label>
             NPS:
             <select aria-label="Nominal pipe size" value={npsInch} onChange={(e) => setNpsInch(Number(e.target.value))}>
-              <option value={2}>2&quot;</option>
-              <option value={3}>3&quot;</option>
-              <option value={4}>4&quot;</option>
-              <option value={6}>6&quot;</option>
+              <option value={2}>2&quot;</option><option value={3}>3&quot;</option><option value={4}>4&quot;</option><option value={6}>6&quot;</option>
             </select>
           </label>
           <label>
             Schedule:
             <select aria-label="Pipe schedule" value={schedule} onChange={(e) => setSchedule(e.target.value as '40' | '80')}>
-              <option value="40">Sch 40</option>
-              <option value="80">Sch 80</option>
+              <option value="40">Sch 40</option><option value="80">Sch 80</option>
             </select>
           </label>
         </div>
@@ -85,8 +86,8 @@ export const HydraulicsWorkbench: React.FC = () => {
 
       <LearnModeCallout
         workbenchId="wb3"
-        title="Pipe Friction Loss, Pump Cavitation & Control Valves"
-        plainEnglish="Drag Flow Q or Suction Pressure to see how velocity, friction loss, and Available Net Positive Suction Head (NPSHa) respond across 70% / 100% / 120% operating cases."
+        title="Pipe Friction, Pump Cavitation, BSL Rheology, Choked Valves, HX Cross & Process Safety"
+        plainEnglish="Drag Flow Q, Suction Pressure, BSL Power-Law n, Control Valve ΔP, HX T-Q Cross (Bowman F_T), Nukiyama boiling, or Flammability LOC / Plume dispersion."
         commonTrap="If NPSHa drops below Pump NPSHr, liquid flashes into vapor bubbles that implode on the impeller (cavitation)."
         perryAnchor="[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11 & Sec. 8, p. 8-71]"
       />
@@ -104,17 +105,19 @@ export const HydraulicsWorkbench: React.FC = () => {
       ))}
 
       <PipingPumpSvgSketch
-        npsInch={npsInch}
-        schedule={schedule}
-        dInnerM={solved.dInnerM}
-        flowGpm={flowGpm}
-        pSuctionPsig={pSuctionPsig}
-        zSuctionM={zSuctionM}
-        npshaM={npshAvailableM}
-        npshrM={npshrM}
-        cvNormal={solved.cvNormal}
-        isChoked={solved.isChoked}
-        isFlashing={false}
+        npsInch={npsInch} schedule={schedule} dInnerM={solved.dInnerM} flowGpm={flowGpm}
+        pSuctionPsig={pSuctionPsig} zSuctionM={zSuctionM} npshaM={npshAvailableM} npshrM={npshrM}
+        cvNormal={solved.cvNormal} isChoked={solved.isChoked} isFlashing={false}
+        lengthM={lengthM} valveDpPsi={valveDpPsi}
+        onChangeFlowGpm={setFlowGpm} onChangeZSuctionM={setZSuctionM}
+        onChangeNpsInch={setNpsInch} onChangeValveDpPsi={setValveDpPsi}
+      />
+
+      <HydraulicsDiagramGallery
+        powerLawN={powerLawN} prandtlPr={prandtlPr} reynolds={caseNorm.re}
+        valveDpPsi={valveDpPsi} pSuctionPsig={pSuctionPsig} cvRated={solved.cvNormal}
+        onChangeRheologyAndPr={(nn, np) => { setPowerLawN(nn); setPrandtlPr(np); }}
+        onChangeValveDpPsi={setValveDpPsi}
       />
 
       <div className="wb-split">
@@ -135,14 +138,7 @@ export const HydraulicsWorkbench: React.FC = () => {
           </h3>
           <table className="mono" style={{ width: '100%', fontSize: '0.82rem' }} data-testid="hydraulics-3case-table">
             <thead>
-              <tr>
-                <th>Case</th>
-                <th>Flow (gpm)</th>
-                <th>v (m/s)</th>
-                <th>Re</th>
-                <th>f_F / f_D</th>
-                <th>ΔP_tot (kPa)</th>
-              </tr>
+              <tr><th>Case</th><th>Flow (gpm)</th><th>v (m/s)</th><th>Re</th><th>f_F / f_D</th><th>ΔP_tot (kPa)</th></tr>
             </thead>
             <tbody>
               {[
@@ -151,14 +147,8 @@ export const HydraulicsWorkbench: React.FC = () => {
                 { label: 'Rated 120%', c: solved.caseRated },
               ].map(({ label, c }) => (
                 <tr key={label}>
-                  <td>{label}</td>
-                  <td>{c.qGpm.toFixed(1)}</td>
-                  <td>{c.vel.toFixed(2)}</td>
-                  <td>{c.re.toExponential(2)}</td>
-                  <td>
-                    {c.fFanning.toFixed(4)} / {c.fDarcy.toFixed(4)}
-                  </td>
-                  <td>{c.dpTotalKpa.toFixed(1)}</td>
+                  <td>{label}</td><td>{c.qGpm.toFixed(1)}</td><td>{c.vel.toFixed(2)}</td>
+                  <td>{c.re.toExponential(2)}</td><td>{c.fFanning.toFixed(4)} / {c.fDarcy.toFixed(4)}</td><td>{c.dpTotalKpa.toFixed(1)}</td>
                 </tr>
               ))}
             </tbody>
