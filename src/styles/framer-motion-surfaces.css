@@ -2,90 +2,142 @@
  * Swarm Pulse beacons, shared-layout pill halos, and SVG handle radar rings (< 200 LOC).
  * Strictly preserves SVG Scrub Guard: never applies scale/translateY to .wb-crop-stage or <svg>. */
 
+.app-shell {
+  background-image:
+    radial-gradient(60% 42% at 15% 0%, rgba(250, 204, 21, 0.12) 0%, rgba(251, 246, 236, 0) 70%),
+    radial-gradient(50% 45% at 88% 12%, rgba(99, 73, 180, 0.08) 0%, rgba(251, 246, 236, 0) 72%);
+}
+
+[data-theme="blueprint"] .app-shell {
+  background-image:
+    radial-gradient(60% 45% at 18% 0%, rgba(250, 204, 21, 0.14) 0%, rgba(7, 26, 51, 0) 72%),
+    radial-gradient(55% 50% at 85% 18%, rgba(99, 73, 180, 0.22) 0%, rgba(7, 26, 51, 0) 72%);
+}
+
 .shell-header {
   background-image:
-    radial-gradient(50% 90% at 18% 0%, rgba(250, 204, 21, 0.12) 0%, rgba(7, 26, 51, 0) 72%),
-    radial-gradient(50% 80% at 82% 100%, rgba(99, 73, 180, 0.18) 0%, rgba(7, 26, 51, 0) 70%);
+    radial-gradient(48% 95% at 16% 0%, rgba(250, 204, 21, 0.22) 0%, rgba(7, 26, 51, 0) 74%),
+    radial-gradient(52% 90% at 84% 100%, rgba(99, 73, 180, 0.28) 0%, rgba(7, 26, 51, 0) 72%);
+  border-bottom: 1px solid rgba(250, 204, 21, 0.45);
+  box-shadow: 0 14px 36px -12px rgba(7, 26, 51, 0.45), 0 0 28px -8px rgba(250, 204, 21, 0.25);
 }
 
-[data-theme="blueprint"] .wb-panel {
-  background-image:
-    radial-gradient(55% 55% at 50% 0%, rgba(250, 204, 21, 0.055) 0%, rgba(15, 27, 61, 0) 72%),
-    radial-gradient(50% 50% at 50% 100%, rgba(99, 73, 180, 0.12) 0%, rgba(10, 15, 29, 0) 70%);
-  border-color: rgba(232, 197, 71, 0.22);
-  transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+/* Override static active button backgrounds so the sliding .motion-pill is 100% visible! */
+.shell-header .persona-btn.active {
+  background: rgba(15, 27, 61, 0.72) !important;
+  color: var(--ivory) !important;
+  border-color: var(--maize) !important;
+  box-shadow: 0 0 22px -4px rgba(250, 204, 21, 0.48);
 }
 
-[data-theme="paper"] .wb-panel {
-  background-image:
-    radial-gradient(60% 55% at 50% 0%, rgba(232, 197, 71, 0.1) 0%, rgba(245, 240, 224, 0) 72%);
-  transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+.wb-tab {
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-[data-theme="blueprint"] .wb-panel:hover {
-  border-color: rgba(250, 204, 21, 0.42);
-  box-shadow: 0 18px 46px -24px rgba(0, 0, 0, 0.72), 0 0 22px -6px rgba(250, 204, 21, 0.16);
+.wb-tab:hover {
+  transform: translateY(-3px);
+  border-color: var(--maize);
+  box-shadow: 0 14px 30px -14px rgba(7, 26, 51, 0.28), 0 0 20px -4px rgba(250, 204, 21, 0.28);
 }
 
-[data-theme="paper"] .wb-panel:hover {
-  border-color: rgba(184, 134, 11, 0.45);
-  box-shadow: 0 12px 30px -14px rgba(7, 26, 51, 0.18), 0 0 18px -6px rgba(232, 197, 71, 0.25);
+.wb-tab.active {
+  background: var(--navy-deep);
+  border-color: var(--maize);
+  box-shadow: 0 0 0 1px var(--maize), 0 14px 34px -12px rgba(7, 26, 51, 0.45), 0 0 26px -4px rgba(250, 204, 21, 0.36);
 }
 
-/* Shared-layout motion pill glow (Framer Layout Spring companion) */
+/* Shared-layout motion pill glow (Framer Layout Spring 500/60/1 companion) */
 .framer-pill-glow {
-  box-shadow: 0 0 24px 1px rgba(250, 204, 21, 0.22);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.38) 0%, rgba(232, 197, 71, 0.22) 55%, rgba(99, 73, 180, 0.24) 100%);
+  border: 1px solid rgba(250, 204, 21, 0.78);
+  box-shadow: 0 0 24px 2px rgba(250, 204, 21, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 [data-theme="paper"] .framer-pill-glow {
-  box-shadow: 0 0 16px 1px rgba(184, 134, 11, 0.2);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.46) 0%, rgba(232, 197, 71, 0.28) 100%);
+  border: 1px solid rgba(184, 134, 11, 0.72);
+  box-shadow: 0 0 20px 1px rgba(232, 197, 71, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
-/* Framer Swarm Pulse (NgQ5bLGaW -> TSGDAqBQ2) 7px live status beacon */
+.framer-pill-btn.active,
+.wb-chip.active {
+  border-color: var(--maize) !important;
+  font-weight: 700;
+}
+
+/* Workbench panels & glass elevation */
+[data-theme="blueprint"] .wb-panel,
+[data-theme="blueprint"] .wb-tutor-card,
+[data-theme="blueprint"] .chat-drawer {
+  background-image:
+    radial-gradient(55% 55% at 50% 0%, rgba(250, 204, 21, 0.08) 0%, rgba(15, 27, 61, 0) 72%),
+    radial-gradient(50% 50% at 50% 100%, rgba(99, 73, 180, 0.16) 0%, rgba(10, 15, 29, 0) 70%);
+  border-color: rgba(232, 197, 71, 0.28);
+  transition: border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="paper"] .wb-panel,
+[data-theme="paper"] .wb-tutor-card,
+[data-theme="paper"] .chat-drawer {
+  background-image:
+    radial-gradient(65% 55% at 50% 0%, rgba(250, 204, 21, 0.16) 0%, rgba(245, 240, 224, 0) 74%);
+  border-color: rgba(184, 134, 11, 0.28);
+  transition: border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="blueprint"] .wb-panel:hover,
+[data-theme="blueprint"] .wb-tutor-card:hover {
+  border-color: rgba(250, 204, 21, 0.55);
+  box-shadow: 0 18px 46px -22px rgba(0, 0, 0, 0.78), 0 0 26px -4px rgba(250, 204, 21, 0.22);
+}
+
+[data-theme="paper"] .wb-panel:hover,
+[data-theme="paper"] .wb-tutor-card:hover {
+  border-color: rgba(184, 134, 11, 0.58);
+  box-shadow: 0 14px 32px -14px rgba(7, 26, 51, 0.18), 0 0 22px -4px rgba(232, 197, 71, 0.35);
+}
+
+/* Framer Swarm Pulse (NgQ5bLGaW -> TSGDAqBQ2) live status beacon + outer halo ring */
+@keyframes swarmHaloRing {
+  0%, 100% { box-shadow: 0 0 8px 1px currentColor, 0 0 0 0 rgba(250, 204, 21, 0.45); }
+  50% { box-shadow: 0 0 14px 2px currentColor, 0 0 0 5px rgba(250, 204, 21, 0); }
+}
+
 .swarm-pulse-dot {
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
-  margin-right: 0.42rem;
+  margin-right: 0.45rem;
   vertical-align: middle;
   flex-shrink: 0;
+  animation: swarmHaloRing 1.4s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
 
-.swarm-pulse-emerald {
-  background: #10b981;
-  box-shadow: 0 0 10px 1px rgba(16, 185, 129, 0.68);
-}
+.swarm-pulse-emerald { background: #10b981; color: #10b981; }
+.swarm-pulse-gold { background: #facc15; color: #facc15; }
+.swarm-pulse-danger { background: #f87171; color: #f87171; }
 
-.swarm-pulse-gold {
-  background: #facc15;
-  box-shadow: 0 0 10px 1px rgba(250, 204, 21, 0.72);
-}
-
-.swarm-pulse-danger {
-  background: #f87171;
-  box-shadow: 0 0 10px 1px rgba(248, 113, 113, 0.72);
-}
-
-/* White-Box Equation Card luxury hover & live scrub evaluation pulse */
-.white-box-eq-card {
+/* White-Box Equation Card & Scrubbable Input luxury hover */
+.white-box-eq-card,
+.scrubbable-input {
   transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.white-box-eq-card:hover {
-  border-color: rgba(250, 204, 21, 0.55);
-  box-shadow: 0 10px 26px -12px rgba(250, 204, 21, 0.22);
-}
-
-.white-box-stage-pill {
-  transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
+.white-box-eq-card:hover,
+.scrubbable-input:hover {
+  border-color: rgba(250, 204, 21, 0.68);
+  box-shadow: 0 12px 28px -12px rgba(250, 204, 21, 0.28);
 }
 
 .white-box-stage-pill:last-child {
-  border-color: rgba(232, 197, 71, 0.42);
+  border-color: rgba(232, 197, 71, 0.55);
+  background-image: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, transparent 100%);
 }
 
 /* Interactive SVG drag handles & crosshairs — halo only, zero geometry distortion on SVG root */
@@ -94,17 +146,12 @@ svg circle[style*="cursor: ew-resize"],
 svg circle[style*="cursor: ns-resize"],
 svg [data-testid="genui-sparkline-handle"] {
   transition: filter 180ms ease, stroke-width 180ms ease;
-  filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.55));
+  filter: drop-shadow(0 0 7px rgba(250, 204, 21, 0.65));
 }
 
 svg circle[style*="cursor: grab"]:hover,
 svg [data-testid="genui-sparkline-handle"]:hover {
-  filter: drop-shadow(0 0 11px rgba(250, 204, 21, 0.9));
-}
-
-.wb-verdict {
-  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 13px rgba(250, 204, 21, 0.95));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -116,6 +163,6 @@ svg [data-testid="genui-sparkline-handle"]:hover {
 }
 
 @media print {
-  .swarm-pulse-dot { box-shadow: none !important; }
-  .wb-panel, .shell-header { background-image: none !important; }
+  .swarm-pulse-dot { box-shadow: none !important; animation: none !important; }
+  .wb-panel, .shell-header, .app-shell { background-image: none !important; }
 }

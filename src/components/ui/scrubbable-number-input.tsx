@@ -1,6 +1,8 @@
 // Tactile scrubbable number input: pointer-drag scrubbing + keyboard entry + Point-and-Ask chip.
 import React, { useRef } from 'react';
+import { motion } from 'motion/react';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
 
 export interface ScrubbableNumberInputProps {
   paramId: string;
@@ -57,11 +59,13 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
   };
 
   return (
-    <div
+    <motion.div
       className="scrubbable-input"
       data-testid={`scrub-${paramId}`}
       data-agent-select={selectable.selectableProps['data-agent-select']}
       data-agent-selected={selectable.selectableProps['data-agent-selected']}
+      whileHover={{ y: -2, scale: 1.005 }}
+      transition={FRAMER_BOUNCE_SPRING}
     >
       <div className="scrubbable-header">
         <span
@@ -116,6 +120,6 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
         />
         <span className="scrubbable-unit mono">{unit}</span>
       </div>
-    </div>
+    </motion.div>
   );
 };

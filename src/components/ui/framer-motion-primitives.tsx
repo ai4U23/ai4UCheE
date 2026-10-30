@@ -73,12 +73,15 @@ export const MotionPillButton: React.FC<MotionPillButtonProps> = ({
   style,
   ...rest
 }) => (
-  <button
+  <motion.button
     type="button"
     data-testid={testId}
-    className={`${className} ${isActive ? 'active' : ''}`.trim()}
+    className={`framer-pill-btn ${className} ${isActive ? 'active' : ''}`.trim()}
     style={{ position: 'relative', overflow: 'hidden', ...style }}
-    {...rest}
+    whileHover={{ y: -1.5 }}
+    whileTap={{ scale: 0.97 }}
+    transition={FRAMER_BOUNCE_SPRING}
+    {...(rest as React.ComponentProps<typeof motion.button>)}
   >
     {isActive && (
       <motion.span
@@ -88,7 +91,7 @@ export const MotionPillButton: React.FC<MotionPillButtonProps> = ({
       />
     )}
     <span style={{ position: 'relative', zIndex: 1 }}>{children}</span>
-  </button>
+  </motion.button>
 );
 
 export interface FramerModalShellProps {

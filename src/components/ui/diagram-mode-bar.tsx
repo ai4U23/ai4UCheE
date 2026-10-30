@@ -54,8 +54,6 @@ export function DiagramModeBar<M extends string = string>({
               onClick={() => onSelectMode(opt.id)}
               style={{
                 fontWeight: isActive ? 700 : 500,
-                borderColor: isActive ? 'var(--accent-primary)' : undefined,
-                background: isActive ? 'rgba(2, 132, 199, 0.14)' : undefined,
               }}
             >
               {opt.label}
