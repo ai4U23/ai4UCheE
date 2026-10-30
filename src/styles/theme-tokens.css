@@ -1,6 +1,6 @@
-/* Dual Theme token system for ChemEng's Intelligent Workbench (ai4UCheE).
+/* Institutional Ivory (#fbf6ec / #f5f0e0) token system for ChemEng's Intelligent Workbench (ai4UCheE).
  * Aligned with ai4UMasterplan sovereign design system:
- * Institutional Ivory (#fbf6ec / #f5f0e0), Sovereign Dark Navy (#071a33 / #0f1b3d),
+ * Institutional Ivory (#fbf6ec / #f5f0e0), Sovereign Deep Navy (#071a33 / #0f1b3d) ink & masthead,
  * and Maize Gold (#e8c547 / #f7dca6) with Cormorant Garamond + Karla + JetBrains Mono. */
 @import 'katex/dist/katex.min.css';
 @import './workbench-components.css';
@@ -35,22 +35,6 @@
   --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
   --font-sans: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
-}
-
-[data-theme="blueprint"] {
-  --bg-canvas: #071a33;
-  --bg-panel: #0f1b3d;
-  --bg-elevated: #1e2f5c;
-  --ink-primary: #fbf6ec;
-  --ink-muted: #d5ccb8;
-  --border-grid: #2a3a66;
-  --accent-primary: #e8c547;
-  --accent-secondary: #f7dca6;
-  --accent-maize: #e8c547;
-  --status-pass: #34d399;
-  --status-warn: #e8c547;
-  --status-danger: #f87171;
-  --shadow-lift: 0 18px 50px -28px rgb(0 0 0 / 0.65);
 }
 
 * { box-sizing: border-box; }

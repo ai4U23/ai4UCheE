@@ -1,4 +1,4 @@
-// AppShell: Dual-Lens header (Learn <-> Plant), Dual Theme toggle (Ivory #FBF6EC <-> Dark Navy #071A33),
+// AppShell: Dual-Lens header (Learn <-> Plant), Institutional Ivory (#FBF6EC) surface,
 // ai4U logo + motion/react layoutId shared-layout morphing, DoF badge, 5 ChE Subject tabs + Cross-Subject Charts & Page Verifier tool + Calc Sheet trigger.
 import React from 'react';
 import { motion } from 'motion/react';
@@ -39,7 +39,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   chatDrawer,
   dofStatus = 'DoF = 0 · Fully Specified',
 }) => {
-  const { personaMode, setPersonaMode, themeMode, setThemeMode, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
+  const { personaMode, setPersonaMode, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
   const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');
   if (activeWorkbench !== 'wb1-visual-verifier') lastSubjectRef.current = activeWorkbench;
 
@@ -124,9 +124,6 @@ export const AppShell: React.FC<AppShellProps> = ({
           >
             {isVerifierActive && <motion.span layoutId="active-verifier-pill" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
             <span>📐 Charts &amp; Page Verifier</span>
-          </button>
-          <button type="button" data-testid="theme-toggle" onClick={() => setThemeMode(themeMode === 'paper' ? 'blueprint' : 'paper')}>
-            {themeMode === 'paper' ? '☀️ Ivory #FBF6EC' : '🌙 Dark Navy #071A33'}
           </button>
           <button type="button" data-testid="export-calc-sheet-btn" onClick={onExportCalcSheet}>
             Export Senior Calc Sheet

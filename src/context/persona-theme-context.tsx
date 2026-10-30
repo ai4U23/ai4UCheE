@@ -1,9 +1,9 @@
-// Persona ('learn' | 'plant') + Dual Theme ('paper' Ivory #FBF6EC | 'blueprint' Dark Navy #071A33) context.
+// Persona ('learn' | 'plant') + Institutional Ivory ('paper' #FBF6EC) context.
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { writeClientAppState } from '../actions/view-screen';
 
 export type PersonaMode = 'learn' | 'plant';
-export type ThemeMode = 'paper' | 'blueprint';
+export type ThemeMode = 'paper';
 export type WorkbenchId =
   | 'wb1-visual-verifier'
   | 'wb2-thermo-dippr'
@@ -47,7 +47,7 @@ export const PersonaThemeProvider: React.FC<{
   initialWorkbench = 'wb1-visual-verifier',
 }) => {
   const [personaMode, setPersonaMode] = useState<PersonaMode>(initialPersona);
-  const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme);
+  const [themeMode, setThemeMode] = useState<ThemeMode>('paper');
   const [activeWorkbench, setActiveWorkbench] = useState<WorkbenchId>(initialWorkbench);
   const [selectedChips, setSelectedChips] = useState<SelectedChip[]>([]);
 

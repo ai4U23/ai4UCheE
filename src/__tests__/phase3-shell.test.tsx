@@ -36,9 +36,9 @@ describe('Phase 3 — Agent-Native Shell, Dual-Lens & Point-and-Ask', () => {
     expect(serializeCurrentScreenTag()).toContain('personaMode="learn"');
   });
 
-  it('toggles Dual Theme between #FBF6EC ivory paper and #071A33 dark navy blueprint and renders ai4U logo', () => {
+  it('locks theme to Institutional Ivory (#FBF6EC paper) without a dark-mode toggle and renders ai4U logo', () => {
     render(
-      <PersonaThemeProvider initialTheme="paper">
+      <PersonaThemeProvider>
         <AppShell />
       </PersonaThemeProvider>,
     );
@@ -48,11 +48,8 @@ describe('Phase 3 — Agent-Native Shell, Dual-Lens & Point-and-Ask', () => {
     expect(logo.getAttribute('src')).toBe('/ai4u-logo.png');
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('paper');
-    expect(screen.getByTestId('theme-toggle').textContent).toContain('#FBF6EC');
-    fireEvent.click(screen.getByTestId('theme-toggle'));
-    expect(document.documentElement.getAttribute('data-theme')).toBe('blueprint');
-    expect(screen.getByTestId('theme-toggle').textContent).toContain('#071A33');
-    expect(serializeCurrentScreenTag()).toContain('themeMode="blueprint"');
+    expect(screen.queryByTestId('theme-toggle')).toBeNull();
+    expect(serializeCurrentScreenTag()).toContain('themeMode="paper"');
   });
 
   it('attaches agent-select:<kind>:<id> chips via useAgentSelectable and ScrubbableNumberInput', () => {
