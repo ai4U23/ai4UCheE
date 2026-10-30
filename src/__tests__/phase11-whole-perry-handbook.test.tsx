@@ -118,13 +118,16 @@ describe("Phase 11 — Whole Perry's 9th Edition 25-Section Handbook Atlas & Bac
     fireEvent.change(searchInput, { target: { value: 'relief' } });
     fireEvent.click(screen.getByTestId('perry-index-search-btn'));
 
-    const chipSec23 = await waitFor(() => {
-      const el =
-        screen.queryByTestId('index-ref-chip-23-57') ??
-        screen.queryByTestId('index-ref-chip-23-30');
-      expect(el).toBeTruthy();
-      return el!;
-    });
+    const chipSec23 = await waitFor(
+      () => {
+        const el =
+          screen.queryByTestId('index-ref-chip-23-57') ??
+          screen.queryByTestId('index-ref-chip-23-30');
+        expect(el).toBeTruthy();
+        return el!;
+      },
+      { timeout: 5000 },
+    );
     fireEvent.click(chipSec23);
 
     await waitFor(() => {

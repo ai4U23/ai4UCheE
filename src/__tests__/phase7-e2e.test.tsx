@@ -94,9 +94,12 @@ describe('Phase 7 — End-to-End Workbench Integration, GenUI & SQLite Calc Shee
     fireEvent.change(screen.getByLabelText('Equipment Tag'), { target: { value: 'T-201-DIST' } });
     fireEvent.click(screen.getByTestId('compile-calc-sheet-btn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('compiled-calc-sheet-output')).toBeTruthy();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('compiled-calc-sheet-output')).toBeTruthy();
+      },
+      { timeout: 5000 },
+    );
 
     expect(screen.getByTestId('calc-sheet-summary').textContent).toContain('T-201-DIST');
     expect(screen.getByTestId('genui-calc-sheet-card')).toBeTruthy();

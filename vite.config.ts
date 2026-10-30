@@ -10,10 +10,16 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom'],
-          'vendor-katex': ['katex'],
-          'vendor-motion-ui': ['motion', 'lucide-react', 'zod', 'clsx'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('katex')) return 'vendor-katex';
+            if (id.includes('motion') || id.includes('lucide-react') || id.includes('zod') || id.includes('clsx')) {
+              return 'vendor-motion-ui';
+            }
+            if (id.includes('react')) return 'vendor-react';
+          }
+          if (id.includes('/src/lib/perry-sections/')) return 'perry-atlas-solvers';
+          if (id.includes('/src/components/sketches/')) return 'che-interactive-sketches';
         },
       },
     },
