@@ -13,7 +13,13 @@ ChemEng's Intelligent Workbench (`ai4UCheE`) is deployed on the **`chemie`** VPS
 
 ### Remote Directory & Systemd Units on `chemie`
 - **Checkout Path**: `/data/home/ai4UCheE`
-- **Reference PDF Path (gitignored)**: `/data/home/ai4UCheE/Perry's Chemical Engineers' Handbook, 9th Edition.pdf` (225.6 MB, 2,274 pages)
+- **Reference Textbooks Path (gitignored, all 6 on `/data/home/ai4UCheE/`)**:
+  - `Perry's Chemical Engineers' Handbook, 9th Edition.pdf` (215.2 MB, 2,274 pages)
+  - `Elements of Chemical Reaction Engineering, 7th Edition -- H_ Scott Fogler & Bryan R_ Goldsmith & Eranda Nikolla & -- 2025 -- Pearson.epub` (43.8 MB)
+  - `Transport Phenomena, Revised 2nd Edition -- Robert Byron Bird; Warren E Stewart; Edwin N Lightfoot -- 2nd, 2006.pdf` (7.9 MB)
+  - `Introduction to Chemical Engineering Thermodynamics 9th -- Hendrick Van Ness, Michael  Abbott, Joseph Mauk Smith, Mark -- 9th Edition, PT, 2021.pdf` (76.2 MB)
+  - `Separation Process Principles with Applications Using -- J_ D_ Seader, Ernest J_ Henley, D_ Keith Roper -- 4, 2015-12-23.pdf` (7.2 MB)
+  - `Chemical Process Safety- Fundamentals with Applications, 4th -- Daniel A_ Crowl & Joseph F_ Louvar -- 2019.pdf` (23.4 MB)
 - **Cloudflare Tunnel (`chemie-workbench`)**:
   - Tunnel ID: `6aeedb2a-9324-4c9a-b75e-650ca6731f7d`
   - DNS CNAME: `chemie.ai4u.now` -> `6aeedb2a-9324-4c9a-b75e-650ca6731f7d.cfargotunnel.com`
