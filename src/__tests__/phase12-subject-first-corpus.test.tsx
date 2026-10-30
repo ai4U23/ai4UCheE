@@ -161,7 +161,7 @@ describe('Phase 12 — Subject-First 6-Textbook Blending & WB6 Kinetics/Reactor 
 
   it('Test 4 (Copilot What-If, WB5 6-Book Corpus Filter & Senior QA/QC Calc Sheet for WB6): dispatches Fogler reactor mutation, filters 6-book corpus, and compiles Calc Sheet', async () => {
     render(<App />);
-    fireEvent.change(screen.getByLabelText("Ask Perry's Agent"), {
+    fireEvent.change(screen.getByLabelText("Ask ChemEng's Agent"), {
       target: { value: 'Rescue reactor runaway with Fogler X=0.80 and Thiele phi=1.1' },
     });
     fireEvent.click(screen.getByText('Send'));

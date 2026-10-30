@@ -80,7 +80,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
   return (
     <aside className="chat-drawer" aria-label="Agent Co-Pilot Drawer" data-testid="agent-chat-drawer">
       <header className="wb-toolbar">
-        <strong>🤖 Perry&apos;s Agent Co-Pilot</strong>
+        <strong>🤖 ChemEng&apos;s Agent Co-Pilot</strong>
         <span className="dof-badge" data-testid="copilot-model-badge">
           <SwarmPulseDot tone="gold" />⚡ gemini-4-argon-low · gateway.ai4u.now
         </span>
@@ -121,7 +121,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
       <div className="chat-messages">
         {messages.length === 0 && (
           <div className="chat-msg chat-agent">
-            <strong>PerryAgent:</strong> Ready to coach <strong>{activeWorkbench.toUpperCase()}</strong> in{' '}
+            <strong>ChemEng&apos;s Agent:</strong> Ready to coach <strong>{activeWorkbench.toUpperCase()}</strong> in{' '}
             <strong>{personaMode === 'learn' ? '🎓 Learn Mode' : '🏭 Plant Mode'}</strong>. Click a starter question
             below or any equation/equipment on the left to inspect its step-by-step Perry derivation.
           </div>
@@ -135,7 +135,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
             animate={{ opacity: 1, y: 0 }}
             transition={FRAMER_BOUNCE_SPRING}
           >
-            <strong>{m.role === 'user' ? 'You' : 'PerryAgent'}:</strong> {m.text}
+            <strong>{m.role === 'user' ? 'You' : "ChemEng's Agent"}:</strong> {m.text}
             {m.appliedMutations && (
               <span className="copilot-mutation-pill" data-testid="copilot-mutation-pill">
                 ⚡ Applied to Workbench: {Object.entries(m.appliedMutations).map(([k, v]) => `${k}=${v}`).join(', ')}
@@ -163,7 +163,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
 
       <form onSubmit={handleSend} className="wb-actions-row">
         <input
-          aria-label="Ask Perry's Agent"
+          aria-label="Ask ChemEng's Agent"
           placeholder="Ask about this equation, chart, or operating case..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}

@@ -139,7 +139,7 @@ describe("Phase 11 — Whole Perry's 9th Edition 25-Section Handbook Atlas & Bac
   it('Test 4 (25-Section Copilot What-If Mutation & Senior EPC Calc Sheet): mutates WB5 via natural-language prompt and exports Sec 23 QA/QC Calc Sheet', async () => {
     render(<App />);
 
-    fireEvent.change(screen.getByLabelText("Ask Perry's Agent"), {
+    fireEvent.change(screen.getByLabelText("Ask ChemEng's Agent"), {
       target: { value: 'Check Sec 23 relief valve sizing at 150 psig' },
     });
     fireEvent.click(screen.getByText('Send'));

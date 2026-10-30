@@ -93,7 +93,7 @@ describe('Phase 9 — Interactive Intelligence: Bi-Directional Bus, White-Box Ca
     render(<App />);
     fireEvent.click(screen.getByTestId('tab-wb3-hydraulics'));
 
-    fireEvent.change(screen.getByLabelText("Ask Perry's Agent"), {
+    fireEvent.change(screen.getByLabelText("Ask ChemEng's Agent"), {
       target: { value: 'Set pipe diameter to 6 in and suction pressure to 15 psig to stop cavitation' },
     });
     fireEvent.click(screen.getByText('Send'));
