@@ -3,6 +3,7 @@
 // and rendering BSL Pipe Velocity/BL, ISA-75.01 Choked Valve, Shell-Tube HX/Nukiyama Boiling,
 // and Crowl & Louvar Flammability Triangle / Pasquill-Gifford Plume Dispersion.
 import React, { useState } from 'react';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { BslPipeVelocityBoundarySvg } from '../sketches/bsl-pipe-velocity-boundary-svg';
 import { HeatExchangerBoilingSvg } from '../sketches/heat-exchanger-boiling-svg';
 import { IsaControlValveChokedSvg } from '../sketches/isa-control-valve-choked-svg';
@@ -51,13 +52,15 @@ export const HydraulicsDiagramGallery: React.FC<HydraulicsDiagramGalleryProps> =
   const showHydraulics = diagramMode === 'all' || diagramMode === 'mode-hydraulics';
   const showHeatBoiling = diagramMode === 'all' || diagramMode === 'mode-heat-boiling';
   const showSafety = diagramMode === 'all' || diagramMode === 'mode-safety';
+  const m = getUiSubcomponentCopy().wb3Modes;
+  const options = WB3_MODE_OPTIONS.map((opt, idx) => ({ ...opt, label: m[idx] ?? opt.label }));
 
   return (
     <div>
       <DiagramModeBar
         testId="wb3-diagram-mode-bar"
         activeMode={diagramMode}
-        options={WB3_MODE_OPTIONS}
+        options={options}
         onSelectMode={setDiagramMode}
       />
 

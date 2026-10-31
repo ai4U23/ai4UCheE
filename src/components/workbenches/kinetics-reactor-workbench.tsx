@@ -102,19 +102,19 @@ export const KineticsReactorWorkbench: React.FC = () => {
             type="button" data-testid="wb6-trap-runaway"
             onClick={() => { setConversionX(0.88); setSemenovPsi(0.52); }}
           >
-            🔥 Runaway Trap (ψ=0.52)
+            {t.wb6RunawayTrapBtn}
           </button>
           <button
             type="button" data-testid="wb6-trap-thiele"
             onClick={() => { setThielePhi(6.5); setSemenovPsi(0.25); }}
           >
-            🧱 Pore Trap (φ=6.5)
+            {t.wb6PoreTrapBtn}
           </button>
           <button
             type="button" data-testid="wb6-rescue-safe"
             onClick={() => { setConversionX(0.80); setThielePhi(1.1); setSemenovPsi(0.24); setPInletPsig(60); }}
           >
-            ✅ Rescue Safe Design
+            {t.wb6RescueBtn}
           </button>
         </div>
       </header>
@@ -126,7 +126,7 @@ export const KineticsReactorWorkbench: React.FC = () => {
             onScrubConversionAndPhi={(nextX, nextPhi) => { setConversionX(nextX); setThielePhi(nextPhi); }}
           />
           <div className="wb-panel" data-testid="wb6-status-banner">
-            <strong>{solved.isRunaway || solved.isDiffusionLimited ? '⚠️ Reactor Guardrail: ' : '✅ Reactor Verdict: '}</strong>
+            <strong>{t.wb6GuardrailPrefix(solved.isRunaway || solved.isDiffusionLimited)}</strong>
             <span className="mono">{statusBanner}</span>
           </div>
         </div>

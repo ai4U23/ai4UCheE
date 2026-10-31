@@ -78,10 +78,10 @@ export const DistillationWorkbench: React.FC = () => {
         </div>
         <div className="wb-actions-row">
           <span className={`wb-verdict ${isFlooding ? 'fail' : 'pass'}`} style={{ margin: 0, padding: '0.2rem 0.6rem', fontSize: '0.76rem' }}>
-            {isFlooding ? `⚠️ Flooding: ${floodPercent.toFixed(1)}% of Fair limit` : `✅ Safe: ${floodPercent.toFixed(1)}% of Fair flood · N = ${solved.totalStages} stages`}
+            {t.wb4Verdict(isFlooding, floodPercent.toFixed(1), solved.totalStages)}
           </span>
           <label>
-            Tray Spacing h_t:
+            {t.wb4TraySpacingLabel}
             <select aria-label="Tray spacing" value={traySpacingM} onChange={(e) => setTraySpacingM(Number(e.target.value))}>
               <option value={0.305}>12 in (0.305 m)</option>
               <option value={0.457}>18 in (0.457 m)</option>

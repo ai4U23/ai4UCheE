@@ -428,7 +428,7 @@
 
         <div class="grid-2">
           <div class="video-stage">
-            <video id="guide-video-el" src="./ai4uchee-guide.mp4" controls playsinline preload="metadata"></video>
+            <video id="guide-video-el" src="/ai4uchee-guide.mp4" controls playsinline preload="metadata"></video>
             <div style="display:flex; justify-content:space-between; align-items:center; color:var(--ivory); padding: 0.5rem 0.35rem 0.1rem; font-family:var(--font-mono); font-size:0.78rem;">
               <span id="video-status-label">▶ Chapter 01 · 3-Zone AI-Native Studio (00:00)</span>
               <span>1920×1080 H.264 · Remotion 4</span>
@@ -1763,29 +1763,123 @@
         sub: '6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Plant Problems',
         nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · EPC Calc Sheet'],
         launch: '🚀 Launch Workbench',
-        heroEyebrow: '✨ SOVEREIGN CHEMICAL ENGINEERING WORKBENCH · 1 BAR · 1 CANVAS · 1 AGENT',
-        heroTitle: 'Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio.',
+        eyebrows: [
+          '✨ SOVEREIGN CHEMICAL ENGINEERING WORKBENCH · 1 BAR · 1 CANVAS · 1 AGENT',
+          '🎬 PROGRAMMATIC REMOTION VIDEO GUIDE · 1920×1080 · 30 FPS',
+          '🔧 5 SUBJECT WORKBENCHES + CROSS-SUBJECT CHARTS VERIFIER',
+          '🕵️ 24 REAL-LIFE PLANT PROBLEMS · FOGLER & LEBLANC 6-STAGE FLOW',
+          '📐 WHITE-BOX PROOFS · ERROR-SIGNATURE DETECTOR · SYSTEM TOPOLOGY',
+          '📄 SENIOR EPC QA/QC CALCULATION SHEETS · AX / GEO READY'
+        ],
+        titles: [
+          'Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio.',
+          'Master the Workbench in 5 Guided Video Chapters.',
+          'Every Core Chemical Engineering Subject—Interactive & Citation-Backed.',
+          'Start from a Real Plant Upset—Not a Disconnected Textbook Formula.',
+          '3-Stage White-Box Proofs & Validated Agent-Native System Architecture.',
+          'From Classroom Intuition to Print-Ready EPC Deliverables.'
+        ],
+        leads: [
+          "<strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.",
+          'Rendered with <code>/ak:remotion</code> in React—click any chapter on the right to seek the video directly to that workflow step.'
+        ],
         heroCta: '🚀 Launch Live Workbench (/app)',
         videoCta: '🎬 Watch 5-Step Video Guide',
-        videoTitle: 'Master the Workbench in 5 Guided Video Chapters.',
-        labsTitle: 'Every Core Chemical Engineering Subject—Interactive & Citation-Backed.',
-        probTitle: 'Start from a Real Plant Upset—Not a Disconnected Textbook Formula.',
-        wbTitle: '3-Stage White-Box Proofs & Validated Agent-Native System Architecture.',
-        calcTitle: 'From Classroom Intuition to Print-Ready EPC Deliverables.'
+        cardH3: [
+          '1 Top Studio Bar · 1 Interactive SVG Canvas · 1 Sticky AI Co-Pilot',
+          'Every Equation & Chart Grounded in Verbatim Page Citations',
+          'Thermodynamics, Phase Equilibria & DIPPR',
+          'Fluid Mechanics, Transport & Piping Hydraulics',
+          'Separations, McCabe-Thiele & Column Hydraulics',
+          'Kinetics, Catalysis & Chemical Reactor Design',
+          '25-Section Perry Atlas & 6-Book Search',
+          '📐 10 Calibrated Nomographs & High-DPI Verifier',
+          'From Unit-Conversion Traps to Coupled Runaway Hazards',
+          'The 6-Stage Creative Problem-Solving Checklist',
+          'Exact First-Principles Form',
+          'Explicit Unit & Datum Guardrails',
+          'Deterministic Verdict Badge',
+          'One-Click Senior Engineer Calculation Sheet Compiler',
+          'Explore ai4UCheE Live or Share with Any AI Agent'
+        ],
+        chapters: [
+          ['01 · 00:00 — 3-Zone AI-Native Studio ("1 Bar · 1 Canvas · 1 Agent")', 'Overview of the Top Studio Masthead, Interactive SVG Canvas, and Sticky Co-Pilot Inspector.'],
+          ['02 · 00:03 — Dual Persona (🎓 Learn ↔ 🏭 Plant) & 5 Subject Labs', 'Switch between Socratic student coaching and 3-case EPC plant engineering across WB2–WB6.'],
+          ['03 · 00:06 — 24 Real-Life Plant Problems & Fogler 6-Stage Detective Board', 'Walk through Observation, K-T IS/IS NOT, Theory, Handbook, and Rule #12 Hypothesis Falsification.'],
+          ['04 · 00:09 — Interactive SVG Handle Scrubbing & 3-Stage White-Box Proofs', 'Drag Pump P-101 out of cavitation while inspecting Symbolic → Substituted → Result KaTeX cards.'],
+          ['05 · 00:12 — Point-and-Ask (+ Ask), What-If Mutations & EPC QA/QC Export', 'Attach context chips, mutate sliders in plain English, and export a Rev 0 QA/QC Calculation Sheet.']
+        ],
+        labDescs: [
+          "Exact DIPPR Eq. 101/106 correlations, Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, Peng-Robinson EOS <em>Z(P_r, T_r)</em> dome, and Rankine/Van 't Hoff cycles.",
+          'Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail, 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em>, BSL Non-Newtonian velocity profiles, ISA-75.01 valves, and Bowman <em>F_T</em> heat exchangers.',
+          "Bi-directional 5-handle McCabe-Thiele canvas, Fenske-Underwood-Gilliland shortcuts, Fair's Souders-Brown flooding, Eckert GPDC, Kremser <em>N_OG</em> absorption, and Ternary LLE.",
+          'Interactive Levenspiel CSTR rectangle vs. PFR integral plot, Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; effectiveness <em>η</em>, Semenov thermal runaway S-curve, LHHW &amp; Butler-Volmer.',
+          "Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Unit Conversions &amp; Economics to API 520 Relief Sizing &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274).",
+          'Cross-subject header utility auto-syncing the active lab\'s chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).'
+        ],
+        openLabBtn: 'Open Lab →',
+        openChartsBtn: 'Open Charts →'
       },
       vi: {
         sub: '6 Giáo trình Chuẩn ChE · 55+ Giản đồ SVG Tương tác · 24 Sự cố Nhà máy Thực tế',
         nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính EPC'],
         launch: '🚀 Mở Phòng Thí Nghiệm',
-        heroEyebrow: '✨ BÀN LÀM VIỆC KỸ THUẬT HÓA HỌC THÔNG MINH · 1 THANH · 1 ĐỒ THỊ · 1 TRỢ LÝ AI',
-        heroTitle: 'Kết hợp 6 Giáo trình Kỹ thuật Hóa học Kinh điển với Phòng Thí nghiệm Tương tác AI.',
+        eyebrows: [
+          '✨ BÀN LÀM VIỆC KỸ THUẬT HÓA HỌC THÔNG MINH · 1 THANH · 1 ĐỒ THỊ · 1 TRỢ LÝ AI',
+          '🎬 VIDEO HƯỚNG DẪN REMOTION · 1920×1080 · 30 FPS',
+          '🔧 5 PHÒNG LAB CHUYÊN NGÀNH + TRÌNH KIỂM TRA GIẢN ĐỒ HIỆU CHUẨN',
+          '🕵️ 24 SỰ CỐ NHÀ MÁY THỰC TẾ · QUY TRÌNH 6 BƯỚC FOGLER & LEBLANC',
+          '📐 CHỨNG MINH WHITE-BOX · PHÁT HIỆN BẪY ĐƠN VỊ · KIẾN TRÚC HỆ THỐNG',
+          '📄 BẢN TÍNH KIỂM ĐỊNH QA/QC KỸ SƯ TRƯỞNG (EPC) · CHUẨN AX / GEO'
+        ],
+        titles: [
+          'Kết hợp 6 Giáo trình Kỹ thuật Hóa học Kinh điển với Phòng Thí nghiệm Tương tác AI.',
+          'Làm chủ Bàn làm việc qua 5 Chương Video Hướng dẫn.',
+          'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản.',
+          'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc.',
+          'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native.',
+          'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC).'
+        ],
+        leads: [
+          '<strong>ai4UCheE</strong> kết hợp <em>Perry 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em> và <em>Crowl &amp; Louvar</em> với <strong>hơn 55 giản đồ SVG tương tác hai chiều</strong>, <strong>chứng minh KaTeX 3 bước</strong> và <strong>24 sự cố nhà máy thực tế</strong>.',
+          'Được kết xuất bằng <code>/ak:remotion</code> trong React — bấm vào bất kỳ chương nào bên phải để tua video tới đúng bước thao tác.'
+        ],
         heroCta: '🚀 Mở Phòng Thí Nghiệm Trực Tiếp (/app?lang=vi)',
         videoCta: '🎬 Xem Video Hướng Dẫn 5 Bước',
-        videoTitle: 'Làm chủ Bàn làm việc qua 5 Chương Video Hướng dẫn.',
-        labsTitle: 'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản.',
-        probTitle: 'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc.',
-        wbTitle: 'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native.',
-        calcTitle: 'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC).'
+        cardH3: [
+          '1 Thanh Điều Khiển · 1 Không Gian Đồ Thị SVG · 1 Trợ Lý AI Co-Pilot',
+          'Mọi Phương Trình & Đồ Thị Đều Có Trích Dẫn Trang Sách Chính Xác',
+          'Nhiệt động học, Cân bằng Pha & Động cơ DIPPR',
+          'Cơ học Lưu chất, Truyền vận & Thủy lực Đường ống',
+          'Quá trình Tách, McCabe-Thiele & Thủy lực Tháp',
+          'Động học, Xúc tác & Thiết kế Lò phản ứng',
+          'Atlas 25 Chương Perry & Tra cứu 6 Giáo trình',
+          '📐 10 Giản đồ Hiệu chuẩn & Kiểm tra Đọc Đồ thị',
+          'Từ Bẫy Quy đổi Đơn vị đến Nguy cơ Thoát nhiệt Lò phản ứng',
+          'Danh mục Kiểm tra Giải quyết Vấn đề Sáng tạo 6 Bước',
+          'Dạng Phương trình Nguyên lý Cơ bản Chính xác',
+          'Cảnh báo Tự động Bẫy Đơn vị & Hệ quy chiếu Áp suất',
+          'Nhãn Kết luận Kiểm định Tất định',
+          'Trình Biên dịch Bản tính Kỹ sư Trưởng (EPC) Chỉ với 1 Cú Nhấp',
+          'Khám phá ai4UCheE Trực tiếp hoặc Chia sẻ với Bất kỳ AI Agent Nào'
+        ],
+        chapters: [
+          ['01 · 00:00 — Kiến trúc Studio 3 Vùng ("1 Thanh · 1 Đồ thị · 1 Trợ lý AI")', 'Tổng quan Thanh điều khiển trên cùng, Không gian Đồ thị SVG tương tác và Ngăn Trợ lý AI Co-Pilot.'],
+          ['02 · 00:03 — Chế độ Kép (🎓 Học tập ↔ 🏭 Nhà máy) & 5 Phòng Lab', 'Chuyển đổi giữa chế độ gia sư Socratic cho sinh viên và bảng thiết kế EPC 3 chế độ qua WB2–WB6.'],
+          ['03 · 00:06 — 24 Sự cố Nhà máy Thực tế & Bảng Điều tra 6 Bước Fogler', 'Thực hành Quan sát, Phân tích K-T IS/IS NOT, Lý thuyết, Sổ tay và Kiểm định Giả thuyết (Quy tắc #12).'],
+          ['04 · 00:09 — Kéo Điểm Nút Đồ thị SVG & Chứng minh White-Box 3 Bước', 'Kéo bơm P-101 thoát khỏi vùng xâm thực đồng thời kiểm tra thẻ phương trình Ký hiệu → Thay số → Kết quả.'],
+          ['05 · 00:12 — Thẻ + Hỏi, Giả lập What-If & Xuất Bản tính QA/QC EPC', 'Gắn thẻ ngữ cảnh, ra lệnh chỉnh thanh trượt bằng tiếng Việt/Anh và xuất Bản tính Kiểm định QA/QC Rev 0.']
+        ],
+        labDescs: [
+          'Tương quan chính xác DIPPR Eq. 101/106, cây quyết định mô hình Carlson, giản đồ đẳng phí VLE 2 cấu tử <em>T-x-y</em>, vòm Peng-Robinson <em>Z(P_r, T_r)</em> và chu trình Rankine/Van \'t Hoff.',
+          'Tính toán ống thương mại Sch 40/80, cảnh báo tường minh <em>f_D = 4·f_F</em>, kiểm tra xâm thực bơm <em>NPSH_A</em> vs. <em>NPSH_R</em>, lưu biến phi Newton BSL, van ISA-75.01 và trao đổi nhiệt Bowman <em>F_T</em>.',
+          'Đồ thị McCabe-Thiele 5 điểm kéo hai chiều, công thức Fenske-Underwood-Gilliland, ngập lụt Fair Souders-Brown, Eckert GPDC, hấp thụ Kremser <em>N_OG</em> và trích ly lỏng-lỏng tam giác.',
+          'Đồ thị Levenspiel so sánh CSTR và PFR, độ sụt áp lớp xúc tác Ergun PBR, mô-đun Thiele <em>φ</em> &amp; hệ số hữu hiệu <em>η</em>, đường cong chữ S thoát nhiệt Semenov, động học LHHW &amp; điện hóa Butler-Volmer.',
+          'Bộ giải đồ thị SVG tương tác riêng cho toàn bộ 25 chương của <em>Perry 9th Ed.</em> (từ Quy đổi đơn vị &amp; Kinh tế đến Van an toàn API 520 &amp; Ăn mòn PREN) kèm Chỉ mục cuối sách (tr. 2244–2274).',
+          'Công cụ tra cứu giản đồ tự động đồng bộ theo phòng Lab đang mở (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Cầu rơi, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).'
+        ],
+        openLabBtn: 'Mở Phòng Lab →',
+        openChartsBtn: 'Mở Giản đồ →'
       }
     };
     function setShowcaseLocale(loc) {
@@ -1804,11 +1898,27 @@
       c.nav.forEach(function(txt, i) { if (navAs[i]) navAs[i].textContent = txt; });
       var launchBtn = document.getElementById('launch-wb-masthead-btn');
       if (launchBtn) launchBtn.textContent = c.launch;
-      var heroEye = document.querySelector('#hero .eyebrow-pill');
-      if (heroEye) heroEye.textContent = c.heroEyebrow;
+      var eyes = document.querySelectorAll('.eyebrow-pill');
+      c.eyebrows.forEach(function(txt, i) { if (eyes[i]) eyes[i].textContent = txt; });
       var titles = document.querySelectorAll('.section-title');
-      var tMap = [c.heroTitle, c.videoTitle, c.labsTitle, c.probTitle, c.wbTitle, c.calcTitle];
-      tMap.forEach(function(txt, i) { if (titles[i]) titles[i].textContent = txt; });
+      c.titles.forEach(function(txt, i) { if (titles[i]) titles[i].textContent = txt; });
+      var leads = document.querySelectorAll('.section-lead');
+      c.leads.forEach(function(html, i) { if (leads[i]) leads[i].innerHTML = html; });
+      var h3s = document.querySelectorAll('.card h3');
+      c.cardH3.forEach(function(txt, i) { if (h3s[i]) h3s[i].textContent = txt; });
+      var chBtns = document.querySelectorAll('.chapter-btn');
+      c.chapters.forEach(function(pair, i) {
+        if (chBtns[i]) {
+          var st = chBtns[i].querySelector('strong');
+          var dv = chBtns[i].querySelector('div');
+          if (st) st.textContent = pair[0];
+          if (dv) dv.textContent = pair[1];
+        }
+      });
+      var labPs = document.querySelectorAll('#six-books-labs .card p');
+      c.labDescs.forEach(function(html, i) { if (labPs[i]) labPs[i].innerHTML = html; });
+      var labAs = document.querySelectorAll('#six-books-labs .card a.ctrl-btn');
+      labAs.forEach(function(a, i) { a.textContent = i === 5 ? c.openChartsBtn : c.openLabBtn; });
       document.querySelectorAll('a[href^="/app"]').forEach(function(a) {
         var raw = a.getAttribute('href') || '/app';
         var base = raw.replace(/([?&])lang=(en|vi)(&|$)/, '$1').replace(/[?&]$/, '');

@@ -1,0 +1,71 @@
+[
+  {
+    "viewport": "320x812",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/plans/reports/enhance-ux-ax-261031-1830-whole-site/round-0/320x812.png",
+    "outline": [
+      "div#root \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 320x2160",
+      "  div.app-shell \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 320x2160",
+      "    header.shell-header \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = @ x0 y0 320x300",
+      "      div.brand-identity \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF =  @ x16 y6 288x52",
+      "      div.mission-bar \"Start from a Real-Life Plant Problem (Fo\" @ x16 y68 288x110",
+      "      div.wb-actions-row \"🎓 Learn 🏭 Plant 📐 Charts 📄 Calc Shee @ x16 y199 288x94",
+      "    main.shell-workspace.wb-split \"📐 Calibrated Nomographs & Ch @ x16 y314 288x1830",
+      "      div \"📐 Calibrated Nomographs & Chart Verifie\" @ x16 y314 288x1124",
+      "      aside.chat-drawer \"🤖 AI Co-Pilot ⚡ gemini-4-argon-low 🏭 P\" @ x16 y1452 288x692"
+    ],
+    "findings": [],
+    "height": 2160
+  },
+  {
+    "viewport": "375x812",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/plans/reports/enhance-ux-ax-261031-1830-whole-site/round-0/375x812.png",
+    "outline": [
+      "div#root \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 375x2008",
+      "  div.app-shell \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 375x2008",
+      "    header.shell-header \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = @ x0 y0 375x242",
+      "      div.brand-identity \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF =  @ x16 y6 343x44",
+      "      div.mission-bar \"Start from a Real-Life Plant Problem (Fo\" @ x16 y60 343x110",
+      "      div.wb-actions-row \"🎓 Learn 🏭 Plant 📐 Charts 📄 Calc Shee @ x16 y191 343x44",
+      "    main.shell-workspace.wb-split \"📐 Calibrated Nomographs & Ch @ x16 y257 343x1736",
+      "      div \"📐 Calibrated Nomographs & Chart Verifie\" @ x16 y257 343x1030",
+      "      aside.chat-drawer \"🤖 AI Co-Pilot ⚡ gemini-4-argon-low 🏭 P\" @ x16 y1300 343x692"
+    ],
+    "findings": [],
+    "height": 2008
+  },
+  {
+    "viewport": "768x1024",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/plans/reports/enhance-ux-ax-261031-1830-whole-site/round-0/768x1024.png",
+    "outline": [
+      "div#root \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 768x1725",
+      "  div.app-shell \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 768x1725",
+      "    header.shell-header \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = @ x0 y0 768x89",
+      "    main.shell-workspace.wb-split \"📐 Calibrated Nomographs & Ch @ x16 y103 736x1606",
+      "      div \"📐 Calibrated Nomographs & Chart Verifie\" @ x16 y103 736x688",
+      "      aside.chat-drawer \"🤖 AI Co-Pilot ⚡ gemini-4-argon-low 🏭 P\" @ x16 y805 736x904"
+    ],
+    "findings": [
+      {
+        "severity": "error",
+        "type": "horizontal-overflow",
+        "target": "",
+        "message": "page is 37px wider than the viewport; widest offenders: div.mission-bar \"Start from a Real-Life Plant Problem (Fo\"; button \"🔍 Catch the 4× Friction Trap⭐\"; button \"💧 Boil Water at 100°C (psig vs psia)\"; button \"⚙️ Check Pump Cavitation (NPSHa)\"; button \"🗼 Stage a Binary Distillation Column\""
+      }
+    ],
+    "height": 1725
+  },
+  {
+    "viewport": "1440x900",
+    "screenshot": "/Users/nad/ai4u/ai4UCheE/plans/reports/enhance-ux-ax-261031-1830-whole-site/round-0/1440x900.png",
+    "outline": [
+      "div#root \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 1440x900",
+      "  div.app-shell \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = \" @ x0 y0 1440x900",
+      "    header.shell-header \"ai4UCheE 🔧 Charts & Nomographs ▾ DoF = @ x0 y0 1440x89",
+      "    main.shell-workspace.wb-split \"📐 Calibrated Nomographs & Ch @ x16 y103 1408x781",
+      "      div \"📐 Calibrated Nomographs & Chart Verifie\" @ x16 y103 1024x459",
+      "      aside.chat-drawer \"🤖 AI Co-Pilot ⚡ gemini-4-argon-low 🏭 P\" @ x1054 y103 370x780"
+    ],
+    "findings": [],
+    "height": 900
+  }
+]

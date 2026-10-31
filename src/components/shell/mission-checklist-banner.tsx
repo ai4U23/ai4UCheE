@@ -14,6 +14,8 @@ import {
   evaluateSixStageProgress,
   subscribeProblemSolvingStore,
 } from '../../lib/hypothesis-verification-engine';
+import { MISSION_BUTTON_LABELS_VI } from '../../lib/i18n/vi-shell-dictionary';
+import { getTroubleshootingCopy } from '../../lib/i18n/vi-troubleshooting-copy';
 import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { HypothesisTroubleshootingBoard } from './hypothesis-troubleshooting-board';
 import type { GuidedMissionScenario } from './mission-scenarios';
@@ -31,7 +33,8 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
   onSocraticHint,
   onDismiss,
 }) => {
-  const { selectedChips } = usePersonaTheme();
+  const { selectedChips, locale } = usePersonaTheme();
+  const ts = getTroubleshootingCopy(locale);
   const [, setStoreTick] = useState<number>(0);
   const [trapObserved, setTrapObserved] = useState<boolean>(false);
   const [payload, setPayload] = useState<WorkbenchLivePayload>(
@@ -55,13 +58,14 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
   });
 
   const steps: Array<{ label: string; done: boolean }> = [
-    { label: 'Stage 1 · Problem Observation (Normal vs. Faulty Plant Data)', done: stageStatus.stage1ObservationDone },
-    { label: 'Stage 2 · Problem Definition (K-T IS / IS NOT & Real Problem)', done: stageStatus.stage2DefinitionDone },
-    { label: 'Stage 3 · Fundamental Theory (Why You Learn This Subject)', done: stageStatus.stage3TheoryDone },
-    { label: 'Stage 4 · Applicable Handbook (Perry & 6-Book Anchor)', done: stageStatus.stage4HandbookDone },
-    { label: 'Stage 5 · Hypotheses: Prove ✅ / Disprove ❌ (Rule #12)', done: stageStatus.stage5HypothesesDone },
-    { label: 'Stage 6 · Actual Solution & Safe Operating Margin Verified', done: (scrubbed && solved) || stageStatus.stage6SolutionDone },
+    { label: ts.missionSteps[0], done: stageStatus.stage1ObservationDone },
+    { label: ts.missionSteps[1], done: stageStatus.stage2DefinitionDone },
+    { label: ts.missionSteps[2], done: stageStatus.stage3TheoryDone },
+    { label: ts.missionSteps[3], done: stageStatus.stage4HandbookDone },
+    { label: ts.missionSteps[4], done: stageStatus.stage5HypothesesDone },
+    { label: ts.missionSteps[5], done: (scrubbed && solved) || stageStatus.stage6SolutionDone },
   ];
+  const missionTitle = locale === 'vi' ? (MISSION_BUTTON_LABELS_VI[mission.id] ?? mission.buttonLabel) : mission.buttonLabel;
 
   return (
     <motion.div
@@ -74,7 +78,7 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
       <div className="mission-banner-head">
         <strong>
           <SwarmPulseDot tone={solved ? 'emerald' : 'gold'} />
-          {solved ? '🏆 Mission Solved' : '🧭 Mission Active'} — {mission.buttonLabel} (Fogler &amp; LeBlanc 6-Stage Flow)
+          {solved ? ts.missionSolvedTitle : ts.missionActiveTitle} — {missionTitle} {ts.missionFlowSuffix}
         </strong>
         <button type="button" onClick={onDismiss} aria-label="Dismiss mission">✕</button>
       </div>
@@ -95,15 +99,15 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
         <div className="wb-actions-row" style={{ marginBottom: '0.35rem', flexWrap: 'wrap' }}>
           {onSocraticHint && (
             <button type="button" data-testid="mission-socratic-hint-btn" onClick={() => onSocraticHint(mission)}>
-              💡 Socratic Hint (Keep Full +35% Mastery)
+              {ts.missionSocraticBtn}
             </button>
           )}
           <button type="button" data-testid="mission-autofix-btn" onClick={() => onAutoFix(mission)}>
-            ⚡ Auto-Fix &amp; Ask Copilot ({Object.entries(mission.rescueMutations).map(([k, v]) => `${k}=${v}`).join(', ')})
+            {ts.missionAutofixPrefix} ({Object.entries(mission.rescueMutations).map(([k, v]) => `${k}=${v}`).join(', ')})
           </button>
           {!stageStatus.stage5HypothesesDone && (
             <span className="mission-pill mono" data-testid="autofix-soft-nudge-banner" style={{ fontSize: '0.73rem' }}>
-              🕵️ Detective Nudge: Test a hypothesis below &amp; scrub sliders yourself for full +35% mastery &amp; Gold Stamp (Auto-Fix gives +12%).
+              {ts.missionDetectiveNudge}
             </span>
           )}
         </div>

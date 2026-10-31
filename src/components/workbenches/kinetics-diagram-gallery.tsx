@@ -3,6 +3,7 @@
 // and rendering Semenov Thermal Runaway, Series Selectivity / RTD, Butler-Volmer Polarization,
 // and LHHW Catalytic Rate Roof / Decay + Monod Chemostat Bioreactor.
 import React, { useState } from 'react';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { ButlerVolmerPolarizationSvg } from '../sketches/butler-volmer-polarization-svg';
 import { LhhwBioreactorSvg } from '../sketches/lhhw-bioreactor-svg';
 import { SemenovThermalRunawaySvg } from '../sketches/semenov-thermal-runaway-svg';
@@ -55,13 +56,15 @@ export const KineticsDiagramGallery: React.FC<KineticsDiagramGalleryProps> = ({
   const showSemenovRtd = diagramMode === 'all' || diagramMode === 'mode-semenov-rtd';
   const showLhhwBio = diagramMode === 'all' || diagramMode === 'mode-lhhw-bioreactor';
   const showElectro = diagramMode === 'all' || diagramMode === 'mode-electro';
+  const m = getUiSubcomponentCopy().wb6Modes;
+  const options = WB6_MODE_OPTIONS.map((opt, idx) => ({ ...opt, label: m[idx] ?? opt.label }));
 
   return (
     <div>
       <DiagramModeBar
         testId="wb6-diagram-mode-bar"
         activeMode={diagramMode}
-        options={WB6_MODE_OPTIONS}
+        options={options}
         onSelectMode={setDiagramMode}
       />
 

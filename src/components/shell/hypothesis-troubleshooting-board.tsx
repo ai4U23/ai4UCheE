@@ -12,6 +12,7 @@ import {
   markProblemDefinitionReviewed, markTheoryReviewed, recordHypothesisVerdict,
   subscribeProblemSolvingStore, type HypothesisUserVerdict,
 } from '../../lib/hypothesis-verification-engine';
+import { getTroubleshootingCopy, localizeFoglerSpec } from '../../lib/i18n/vi-troubleshooting-copy';
 import { getStudentProfile, subscribeStudentProfile } from '../../lib/student-adaptive-model';
 import { KaTeXBlock } from '../ui/katex-block';
 
@@ -24,7 +25,8 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
   workbenchId,
   compactByDefault = false,
 }) => {
-  const { personaMode, selectedChips, toggleChip } = usePersonaTheme();
+  const { personaMode, selectedChips, toggleChip, locale } = usePersonaTheme();
+  const ts = getTroubleshootingCopy(locale);
   const [, setTick] = useState<number>(0);
   const [expanded, setExpanded] = useState<boolean>(!compactByDefault);
   const [agentReplySnippet, setAgentReplySnippet] = useState<string>('');
@@ -36,7 +38,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
   useEffect(() => subscribeStudentProfile(() => setTick((t) => t + 1)), []);
   useEffect(() => subscribeClientAppState((s) => setLivePayload(s.payload as WorkbenchLivePayload)), []);
 
-  const spec = getFoglerCaseForWorkbench(workbenchId);
+  const spec = localizeFoglerSpec(getFoglerCaseForWorkbench(workbenchId), locale);
   const stageStatus = evaluateSixStageProgress(workbenchId, {
     selectedChipIds: selectedChips.map((c) => c.chipId),
   });
@@ -92,7 +94,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
         <div>
           <strong data-testid="why-learn-subject-banner">🎯 {spec.whyLearnSubject}</strong>
           <div className="wb-subtitle">
-            <span>🚨 Real Plant Problem: <strong>{spec.plantIncidentTitle}</strong></span> · <code>{spec.foglerBookCitation}</code> ·{' '}
+            <span>{ts.boardRealPlantPrefix} <strong>{spec.plantIncidentTitle}</strong></span> · <code>{spec.foglerBookCitation}</code> ·{' '}
             <span data-testid="fogler-detective-stamp">{stamp.tierLabel}</span>
           </div>
         </div>
@@ -105,7 +107,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
             {stageStatus.activeCollaboratorPrompt}
           </button>
           <button type="button" data-testid="toggle-hypothesis-board-btn" onClick={() => setExpanded(!expanded)}>
-            {expanded ? '▾ Compact 6-Stage Board' : '▸ Expand 6-Stage Board'}
+            {ts.boardToggleBtn(expanded)}
           </button>
         </div>
       </div>
@@ -114,7 +116,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
         <div className="wb-split" style={{ gap: '0.75rem' }}>
           <div data-testid="kt-fault-telemetry-card">
             <div className="mono" style={{ fontSize: '0.78rem', marginBottom: '0.35rem' }}>
-              <strong>1. Problem Observation (Normal vs. Faulty Plant Telemetry):</strong> {spec.observationSummary}
+              <strong>{ts.boardStage1Title}</strong> {spec.observationSummary}
             </div>
             <div className="mono" data-testid="temporal-fault-clue-badge" style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>
               <strong>{temporalClue.timeHorizonBadge}:</strong> {temporalClue.rateOfChangeClue} <em>({temporalClue.falsifiesReason})</em>
@@ -125,7 +127,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
               </div>
             )}
             <table className="mono" style={{ width: '100%', fontSize: '0.76rem', marginBottom: '0.45rem' }}>
-              <thead><tr><th>Telemetry</th><th>Normal Baseline</th><th>Faulty Plant Reading</th><th>Physical Delta</th></tr></thead>
+              <thead><tr><th>{ts.boardColTelemetry}</th><th>{ts.boardColNormal}</th><th>{ts.boardColFaulty}</th><th>{ts.boardColDelta}</th></tr></thead>
               <tbody>
                 {spec.telemetryRows.map((r) => (
                   <tr key={r.metric}><td>{r.metric}</td><td>{r.normalVal}</td><td><strong>{r.faultyVal}</strong></td><td>{r.deltaNote}</td></tr>
@@ -134,26 +136,26 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
             </table>
 
             <div className="mono" style={{ fontSize: '0.76rem', marginBottom: '0.45rem' }} data-testid="kt-problem-definition-box">
-              <strong>2. Problem Definition (K-T IS / IS NOT &amp; Restatement):</strong>
-              <div>• <em>Perceived Trap:</em> &ldquo;{spec.ktDefinition.perceivedProblem}&rdquo;</div>
-              <div>• <em>Real Problem Defined:</em> <strong>{spec.ktDefinition.realProblemDefined}</strong></div>
+              <strong>{ts.boardStage2Title}</strong>
+              <div>• <em>{ts.boardPerceivedLabel}</em> &ldquo;{spec.ktDefinition.perceivedProblem}&rdquo;</div>
+              <div>• <em>{ts.boardRealDefLabel}</em> <strong>{spec.ktDefinition.realProblemDefined}</strong></div>
               <div>• <em>K-T IS:</em> {spec.ktDefinition.whatIs} | <em>IS NOT:</em> {spec.ktDefinition.whatIsNot}</div>
             </div>
 
             <div className="mono" style={{ fontSize: '0.76rem' }} data-testid="theory-handbook-bridge-box">
-              <strong>3. Fundamental Theory &amp; 4. Applicable Handbook:</strong>
+              <strong>{ts.boardStage34Title}</strong>
               <KaTeXBlock latex={spec.fundamentalTheory.symbolicLatex} />
-              <div>• <em>Governing Terms:</em> {spec.fundamentalTheory.governingTermsNote}</div>
-              <div>• <em>Applicable Handbook:</em> <code>{spec.applicableHandbook.primaryCitation}</code> ({spec.applicableHandbook.chartOrTableRef})</div>
+              <div>• <em>{ts.boardGoverningLabel}</em> {spec.fundamentalTheory.governingTermsNote}</div>
+              <div>• <em>{ts.boardHandbookLabel}</em> <code>{spec.applicableHandbook.primaryCitation}</code> ({spec.applicableHandbook.chartOrTableRef})</div>
               <button type="button" data-testid="stage-review-theory-btn" onClick={handleInspectTheoryAndHandbook} style={{ marginTop: '0.3rem' }}>
-                📐 Confirm Theory &amp; Handbook Anchor ({stageStatus.stage3TheoryDone ? '✓ Reviewed' : 'Mark Reviewed'})
+                {ts.boardConfirmTheoryBtn(stageStatus.stage3TheoryDone)}
               </button>
             </div>
           </div>
 
           <div>
             <div className="mono" style={{ fontSize: '0.78rem', marginBottom: '0.35rem' }}>
-              <strong>5. Draft &amp; Prove/Disprove Hypotheses (&ldquo;Does It Fit the Observation?&rdquo; — Rule #12):</strong>
+              <strong>{ts.boardStage5Title}</strong>
             </div>
             {spec.hypotheses.map((h) => {
               const evalState = evaluateHypothesisItem(workbenchId, h.id);
@@ -162,13 +164,13 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
                   <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{h.claim}</div>
                   <div className="wb-actions-row" style={{ marginTop: '0.25rem' }}>
                     <button type="button" data-testid={`hyp-prove-${h.id}`} onClick={() => handleVerdictClick(h.id, 'proved')}>
-                      {evalState.userVerdict === 'proved' ? '● ' : ''}Prove ✅
+                      {evalState.userVerdict === 'proved' ? '● ' : ''}{ts.boardProveBtn}
                     </button>
                     <button type="button" data-testid={`hyp-disprove-${h.id}`} onClick={() => handleVerdictClick(h.id, 'disproved')}>
-                      {evalState.userVerdict === 'disproved' ? '● ' : ''}Disprove ❌
+                      {evalState.userVerdict === 'disproved' ? '● ' : ''}{ts.boardDisproveBtn}
                     </button>
                     <button type="button" data-testid={`hyp-ask-agent-${h.id}`} onClick={() => void handleCollaborateWithAgent(h.agentPrompt)}>
-                      🤖 Ask AI Agent to Test
+                      {ts.boardAskAgentBtn}
                     </button>
                   </div>
                   <div className="mono" data-testid={`hyp-verdict-${h.id}`} style={{ fontSize: '0.74rem', marginTop: '0.25rem' }}>
@@ -178,11 +180,11 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
               );
             })}
             <div className="mono" style={{ fontSize: '0.75rem' }} data-testid="stage6-solution-prescription">
-              <strong>6. Actual Solution Prescription:</strong> {spec.actualSolutionSummary}
+              <strong>{ts.boardStage6Title}</strong> {spec.actualSolutionSummary}
             </div>
             {agentReplySnippet && (
               <div className="mono" data-testid="ai-collaborator-hypothesis-note" style={{ fontSize: '0.75rem', marginTop: '0.35rem' }}>
-                <strong>🤖 AI Problem-Solving Collaborator:</strong> {agentReplySnippet}
+                <strong>{ts.boardAiCollaboratorTitle}</strong> {agentReplySnippet}
               </div>
             )}
           </div>

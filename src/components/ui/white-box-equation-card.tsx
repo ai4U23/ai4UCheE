@@ -12,6 +12,7 @@ import {
   markTheoryReviewed,
   subscribeProblemSolvingStore,
 } from '../../lib/hypothesis-verification-engine';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { KaTeXBlock } from './katex-block';
 
 export interface WhiteBoxEquationCardProps {
@@ -27,6 +28,7 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
 
   const activeWb = (getClientAppState().activeWorkbench || 'wb1-visual-verifier') as WorkbenchId;
   const cited = getWorkbenchProblemProgress(activeWb).citedEquationIds.includes(equation.id);
+  const ui = getUiSubcomponentCopy();
 
   const handleCiteTheory = () => {
     const wb = (getClientAppState().activeWorkbench || 'wb1-visual-verifier') as WorkbenchId;
@@ -50,9 +52,9 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
             data-testid={`cite-theory-${equation.id}`}
             onClick={handleCiteTheory}
             style={{ fontSize: '0.72rem', padding: '0.18rem 0.45rem' }}
-            title="Confirm Stage 3 Fundamental Theory & Stage 4 Applicable Handbook in the Fogler & LeBlanc 6-Stage Flow"
+            title={ui.eqCiteTitle}
           >
-            {cited ? '✓ Stage 3 Theory & Stage 4 Handbook Cited' : '📐 Cite as Stage 3 Theory & Handbook'}
+            {ui.eqCiteBtn(cited)}
           </button>
           <span className="white-box-citation-badge">{equation.citation}</span>
         </div>
@@ -65,7 +67,7 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
           animate={{ opacity: 1, y: 0 }}
           transition={getFramerStaggerTransition(0)}
         >
-          <span className="white-box-stage-label">1 · SYMBOLIC</span>
+          <span className="white-box-stage-label">{ui.eqStage1}</span>
           <KaTeXBlock latex={equation.symbolicLatex} testId={katexTestIds?.symbolic} />
         </motion.div>
         <motion.div
@@ -75,7 +77,7 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
           animate={{ opacity: 1, y: 0 }}
           transition={getFramerStaggerTransition(1)}
         >
-          <span className="white-box-stage-label">2 · LIVE SUBSTITUTION</span>
+          <span className="white-box-stage-label">{ui.eqStage2}</span>
           <KaTeXBlock latex={equation.substitutedLatex} testId={katexTestIds?.substituted} />
         </motion.div>
         <motion.div
@@ -85,7 +87,7 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
           animate={{ opacity: 1, y: 0 }}
           transition={getFramerStaggerTransition(2)}
         >
-          <span className="white-box-stage-label">3 · EVALUATED RESULT</span>
+          <span className="white-box-stage-label">{ui.eqStage3}</span>
           <KaTeXBlock latex={equation.resultLatex} testId={katexTestIds?.result} />
         </motion.div>
       </div>

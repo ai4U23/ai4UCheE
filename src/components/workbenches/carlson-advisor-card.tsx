@@ -2,6 +2,7 @@
 // interactive clickable SVG decision flowchart nodes, and scrubbable Vapor Pressure vs. T curve.
 import React, { useRef } from 'react';
 import type { PersonaMode } from '../../context/persona-theme-context';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { clientPointToViewBox, clampDomainValue, safeSetPointerCapture, type ViewBoxRect } from '../../lib/svg-drag-math';
 
 export interface CarlsonAdvisorCardProps {
@@ -56,37 +57,37 @@ export const CarlsonAdvisorCard: React.FC<CarlsonAdvisorCardProps> = ({
     const nextT = clampDomainValue(280 + pt.u * 220, 280, 500, 0.25);
     onChangeTempK(Number(nextT.toFixed(2)));
   };
+  const ui = getUiSubcomponentCopy();
 
   return (
     <aside className="wb-tutor-card" data-testid="carlson-advisor-panel">
-      <h3>🧭 Carlson&apos;s (1996) / Perry Sec 4 Property Package Advisor</h3>
+      <h3>{ui.carlsonTitle}</h3>
       <div className="wb-actions-row">
         <label>
-          Polarity:
+          {ui.carlsonPolarityLabel}
           <select
             aria-label="Mixture polarity"
             value={polarity}
             onChange={(e) => onPolarityChange(e.target.value as typeof polarity)}
           >
-            <option value="nonpolar">Nonpolar / Hydrocarbon</option>
-            <option value="polar_non_electrolyte">Polar Non-Electrolyte</option>
+            <option value="nonpolar">{ui.carlsonNonpolarOpt}</option>
+            <option value="polar_non_electrolyte">{ui.carlsonPolarOpt}</option>
           </select>
         </label>
         <label>
-          <input type="checkbox" checked={hasLle} onChange={(e) => onHasLleChange(e.target.checked)} /> Two Liquid Phases (LLE)
+          <input type="checkbox" checked={hasLle} onChange={(e) => onHasLleChange(e.target.checked)} /> {ui.carlsonLleLabel}
         </label>
         <label>
-          <input type="checkbox" checked={hasAssoc} onChange={(e) => onHasAssocChange(e.target.checked)} /> Carboxylic Acid Vapor Dimerization
+          <input type="checkbox" checked={hasAssoc} onChange={(e) => onHasAssocChange(e.target.checked)} /> {ui.carlsonAssocLabel}
         </label>
       </div>
       <p>
-        Recommended Package: <strong data-testid="carlson-recommended">{recommendedModel}</strong>{' '}
+        {ui.carlsonRecPrefix} <strong data-testid="carlson-recommended">{recommendedModel}</strong>{' '}
         <code>[Perry&apos;s 9th Ed., Sec. 4, p. 4-18]</code>
       </p>
       {hasLle && (
         <p className="wb-coaching" data-testid="carlson-lle-warning">
-          ⚠️ <strong>LLE Trap:</strong> NEVER use <code>Wilson</code> for Liquid-Liquid Equilibrium — Wilson cannot
-          predict two liquid phases.
+          ⚠️ <strong>LLE Trap:</strong> {ui.carlsonLleWarn}
         </p>
       )}
       <div className="wb-crop-placeholder">
@@ -102,7 +103,7 @@ export const CarlsonAdvisorCard: React.FC<CarlsonAdvisorCardProps> = ({
           >
             <rect x="20" y="22" width="110" height="32" rx="5" fill="var(--bg-elevated)" stroke="var(--accent-primary)" />
             <text x="75" y="42" fontSize="10" fontWeight="700" textAnchor="middle" fill="currentColor">
-              {polarity === 'nonpolar' ? 'Nonpolar Fluid' : 'Polar Mixture'}
+              {polarity === 'nonpolar' ? ui.carlsonNodeNonpolar : ui.carlsonNodePolar}
             </text>
           </g>
           <line x1="130" y1="38" x2="162" y2="38" stroke="currentColor" strokeWidth="1.8" />
@@ -116,7 +117,7 @@ export const CarlsonAdvisorCard: React.FC<CarlsonAdvisorCardProps> = ({
           >
             <rect x="162" y="22" width="108" height="32" rx="5" fill="var(--bg-elevated)" stroke={hasLle ? 'var(--status-warn)' : 'var(--border-grid)'} />
             <text x="216" y="42" fontSize="10" fontWeight="700" textAnchor="middle" fill="currentColor">
-              {hasLle ? '2 Liquid Phases' : 'Single Liquid'}
+              {hasLle ? ui.carlsonNode2Liquid : ui.carlsonNode1Liquid}
             </text>
           </g>
           <line x1="270" y1="38" x2="300" y2="38" stroke="currentColor" strokeWidth="1.8" />
@@ -133,7 +134,7 @@ export const CarlsonAdvisorCard: React.FC<CarlsonAdvisorCardProps> = ({
               {hasAssoc ? 'NRTL-HOC' : hasLle ? 'NRTL / UNIQUAC' : polarity === 'nonpolar' ? 'PR / SRK EOS' : 'Wilson / NRTL'}
             </text>
             <text x="349" y="50" fontSize="8.5" textAnchor="middle" fill="currentColor">
-              Selected Model
+              {ui.carlsonNodeSelected}
             </text>
           </g>
           {/* Interactive Vapor Pressure Boiling Curve Scrubber */}

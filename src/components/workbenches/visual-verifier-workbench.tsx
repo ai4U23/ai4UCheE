@@ -102,13 +102,13 @@ export const VisualVerifierWorkbench: React.FC = () => {
         </div>
         <div className="wb-controls">
           <label>
-            Section (1–25):
+            {t.wb1SecLabel}
             <select aria-label="Section selector" value={secNum} onChange={(e) => applyPreset(resolvePresetForSection(Number(e.target.value)))}>
               {Array.from({ length: 25 }, (_, i) => i + 1).map((s) => (<option key={s} value={s}>Sec {s}</option>))}
             </select>
           </label>
           <label>
-            Sec-Page:
+            {t.wb1SecPageLabel}
             <input
               aria-label="Sec-Page code" value={secPage}
               onChange={(e) => {
@@ -132,7 +132,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
                 secPage={citedSecPage} exactValue={exactValue} showCrosshair={showCrosshair}
                 crosshair={crosshair} onScrubCrosshair={handleScrubSample}
               />
-              <span>Drag curve to scrub reading or click to attach Point-and-Ask chip · [Perry&apos;s 9th Ed., p. {citedSecPage}]</span>
+              <span>{t.wb1DragHint(citedSecPage)}</span>
             </div>
           )}
           {showCrosshair && (

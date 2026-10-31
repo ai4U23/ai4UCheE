@@ -1,52 +1,10 @@
-// Showcase & Video Guide Modal (`🎬 Guide` — English-only):
+// Showcase & Video Guide Modal (`🎬 Guide` — Bilingual EN/VI):
 // Introduces ai4UCheE's features, plays the Remotion user-guide video (/ai4uchee-guide.mp4),
 // provides an interactive 5-step walkthrough, and links to the standalone /showcase.html page.
 import React, { useState } from 'react';
 import type { WorkbenchId } from '../../context/persona-theme-context';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { FramerModalShell } from '../ui/framer-motion-primitives';
-
-const GUIDE_CHAPTERS: ReadonlyArray<{
-  step: string;
-  timeSec: number;
-  title: string;
-  desc: string;
-  targetWb?: WorkbenchId;
-}> = [
-  {
-    step: '01 · 3-Zone Studio',
-    timeSec: 0,
-    title: '1 Bar · 1 Canvas · 1 AI Co-Pilot',
-    desc: 'Blend 6 canonical ChE textbooks (Perry 9e, Fogler 7e, BSL, SVNA, Seader, Crowl) with 55+ live SVG nomographs.',
-  },
-  {
-    step: '02 · 5 Subject Labs',
-    timeSec: 3,
-    title: 'Switch 🎓 Learn ↔ 🏭 Plant Across 5 Labs',
-    desc: 'Explore Thermodynamics (WB2), Hydraulics (WB3), Separations (WB4), Kinetics (WB6), and the 25-Sec Atlas (WB5).',
-    targetWb: 'wb2-thermo-dippr',
-  },
-  {
-    step: '03 · 24 Plant Problems',
-    timeSec: 6,
-    title: '6-Stage Fogler & LeBlanc Troubleshooting (L1–L4)',
-    desc: 'Diagnose plant telemetry, apply K-T IS/IS NOT, and Prove ✅ / Disprove ❌ hypotheses (Rule #12).',
-    targetWb: 'wb3-hydraulics',
-  },
-  {
-    step: '04 · White-Box Proofs',
-    timeSec: 9,
-    title: 'Scrub SVG Curves & 3-Stage KaTeX Proofs',
-    desc: 'Drag operating points with automatic guardrails for Fanning vs. Darcy (f_D = 4·f_F) and psig ↔ psia.',
-    targetWb: 'wb4-distillation',
-  },
-  {
-    step: '05 · Co-Pilot & QA/QC',
-    timeSec: 12,
-    title: '+ Ask Chips, What-If Mutations & EPC Calc Sheet',
-    desc: 'Attach equipment chips, mutate sliders in plain English, and compile a print-ready Rev 0 QA/QC sheet.',
-    targetWb: 'wb6-kinetics-reactors',
-  },
-];
 
 export interface ShowcaseVideoModalProps {
   isOpen: boolean;
@@ -57,6 +15,8 @@ export interface ShowcaseVideoModalProps {
 export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, onClose, onSelectWorkbench }) => {
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
+  const ui = getUiSubcomponentCopy();
+  const chapters = ui.guideChapters;
 
   if (!isOpen) return null;
 
@@ -64,12 +24,12 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
     setActiveIdx(idx);
     const v = videoRef.current;
     if (v) {
-      v.currentTime = GUIDE_CHAPTERS[idx].timeSec;
+      v.currentTime = chapters[idx].timeSec;
       try { const p = v.play?.(); if (p && typeof p.catch === 'function') p.catch(() => {}); } catch { /* jsdom */ }
     }
   };
 
-  const active = GUIDE_CHAPTERS[activeIdx];
+  const active = chapters[activeIdx] ?? chapters[0];
 
   return (
     <FramerModalShell
@@ -80,10 +40,8 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
     >
       <div className="wb-toolbar modal-sticky-header">
         <div>
-          <h2 style={{ margin: 0 }}>🎬 ai4UCheE — Feature Showcase &amp; Interactive Video Guide</h2>
-          <p className="wb-subtitle">
-            6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Real-Life Plant Problems · Remotion Walkthrough
-          </p>
+          <h2 style={{ margin: 0 }}>{ui.guideModalTitle}</h2>
+          <p className="wb-subtitle">{ui.guideModalSub}</p>
         </div>
         <div className="wb-actions-row">
           <a
@@ -103,10 +61,10 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
               textDecoration: 'none',
             }}
           >
-            🏠 Open Showcase Homepage ↗
+            {ui.guideOpenShowcaseBtn}
           </a>
           <button type="button" data-testid="close-showcase-modal-btn" onClick={onClose}>
-            ✕ Close
+            {ui.guideCloseBtn}
           </button>
         </div>
       </div>
@@ -129,7 +87,7 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-          {GUIDE_CHAPTERS.map((ch, idx) => (
+          {chapters.map((ch, idx) => (
             <div
               key={ch.step}
               data-testid={`guide-chapter-${idx + 1}`}
@@ -157,7 +115,7 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
                     }}
                     style={{ fontSize: '0.7rem', padding: '0.15rem 0.45rem' }}
                   >
-                    Open Lab →
+                    {ui.guideOpenLabBtn}
                   </button>
                 )}
               </div>

@@ -75,7 +75,11 @@ export const PersonaThemeProvider: React.FC<{
   }, [initialWorkbench]);
   const [personaMode, setPersonaMode] = useState<PersonaMode>(initialPersona);
   const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme);
-  const [locale, setLocaleState] = useState<LocaleCode>(() => resolveInitialLocale(initialLocale));
+  const [locale, setLocaleState] = useState<LocaleCode>(() => {
+    const resolved = resolveInitialLocale(initialLocale);
+    setActiveLocale(resolved, { persist: false });
+    return resolved;
+  });
   const [activeWorkbench, setActiveWorkbench] = useState<WorkbenchId>(resolvedInitialWb);
   const [selectedChips, setSelectedChips] = useState<SelectedChip[]>([]);
 

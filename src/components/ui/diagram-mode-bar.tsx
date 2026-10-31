@@ -2,6 +2,7 @@
 // Defaults to 'all' so every interactive chart renders on initial mount while letting
 // students and engineers filter to a focused diagram group with one click.
 import React from 'react';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { MotionPillButton } from './framer-motion-primitives';
 
 export interface DiagramModeOption<M extends string = string> {
@@ -38,7 +39,7 @@ export function DiagramModeBar<M extends string = string>({
       }}
     >
       <span className="mono" style={{ fontSize: '0.78rem', fontWeight: 700 }}>
-        🎛️ Diagram Mode:
+        {getUiSubcomponentCopy().diagramModePrefix}
       </span>
       <div className="wb-actions-row" role="tablist" aria-label="Interactive Diagram Mode">
         {options.map((opt) => {

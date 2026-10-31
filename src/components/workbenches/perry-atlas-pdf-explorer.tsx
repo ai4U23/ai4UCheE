@@ -8,6 +8,7 @@ import {
   type PerryIndexHit,
 } from '../../actions/search-perry-pdf';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { TEXTBOOK_CORPUS_CATALOG } from '../../lib/textbook-corpus-registry';
 
 export interface PerryAtlasPdfExplorerProps {
@@ -78,22 +79,24 @@ export const PerryAtlasPdfExplorer: React.FC<PerryAtlasPdfExplorerProps> = ({
     }
   };
 
+  const ui = getUiSubcomponentCopy();
+
   return (
     <div className="wb-panel" data-testid="perry-atlas-pdf-explorer">
       <div className="wb-toolbar">
         <div>
-          <strong>📖 6-Book Corpus &amp; Perry Back-of-Book Index (pp. 2244–2274)</strong>
+          <strong>{ui.atlasTitle}</strong>
           <p className="wb-subtitle">
-            Active Reference: <code>p. {activeSecPage}</code> (PDF Page {activePdfPage} of 2,274)
+            {ui.atlasActiveRef(activeSecPage, activePdfPage)}
           </p>
         </div>
         <div className="wb-actions-row">
           <button type="button" data-testid="perry-atlas-crop-btn" onClick={() => handleLoadCrop(activeSecPage)}>
-            Crop PDF Page {activeSecPage}
+            {ui.atlasCropBtn(activeSecPage)}
           </button>
           {cropDataUri && (
             <button type="button" onClick={() => setCropDataUri(null)}>
-              Hide PDF Crop
+              {ui.atlasHideCropBtn}
             </button>
           )}
         </div>
@@ -106,7 +109,7 @@ export const PerryAtlasPdfExplorer: React.FC<PerryAtlasPdfExplorerProps> = ({
           value={bookFilter}
           onChange={(e) => setBookFilter(e.target.value)}
         >
-          <option value="all">All 6 Textbooks</option>
+          <option value="all">{ui.atlasAllBooksOpt}</option>
           {TEXTBOOK_CORPUS_CATALOG.map((b) => (
             <option key={b.bookId} value={b.bookId}>
               {b.shortTitle} ({b.format})
@@ -117,13 +120,13 @@ export const PerryAtlasPdfExplorer: React.FC<PerryAtlasPdfExplorerProps> = ({
           type="text"
           aria-label="Search Perry Back-of-Book Index (pp. 2244-2274)"
           data-testid="perry-index-search-input"
-          placeholder="Search 6-Book Corpus & Index: e.g. Levenspiel, Thiele, LMTD, relief..."
+          placeholder={ui.atlasSearchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           style={{ flex: 1 }}
         />
         <button type="button" data-testid="perry-index-search-btn" onClick={handleSearch}>
-          Search Index
+          {ui.atlasSearchBtn}
         </button>
       </div>
 
@@ -158,7 +161,7 @@ export const PerryAtlasPdfExplorer: React.FC<PerryAtlasPdfExplorerProps> = ({
                   onClick={() => onSelectSecPage(secNum, ref)}
                   style={{ marginLeft: '0.35rem', padding: '0.1rem 0.4rem', fontSize: '0.78rem' }}
                 >
-                  Jump → p. {ref} (Sec {secNum})
+                  {ui.atlasJumpBtn(ref, secNum)}
                 </button>
               );
             })}

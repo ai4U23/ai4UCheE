@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { motion } from 'motion/react';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 
 export interface ScrubbableNumberInputProps {
   paramId: string;
@@ -86,7 +87,7 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
           aria-label={`Inspect ${label}`}
           onClick={selectable.toggleSelect}
         >
-          {selectable.isSelected ? '✓ Selected' : '+ Ask'}
+          {selectable.isSelected ? getUiSubcomponentCopy().scrubSelected : getUiSubcomponentCopy().scrubAsk}
         </button>
       </div>
       <div className="scrubbable-row">

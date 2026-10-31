@@ -1,61 +1,21 @@
 // Bilingual (`en` / `vi`) dictionary for Subject Workbenches WB1..WB6 headers, disclosure buttons,
-// scrubbable input labels, and Learn Mode callouts (< 200 LOC).
+// scrubbable input labels, verdicts, and Learn Mode callouts (< 200 LOC).
 import type { LocaleCode } from './locale-types';
 
 export interface WorkbenchCommonCopy {
   investigationBtn: (open: boolean) => string;
-  wb1Title: string;
-  wb1AllChartsBtn: (open: boolean, n: number) => string;
-  wb1CalloutTitle: string;
-  wb1CalloutPlain: string;
-  wb1CalloutTrap: string;
-  wb2Title: string;
-  wb2TempLabel: string;
-  wb2ProofsBtn: (open: boolean) => string;
-  wb2MoreDiagramsBtn: (open: boolean) => string;
-  wb2CalloutTitle: string;
-  wb2CalloutPlain: string;
-  wb2CalloutTrap: string;
-  wb3Title: string;
-  wb3FlowLabel: string;
-  wb3LengthLabel: string;
-  wb3PsucLabel: string;
-  wb3HeadLabel: string;
-  wb3NpshrLabel: string;
-  wb3ValveDpLabel: string;
-  wb3ProofsBtn: (open: boolean, n: number) => string;
-  wb3MoreDiagramsBtn: (open: boolean) => string;
-  wb3CalloutTitle: string;
-  wb3CalloutPlain: string;
-  wb3CalloutTrap: string;
-  wb4Title: string;
-  wb4AlphaLabel: string;
-  wb4XfLabel: string;
-  wb4XdLabel: string;
-  wb4XbLabel: string;
-  wb4QLabel: string;
-  wb4RmultLabel: string;
-  wb4DiamLabel: string;
-  wb4ProofsBtn: (open: boolean, n: number) => string;
-  wb4MoreDiagramsBtn: (open: boolean) => string;
-  wb4CalloutTitle: string;
-  wb4CalloutPlain: string;
-  wb4CalloutTrap: string;
-  wb6Title: string;
-  wb6ConvLabel: string;
-  wb6TempLabel: string;
-  wb6PinLabel: string;
-  wb6EpsLabel: string;
-  wb6AlphaLabel: string;
-  wb6ThieleLabel: string;
-  wb6SemenovLabel: string;
-  wb6ProofsBtn: (open: boolean, n: number) => string;
-  wb6MoreDiagramsBtn: (open: boolean) => string;
-  wb6CalloutTitle: string;
-  wb6CalloutPlain: string;
-  wb6CalloutTrap: string;
-  wb5BrowseBtn: (open: boolean) => string;
-  wb5ProofsIndexBtn: (open: boolean) => string;
+  wb1Title: string; wb1AllChartsBtn: (open: boolean, n: number) => string; wb1CalloutTitle: string; wb1CalloutPlain: string; wb1CalloutTrap: string;
+  wb2Title: string; wb2TempLabel: string; wb2ProofsBtn: (open: boolean) => string; wb2MoreDiagramsBtn: (open: boolean) => string; wb2CalloutTitle: string; wb2CalloutPlain: string; wb2CalloutTrap: string;
+  wb3Title: string; wb3FlowLabel: string; wb3LengthLabel: string; wb3PsucLabel: string; wb3HeadLabel: string; wb3NpshrLabel: string; wb3ValveDpLabel: string; wb3ProofsBtn: (open: boolean, n: number) => string; wb3MoreDiagramsBtn: (open: boolean) => string; wb3CalloutTitle: string; wb3CalloutPlain: string; wb3CalloutTrap: string;
+  wb4Title: string; wb4AlphaLabel: string; wb4XfLabel: string; wb4XdLabel: string; wb4XbLabel: string; wb4QLabel: string; wb4RmultLabel: string; wb4DiamLabel: string; wb4ProofsBtn: (open: boolean, n: number) => string; wb4MoreDiagramsBtn: (open: boolean) => string; wb4CalloutTitle: string; wb4CalloutPlain: string; wb4CalloutTrap: string;
+  wb6Title: string; wb6ConvLabel: string; wb6TempLabel: string; wb6PinLabel: string; wb6EpsLabel: string; wb6AlphaLabel: string; wb6ThieleLabel: string; wb6SemenovLabel: string; wb6ProofsBtn: (open: boolean, n: number) => string; wb6MoreDiagramsBtn: (open: boolean) => string; wb6CalloutTitle: string; wb6CalloutPlain: string; wb6CalloutTrap: string;
+  wb5BrowseBtn: (open: boolean) => string; wb5ProofsIndexBtn: (open: boolean) => string;
+  wb1SecLabel: string; wb1SecPageLabel: string; wb1DragHint: (sp: string) => string;
+  wb2FluidLabel: string; wb2TUnitLabel: string; wb2PDatumLabel: string;
+  wb3Verdict: (cav: boolean, a: string, r: string) => string; wb3NpsLabel: string; wb3SchLabel: string;
+  wb4Verdict: (flood: boolean, pct: string, n: number) => string; wb4TraySpacingLabel: string;
+  wb6RunawayTrapBtn: string; wb6PoreTrapBtn: string; wb6RescueBtn: string; wb6GuardrailPrefix: (warn: boolean) => string;
+  wb5Trap11Btn: string; wb5Trap19Btn: string; wb5Trap23Btn: string; wb5AlertPrefix: (alert: boolean) => string; wb5OpenDedicatedBtn: (code: string) => string;
 }
 
 const WB_COPY_EN: WorkbenchCommonCopy = {
@@ -73,38 +33,21 @@ const WB_COPY_EN: WorkbenchCommonCopy = {
   wb2CalloutPlain: "A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T).",
   wb2CalloutTrap: 'Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE).',
   wb3Title: '🔧 Pump P-101 Suction Hydraulics & Piping',
-  wb3FlowLabel: 'Normal Flow Q',
-  wb3LengthLabel: 'Pipe Length L',
-  wb3PsucLabel: 'Suction Pressure',
-  wb3HeadLabel: 'Suction Static Head z',
-  wb3NpshrLabel: 'Pump NPSHr',
-  wb3ValveDpLabel: 'Valve ΔP',
+  wb3FlowLabel: 'Normal Flow Q', wb3LengthLabel: 'Pipe Length L', wb3PsucLabel: 'Suction Pressure', wb3HeadLabel: 'Suction Static Head z', wb3NpshrLabel: 'Pump NPSHr', wb3ValveDpLabel: 'Valve ΔP',
   wb3ProofsBtn: (o, n) => `${o ? '▾' : '▸'} 📐 Show Math Proofs & 3-Case Table (${n})`,
   wb3MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} 📊 More Diagrams (Valves, Boiling, Safety)`,
   wb3CalloutTitle: 'Pipe Friction, Pump Cavitation, BSL Rheology, Choked Valves, HX Cross & Process Safety',
   wb3CalloutPlain: 'Drag Flow Q, Suction Pressure, BSL Power-Law n, Control Valve ΔP, HX T-Q Cross (Bowman F_T), Nukiyama boiling, or Flammability LOC / Plume dispersion.',
   wb3CalloutTrap: 'If NPSHa drops below Pump NPSHr, liquid flashes into vapor bubbles that implode on the impeller (cavitation).',
   wb4Title: '🗼 Column T-201 McCabe-Thiele & Fair Flooding',
-  wb4AlphaLabel: 'Relative Volatility α',
-  wb4XfLabel: 'Feed Mole Fraction z_F',
-  wb4XdLabel: 'Distillate Purity x_D',
-  wb4XbLabel: 'Bottoms Impurity x_B',
-  wb4QLabel: 'Feed Thermal Quality q',
-  wb4RmultLabel: 'Reflux Ratio R / R_min',
-  wb4DiamLabel: 'Column Diameter D_c',
+  wb4AlphaLabel: 'Relative Volatility α', wb4XfLabel: 'Feed Mole Fraction z_F', wb4XdLabel: 'Distillate Purity x_D', wb4XbLabel: 'Bottoms Impurity x_B', wb4QLabel: 'Feed Thermal Quality q', wb4RmultLabel: 'Reflux Ratio R / R_min', wb4DiamLabel: 'Column Diameter D_c',
   wb4ProofsBtn: (o, n) => `${o ? '▾' : '▸'} 📐 Show Math Proofs (${n})`,
   wb4MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} 📊 More Diagrams (Kremser, Ternary LLE, Psychrometry, Membrane)`,
   wb4CalloutTitle: 'McCabe-Thiele Stage Stepping, Column Flooding, Kremser, LLE/Adsorption, Psychrometry & Membranes',
   wb4CalloutPlain: 'Drag McCabe-Thiele handles, column diameter D_c, Kremser A = L/(mV), Ternary LLE/adsorption, or Psychrometric T_db/RH and Membrane stage cut θ.',
   wb4CalloutTrap: "Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, and operating an absorber at A < 1 pinches solute recovery.",
   wb6Title: '⚗️ Reactor R-401 Levenspiel Sizing & Runaway Safety',
-  wb6ConvLabel: 'Target Conversion X',
-  wb6TempLabel: 'Reactor Temperature T',
-  wb6PinLabel: 'Inlet Gauge Pressure P_in',
-  wb6EpsLabel: 'Gas Expansion Factor ε_A',
-  wb6AlphaLabel: 'Ergun PBR Pressure Parameter α',
-  wb6ThieleLabel: 'Thiele Modulus φ (Spherical Pellet)',
-  wb6SemenovLabel: 'Semenov Heat-Release Number ψ',
+  wb6ConvLabel: 'Target Conversion X', wb6TempLabel: 'Reactor Temperature T', wb6PinLabel: 'Inlet Gauge Pressure P_in', wb6EpsLabel: 'Gas Expansion Factor ε_A', wb6AlphaLabel: 'Ergun PBR Pressure Parameter α', wb6ThieleLabel: 'Thiele Modulus φ (Spherical Pellet)', wb6SemenovLabel: 'Semenov Heat-Release Number ψ',
   wb6ProofsBtn: (o, n) => `${o ? '▾' : '▸'} 📐 Show Math Proofs (${n})`,
   wb6MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} 📊 More Diagrams (Semenov, Selectivity/RTD, LHHW, Electro)`,
   wb6CalloutTitle: 'Levenspiel CSTR/PFR, Thiele η, Semenov Runaway, Selectivity/RTD, LHHW/Bioreactor & Electro-Catalysis',
@@ -112,6 +55,18 @@ const WB_COPY_EN: WorkbenchCommonCopy = {
   wb6CalloutTrap: 'Three classic traps: (1) forgetting psig → psia (+14.696) before computing gas concentration C_A0 = P_abs/(RT), (2) mixing open-pipe Fanning f_F / Darcy f_D = 4·f_F with packed-bed Ergun friction, and (3) operating above Semenov ψ_crit = 1/e ≈ 0.368.',
   wb5BrowseBtn: (o) => `${o ? '▾' : '▸'} 📚 Browse All 25 Perry Sections`,
   wb5ProofsIndexBtn: (o) => `${o ? '▾' : '▸'} 📐 Show Math Proofs & 6-Book Index`,
+  wb1SecLabel: 'Section (1–25):', wb1SecPageLabel: 'Sec-Page:',
+  wb1DragHint: (sp) => `Drag curve to scrub reading or click to attach Point-and-Ask chip · [Perry's 9th Ed., p. ${sp}]`,
+  wb2FluidLabel: 'Fluid:', wb2TUnitLabel: 'T Unit:', wb2PDatumLabel: 'P Datum:',
+  wb3Verdict: (cav, a, r) => (cav ? `⚠️ Cavitating: NPSHa (${a} m) < NPSHr (${r} m)` : `✅ Safe: NPSHa (${a} m) ≥ NPSHr (${r} m)`),
+  wb3NpsLabel: 'NPS:', wb3SchLabel: 'Schedule:',
+  wb4Verdict: (f, p, n) => (f ? `⚠️ Flooding: ${p}% of Fair limit` : `✅ Safe: ${p}% of Fair flood · N = ${n} stages`),
+  wb4TraySpacingLabel: 'Tray Spacing h_t:',
+  wb6RunawayTrapBtn: '🔥 Runaway Trap (ψ=0.52)', wb6PoreTrapBtn: '🧱 Pore Trap (φ=6.5)', wb6RescueBtn: '✅ Rescue Safe Design',
+  wb6GuardrailPrefix: (w) => (w ? '⚠️ Reactor Guardrail: ' : '✅ Reactor Verdict: '),
+  wb5Trap11Btn: '⚠️ Sec 11 Cross Trap', wb5Trap19Btn: '🔥 Sec 19 Runaway Trap', wb5Trap23Btn: '🚨 Sec 23 PSV Trap',
+  wb5AlertPrefix: (a) => (a ? '⚠️ Engineering Alert: ' : '✅ Operating Verdict: '),
+  wb5OpenDedicatedBtn: (c) => `Open Dedicated Workbench (${c}) →`,
 };
 
 const WB_COPY_VI: WorkbenchCommonCopy = {
@@ -129,38 +84,21 @@ const WB_COPY_VI: WorkbenchCommonCopy = {
   wb2CalloutPlain: 'Chất lỏng sôi khi áp suất hơi bão hòa P_vp bằng áp suất tuyệt đối xung quanh. Kéo đường cong DIPPR, thấu kính VLE, vòm Peng-Robinson, chu trình Rankine T-S hoặc đường cân bằng Van \'t Hoff X_eq(T).',
   wb2CalloutTrap: 'Đồng hồ nhà máy đo psig (áp suất dư). Luôn cộng 14.696 psi để đổi psig → psia trước khi thay vào phương trình nhiệt động, và tuyệt đối không dùng phương trình Wilson cho cân bằng lỏng-lỏng (LLE).',
   wb3Title: '🔧 Thủy lực Đường ống Hút Bơm P-101 & Van Điều khiển',
-  wb3FlowLabel: 'Lưu lượng định mức Q',
-  wb3LengthLabel: 'Chiều dài ống L',
-  wb3PsucLabel: 'Áp suất hút (Suction P)',
-  wb3HeadLabel: 'Cột áp tĩnh hút z',
-  wb3NpshrLabel: 'NPSHr của Bơm',
-  wb3ValveDpLabel: 'Độ sụt áp van ΔP',
+  wb3FlowLabel: 'Lưu lượng định mức Q', wb3LengthLabel: 'Chiều dài ống L', wb3PsucLabel: 'Áp suất hút (Suction P)', wb3HeadLabel: 'Cột áp tĩnh hút z', wb3NpshrLabel: 'NPSHr của Bơm', wb3ValveDpLabel: 'Độ sụt áp van ΔP',
   wb3ProofsBtn: (o, n) => `${o ? '▾' : '▸'} 📐 Xem Chứng minh Toán & Bảng 3 Chế độ (${n})`,
   wb3MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} 📊 Thêm Đồ thị (Van nghẽn dòng, Sôi Nukiyama, An toàn cháy nổ)`,
   wb3CalloutTitle: 'Ma sát Đường ống, Xâm thực Bơm, Lưu biến BSL, Van Nghẽn dòng, Giao cắt Nhiệt HX & An toàn Quá trình',
   wb3CalloutPlain: 'Kéo chỉnh Lưu lượng Q, Áp suất hút, chỉ số luật lũy thừa BSL n, ΔP van điều khiển, giao cắt nhiệt độ thiết bị trao đổi nhiệt (Bowman F_T), đường cong sôi Nukiyama hoặc tam giác cháy nổ LOC.',
   wb3CalloutTrap: 'Nếu NPSHa tụt xuống dưới NPSHr của bơm, chất lỏng hóa hơi cục bộ tạo bọt khí nổ sập trên cánh bơm (hiện tượng xâm thực / cavitation).',
   wb4Title: '🗼 Tháp Chưng cất T-201 McCabe-Thiele & Ngập lụt Fair',
-  wb4AlphaLabel: 'Độ bay hơi tương đối α',
-  wb4XfLabel: 'Phần mol nhập liệu z_F',
-  wb4XdLabel: 'Độ tinh khiết đỉnh x_D',
-  wb4XbLabel: 'Tạp chất đáy x_B',
-  wb4QLabel: 'Trạng thái nhiệt nhập liệu q',
-  wb4RmultLabel: 'Tỷ số hồi lưu R / R_min',
-  wb4DiamLabel: 'Đường kính tháp D_c',
+  wb4AlphaLabel: 'Độ bay hơi tương đối α', wb4XfLabel: 'Phần mol nhập liệu z_F', wb4XdLabel: 'Độ tinh khiết đỉnh x_D', wb4XbLabel: 'Tạp chất đáy x_B', wb4QLabel: 'Trạng thái nhiệt nhập liệu q', wb4RmultLabel: 'Tỷ số hồi lưu R / R_min', wb4DiamLabel: 'Đường kính tháp D_c',
   wb4ProofsBtn: (o, n) => `${o ? '▾' : '▸'} 📐 Xem Chứng minh Toán (${n})`,
   wb4MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} 📊 Thêm Đồ thị (Hấp thụ Kremser, Trích ly LLE, Không khí ẩm, Màng lọc)`,
   wb4CalloutTitle: 'Bậc thang McCabe-Thiele, Ngập lụt Tháp, Hấp thụ Kremser, Trích ly LLE/Hấp phụ, Không khí ẩm & Màng',
   wb4CalloutPlain: 'Kéo các điểm nút McCabe-Thiele, đường kính tháp D_c, hệ số hấp thụ Kremser A = L/(mV), giản đồ tam giác LLE/hấp phụ, hoặc giản đồ không khí ẩm T_db/RH và độ cắt tầng màng θ.',
   wb4CalloutTrap: 'Vận hành vượt ~80–85% vận tốc ngập lụt cuốn theo của Fair sẽ thổi ngược chất lỏng lên đĩa trên, và vận hành tháp hấp thụ ở A < 1 sẽ gây thắt cổ chai độ thu hồi.',
   wb6Title: '⚗️ Thiết kế Lò phản ứng R-401 Levenspiel & An toàn Thoát nhiệt',
-  wb6ConvLabel: 'Độ chuyển hóa mục tiêu X',
-  wb6TempLabel: 'Nhiệt độ phản ứng T',
-  wb6PinLabel: 'Áp suất dư đầu vào P_in',
-  wb6EpsLabel: 'Hệ số giãn nở thể tích khí ε_A',
-  wb6AlphaLabel: 'Thông số sụt áp Ergun PBR α',
-  wb6ThieleLabel: 'Mô-đun Thiele φ (Hạt xúc tác cầu)',
-  wb6SemenovLabel: 'Số tỏa nhiệt Semenov ψ',
+  wb6ConvLabel: 'Độ chuyển hóa mục tiêu X', wb6TempLabel: 'Nhiệt độ phản ứng T', wb6PinLabel: 'Áp suất dư đầu vào P_in', wb6EpsLabel: 'Hệ số giãn nở thể tích khí ε_A', wb6AlphaLabel: 'Thông số sụt áp Ergun PBR α', wb6ThieleLabel: 'Mô-đun Thiele φ (Hạt xúc tác cầu)', wb6SemenovLabel: 'Số tỏa nhiệt Semenov ψ',
   wb6ProofsBtn: (o, n) => `${o ? '▾' : '▸'} 📐 Xem Chứng minh Toán (${n})`,
   wb6MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} 📊 Thêm Đồ thị (Semenov, Độ chọn lọc/RTD, LHHW, Điện hóa)`,
   wb6CalloutTitle: 'Đồ thị Levenspiel CSTR/PFR, Hệ số hữu hiệu Thiele η, Thoát nhiệt Semenov, RTD, LHHW/Bioreactor & Điện xúc tác',
@@ -168,6 +106,18 @@ const WB_COPY_VI: WorkbenchCommonCopy = {
   wb6CalloutTrap: 'Ba bẫy kinh điển: (1) quên đổi psig → psia (+14.696) trước khi tính nồng độ pha khí C_A0 = P_abs/(RT), (2) nhầm lẫn ma sát ống trống Fanning f_F / Darcy f_D = 4·f_F với phương trình Ergun lớp xúc tác, và (3) vận hành vượt ngưỡng Semenov ψ_crit = 1/e ≈ 0.368.',
   wb5BrowseBtn: (o) => `${o ? '▾' : '▸'} 📚 Duyệt Toàn bộ 25 Chương Perry`,
   wb5ProofsIndexBtn: (o) => `${o ? '▾' : '▸'} 📐 Xem Chứng minh Toán & Chỉ mục 6 Giáo trình`,
+  wb1SecLabel: 'Chương (1–25):', wb1SecPageLabel: 'Mã Trang:',
+  wb1DragHint: (sp) => `Kéo đường cong để đọc giá trị hoặc bấm để gắn thẻ + Hỏi · [Perry's 9th Ed., p. ${sp}]`,
+  wb2FluidLabel: 'Lưu chất:', wb2TUnitLabel: 'Đơn vị T:', wb2PDatumLabel: 'Hệ quy chiếu P:',
+  wb3Verdict: (cav, a, r) => (cav ? `⚠️ Xâm thực: NPSHa (${a} m) < NPSHr (${r} m)` : `✅ An toàn: NPSHa (${a} m) ≥ NPSHr (${r} m)`),
+  wb3NpsLabel: 'Cỡ ống NPS:', wb3SchLabel: 'Độ dày Sch:',
+  wb4Verdict: (f, p, n) => (f ? `⚠️ Ngập lụt: ${p}% giới hạn Fair` : `✅ An toàn: ${p}% giới hạn Fair · N = ${n} bậc`),
+  wb4TraySpacingLabel: 'Khoảng cách đĩa h_t:',
+  wb6RunawayTrapBtn: '🔥 Bẫy Thoát nhiệt (ψ=0.52)', wb6PoreTrapBtn: '🧱 Bẫy Lỗ xốp (φ=6.5)', wb6RescueBtn: '✅ Khôi phục Thiết kế An toàn',
+  wb6GuardrailPrefix: (w) => (w ? '⚠️ Cảnh báo Lò phản ứng: ' : '✅ Kết luận Lò phản ứng: '),
+  wb5Trap11Btn: '⚠️ Bẫy Giao cắt Chg 11', wb5Trap19Btn: '🔥 Bẫy Thoát nhiệt Chg 19', wb5Trap23Btn: '🚨 Bẫy Van PSV Chg 23',
+  wb5AlertPrefix: (a) => (a ? '⚠️ Cảnh báo Kỹ thuật: ' : '✅ Kết luận Vận hành: '),
+  wb5OpenDedicatedBtn: (c) => `Mở Phòng Lab Chuyên sâu (${c}) →`,
 };
 
 export function getWorkbenchCopy(locale: LocaleCode = 'en'): WorkbenchCommonCopy {

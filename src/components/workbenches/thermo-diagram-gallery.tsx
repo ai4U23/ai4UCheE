@@ -2,6 +2,7 @@
 // Keeps ThermoDipprWorkbench modular while hosting the DiagramModeBar ('all' default)
 // and rendering BinaryVleTxySvg, PengRobinsonEosSvg, and RankineRxnEquilibriumSvg.
 import React, { useState } from 'react';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { BinaryVleTxySvg } from '../sketches/binary-vle-txy-svg';
 import { PengRobinsonEosSvg } from '../sketches/peng-robinson-eos-svg';
 import { RankineRxnEquilibriumSvg } from '../sketches/rankine-rxn-equilibrium-svg';
@@ -41,13 +42,19 @@ export const ThermoDiagramGallery: React.FC<ThermoDiagramGalleryProps> = ({
 
   const showPhase = diagramMode === 'all' || diagramMode === 'mode-phase';
   const showCyclesEq = diagramMode === 'all' || diagramMode === 'mode-cycles-eq';
+  const m = getUiSubcomponentCopy().wb2Modes;
+  const options: ReadonlyArray<DiagramModeOption<ThermoDiagramMode>> = [
+    { ...WB2_MODE_OPTIONS[0], label: m[0] },
+    { ...WB2_MODE_OPTIONS[1], label: m[1] },
+    { ...WB2_MODE_OPTIONS[2], label: m[2] },
+  ];
 
   return (
     <div>
       <DiagramModeBar
         testId="wb2-diagram-mode-bar"
         activeMode={diagramMode}
-        options={WB2_MODE_OPTIONS}
+        options={options}
         onSelectMode={setDiagramMode}
       />
 

@@ -3,9 +3,10 @@
 // plus secondary filters for Equipment Tag, Symptom Archetype, Subject Workbench, and search.
 import React, { useState } from 'react';
 import type { WorkbenchId } from '../../actions/view-screen';
+import { getTroubleshootingCopy } from '../../lib/i18n/vi-troubleshooting-copy';
 import { ALL_24_REAL_LIFE_PROBLEMS, filterProblemLibrary } from '../../lib/problem-library-registry';
 import {
-  EQUIPMENT_CATEGORY_META, PROGRESSION_TIER_META, SYMPTOM_CATEGORY_META,
+  EQUIPMENT_CATEGORY_META, SYMPTOM_CATEGORY_META,
   type EngineeringProgressionTier, type EquipmentCategoryId, type ProblemCaseEntry, type SymptomCategoryId,
 } from '../../lib/problem-library-types';
 import { MotionPillButton } from '../ui/framer-motion-primitives';
@@ -30,6 +31,7 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
   const [symptomFilter, setSymptomFilter] = useState<SymptomCategoryId | 'all'>('all');
   const [wbFilter, setWbFilter] = useState<WorkbenchId | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const ts = getTroubleshootingCopy();
 
   const filtered = filterProblemLibrary({
     tier: tierFilter, equipment: equipFilter, symptom: symptomFilter, workbench: wbFilter, searchQuery,
@@ -45,24 +47,22 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
     >
       <div className="wb-toolbar" style={{ marginBottom: '0.5rem' }}>
         <div>
-          <strong>📚 24 Real-Life Plant Problem Library (7 Reference Books · Engineering Progression Tiers L1–L4)</strong>
-          <div className="wb-subtitle">
-            Select any real plant problem by <strong>Difficulty Tier (L1–L4)</strong>, <strong>Equipment</strong>, or <strong>Symptom</strong> to launch its 6-Stage Fogler &amp; LeBlanc Investigation
-          </div>
+          <strong>{ts.libHeader}</strong>
+          <div className="wb-subtitle">{ts.libSubtitle}</div>
         </div>
         {onClose && (
-          <button type="button" data-testid="close-problem-library-btn" onClick={onClose}>✕ Close Library</button>
+          <button type="button" data-testid="close-problem-library-btn" onClick={onClose}>{ts.libCloseBtn}</button>
         )}
       </div>
 
       {/* Primary Filter Bar: Engineering Progression Difficulty Tiers (L1..L4) */}
       <div className="wb-actions-row" data-testid="problem-tier-filter-bar" style={{ flexWrap: 'wrap', marginBottom: '0.45rem' }}>
         <MotionPillButton layoutId="prob-tier-pill" isActive={tierFilter === 'all'} testId="filter-tier-all" onClick={() => setTierFilter('all')}>
-          All Tiers ({ALL_24_REAL_LIFE_PROBLEMS.length})
+          {ts.libAllTiers(ALL_24_REAL_LIFE_PROBLEMS.length)}
         </MotionPillButton>
         {TIERS.map((t) => (
           <MotionPillButton key={t} layoutId="prob-tier-pill" isActive={tierFilter === t} testId={`filter-tier-${t}`} onClick={() => setTierFilter(t)}>
-            {PROGRESSION_TIER_META[t].label} ({tierCount(t)})
+            {ts.libTierLabel(t)} ({tierCount(t)})
           </MotionPillButton>
         ))}
       </div>
@@ -70,29 +70,29 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
       {/* Secondary Facets: Equipment, Symptom, Subject Workbench, & Search */}
       <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.55rem', fontSize: '0.76rem' }}>
         <label className="mono">
-          🏭 Equipment:
+          {ts.libEquipLabel}
           <select aria-label="Filter by Equipment Category" data-testid="filter-equipment-select" value={equipFilter} onChange={(e) => setEquipFilter(e.target.value as EquipmentCategoryId | 'all')}>
-            <option value="all">All 8 Equipment Families</option>
+            <option value="all">{ts.libAllEquipOpt}</option>
             {(Object.keys(EQUIPMENT_CATEGORY_META) as EquipmentCategoryId[]).map((k) => (
-              <option key={k} value={k}>{EQUIPMENT_CATEGORY_META[k].icon} {EQUIPMENT_CATEGORY_META[k].label}</option>
+              <option key={k} value={k}>{ts.libEquipOpt(k)}</option>
             ))}
           </select>
         </label>
 
         <label className="mono">
-          🩺 Symptom:
+          {ts.libSymptomLabel}
           <select aria-label="Filter by Symptom Archetype" data-testid="filter-symptom-select" value={symptomFilter} onChange={(e) => setSymptomFilter(e.target.value as SymptomCategoryId | 'all')}>
-            <option value="all">All 5 Failure Symptoms</option>
+            <option value="all">{ts.libAllSymptomOpt}</option>
             {(Object.keys(SYMPTOM_CATEGORY_META) as SymptomCategoryId[]).map((k) => (
-              <option key={k} value={k}>{SYMPTOM_CATEGORY_META[k].label}</option>
+              <option key={k} value={k}>{ts.libSymptomOpt(k)}</option>
             ))}
           </select>
         </label>
 
         <label className="mono">
-          📘 Subject:
+          {ts.libSubjectLabel}
           <select aria-label="Filter by Subject Workbench" data-testid="filter-subject-select" value={wbFilter} onChange={(e) => setWbFilter(e.target.value as WorkbenchId | 'all')}>
-            <option value="all">All 5 ChE Subjects + Charts</option>
+            <option value="all">{ts.libAllSubjectsOpt}</option>
             <option value="wb2-thermo-dippr">Subject 1 · Thermodynamics (WB2)</option>
             <option value="wb3-hydraulics">Subject 2 · Fluid &amp; Transport (WB3)</option>
             <option value="wb4-distillation">Subject 3 · Separations (WB4)</option>
@@ -104,13 +104,13 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
 
         <input
           type="search" aria-label="Search 24 real-life problems" data-testid="problem-library-search-input"
-          placeholder="Search equipment, book, or fault..." value={searchQuery}
+          placeholder={ts.libSearchPlaceholder} value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           style={{ padding: '0.22rem 0.5rem', fontSize: '0.76rem', minWidth: '185px' }}
         />
 
         <span className="mono" data-testid="problem-library-count-badge">
-          Showing <strong>{filtered.length}</strong> / {ALL_24_REAL_LIFE_PROBLEMS.length} Problems
+          {ts.libCountBadge(filtered.length, ALL_24_REAL_LIFE_PROBLEMS.length)}
         </span>
       </div>
 
@@ -142,7 +142,7 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
               <div className="wb-actions-row" style={{ justifyContent: 'space-between' }}>
                 <code style={{ fontSize: '0.68rem' }}>{p.sourceBookCitation.slice(0, 42)}…</code>
                 <button type="button" data-testid={`launch-${p.problemId}`} onClick={() => onSelectProblem(p)}>
-                  🚀 Solve Problem #{p.number}
+                  {ts.libSolveBtn(p.number)}
                 </button>
               </div>
             </div>

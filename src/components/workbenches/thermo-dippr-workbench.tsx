@@ -94,7 +94,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
         </div>
         <div className="wb-actions-row">
           <label>
-            Fluid:
+            {t.wb2FluidLabel}
             <select aria-label="DIPPR fluid" value={compound} onChange={(e) => setCompound(e.target.value)}>
               {Object.values(DIPPR_COMPOUNDS).map((f) => (
                 <option key={f.key} value={f.key}>{f.label}</option>
@@ -102,13 +102,13 @@ export const ThermoDipprWorkbench: React.FC = () => {
             </select>
           </label>
           <label>
-            T Unit:
+            {t.wb2TUnitLabel}
             <select aria-label="Temperature unit" value={tempUnit} onChange={(e) => setTempUnit(e.target.value as typeof tempUnit)}>
               <option value="K">K</option><option value="degC">°C</option><option value="degF">°F</option><option value="degR">°R</option>
             </select>
           </label>
           <label>
-            P Datum:
+            {t.wb2PDatumLabel}
             <select aria-label="Pressure unit" value={pressureUnit} onChange={(e) => setPressureUnit(e.target.value as typeof pressureUnit)}>
               <option value="psig">psig (gauge +14.696 psia)</option><option value="psia">psia (absolute)</option><option value="bar">bar</option><option value="kPa">kPa</option>
             </select>

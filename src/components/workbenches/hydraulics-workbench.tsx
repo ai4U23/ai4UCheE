@@ -76,16 +76,16 @@ export const HydraulicsWorkbench: React.FC = () => {
         </div>
         <div className="wb-actions-row">
           <span className={`wb-verdict ${isCavitating ? 'fail' : 'pass'}`} style={{ margin: 0, padding: '0.2rem 0.6rem', fontSize: '0.76rem' }}>
-            {isCavitating ? `⚠️ Cavitating: NPSHa (${npshAvailableM.toFixed(1)} m) < NPSHr (${npshrM.toFixed(1)} m)` : `✅ Safe: NPSHa (${npshAvailableM.toFixed(1)} m) ≥ NPSHr (${npshrM.toFixed(1)} m)`}
+            {t.wb3Verdict(isCavitating, npshAvailableM.toFixed(1), npshrM.toFixed(1))}
           </span>
           <label>
-            NPS:
+            {t.wb3NpsLabel}
             <select aria-label="Nominal pipe size" value={npsInch} onChange={(e) => setNpsInch(Number(e.target.value))}>
               <option value={2}>2&quot;</option><option value={3}>3&quot;</option><option value={4}>4&quot;</option><option value={6}>6&quot;</option>
             </select>
           </label>
           <label>
-            Schedule:
+            {t.wb3SchLabel}
             <select aria-label="Pipe schedule" value={schedule} onChange={(e) => setSchedule(e.target.value as '40' | '80')}>
               <option value="40">Sch 40</option><option value="80">Sch 80</option>
             </select>

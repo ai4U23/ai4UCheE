@@ -3,6 +3,7 @@
 // and rendering McCabe-Thiele + Fair Column Flooding, Kremser Absorption + Ternary LLE/Adsorption,
 // and Psychrometric Humidification + Membrane Gas Permeation.
 import React, { useState } from 'react';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { ColumnFloodingSvgSketch } from '../sketches/column-flooding-svg-sketch';
 import { KremserAbsorptionSvg } from '../sketches/kremser-absorption-svg';
 import { McCabeThieleSvgCanvas } from '../sketches/mccabe-thiele-svg-canvas';
@@ -74,6 +75,8 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
   const showKremserLle = diagramMode === 'all' || diagramMode === 'mode-kremser-lle';
   const showPsychMembrane = diagramMode === 'all' || diagramMode === 'mode-psychrometry-membrane';
   const expandCompanion = showMoreDiagrams || diagramMode !== 'all';
+  const m = getUiSubcomponentCopy().wb4Modes;
+  const options = WB4_MODE_OPTIONS.map((opt, idx) => ({ ...opt, label: m[idx] ?? opt.label }));
 
   return (
     <div>
@@ -81,7 +84,7 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
         <DiagramModeBar
           testId="wb4-diagram-mode-bar"
           activeMode={diagramMode}
-          options={WB4_MODE_OPTIONS}
+          options={options}
           onSelectMode={setDiagramMode}
         />
       </div>

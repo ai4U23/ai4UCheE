@@ -2,6 +2,7 @@
 import React from 'react';
 import type { PersonaMode } from '../../context/persona-theme-context';
 import { detectNumericErrorSignature } from '../../lib/che-error-signature-detector';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 
 export interface VisualVerifierTutorCardProps {
   personaMode: PersonaMode;
@@ -41,24 +42,23 @@ export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = (
   const isEmptyReading = userReading.trim() === '';
   const isInvalidPage = Boolean(rawSecPage && rawSecPage.trim() !== secPage);
   const signatureMatch = isEmptyReading ? null : detectNumericErrorSignature(numReading, exactValue);
+  const ui = getUiSubcomponentCopy();
   return (
     <aside className="wb-tutor-card">
       <h3>
-        {personaMode === 'learn'
-          ? '🎓 DeepTutor Chart-Reading Challenge'
-          : '🏭 Plant Mode — Calibrated Operating Point'}
+        {personaMode === 'learn' ? ui.tutorHeaderLearn : ui.tutorHeaderPlant}
       </h3>
       <p>
-        Target anchor: <code>[Perry&apos;s 9th Ed., p. {secPage}]</code> · Exact value ={' '}
-        <strong>{showCrosshair ? exactValue : '🔒 hidden until verified'}</strong>
+        {ui.tutorTargetAnchor} <code>[Perry&apos;s 9th Ed., p. {secPage}]</code> · {ui.tutorExactValueLabel}{' '}
+        <strong>{showCrosshair ? exactValue : ui.tutorHiddenLabel}</strong>
       </p>
       {isInvalidPage && (
         <p className="wb-coaching" data-testid="invalid-secpage-warning" style={{ marginTop: 0, marginBottom: '0.45rem' }}>
-          ⚠️ Unrecognized section-page code <code>{rawSecPage}</code> — anchored to calibrated Perry page <code>{secPage}</code>.
+          {ui.tutorInvalidPagePrefix} <code>{rawSecPage}</code> {ui.tutorInvalidPageSuffix} <code>{secPage}</code>.
         </p>
       )}
       <label>
-        Your visually read value:
+        {ui.tutorReadValueLabel}
         <input
           aria-label="Chart reading value"
           type="number"
@@ -69,32 +69,29 @@ export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = (
       </label>
       <div className="wb-actions-row">
         <button type="button" onClick={onVerify}>
-          Verify &amp; Reveal Crosshair
+          {ui.tutorVerifyBtn}
         </button>
         <button type="button" data-testid="load-pdf-crop-btn" onClick={onLoadCrop}>
-          Load High-DPI Crop
+          {ui.tutorLoadCropBtn}
         </button>
         <button type="button" onClick={onResetCrop}>
-          Reset Crop
+          {ui.tutorResetCropBtn}
         </button>
       </div>
       {revealed && (
         <div className={`wb-verdict ${pass ? 'pass' : 'fail'}`} data-testid="chart-verdict">
           {isEmptyReading ? (
             <span>
-              <strong>REVIEW</strong> — Enter a numeric chart reading above to verify against exact = {exactValue}
+              <strong>REVIEW</strong> — {ui.tutorEmptyReviewMsg(exactValue)}
             </span>
           ) : (
             <span>
-              <strong>{pass ? 'PASS' : 'REVIEW'}</strong> — Error: {errPct.toFixed(2)}% (exact = {exactValue})
+              <strong>{pass ? 'PASS' : 'REVIEW'}</strong> — {ui.tutorVerdictMsg(pass, errPct.toFixed(2), exactValue)}
             </span>
           )}
           {fanning4xDetected && (
             <p className="wb-coaching" data-testid="fanning-4x-coaching">
-              ⚠️ <strong>Fanning vs. Darcy 4× trap detected:</strong> Perry&apos;s Fig. 6-9 (p. 6-10) plots{' '}
-              <em>Fanning</em> friction factor f_F. Your reading ({numReading}) is ~4× f_F — i.e. the Moody{' '}
-              <em>Darcy</em> factor f_D = 4·f_F. Divide by 4 when reading Fig. 6-9, or use f_D = 4·f_F in
-              Darcy-Weisbach.
+              ⚠️ <strong>Fanning vs. Darcy 4×:</strong> {ui.tutorFanningCoaching(numReading)}
             </p>
           )}
           {!pass && signatureMatch && (

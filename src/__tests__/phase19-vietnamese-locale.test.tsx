@@ -60,30 +60,44 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
     // WB1
     expect(screen.getByTestId('wb1-visual-verifier').textContent).toContain('Giản đồ Hiệu chuẩn & Kiểm tra Đọc Đồ thị');
     expect(screen.getByTestId('wb1-visual-verifier').textContent).toContain('Hình 6-9 của Perry vẽ hệ số ma sát Fanning f_F');
+    expect(screen.getByTestId('wb1-visual-verifier').textContent).toContain('Thử thách Đọc Giản đồ DeepTutor');
+    expect(screen.getByTestId('wb1-visual-verifier').textContent).toContain('Kiểm tra & Hiện Tâm chữ thập');
 
     // WB2
     fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
     expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Nhiệt động học, Cân bằng Pha & Động cơ DIPPR');
     expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Nhiệt độ (Temperature)');
+    expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Cố vấn Chọn Mô hình Nhiệt động Carlson');
+    expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('PHƯƠNG TRÌNH KÝ HIỆU');
+    expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Chế độ Đồ thị:');
 
     // WB3
     fireEvent.click(screen.getByTestId('tab-wb3-hydraulics'));
     expect(screen.getByTestId('wb3-hydraulics').textContent).toContain('Thủy lực Đường ống Hút Bơm P-101 & Van Điều khiển');
     expect(screen.getByTestId('wb3-hydraulics').textContent).toContain('Lưu lượng định mức Q');
+    expect(screen.getByTestId('wb3-hydraulics').textContent).toContain('An toàn: NPSHa');
 
     // WB4
     fireEvent.click(screen.getByTestId('tab-wb4-distillation'));
     expect(screen.getByTestId('wb4-distillation').textContent).toContain('Tháp Chưng cất T-201 McCabe-Thiele & Ngập lụt Fair');
     expect(screen.getByTestId('wb4-distillation').textContent).toContain('Độ bay hơi tương đối α');
+    expect(screen.getByTestId('wb4-distillation').textContent).toContain('Khoảng cách đĩa h_t:');
 
     // WB6
     fireEvent.click(screen.getByTestId('tab-wb6-kinetics-reactors'));
     expect(screen.getByTestId('wb6-kinetics-reactors').textContent).toContain('Thiết kế Lò phản ứng R-401 Levenspiel & An toàn Thoát nhiệt');
     expect(screen.getByTestId('wb6-kinetics-reactors').textContent).toContain('Độ chuyển hóa mục tiêu X');
+    expect(screen.getByTestId('wb6-kinetics-reactors').textContent).toContain('Bẫy Thoát nhiệt');
 
     // WB5
     fireEvent.click(screen.getByTestId('tab-wb5-handbook-atlas'));
     expect(screen.getByTestId('wb5-handbook-atlas').textContent).toContain('Duyệt Toàn bộ 25 Chương Perry');
+    expect(screen.getByTestId('wb5-handbook-atlas').textContent).toContain('Kho 6 Giáo trình & Chỉ mục Cuối sách Perry');
+
+    // Open Problem Library Browser in Vietnamese
+    fireEvent.click(screen.getByTestId('toggle-problem-library-btn'));
+    expect(screen.getByTestId('problem-library-browser').textContent).toContain('Thư viện 24 Sự cố Nhà máy Thực tế');
+    expect(screen.getByTestId('problem-library-browser').textContent).toContain('Giải Sự cố #1');
 
     // Open QA/QC Calc Sheet Modal in Vietnamese
     fireEvent.click(screen.getByTestId('export-calc-sheet-btn'));

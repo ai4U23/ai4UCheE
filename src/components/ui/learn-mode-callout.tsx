@@ -7,6 +7,8 @@ import type { WorkbenchId } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { getFoglerCaseForWorkbench } from '../../lib/fogler-problem-solving-catalog';
 import { markProblemDefinitionReviewed } from '../../lib/hypothesis-verification-engine';
+import { localizeFoglerSpec } from '../../lib/i18n/vi-troubleshooting-copy';
+import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { HypothesisTroubleshootingBoard } from '../shell/hypothesis-troubleshooting-board';
 import { FramerEntranceStage } from './framer-motion-primitives';
 
@@ -35,13 +37,14 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
   commonTrap,
   perryAnchor,
 }) => {
-  const { personaMode } = usePersonaTheme();
+  const { personaMode, locale } = usePersonaTheme();
   const [showStudio, setShowStudio] = useState<boolean>(false);
   const [expanded, setExpanded] = useState<boolean>(false);
   if (personaMode !== 'learn') return null;
 
   const fullWb = SUFFIX_TO_WORKBENCH[workbenchId] ?? 'wb1-visual-verifier';
-  const spec = getFoglerCaseForWorkbench(fullWb);
+  const spec = localizeFoglerSpec(getFoglerCaseForWorkbench(fullWb), locale);
+  const ui = getUiSubcomponentCopy(locale);
 
   return (
     <FramerEntranceStage className="learn-callout" testId={`learn-callout-${workbenchId}`}>
@@ -53,7 +56,7 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
             onClick={() => setExpanded(!expanded)}
             style={{ fontSize: '0.72rem', padding: '0.15rem 0.45rem' }}
           >
-            {expanded ? '▾ Less Notes' : '▸ Field Notes'}
+            {ui.calloutFieldNotesBtn(expanded)}
           </button>
           <button
             type="button"
@@ -63,7 +66,7 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
               setShowStudio(!showStudio);
             }}
           >
-            {showStudio ? '▾ Hide 6-Stage Studio' : '🔬 Open 6-Stage Problem & Hypothesis Studio'}
+            {ui.calloutOpenStudioBtn(showStudio)}
           </button>
         </div>
       </div>
@@ -72,7 +75,7 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
       </p>
       <div className={expanded ? '' : 'studio-drawer-collapsed'}>
         <p>{plainEnglish}</p>
-        <p>⚠️ Watch out: {commonTrap}</p>
+        <p>{ui.calloutWatchOutPrefix} {commonTrap}</p>
         <code>{perryAnchor} · {spec.foglerBookCitation}</code>
       </div>
       {showStudio && <HypothesisTroubleshootingBoard workbenchId={fullWb} />}

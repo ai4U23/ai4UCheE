@@ -79,13 +79,13 @@ export const HandbookAtlasWorkbench: React.FC = () => {
         </div>
         <div className="wb-actions-row">
           <button type="button" data-testid="atlas-trap-sec11-ft" onClick={() => selectSection(11, 0.72, 1.6)}>
-            ⚠️ Sec 11 Cross Trap
+            {t.wb5Trap11Btn}
           </button>
           <button type="button" data-testid="atlas-trap-sec19-runaway" onClick={() => selectSection(19, 0.88, 0.52)}>
-            🔥 Sec 19 Runaway Trap
+            {t.wb5Trap19Btn}
           </button>
           <button type="button" data-testid="atlas-trap-sec23-psv" onClick={() => selectSection(23, 25, 18000)}>
-            🚨 Sec 23 PSV Trap
+            {t.wb5Trap23Btn}
           </button>
         </div>
       </header>
@@ -98,11 +98,11 @@ export const HandbookAtlasWorkbench: React.FC = () => {
           />
           <div className="wb-panel" data-testid="atlas-status-banner">
             <SwarmPulseDot tone={solved.isAlert ? 'danger' : 'emerald'} />
-            <strong>{solved.isAlert ? '⚠️ Engineering Alert: ' : '✅ Operating Verdict: '}</strong>
+            <strong>{t.wb5AlertPrefix(solved.isAlert)}</strong>
             <span className="mono">{solved.statusBanner}</span>
             {solved.deepDiveWorkbench && (
               <button type="button" data-testid="atlas-deep-dive-btn" style={{ marginLeft: '0.75rem' }} onClick={() => setActiveWorkbench(solved.deepDiveWorkbench!)}>
-                Open Dedicated Workbench ({solved.deepDiveWorkbench.toUpperCase().slice(0, 3)}) →
+                {t.wb5OpenDedicatedBtn(solved.deepDiveWorkbench.toUpperCase().slice(0, 3))}
               </button>
             )}
           </div>
