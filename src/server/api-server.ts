@@ -123,8 +123,17 @@ export function createApiServer(dbPath?: string): Express {
     await proxyToSidecar(req, res, req.path);
   });
 
-  app.use(express.static(DIST_DIR));
+  app.use(
+    express.static(DIST_DIR, {
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.html')) {
+          res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+        }
+      },
+    }),
+  );
   app.get('*', (_req: Request, res: Response): void => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.sendFile(path.join(DIST_DIR, 'index.html'));
   });
 

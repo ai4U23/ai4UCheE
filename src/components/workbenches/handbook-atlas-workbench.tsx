@@ -62,47 +62,31 @@ export const HandbookAtlasWorkbench: React.FC = () => {
   });
 
   const visibleSections = ALL_25_PERRY_SECTIONS.filter((s) => clusterFilter === 'all' || s.clusterId === clusterFilter);
+  const [showSectionBrowser, setShowSectionBrowser] = useState<boolean>(false);
+  const [showProofsAndIndex, setShowProofsAndIndex] = useState<boolean>(false);
+  const [showInvestigation, setShowInvestigation] = useState<boolean>(false);
 
   return (
     <section className="wb-panel" data-testid="wb5-handbook-atlas">
       <header className="wb-toolbar">
         <div>
-          <h2>Subject 5 · 6-Book Chemical Engineering Corpus &amp; 25-Section Atlas</h2>
-          <p className="wb-subtitle" data-testid="wb5-blended-sources-badge">
+          <h2>📘 Sec {solved.secNum} · {solved.secTitle}</h2>
+          <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb5-blended-sources-badge">
             📚 6 Blended Textbooks ({TEXTBOOK_CORPUS_CATALOG.map((b) => b.shortTitle).join(' · ')}) · All 25 Perry Sections
           </p>
         </div>
         <div className="wb-actions-row">
           <button type="button" data-testid="atlas-trap-sec11-ft" onClick={() => selectSection(11, 0.72, 1.6)}>
-            ⚠️ Sec 11 LMTD F_T &lt; 0.75 Cross Trap
+            ⚠️ Sec 11 Cross Trap
           </button>
           <button type="button" data-testid="atlas-trap-sec19-runaway" onClick={() => selectSection(19, 0.88, 0.52)}>
-            🔥 Sec 19 Semenov Runaway Trap
+            🔥 Sec 19 Runaway Trap
           </button>
           <button type="button" data-testid="atlas-trap-sec23-psv" onClick={() => selectSection(23, 25, 18000)}>
-            🚨 Sec 23 PSV psig→psia Trap
+            🚨 Sec 23 PSV Trap
           </button>
         </div>
       </header>
-
-      <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.45rem' }}>
-        <MotionPillButton layoutId="wb5-cluster-pill" isActive={clusterFilter === 'all'} testId="atlas-cluster-all" onClick={() => setClusterFilter('all')}>
-          All 25 Sections ({ALL_25_PERRY_SECTIONS.length})
-        </MotionPillButton>
-        {PERRY_CLUSTERS.map((c) => (
-          <MotionPillButton key={c.id} layoutId="wb5-cluster-pill" isActive={clusterFilter === c.id} testId={`atlas-cluster-${c.id}`} onClick={() => setClusterFilter(c.id)}>
-            {c.label}
-          </MotionPillButton>
-        ))}
-      </div>
-
-      <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.65rem' }} data-testid="atlas-section-pills">
-        {visibleSections.map((s) => (
-          <MotionPillButton key={s.secNum} layoutId="wb5-sec-pill" isActive={s.secNum === solved.secNum} testId={`atlas-sec-pill-${s.secNum}`} onClick={() => selectSection(s.secNum)}>
-            Sec {s.secNum}: {s.secTitle.split('(')[0].trim()}
-          </MotionPillButton>
-        ))}
-      </div>
 
       <div className="wb-split">
         <div>
@@ -110,17 +94,6 @@ export const HandbookAtlasWorkbench: React.FC = () => {
             descriptor={descriptor} result={solved}
             onScrubParameters={(nextP, nextS) => { setPrimaryVal(nextP); setSecondaryVal(nextS); }}
           />
-          <ScrubbableNumberInput
-            paramId={`atlas-primary-${solved.secNum}`} label={descriptor.primaryParam.label} value={solved.primaryVal}
-            unit={descriptor.primaryParam.unit} min={descriptor.primaryParam.min} max={descriptor.primaryParam.max}
-            step={descriptor.primaryParam.step} onChange={setPrimaryVal}
-          />
-          <ScrubbableNumberInput
-            paramId={`atlas-secondary-${solved.secNum}`} label={descriptor.secondaryParam.label} value={solved.secondaryVal}
-            unit={descriptor.secondaryParam.unit} min={descriptor.secondaryParam.min} max={descriptor.secondaryParam.max}
-            step={descriptor.secondaryParam.step} onChange={setSecondaryVal}
-          />
-
           <div className="wb-panel" data-testid="atlas-status-banner">
             <SwarmPulseDot tone={solved.isAlert ? 'danger' : 'emerald'} />
             <strong>{solved.isAlert ? '⚠️ Engineering Alert: ' : '✅ Operating Verdict: '}</strong>
@@ -134,26 +107,72 @@ export const HandbookAtlasWorkbench: React.FC = () => {
         </div>
 
         <div>
-          <div className="wb-panel" {...eqSelect.selectableProps}>
-            {solved.equations.map((eq) => (
-              <WhiteBoxEquationCard key={eq.id} equation={eq} personaMode={personaMode} />
-            ))}
-          </div>
-
-          <PerryAtlasPdfExplorer
-            activeSecNum={solved.secNum} activeSecPage={activeSecPage} activePdfPage={solved.pdfPage1Based}
-            onSelectSecPage={(nextSec, nextRef) => selectSection(nextSec, undefined, undefined, nextRef)}
+          <ScrubbableNumberInput
+            paramId={`atlas-primary-${solved.secNum}`} label={descriptor.primaryParam.label} value={solved.primaryVal}
+            unit={descriptor.primaryParam.unit} min={descriptor.primaryParam.min} max={descriptor.primaryParam.max}
+            step={descriptor.primaryParam.step} onChange={setPrimaryVal}
+          />
+          <ScrubbableNumberInput
+            paramId={`atlas-secondary-${solved.secNum}`} label={descriptor.secondaryParam.label} value={solved.secondaryVal}
+            unit={descriptor.secondaryParam.unit} min={descriptor.secondaryParam.min} max={descriptor.secondaryParam.max}
+            step={descriptor.secondaryParam.step} onChange={setSecondaryVal}
           />
         </div>
       </div>
 
-      <LearnModeCallout
-        workbenchId="wb5"
-        title={`Sec ${solved.secNum} — ${solved.learnCallout.title}`}
-        plainEnglish={solved.learnCallout.plainEnglish}
-        commonTrap={solved.learnCallout.commonTrap}
-        perryAnchor={solved.citation}
-      />
+      <div className="studio-disclosure-bar">
+        <button type="button" onClick={() => setShowSectionBrowser(!showSectionBrowser)}>
+          {showSectionBrowser ? '▾' : '▸'} 📚 Browse All 25 Perry Sections
+        </button>
+        <button type="button" onClick={() => setShowProofsAndIndex(!showProofsAndIndex)}>
+          {showProofsAndIndex ? '▾' : '▸'} 📐 Show Math Proofs &amp; 6-Book Index
+        </button>
+        <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
+          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+        </button>
+      </div>
+
+      <div className={showSectionBrowser ? '' : 'studio-drawer-collapsed'}>
+        <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.45rem' }}>
+          <MotionPillButton layoutId="wb5-cluster-pill" isActive={clusterFilter === 'all'} testId="atlas-cluster-all" onClick={() => setClusterFilter('all')}>
+            All 25 Sections ({ALL_25_PERRY_SECTIONS.length})
+          </MotionPillButton>
+          {PERRY_CLUSTERS.map((c) => (
+            <MotionPillButton key={c.id} layoutId="wb5-cluster-pill" isActive={clusterFilter === c.id} testId={`atlas-cluster-${c.id}`} onClick={() => setClusterFilter(c.id)}>
+              {c.label}
+            </MotionPillButton>
+          ))}
+        </div>
+        <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.65rem' }} data-testid="atlas-section-pills">
+          {visibleSections.map((s) => (
+            <MotionPillButton key={s.secNum} layoutId="wb5-sec-pill" isActive={s.secNum === solved.secNum} testId={`atlas-sec-pill-${s.secNum}`} onClick={() => selectSection(s.secNum)}>
+              Sec {s.secNum}: {s.secTitle.split('(')[0].trim()}
+            </MotionPillButton>
+          ))}
+        </div>
+      </div>
+
+      <div className={showProofsAndIndex ? 'wb-split' : 'studio-drawer-collapsed'}>
+        <div className="wb-panel" {...eqSelect.selectableProps}>
+          {solved.equations.map((eq) => (
+            <WhiteBoxEquationCard key={eq.id} equation={eq} personaMode={personaMode} />
+          ))}
+        </div>
+        <PerryAtlasPdfExplorer
+          activeSecNum={solved.secNum} activeSecPage={activeSecPage} activePdfPage={solved.pdfPage1Based}
+          onSelectSecPage={(nextSec, nextRef) => selectSection(nextSec, undefined, undefined, nextRef)}
+        />
+      </div>
+
+      <div className={showInvestigation ? '' : 'studio-drawer-collapsed'}>
+        <LearnModeCallout
+          workbenchId="wb5"
+          title={`Sec ${solved.secNum} — ${solved.learnCallout.title}`}
+          plainEnglish={solved.learnCallout.plainEnglish}
+          commonTrap={solved.learnCallout.commonTrap}
+          perryAnchor={solved.citation}
+        />
+      </div>
     </section>
   );
 };

@@ -45,6 +45,7 @@ export interface DistillationDiagramGalleryProps {
   recoveryFrac: number;
   soluteFeedZ: number;
   peNumber: number;
+  showMoreDiagrams?: boolean;
   onChangeQ: (nextQ: number) => void;
   onChangeXd: (nextXd: number) => void;
   onChangeXf: (nextXf: number) => void;
@@ -57,35 +58,11 @@ export interface DistillationDiagramGalleryProps {
 }
 
 export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProps> = ({
-  alpha,
-  xf,
-  xd,
-  xb,
-  q,
-  rOp,
-  rMin,
-  rMult,
-  colDiamM,
-  traySpacingM,
-  totalStages,
-  feedStage,
-  fLv,
-  cSbMs,
-  floodPercent,
-  dpPackingMmH2oM,
-  absorptionA,
-  recoveryFrac,
-  soluteFeedZ,
-  peNumber,
-  onChangeQ,
-  onChangeXd,
-  onChangeXf,
-  onChangeXb,
-  onChangeRMult,
-  onChangeColDiamM,
-  onChangeTraySpacingM,
-  onChangeKremser,
-  onChangeLleAndPe,
+  alpha, xf, xd, xb, q, rOp, rMin, rMult, colDiamM, traySpacingM, totalStages,
+  feedStage, fLv, cSbMs, floodPercent, dpPackingMmH2oM, absorptionA, recoveryFrac,
+  soluteFeedZ, peNumber, showMoreDiagrams = false,
+  onChangeQ, onChangeXd, onChangeXf, onChangeXb, onChangeRMult,
+  onChangeColDiamM, onChangeTraySpacingM, onChangeKremser, onChangeLleAndPe,
 }) => {
   const [diagramMode, setDiagramMode] = useState<DistillationDiagramMode>('all');
   const [tDryBulbC, setTDryBulbC] = useState<number>(32.0);
@@ -96,15 +73,18 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
   const showDistillation = diagramMode === 'all' || diagramMode === 'mode-distillation';
   const showKremserLle = diagramMode === 'all' || diagramMode === 'mode-kremser-lle';
   const showPsychMembrane = diagramMode === 'all' || diagramMode === 'mode-psychrometry-membrane';
+  const expandCompanion = showMoreDiagrams || diagramMode !== 'all';
 
   return (
     <div>
-      <DiagramModeBar
-        testId="wb4-diagram-mode-bar"
-        activeMode={diagramMode}
-        options={WB4_MODE_OPTIONS}
-        onSelectMode={setDiagramMode}
-      />
+      <div className={expandCompanion ? '' : 'studio-drawer-collapsed'}>
+        <DiagramModeBar
+          testId="wb4-diagram-mode-bar"
+          activeMode={diagramMode}
+          options={WB4_MODE_OPTIONS}
+          onSelectMode={setDiagramMode}
+        />
+      </div>
 
       {showDistillation && (
         <FramerEntranceStage key={`wb4-dist-${diagramMode}`} className="wb-split">
@@ -123,37 +103,31 @@ export const DistillationDiagramGallery: React.FC<DistillationDiagramGalleryProp
         </FramerEntranceStage>
       )}
 
-      {showKremserLle && (
-        <FramerEntranceStage key={`wb4-krem-${diagramMode}`} className="wb-split" delay={0.06}>
-          <KremserAbsorptionSvg
-            absorptionA={absorptionA} recoveryFrac={recoveryFrac}
-            onChangeKremser={onChangeKremser}
-          />
-          <TernaryLleBreakthroughSvg
-            soluteFeedZ={soluteFeedZ} peNumber={peNumber}
-            onChangeLleAndPe={onChangeLleAndPe}
-          />
-        </FramerEntranceStage>
-      )}
+      <div className={expandCompanion ? '' : 'studio-drawer-collapsed'}>
+        {showKremserLle && (
+          <FramerEntranceStage key={`wb4-krem-${diagramMode}`} className="wb-split" delay={0.06}>
+            <KremserAbsorptionSvg
+              absorptionA={absorptionA} recoveryFrac={recoveryFrac}
+              onChangeKremser={onChangeKremser}
+            />
+            <TernaryLleBreakthroughSvg
+              soluteFeedZ={soluteFeedZ} peNumber={peNumber}
+              onChangeLleAndPe={onChangeLleAndPe}
+            />
+          </FramerEntranceStage>
+        )}
 
-      {showPsychMembrane && (
-        <FramerEntranceStage key={`wb4-psych-${diagramMode}`} delay={0.12}>
-          <PsychrometricMembraneSvg
-            tDryBulbC={tDryBulbC}
-            relHumidityPct={relHumidityPct}
-            stageCutTheta={stageCutTheta}
-            selectivityAlpha={selectivityAlpha}
-            onChangePsychrometry={(nt, nrh) => {
-              setTDryBulbC(nt);
-              setRelHumidityPct(nrh);
-            }}
-            onChangeMembrane={(nth, na) => {
-              setStageCutTheta(nth);
-              setSelectivityAlpha(na);
-            }}
-          />
-        </FramerEntranceStage>
-      )}
+        {showPsychMembrane && (
+          <FramerEntranceStage key={`wb4-psych-${diagramMode}`} delay={0.12}>
+            <PsychrometricMembraneSvg
+              tDryBulbC={tDryBulbC} relHumidityPct={relHumidityPct}
+              stageCutTheta={stageCutTheta} selectivityAlpha={selectivityAlpha}
+              onChangePsychrometry={(nt, nrh) => { setTDryBulbC(nt); setRelHumidityPct(nrh); }}
+              onChangeMembrane={(nth, na) => { setStageCutTheta(nth); setSelectivityAlpha(na); }}
+            />
+          </FramerEntranceStage>
+        )}
+      </div>
     </div>
   );
 };

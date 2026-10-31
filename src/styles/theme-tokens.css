@@ -63,20 +63,20 @@ code, pre, .mono {
 .app-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto 1fr;
   gap: 0.45rem;
   padding: 0 1rem 1rem;
 }
 
 .shell-header {
   margin: 0 -1rem;
-  padding: 0.45rem 1.15rem;
+  padding: 0.42rem 1.15rem;
   background: var(--navy-deep);
   color: var(--ivory);
   border-bottom: 1px solid rgba(232, 197, 71, 0.28);
   box-shadow: var(--shadow-lift);
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.65rem;

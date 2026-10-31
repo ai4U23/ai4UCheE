@@ -77,16 +77,18 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
     void submitQuestion(prompt);
   };
 
+  const [showStarters, setShowStarters] = useState<boolean>(false);
+
   return (
     <aside className="chat-drawer" aria-label="Agent Co-Pilot Drawer" data-testid="agent-chat-drawer">
       <header className="wb-toolbar">
         <strong>🤖 AI Co-Pilot</strong>
         <div className="wb-actions-row">
-          <span className="dof-badge" data-testid="copilot-model-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.45rem' }}>
+          <span className="dof-badge studio-drawer-collapsed" data-testid="copilot-model-badge">
             <SwarmPulseDot tone="gold" />⚡ gemini-4-argon-low
           </span>
           <span className="mono screen-sync-pill" data-testid="current-screen-badge" title={currentScreenXml}>
-            <SwarmPulseDot tone="emerald" />{activeWorkbench.toUpperCase()} ({personaMode.toUpperCase()})
+            <SwarmPulseDot tone="emerald" />{personaMode === 'learn' ? '🕵️ Socratic' : '🏭 Plant'} · {activeWorkbench.slice(0, 3).toUpperCase()}
           </span>
         </div>
       </header>
@@ -100,9 +102,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
       <div className="chat-messages">
         {messages.length === 0 && (
           <div className="chat-msg chat-agent">
-            <strong>ChemEng&apos;s Agent:</strong> Ready to coach <strong>{activeWorkbench.toUpperCase()}</strong> in{' '}
-            <strong>{personaMode === 'learn' ? '🎓 Learn Mode' : '🏭 Plant Mode'}</strong>. Click any equation, pipe, or
-            stage on the canvas (`+ Ask`) or tap a quick action below.
+            <strong>🤖 Agent:</strong> Ready on <strong>{activeWorkbench.toUpperCase()}</strong>. Drag any diagram handle, click <code>+ Ask</code> on any control, or tell me to adjust the dials!
           </div>
         )}
         {messages.map((m) => (
@@ -153,9 +153,12 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
             {action}
           </button>
         ))}
+        <button type="button" onClick={() => setShowStarters(!showStarters)}>
+          {showStarters ? '▾ Hide Starters' : '💡 Starter Questions ▾'}
+        </button>
       </div>
 
-      <div className="starter-prompts" data-testid="copilot-starter-prompts">
+      <div className={showStarters ? 'starter-prompts' : 'starter-prompts studio-drawer-collapsed'} data-testid="copilot-starter-prompts">
         {getStarterPromptsForWorkbench(activeWorkbench, studentProfile, livePayload).map((starter, idx) => (
           <button key={starter} type="button" data-testid={`starter-prompt-${idx}`} onClick={() => void submitQuestion(starter)}>
             {starter}
@@ -166,7 +169,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
       <form onSubmit={handleSend} className="wb-actions-row">
         <input
           aria-label="Ask ChemEng's Agent"
-          placeholder="Ask about this equation, chart, or operating case..."
+          placeholder="Ask or tell Agent to change dials..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />

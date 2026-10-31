@@ -52,11 +52,16 @@ nav.wb-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))
 .scrubbable-unit { font-size: 0.72rem; color: var(--ink-muted); min-width: 2.3rem; text-align: right; }
 
 /* Problem-First Studio launcher strip & compact Learn Mode callout. */
-.mission-bar { display: flex; flex-wrap: nowrap; align-items: center; gap: 0.35rem; padding: 0.28rem 0.6rem; background: var(--bg-panel); border: 1px solid var(--border-grid); border-radius: 8px; overflow-x: auto; }
+.mission-bar { display: flex; flex-wrap: nowrap; align-items: center; gap: 0.35rem; padding: 0.24rem 0.55rem; background: var(--bg-panel); border: 1px solid var(--border-grid); border-radius: 8px; overflow-x: auto; }
+.shell-header .mission-bar { background: rgba(15, 27, 61, 0.85); border-color: rgba(232, 197, 71, 0.38); padding: 0.16rem 0.35rem; }
+.lab-switcher-pill { font-weight: 700; color: var(--maize-soft) !important; background: rgba(232, 197, 71, 0.14) !important; }
+.studio-disclosure-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid var(--border-grid); }
+.studio-disclosure-bar button { font-size: 0.75rem; font-weight: 700; padding: 0.28rem 0.65rem; border-radius: 8px; background: var(--bg-elevated); }
+.studio-floating-mission-wrap { position: fixed; bottom: 0.85rem; left: 1rem; right: 390px; z-index: 65; max-height: 56vh; overflow-y: auto; }
 .mission-pill { font-size: 0.7rem; font-weight: 700; padding: 0.18rem 0.5rem; border-radius: 999px; border: 1px solid var(--accent-secondary); background: rgba(232, 197, 71, 0.2); color: var(--ink-primary); white-space: nowrap; }
 .mission-bar button { font-size: 0.73rem; padding: 0.24rem 0.55rem; white-space: nowrap; }
 .mission-bar > button:last-child { margin-left: auto; }
-[data-testid="problem-library-browser"] { position: fixed; top: 88px; left: 1rem; right: 1rem; max-width: 1140px; margin: 0 auto !important; z-index: 80; background: var(--bg-elevated); box-shadow: 0 24px 48px rgba(7, 26, 51, 0.28); max-height: calc(100vh - 110px); overflow-y: auto; }
+[data-testid="problem-library-browser"], [data-testid="adaptive-recommendation-rail"] { position: fixed; top: 56px; left: 1rem; right: 1rem; max-width: 1140px; margin: 0 auto !important; z-index: 80; background: var(--bg-elevated); box-shadow: 0 24px 48px rgba(7, 26, 51, 0.28); max-height: calc(100vh - 80px); overflow-y: auto; }
 .learn-callout { padding: 0.45rem 0.75rem; margin: 0.45rem 0; border-left: 3px solid var(--maize); background: rgba(232, 197, 71, 0.1); border-radius: 0 7px 7px 0; font-size: 0.8rem; }
 .learn-callout p { margin: 0.2rem 0; }
 

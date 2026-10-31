@@ -28,24 +28,13 @@ export const ThermoDipprWorkbench: React.FC = () => {
   const [prReducedP, setPrReducedP] = useState<number>(1.5);
   const [prReducedT, setPrReducedT] = useState<number>(1.15);
 
-  const tKelvin =
-    tempUnit === 'degC'
-      ? tempK + 273.15
-      : tempUnit === 'degF'
-        ? (tempK - 32) * (5 / 9) + 273.15
-        : tempUnit === 'degR'
-          ? tempK * (5 / 9)
-          : tempK;
+  const tKelvin = tempUnit === 'degC' ? tempK + 273.15 : tempUnit === 'degF' ? (tempK - 32) * (5 / 9) + 273.15 : tempUnit === 'degR' ? tempK * (5 / 9) : tempK;
   const solved = solveThermo({ compound, tempK: tKelvin });
   const { pSatPa, pSatPsia, hVapJkmol } = solved;
   const vpDisplay =
-    pressureUnit === 'psig'
-      ? `${(pSatPsia - 14.6959).toFixed(2)} psig (${pSatPsia.toFixed(2)} psia)`
-      : pressureUnit === 'psia'
-        ? `${pSatPsia.toFixed(2)} psia`
-        : pressureUnit === 'bar'
-          ? `${(pSatPa / 1e5).toFixed(4)} bar`
-          : `${(pSatPa / 1e3).toFixed(2)} kPa`;
+    pressureUnit === 'psig' ? `${(pSatPsia - 14.6959).toFixed(2)} psig (${pSatPsia.toFixed(2)} psia)`
+    : pressureUnit === 'psia' ? `${pSatPsia.toFixed(2)} psia`
+    : pressureUnit === 'bar' ? `${(pSatPa / 1e5).toFixed(4)} bar` : `${(pSatPa / 1e3).toFixed(2)} kPa`;
 
   useWorkbenchMutations('wb2-thermo-dippr', (p) => {
     if (p.compound !== undefined) setCompound(String(p.compound));
@@ -88,12 +77,16 @@ export const ThermoDipprWorkbench: React.FC = () => {
         ? 'Peng-Robinson (PR) / Soave-Redlich-Kwong (SRK)'
         : 'Wilson / NRTL / UNIQUAC';
 
+  const [showProofs, setShowProofs] = useState<boolean>(false);
+  const [showMoreDiagrams, setShowMoreDiagrams] = useState<boolean>(false);
+  const [showInvestigation, setShowInvestigation] = useState<boolean>(false);
+
   return (
     <section className="wb-panel" data-testid="wb2-thermo-dippr">
       <header className="wb-toolbar">
         <div>
-          <h2>Subject 1 · Thermodynamics, Phase Equilibria &amp; DIPPR Engine</h2>
-          <p className="wb-subtitle" data-testid="wb2-blended-sources-badge">
+          <h2>🔥 Thermodynamics, Phase Equilibria &amp; DIPPR Engine</h2>
+          <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb2-blended-sources-badge">
             📚 Blended Sources: <code>Perry&apos;s Sec 1/2/4/24 · Smith-Van Ness-Abbott 9th Ed. Ch. 3/8/9/10/12/14 · Fogler Ch. 11 · Seader Ch. 2</code>
           </p>
         </div>
@@ -124,27 +117,44 @@ export const ThermoDipprWorkbench: React.FC = () => {
       <div className="wb-split">
         <div>
           <DipprPhaseEnvelopeSvg compound={compound} tempK={tKelvin} onChangeTempK={(nextK) => { setTempUnit('K'); setTempK(nextK); }} />
+        </div>
+        <div>
           <ScrubbableNumberInput
             paramId="dippr-temp-k" label="Temperature" value={tempK} unit={TEMP_UNIT_SYMBOLS[tempUnit]}
             min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
+          <div className="wb-panel" data-testid="dippr-vp-result">
+            Result at T = {tKelvin.toFixed(2)} K: <strong>{Math.round(pSatPa).toLocaleString()} Pa</strong> ({vpDisplay}) · 1 atm = 101,325 Pa ·{' '}
+            <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
+          </div>
+          <div className="wb-panel mono">
+            T_r = {solved.tr.toFixed(4)} → ΔH_vap = <strong>{hVapJkmol.toExponential(3)} J/kmol</strong> · Model: <strong>{recommendedModel}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="studio-disclosure-bar">
+        <button type="button" onClick={() => setShowProofs(!showProofs)}>
+          {showProofs ? '▾' : '▸'} 📐 Show Math Proofs &amp; Model Advisor (2)
+        </button>
+        <button type="button" onClick={() => setShowMoreDiagrams(!showMoreDiagrams)}>
+          {showMoreDiagrams ? '▾' : '▸'} 📊 More Diagrams (Binary VLE, Peng-Robinson, Rankine)
+        </button>
+        <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
+          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+        </button>
+      </div>
+
+      <div className={showProofs ? 'wb-split' : 'studio-drawer-collapsed'}>
+        <div>
           <div className="wb-panel" {...eq101Select.selectableProps}>
             <WhiteBoxEquationCard equation={solved.equations[0]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-dippr-101' }} />
-            <div className="mono" data-testid="dippr-vp-result">
-              Result at T = {tKelvin.toFixed(2)} K: <strong>{Math.round(pSatPa).toLocaleString()} Pa</strong> ({vpDisplay}) · 1 atm = 101,325 Pa ·{' '}
-              <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
-            </div>
           </div>
           <div className="wb-panel" {...eq106Select.selectableProps}>
             <WhiteBoxEquationCard equation={solved.equations[1]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-dippr-106' }} />
-            <div className="mono">
-              T_r = {solved.tr.toFixed(4)} → <strong>{hVapJkmol.toExponential(3)} J/kmol</strong> ·{' '}
-              <code>[Perry&apos;s 9th Ed., Table 2-69 (DIPPR Eq. 106), p. 2-120]</code>
-            </div>
           </div>
         </div>
-
         <CarlsonAdvisorCard
           personaMode={personaMode} polarity={polarity} onPolarityChange={setPolarity}
           hasLle={hasLle} onHasLleChange={setHasLle} hasAssoc={hasAssoc}
@@ -153,19 +163,23 @@ export const ThermoDipprWorkbench: React.FC = () => {
         />
       </div>
 
-      <LearnModeCallout
-        workbenchId="wb2"
-        title="Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium"
-        plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T)."
-        commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
-        perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
-      />
+      <div className={showMoreDiagrams ? '' : 'studio-drawer-collapsed'}>
+        <ThermoDiagramGallery
+          vleX1={vleX1} vleA12={vleA12} prReducedP={prReducedP} prReducedT={prReducedT}
+          onChangeVle={(nx, na) => { setVleX1(nx); setVleA12(na); }}
+          onChangePrTr={(np, nt) => { setPrReducedP(np); setPrReducedT(nt); }}
+        />
+      </div>
 
-      <ThermoDiagramGallery
-        vleX1={vleX1} vleA12={vleA12} prReducedP={prReducedP} prReducedT={prReducedT}
-        onChangeVle={(nx, na) => { setVleX1(nx); setVleA12(na); }}
-        onChangePrTr={(np, nt) => { setPrReducedP(np); setPrReducedT(nt); }}
-      />
+      <div className={showInvestigation ? '' : 'studio-drawer-collapsed'}>
+        <LearnModeCallout
+          workbenchId="wb2"
+          title="Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium"
+          plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T)."
+          commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
+          perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
+        />
+      </div>
     </section>
   );
 };

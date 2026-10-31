@@ -1,6 +1,6 @@
-// AppShell: Dual-Lens header (Learn <-> Plant), Institutional Ivory (#FBF6EC) surface,
-// ai4U logo + motion/react layoutId shared-layout morphing, DoF badge, 5 ChE Subject tabs + Cross-Subject Charts & Page Verifier tool + Calc Sheet trigger.
-import React from 'react';
+// AppShell: Minimalist 3-Zone AI-Native Studio (1 Top Bar · 1 Canvas · 1 Agent).
+// Unifies Brand + Lab Switcher + GuidedMissionBar + Utility Pills into a single 48px dark studio bar.
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { dispatchWorkbenchMutation } from '../../actions/view-screen';
 import { usePersonaTheme, type PersonaMode, type WorkbenchId } from '../../context/persona-theme-context';
@@ -40,8 +40,12 @@ export const AppShell: React.FC<AppShellProps> = ({
   dofStatus = 'DoF = 0 · Fully Specified',
 }) => {
   const { personaMode, setPersonaMode, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
+  const [showLabs, setShowLabs] = useState<boolean>(false);
   const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');
   if (activeWorkbench !== 'wb1-visual-verifier') lastSubjectRef.current = activeWorkbench;
+
+  const activeSubjectLabel =
+    WORKBENCH_TABS.find((t) => t.id === activeWorkbench)?.label ?? 'Charts & Nomographs';
 
   const openVisualVerifierTool = () => {
     if (activeWorkbench === 'wb1-visual-verifier') {
@@ -95,11 +99,20 @@ export const AppShell: React.FC<AppShellProps> = ({
         <div className="brand-identity">
           <img src="/ai4u-logo.png" alt="AI4U.now" className="brand-logo" data-testid="ai4u-logo" />
           <div className="brand-title-group">
-            <h1>ChemEng&apos;s Intelligent Workbench</h1>
-            <span className="brand-eyebrow">ai4UCheE · Chemical Engineering Intelligence</span>
+            <h1>ai4UCheE</h1>
+            <span className="brand-eyebrow">ChemEng&apos;s Intelligent Workbench</span>
           </div>
+          <button
+            type="button"
+            className="lab-switcher-pill"
+            data-testid="toggle-lab-switcher-btn"
+            onClick={() => setShowLabs(!showLabs)}
+            title="Switch Engineering Subject Lab (or let Problem Selection switch automatically)"
+          >
+            🔧 {activeSubjectLabel} {showLabs ? '▴' : '▾'}
+          </button>
           <span
-            className="dof-badge"
+            className="dof-badge studio-drawer-collapsed"
             data-testid="dof-badge"
             title="Degrees of Freedom = 0: Every required input variable is specified so the solver has a unique physical answer."
           >
@@ -108,12 +121,13 @@ export const AppShell: React.FC<AppShellProps> = ({
           </span>
         </div>
 
-        <div className="wb-actions-row" role="tablist" aria-label="Persona Lens Switcher">
-          {renderPersonaButton('learn', '🎓 Learn Mode')}
-          {renderPersonaButton('plant', '🏭 Plant Mode')}
-        </div>
+        <GuidedMissionBar />
 
         <div className="wb-actions-row">
+          <div className="wb-actions-row" role="tablist" aria-label="Persona Lens Switcher">
+            {renderPersonaButton('learn', '🎓 Learn')}
+            {renderPersonaButton('plant', '🏭 Plant')}
+          </div>
           <button
             type="button"
             data-testid="tab-wb1-visual-verifier"
@@ -123,17 +137,19 @@ export const AppShell: React.FC<AppShellProps> = ({
             onClick={openVisualVerifierTool}
           >
             {isVerifierActive && <motion.span layoutId="active-verifier-pill" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
-            <span>📐 Charts &amp; Page Verifier</span>
+            <span>📐 Charts</span>
           </button>
           <button type="button" data-testid="export-calc-sheet-btn" onClick={onExportCalcSheet}>
-            Export Senior Calc Sheet
+            📄 Calc Sheet
           </button>
         </div>
       </header>
 
-      <GuidedMissionBar />
-
-      <nav className="wb-toolbar" role="tablist" aria-label="Engineering Subject Workbenches">
+      <nav
+        className={`wb-toolbar ${showLabs ? 'wb-labs-open' : 'studio-drawer-collapsed'}`}
+        role="tablist"
+        aria-label="Engineering Subject Workbenches"
+      >
         {WORKBENCH_TABS.map((tab) => {
           const isActive = activeWorkbench === tab.id;
           return (
@@ -144,7 +160,10 @@ export const AppShell: React.FC<AppShellProps> = ({
               aria-selected={isActive}
               data-testid={`tab-${tab.id}`}
               className={`wb-tab ${isActive ? 'active' : ''}`}
-              onClick={() => setActiveWorkbench(tab.id)}
+              onClick={() => {
+                setActiveWorkbench(tab.id);
+                setShowLabs(false);
+              }}
             >
               {isActive && <motion.span layoutId="active-workbench-tab" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
               <span className="wb-tab-title">{tab.label}</span>

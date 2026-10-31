@@ -110,13 +110,14 @@ export const GuidedMissionBar: React.FC = () => {
       <div className="mission-bar" data-testid="guided-mission-bar">
         {!collapsed && (
           <>
-            <span className="mission-pill">🚨 Step 1 · Start from a Real-Life Plant Problem (Fogler &amp; LeBlanc 6-Stage Flow)</span>
+            <span className="studio-drawer-collapsed">Start from a Real-Life Plant Problem (Fogler &amp; LeBlanc 6-Stage Flow)</span>
             <button
               type="button"
               data-testid="toggle-problem-library-btn"
               onClick={() => setLibraryOpen(!libraryOpen)}
+              title="Browse all 24 Real-Life Plant Problems across 🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4"
             >
-              📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems (🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4)
+              🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4 · 📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems ▾
             </button>
             <div className={showScorecardDrawer ? 'wb-actions-row' : 'studio-drawer-collapsed'}>
               {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
@@ -142,12 +143,13 @@ export const GuidedMissionBar: React.FC = () => {
               onClick={() => setShowScorecardDrawer(!showScorecardDrawer)}
               title="Toggle Quick Missions & Student Progress Drawer"
             >
-              {showScorecardDrawer ? '▾ Less' : '⚙️ Quick Missions & Coach'}
+              {showScorecardDrawer ? '▾ Less' : '⚙️ Coach'}
             </button>
           </>
         )}
         <button
           type="button"
+          className="studio-drawer-collapsed"
           data-testid="toggle-mission-bar"
           aria-label={collapsed ? 'Show guided mission bar' : 'Hide guided mission bar'}
           onClick={() => setCollapsed(!collapsed)}
@@ -173,12 +175,16 @@ export const GuidedMissionBar: React.FC = () => {
               }}
             />
           </div>
-          <MissionChecklistBanner
-            mission={activeMission}
-            onAutoFix={handleAutoFix}
-            onSocraticHint={handleSocraticHint}
-            onDismiss={() => setActiveMission(null)}
-          />
+          {activeMission && (
+            <div className="studio-floating-mission-wrap">
+              <MissionChecklistBanner
+                mission={activeMission}
+                onAutoFix={handleAutoFix}
+                onSocraticHint={handleSocraticHint}
+                onDismiss={() => setActiveMission(null)}
+              />
+            </div>
+          )}
         </>
       )}
     </>
