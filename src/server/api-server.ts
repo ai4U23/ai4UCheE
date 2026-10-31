@@ -123,14 +123,26 @@ export function createApiServer(dbPath?: string): Express {
     await proxyToSidecar(req, res, req.path);
   });
 
-  app.get(['/', '/index.html'], (req: Request, res: Response, next): void => {
+  app.get(['/', '/showcase.html'], (req: Request, res: Response): void => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.setHeader('Vary', 'Accept');
     if (String(req.headers.accept ?? '').includes('text/markdown')) {
       res.setHeader('X-Robots-Tag', 'noindex');
       res.type('text/markdown; charset=utf-8').sendFile(path.join(DIST_DIR, 'index.md'));
       return;
     }
-    next();
+    res.sendFile(path.join(DIST_DIR, 'showcase.html'));
+  });
+
+  app.get(['/app', '/workbench', '/index.html'], (req: Request, res: Response): void => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Vary', 'Accept');
+    if (String(req.headers.accept ?? '').includes('text/markdown')) {
+      res.setHeader('X-Robots-Tag', 'noindex');
+      res.type('text/markdown; charset=utf-8').sendFile(path.join(DIST_DIR, 'index.md'));
+      return;
+    }
+    res.sendFile(path.join(DIST_DIR, 'index.html'));
   });
 
   app.use(

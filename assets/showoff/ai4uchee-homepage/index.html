@@ -5,6 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ai4UCheE — ChemEng's Intelligent Workbench | Feature Showcase &amp; Remotion Guide</title>
   <meta name="description" content="Bi-directional agent-native chemical engineering workbench blending 6 canonical textbooks (Perry's 9th Ed., Fogler 7th Ed., BSL, SVNA, Seader, Crowl) with 55+ interactive SVG nomographs, 24 real-life plant problems, and a Remotion user guide." />
+  <link rel="canonical" href="https://chemeng.ai4u.now/" />
+  <link rel="alternate" type="text/markdown" href="https://chemeng.ai4u.now/index.md" title="Markdown twin" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ai4UCheE — ChemEng's Intelligent Workbench" />
+  <meta property="og:title" content="ai4UCheE — ChemEng's Intelligent Workbench | Feature Showcase &amp; Remotion Guide" />
+  <meta property="og:description" content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems." />
+  <meta property="og:url" content="https://chemeng.ai4u.now/" />
+  <meta property="og:image" content="https://chemeng.ai4u.now/og-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ai4UCheE — ChemEng's Intelligent Workbench" />
+  <meta name="twitter:description" content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems." />
+  <meta name="twitter:image" content="https://chemeng.ai4u.now/og-card.png" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23E8C547'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='monospace' font-weight='800' font-size='26' fill='%23071A33'%3EChE%3C/text%3E%3C/svg%3E" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://chemeng.ai4u.now/#organization",
+          "name": "AI4U.now",
+          "url": "https://chemeng.ai4u.now/",
+          "logo": "https://chemeng.ai4u.now/ai4u-logo.png"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://chemeng.ai4u.now/#website",
+          "url": "https://chemeng.ai4u.now/",
+          "name": "ai4UCheE — ChemEng's Intelligent Workbench",
+          "publisher": { "@id": "https://chemeng.ai4u.now/#organization" }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://chemeng.ai4u.now/#app",
+          "name": "ai4UCheE — ChemEng's Intelligent Workbench",
+          "applicationCategory": "EducationalApplication, EngineeringApplication",
+          "operatingSystem": "Web",
+          "url": "https://chemeng.ai4u.now/app",
+          "description": "Bi-directional agent-native chemical engineering workbench blending Perry's 9th Ed., Fogler 7th Ed., Bird-Stewart-Lightfoot 2nd Ed., Smith-Van Ness-Abbott 9th Ed., Seader 4th Ed., and Crowl & Louvar 4th Ed. with 55+ interactive charts and 24 real-life plant problems.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        }
+      ]
+    }
+  </script>
   <style>
     :root, [data-theme="light"] {
       --navy-deep: #071a33;
@@ -309,8 +355,9 @@
       <a href="#whitebox-copilot">05 · White-Box &amp; AI</a>
       <a href="#calc-sheet-cta">06 · EPC Calc Sheet</a>
     </nav>
-    <div class="nav-links" role="group" aria-label="Theme Controls">
+    <div class="nav-links" role="group" aria-label="Theme and Workbench Controls">
       <button type="button" class="ctrl-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️ Theme: Light</button>
+      <a class="ctrl-btn active" href="/app">🚀 Launch Workbench</a>
     </div>
   </header>
 
@@ -336,7 +383,7 @@
               </ul>
             </div>
             <div class="cta-row">
-              <a class="cta-btn" href="/">🚀 Launch Live Workbench</a>
+              <a class="cta-btn" href="/app">🚀 Launch Live Workbench (/app)</a>
               <a class="cta-btn secondary" href="#video-guide">🎬 Watch 5-Step Video Guide</a>
             </div>
           </div>
@@ -419,7 +466,10 @@
               <h3>Thermodynamics, Phase Equilibria &amp; DIPPR</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Exact DIPPR Eq. 101/106 correlations, Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, Peng-Robinson EOS <em>Z(P_r, T_r)</em> dome, and Rankine/Van 't Hoff cycles.</p>
             </div>
-            <div class="stage-pill">[Perry's 9e Table 2-8, p. 2-53 · SVNA 9e Ch. 3 &amp; 10]</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+              <div class="stage-pill" style="margin-top:0; flex:1;">[Perry's 9e Table 2-8, p. 2-53 · SVNA 9e]</div>
+              <a class="ctrl-btn" href="/app?wb=wb2-thermo-dippr">Open Lab →</a>
+            </div>
           </div>
 
           <div class="card">
@@ -428,7 +478,10 @@
               <h3>Fluid Mechanics, Transport &amp; Piping Hydraulics</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail, 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em>, BSL Non-Newtonian velocity profiles, ISA-75.01 valves, and Bowman <em>F_T</em> heat exchangers.</p>
             </div>
-            <div class="stage-pill">[Perry's 9e Fig. 6-9, p. 6-10 &amp; p. 10-28 · BSL Ch. 2]</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+              <div class="stage-pill" style="margin-top:0; flex:1;">[Perry's 9e Fig. 6-9, p. 6-10 · BSL Ch. 2]</div>
+              <a class="ctrl-btn" href="/app?wb=wb3-hydraulics">Open Lab →</a>
+            </div>
           </div>
 
           <div class="card">
@@ -437,7 +490,10 @@
               <h3>Separations, McCabe-Thiele &amp; Column Hydraulics</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Bi-directional 5-handle McCabe-Thiele canvas, Fenske-Underwood-Gilliland shortcuts, Fair's Souders-Brown flooding, Eckert GPDC, Kremser <em>N_OG</em> absorption, and Ternary LLE.</p>
             </div>
-            <div class="stage-pill">[Seader 4e Ch. 6–8 · Perry's 9e Fig. 14-32, p. 14-37]</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+              <div class="stage-pill" style="margin-top:0; flex:1;">[Seader 4e Ch. 6–8 · Perry's 9e p. 14-37]</div>
+              <a class="ctrl-btn" href="/app?wb=wb4-distillation">Open Lab →</a>
+            </div>
           </div>
 
           <div class="card">
@@ -446,7 +502,10 @@
               <h3>Kinetics, Catalysis &amp; Chemical Reactor Design</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Interactive Levenspiel CSTR rectangle vs. PFR integral plot, Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; effectiveness <em>η</em>, Semenov thermal runaway S-curve, LHHW &amp; Butler-Volmer.</p>
             </div>
-            <div class="stage-pill">[Fogler 7e Ch. 2, 5, 12, 15 · Crowl 4e Ch. 8]</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+              <div class="stage-pill" style="margin-top:0; flex:1;">[Fogler 7e Ch. 2, 5, 12, 15 · Crowl 4e]</div>
+              <a class="ctrl-btn" href="/app?wb=wb6-kinetics-reactors">Open Lab →</a>
+            </div>
           </div>
 
           <div class="card">
@@ -455,7 +514,10 @@
               <h3>25-Section Perry Atlas &amp; 6-Book Search</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Unit Conversions &amp; Economics to API 520 Relief Sizing &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274).</p>
             </div>
-            <div class="stage-pill">[Perry's 9e Sec 1–25 · pp. 2244–2274 Index]</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+              <div class="stage-pill" style="margin-top:0; flex:1;">[Perry's 9e Sec 1–25 · pp. 2244–2274]</div>
+              <a class="ctrl-btn" href="/app?wb=wb5-handbook-atlas">Open Lab →</a>
+            </div>
           </div>
 
           <div class="card card-navy">
@@ -464,7 +526,10 @@
               <h3 style="color:var(--maize);">📐 10 Calibrated Nomographs &amp; High-DPI Verifier</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Cross-subject header utility auto-syncing the active lab's chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).</p>
             </div>
-            <div class="stage-pill">✓ DeepTutor Chart-Reading Verification</div>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+              <div class="stage-pill" style="margin-top:0; flex:1;">✓ DeepTutor Chart Verifier</div>
+              <a class="ctrl-btn active" href="/app?wb=wb1-visual-verifier">Open Charts →</a>
+            </div>
           </div>
         </div>
       </div>
@@ -1639,7 +1704,7 @@
               <p style="font-size:0.9rem;">Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>🔗 Share / AI</code> menu for ChatGPT, Claude, and Perplexity.</p>
             </div>
             <div class="cta-row">
-              <a class="cta-btn" href="/">🚀 Open Interactive Workbench</a>
+              <a class="cta-btn" href="/app">🚀 Open Interactive Workbench (/app)</a>
               <a class="cta-btn secondary" href="/index.md">📄 View Markdown Twin (/index.md)</a>
               <a class="cta-btn secondary" href="/llms-full.txt">🤖 Read /llms-full.txt</a>
             </div>

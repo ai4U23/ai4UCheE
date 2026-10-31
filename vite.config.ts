@@ -11,7 +11,7 @@ function discoveryHeadersPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const urlPath = (req.url ?? '/').split('?')[0];
-        if (urlPath === '/' || urlPath === '/index.html') {
+        if (urlPath === '/' || urlPath === '/showcase.html') {
           res.setHeader('Vary', 'Accept');
           if (String(req.headers.accept ?? '').includes('text/markdown')) {
             res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
@@ -19,6 +19,18 @@ function discoveryHeadersPlugin(): Plugin {
             res.end(fs.readFileSync(path.join(publicDir, 'index.md'), 'utf8'));
             return;
           }
+          res.setHeader('Content-Type', 'text/html; charset=utf-8');
+          res.end(fs.readFileSync(path.join(publicDir, 'showcase.html'), 'utf8'));
+          return;
+        } else if (urlPath === '/app' || urlPath === '/workbench' || urlPath === '/index.html') {
+          res.setHeader('Vary', 'Accept');
+          if (String(req.headers.accept ?? '').includes('text/markdown')) {
+            res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+            res.setHeader('X-Robots-Tag', 'noindex');
+            res.end(fs.readFileSync(path.join(publicDir, 'index.md'), 'utf8'));
+            return;
+          }
+          req.url = '/index.html';
         } else if (urlPath === '/index.md' || urlPath === '/index.html.md') {
           res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
           res.setHeader('X-Robots-Tag', 'noindex');

@@ -87,7 +87,7 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
         </div>
         <div className="wb-actions-row">
           <a
-            href="/showcase.html"
+            href="/"
             target="_blank"
             rel="noreferrer"
             data-testid="open-full-showcase-link"
@@ -103,7 +103,7 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
               textDecoration: 'none',
             }}
           >
-            ✨ Open Full Showcase Page ↗
+            🏠 Open Showcase Homepage ↗
           </a>
           <button type="button" data-testid="close-showcase-modal-btn" onClick={onClose}>
             ✕ Close

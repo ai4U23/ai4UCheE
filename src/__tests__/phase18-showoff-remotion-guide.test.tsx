@@ -67,6 +67,8 @@ describe('Phase 18 — Showcase Homepage (/ak:show-off) & Remotion Video Guide (
     expect(html).toContain('id="problem-solving"');
     expect(html).toContain('id="whitebox-copilot"');
     expect(html).toContain('id="calc-sheet-cta"');
+    expect(html).toContain('href="/app"');
+    expect(html).toContain('href="/app?wb=wb2-thermo-dippr"');
     expect(html).toContain('ak-diagram-root');
     expect(html).not.toContain('lang-vi-btn');
   });

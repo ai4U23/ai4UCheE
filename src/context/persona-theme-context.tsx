@@ -44,11 +44,28 @@ export const PersonaThemeProvider: React.FC<{
   children,
   initialPersona = 'plant',
   initialTheme = 'paper',
-  initialWorkbench = 'wb1-visual-verifier',
+  initialWorkbench,
 }) => {
+  const resolvedInitialWb = React.useMemo<WorkbenchId>(() => {
+    if (initialWorkbench) return initialWorkbench;
+    if (typeof window !== 'undefined') {
+      const wbParam = new URLSearchParams(window.location.search).get('wb') as WorkbenchId | null;
+      if (wbParam && [
+        'wb1-visual-verifier',
+        'wb2-thermo-dippr',
+        'wb3-hydraulics',
+        'wb4-distillation',
+        'wb6-kinetics-reactors',
+        'wb5-handbook-atlas',
+      ].includes(wbParam)) {
+        return wbParam;
+      }
+    }
+    return 'wb1-visual-verifier';
+  }, [initialWorkbench]);
   const [personaMode, setPersonaMode] = useState<PersonaMode>(initialPersona);
-  const [themeMode, setThemeMode] = useState<ThemeMode>('paper');
-  const [activeWorkbench, setActiveWorkbench] = useState<WorkbenchId>(initialWorkbench);
+  const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme);
+  const [activeWorkbench, setActiveWorkbench] = useState<WorkbenchId>(resolvedInitialWb);
   const [selectedChips, setSelectedChips] = useState<SelectedChip[]>([]);
 
   useEffect(() => {
