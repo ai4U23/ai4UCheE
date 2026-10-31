@@ -68,6 +68,10 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
     )) as Record<string, unknown>;
     setCompiledHtml(String(out.html_document ?? ''));
     setCompiledMd(String(out.markdown_latex ?? ''));
+    window.setTimeout(() => {
+      const el = document.querySelector('[data-testid="compiled-calc-sheet-output"]');
+      if (el && typeof el.scrollIntoView === 'function') el.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }, 0);
   };
 
   return (
@@ -77,7 +81,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
       ariaLabel="Senior-Engineer QA/QC Calculation Sheet Modal"
       onClose={onClose}
     >
-        <header className="wb-toolbar">
+        <header className="wb-toolbar modal-sticky-header" data-testid="calc-sheet-sticky-header">
           <h3>📋 Senior-Engineer QA/QC Calculation Sheet Exporter</h3>
           <button type="button" onClick={onClose} data-testid="close-calc-sheet-modal">
             Close

@@ -46,7 +46,7 @@ export const FRAMER_SWARM_PULSE_TRANSITION: Transition = {
 
 /** Enter-only container & item variants (NO exit prop -> 100% synchronous DOM unmount for Vitest) */
 export const FRAMER_STAGE_VARIANTS: Variants = {
-  initial: { opacity: 0, y: 18, scale: 1 },
+  initial: { opacity: 1, y: 10, scale: 1 },
   animate: {
     opacity: 1,
     y: 0,
@@ -59,7 +59,7 @@ export const FRAMER_STAGE_VARIANTS: Variants = {
 };
 
 export const FRAMER_ITEM_VARIANTS: Variants = {
-  initial: { opacity: 0, y: 12, scale: 0.99 },
+  initial: { opacity: 1, y: 8, scale: 0.99 },
   animate: {
     opacity: 1,
     y: 0,

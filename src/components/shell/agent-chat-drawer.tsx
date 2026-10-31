@@ -99,7 +99,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
                 key={chip.chipId}
                 className="composer-chip"
                 data-testid={`chip-${chip.chipId}`}
-                initial={{ opacity: 0, scale: 0.92 }}
+                initial={{ opacity: 1, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={FRAMER_BOUNCE_SPRING}
               >
@@ -131,7 +131,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
             key={m.id}
             className={`chat-msg chat-${m.role}`}
             data-testid={m.role === 'agent' ? 'copilot-agent-message' : undefined}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 1, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={FRAMER_BOUNCE_SPRING}
           >

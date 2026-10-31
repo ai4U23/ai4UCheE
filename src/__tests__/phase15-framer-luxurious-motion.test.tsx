@@ -53,8 +53,10 @@ describe('Phase 15 — Framer "Luxurious Three" Motion & Surface Choreography', 
   it('Test 2 (Swarm Pulse Telemetry & Stage Entrances): renders SwarmPulseDot beacons and enter-only FramerEntranceStage with synchronous unmounts', () => {
     render(<App />);
 
-    // Default workbench is wb1-visual-verifier wrapped in FramerEntranceStage
-    expect(screen.getByTestId('stage-wb1-visual-verifier')).toBeTruthy();
+    // Default workbench is wb1-visual-verifier wrapped in FramerEntranceStage with solid opacity: 1 (zero WAAPI opacity: 0 lag)
+    const wb1Stage = screen.getByTestId('stage-wb1-visual-verifier');
+    expect(wb1Stage).toBeTruthy();
+    expect(wb1Stage.style.opacity).not.toBe('0');
 
     // SwarmPulseDot rendered in header dof-badge and Co-Pilot drawer badges
     const pulseDots = screen.getAllByTestId('swarm-pulse-dot');
@@ -63,7 +65,9 @@ describe('Phase 15 — Framer "Luxurious Three" Motion & Surface Choreography', 
     // Switch to WB2 Thermo: stage-wb1-visual-verifier unmounts synchronously (0ms exit hold) and stage-wb2-thermo-dippr mounts
     fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
     expect(screen.queryByTestId('stage-wb1-visual-verifier')).toBeNull();
-    expect(screen.getByTestId('stage-wb2-thermo-dippr')).toBeTruthy();
+    const wb2Stage = screen.getByTestId('stage-wb2-thermo-dippr');
+    expect(wb2Stage).toBeTruthy();
+    expect(wb2Stage.style.opacity).not.toBe('0');
 
     // Switch WB2 diagram mode to Cycles & Equilibrium: VLE chart unmounts synchronously
     fireEvent.click(screen.getByTestId('wb2-mode-cycles-eq'));
@@ -91,10 +95,13 @@ describe('Phase 15 — Framer "Luxurious Three" Motion & Surface Choreography', 
     expect(sec11Pill.className).toContain('active');
     expect(sec11Pill.querySelector('.framer-pill-glow')).toBeTruthy();
 
-    // Open Senior Calc Sheet Modal (FramerModalShell + SwarmPulseDot inside safety badge) and close synchronously
+    // Open Senior Calc Sheet Modal (FramerModalShell + sticky header + SwarmPulseDot inside safety badge) and close synchronously
     fireEvent.click(screen.getByTestId('export-calc-sheet-btn'));
     const modal = screen.getByTestId('calc-sheet-modal');
     expect(modal).toBeTruthy();
+    expect(modal.style.opacity).not.toBe('0');
+    const stickyHeader = screen.getByTestId('calc-sheet-sticky-header');
+    expect(stickyHeader.className).toContain('modal-sticky-header');
     const safetyBadge = screen.getByTestId('calc-sheet-safety-badge');
     expect(safetyBadge.querySelector('.swarm-pulse-dot')).toBeTruthy();
 

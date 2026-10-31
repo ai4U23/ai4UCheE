@@ -29,7 +29,7 @@ export const FramerEntranceStage: React.FC<FramerEntranceStageProps> = ({
     className={className}
     data-testid={testId}
     style={style}
-    initial={{ opacity: 0, y: 18, scale: 1 }}
+    initial={{ opacity: 1, y: 10, scale: 1 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     transition={delay > 0 ? { ...FRAMER_ENTRANCE_TRANSITION, delay } : FRAMER_ENTRANCE_TRANSITION}
   >
@@ -113,7 +113,7 @@ export const FramerModalShell: React.FC<FramerModalShellProps> = ({
     className="modal-backdrop"
     data-testid={backdropTestId}
     onClick={onClose}
-    initial={{ opacity: 0 }}
+    initial={{ opacity: 1 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.2 }}
   >
@@ -124,7 +124,7 @@ export const FramerModalShell: React.FC<FramerModalShellProps> = ({
       aria-label={ariaLabel}
       data-testid={dialogTestId}
       onClick={(e) => e.stopPropagation()}
-      initial={{ opacity: 0, y: 16, scale: 0.97 }}
+      initial={{ opacity: 1, y: 0, scale: 1 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={FRAMER_BOUNCE_SPRING}
     >
