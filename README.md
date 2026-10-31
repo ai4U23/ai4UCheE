@@ -15,7 +15,7 @@ Bi-directional agent-native chemical engineering workbench organized by **Chemic
 - Governed under `control-plane (repo ai4u)`
 - Registry entry: `repos.yaml` -> `verticals.ai4UCheE`
 - Remote: `https://github.com/ai4U23/ai4UCheE.git`
-- Live URL: [https://chemie.ai4u.now](https://chemie.ai4u.now) (Tailnet: [http://chemie](http://chemie) / `100.64.56.26`)
+- Live URL: [https://chemeng.ai4u.now](https://chemeng.ai4u.now) (Tailnet: [http://chemeng](http://chemeng) / `100.64.56.26`; legacy alias `chemie.ai4u.now` still resolves)
 
 ## Subject-First Workbenches & Cross-Subject Utility Tools
 1. **Subject 1 (`WB2`): Thermodynamics, Phase Equilibria & DIPPR** — Exact DIPPR Eq. 101/106 correlations, pint field-unit normalization (`psig` ↔ `psia`), Carlson property-package decision tree, interactive **Diagram Mode Bar (`wb2-diagram-mode-bar`)**, **Binary Non-Ideal VLE $T\text{-}x\text{-}y$ / $y\text{-}x$ Phase Lens & Azeotrope Explorer**, **Peng-Robinson Cubic EOS $Z(P_r, T_r)$ & $P_r\text{-}V_r$ Isotherm Dome**, and **Rankine / Vapor-Compression $T\text{-}S$ Cycle Dome + Van 't Hoff Reaction Equilibrium $X_{\text{eq}}(T)$ with Adiabatic Line** (*Perry's* + *Smith-Van Ness-Abbott* + *Fogler* + *Seader*).
