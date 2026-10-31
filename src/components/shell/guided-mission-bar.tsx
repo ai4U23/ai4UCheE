@@ -19,6 +19,10 @@ import {
   subscribeStudentProfile,
   type StudentProfileState,
 } from '../../lib/student-adaptive-model';
+import {
+  autoCompleteProblemStagesForRescue,
+  markProblemDefinitionReviewed,
+} from '../../lib/hypothesis-verification-engine';
 import { AdaptiveRecommendationRail } from './adaptive-recommendation-rail';
 import { MissionChecklistBanner } from './mission-checklist-banner';
 import { GUIDED_MISSIONS, getMissionById, type GuidedMissionScenario } from './mission-scenarios';
@@ -62,6 +66,7 @@ export const GuidedMissionBar: React.FC = () => {
     solvedRecordedRef.current = null;
     setPersonaMode('learn');
     setActiveWorkbench(mission.workbench);
+    markProblemDefinitionReviewed(mission.workbench);
     clearChips();
     toggleChip(mission.chip);
     agentNative.ui.output(mission.proofCard);
@@ -73,6 +78,7 @@ export const GuidedMissionBar: React.FC = () => {
     usedAutoFixRef.current = true;
     solvedRecordedRef.current = mission.id;
     recordMissionOutcome(mission.id, true);
+    autoCompleteProblemStagesForRescue(mission.workbench);
     applyMutations(mission, mission.rescueMutations);
     agentNative.ui.output({
       type: 'equation-proof-card',
@@ -109,7 +115,7 @@ export const GuidedMissionBar: React.FC = () => {
       <div className="mission-bar" data-testid="guided-mission-bar">
         {!collapsed && (
           <>
-            <span className="mission-pill">🧭 Guided Student Missions — 1-click start</span>
+            <span className="mission-pill">🚨 Step 1 · Start from a Real-Life Plant Problem (Fogler &amp; LeBlanc 6-Stage Flow)</span>
             {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
               <button
                 key={mission.id}

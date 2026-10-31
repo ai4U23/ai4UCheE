@@ -131,6 +131,8 @@ export const AppShell: React.FC<AppShellProps> = ({
         </div>
       </header>
 
+      <GuidedMissionBar />
+
       <nav className="wb-toolbar" role="tablist" aria-label="Engineering Subject Workbenches">
         {WORKBENCH_TABS.map((tab) => {
           const isActive = activeWorkbench === tab.id;
@@ -151,8 +153,6 @@ export const AppShell: React.FC<AppShellProps> = ({
           );
         })}
       </nav>
-
-      <GuidedMissionBar />
 
       <main className="shell-workspace wb-split">
         <div>{(renderWorkbench ?? defaultRenderWorkbench)(activeWorkbench)}</div>

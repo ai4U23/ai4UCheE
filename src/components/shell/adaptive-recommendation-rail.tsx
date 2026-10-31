@@ -1,6 +1,6 @@
 // AdaptiveRecommendationRail: Instant Browser Scorecard (with Student Name switcher),
-// Scaffolding Mode selector (`Auto | Guided | Socratic | Challenge`), active trap alert,
-// and 1-click Personalized Next Action button.
+// Scaffolding Mode selector (`Auto | Guided | Socratic | Challenge`), Hypothesis Prove/Disprove
+// tally badge, active trap alert, and 1-click Personalized Next Action button.
 import React, { useEffect, useState } from 'react';
 import {
   dispatchWorkbenchMutation,
@@ -13,6 +13,11 @@ import {
   buildAdaptiveRecommendations,
   type AdaptiveRecommendation,
 } from '../../lib/adaptive-recommendation-engine';
+import {
+  evaluateSixStageProgress,
+  resetProblemSolvingStore,
+  subscribeProblemSolvingStore,
+} from '../../lib/hypothesis-verification-engine';
 import {
   getAverageMastery,
   getStudentProfile,
@@ -34,6 +39,7 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
 }) => {
   const { activeWorkbench, setActiveWorkbench, setPersonaMode } = usePersonaTheme();
   const [profile, setProfile] = useState<StudentProfileState>(() => getStudentProfile());
+  const [, setHypTick] = useState<number>(0);
   const [screenPayload, setScreenPayload] = useState<Record<string, unknown>>(
     () => getClientAppState().payload,
   );
@@ -42,11 +48,13 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
 
   useEffect(() => subscribeStudentProfile((p) => setProfile({ ...p })), []);
   useEffect(() => subscribeClientAppState((s) => setScreenPayload(s.payload)), []);
+  useEffect(() => subscribeProblemSolvingStore(() => setHypTick((t) => t + 1)), []);
 
   const bundle = buildAdaptiveRecommendations(profile, {
     activeWorkbench,
     payload: screenPayload,
   });
+  const stageStatus = evaluateSixStageProgress(activeWorkbench);
   const avgPct = Math.round(getAverageMastery(profile) * 100);
   const students = listStudentProfiles();
   const rec = bundle.primaryRecommendation;
@@ -90,17 +98,12 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
           data-testid="student-switcher-select"
           value={profile.studentId}
           onChange={(e) => {
-            if (e.target.value === '__new__') {
-              setAddingStudent(true);
-            } else {
-              switchStudentProfile(e.target.value);
-            }
+            if (e.target.value === '__new__') setAddingStudent(true);
+            else switchStudentProfile(e.target.value);
           }}
         >
           {students.map((s) => (
-            <option key={s.studentId} value={s.studentId}>
-              {s.studentName}
-            </option>
+            <option key={s.studentId} value={s.studentId}>{s.studentName}</option>
           ))}
           <option value="__new__">+ New Student…</option>
         </select>
@@ -122,6 +125,10 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
 
       <span className="mission-pill" data-testid="student-mastery-badge">
         ⭐ Mastery: {avgPct}% ({profile.solvedMissionIds.length}/5 Missions)
+      </span>
+
+      <span className="mission-pill" data-testid="hypothesis-verified-badge" title="Fogler & LeBlanc Rule #12 Hypotheses Proved/Disproved">
+        🔬 Hypotheses: {stageStatus.correctHypothesisCount}/{stageStatus.totalHypothesisCount}
       </span>
 
       <label className="mono" style={{ fontSize: '0.76rem' }}>
@@ -157,8 +164,11 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
       <button
         type="button"
         data-testid="reset-student-profile-btn"
-        onClick={() => resetStudentProfile()}
-        title="Reset current student scorecard"
+        onClick={() => {
+          resetStudentProfile();
+          resetProblemSolvingStore();
+        }}
+        title="Reset current student scorecard and hypothesis log"
       >
         ↺ Reset Scorecard
       </button>

@@ -7,6 +7,7 @@ import { solveThermo } from './thermo-solver-math';
 import { solveDistillation, type DistillationInputs } from './distillation-solver-math';
 import { solveKineticsReactor, type KineticsReactorInputs } from './kinetics-solver-math';
 import { buildAtlasCalcSheetSection } from '../../lib/perry-sections/perry-atlas-registry';
+import { buildFoglerTroubleshootingMarkdownSection } from './calc-sheet-troubleshooting-section';
 
 export interface CalcSheetRow {
   parameter: string;
@@ -160,6 +161,8 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
     '',
     '## White-Box Derivations',
     ...equations.map((e) => `1. **${e.title}** ${e.citation}\n   - Symbolic: \\(${e.symbolicLatex}\\)\n   - Substituted: \\(${e.substitutedLatex}\\)\n   - Result: \\(${e.resultLatex}\\)`),
+    '',
+    buildFoglerTroubleshootingMarkdownSection(wb, safetyStatus === 'PASS'),
     '',
     '---',
     'Prepared by: ____________  |  Checked by: ____________  |  Date: ____________',

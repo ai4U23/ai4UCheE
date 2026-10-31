@@ -1,13 +1,16 @@
-// Adaptive Pedagogical Co-Pilot Tutor (`guided` | `socratic` | `challenge`) & Live Anomaly Fallback.
-// Extracted from `copilot-responder.ts` to keep all action files strictly `< 200` LOC while providing:
+// Adaptive Pedagogical Co-Pilot Tutor (`guided` | `socratic` | `challenge`), Fogler & LeBlanc (2008)
+// 6-Stage Problem-Solving Collaborator, & Live Anomaly Fallback.
+// Keeps all action files strictly `< 200` LOC while providing:
 // 1) 3-tier scaffolding coaching (`guided` worked recipe, `socratic` diagnostic hint, `challenge` EPC trade-off),
-// 2) Live screen anomaly fallback (`diagnoseLiveScreenAnomalies`) when a student asks "Help, what's wrong?",
-// 3) Compact `<student-profile>` XML injection for `gateway.ai4u.now` (`gemini-4-argon-low`).
+// 2) Fogler & LeBlanc 6-Stage Problem Definition (K-T IS/IS NOT), Fundamental Theory, Handbook & Hypothesis testing,
+// 3) Live screen anomaly fallback (`diagnoseLiveScreenAnomalies`) & `<student-profile>` XML injection.
 import type { WorkbenchId, WorkbenchLivePayload } from './view-screen';
 import {
   buildAdaptiveRecommendations,
   type AdaptiveRecommendation,
 } from '../lib/adaptive-recommendation-engine';
+import { getFoglerCaseForWorkbench } from '../lib/fogler-problem-solving-catalog';
+import { evaluateSixStageProgress } from '../lib/hypothesis-verification-engine';
 import {
   detectLivePayloadTraps,
   getEffectiveScaffoldingLevel,
@@ -91,6 +94,8 @@ export function buildAdaptiveCopilotCoaching(input: {
   const traps = detectLivePayloadTraps(wb, livePayload);
   const bundle = buildAdaptiveRecommendations(profile, { activeWorkbench: wb, payload: livePayload });
   const anomalyLine = diagnoseLiveScreenAnomalies(wb, livePayload, bundle.detectedTraps);
+  const foglerCase = getFoglerCaseForWorkbench(wb);
+  const stageProgress = evaluateSixStageProgress(wb);
 
   const tierBlock =
     level === 'socratic'
@@ -99,8 +104,9 @@ export function buildAdaptiveCopilotCoaching(input: {
         ? CHALLENGE_PROBES[wb] ?? CHALLENGE_PROBES['wb1-visual-verifier']
         : `🌱 Guided Step-by-Step (${profile.studentName}): Follow the numbered derivation below, or click "${bundle.primaryRecommendation.title}" to practice this concept.`;
 
+  const foglerLine = `🔬 Fogler & LeBlanc 6-Stage Collaborator ${foglerCase.foglerBookCitation}: ${foglerCase.whyLearnSubject} | K-T Real Problem: ${foglerCase.ktDefinition.realProblemDefined} | Hypotheses Verified: ${stageProgress.correctHypothesisCount}/${stageProgress.totalHypothesisCount} (Rule #12: seek to reject as well as accept — ${foglerCase.applicableHandbook.primaryCitation}).`;
   const recLine = `🧭 Next Recommended Step: ${bundle.primaryRecommendation.title} — ${bundle.primaryRecommendation.rationale}`;
-  const coachingBlock = [anomalyLine, tierBlock, recLine].filter(Boolean).join('\n');
+  const coachingBlock = [anomalyLine, tierBlock, foglerLine, recLine].filter(Boolean).join('\n');
 
   return {
     coachingBlock,
