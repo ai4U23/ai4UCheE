@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture",
+    "subtitle": "6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional <current-screen> Co-Pilot",
+    "preset": "editorial",
+    "theme": "light",
+    "animation": "trace",
+    "views": [
+      {
+        "id": "ch1-studio",
+        "title": "1. 3-Zone Studio Shell",
+        "narrative": "Top Studio Bar (Zone 1), Interactive SVG Canvas & Scrubbable Dials (Zone 2), and Sticky AI Co-Pilot Inspector (Zone 3).",
+        "focus_nodes": ["zone1-bar", "zone2-canvas", "zone3-copilot"]
+      },
+      {
+        "id": "ch2-solvers",
+        "title": "2. Deterministic ChE Solvers",
+        "narrative": "5 Subject Labs + 25-Section Perry Atlas + 6-Book PyMuPDF/EPUB & CoolProp/Pint sidecar.",
+        "focus_nodes": ["zone2-canvas", "ts-solvers", "perry-sidecar", "six-book-corpus"]
+      },
+      {
+        "id": "ch3-qaqc",
+        "title": "3. Fogler 6-Stage & EPC QA/QC",
+        "narrative": "24 Real-Life Plant Problems, ChE Error-Signature Guardrails, and SQLite QA/QC Calculation Sheet export.",
+        "focus_nodes": ["fogler-engine", "zone3-copilot", "qaqc-sqlite"]
+      }
+    ]
+  },
+  "boundaries": [
+    {
+      "id": "client-studio",
+      "label": "React 19 3-Zone AI-Native Studio (Browser)",
+      "role": "cluster"
+    },
+    {
+      "id": "solver-plane",
+      "label": "Deterministic ChE Solvers & 6-Book Corpus",
+      "role": "private-network"
+    }
+  ],
+  "components": [
+    {
+      "id": "zone1-bar",
+      "label": "Zone 1 · Top Studio Bar (5 Labs · 24 Problems · Learn/Plant)",
+      "role": "frontend",
+      "layer": 0,
+      "boundary": "client-studio"
+    },
+    {
+      "id": "zone2-canvas",
+      "label": "Zone 2 · 55+ Interactive SVG Charts & 34px Dials",
+      "role": "frontend",
+      "layer": 1,
+      "boundary": "client-studio"
+    },
+    {
+      "id": "zone3-copilot",
+      "label": "Zone 3 · Bi-Directional AI Co-Pilot & GenUI Proofs",
+      "role": "gateway",
+      "layer": 1,
+      "boundary": "client-studio"
+    },
+    {
+      "id": "fogler-engine",
+      "label": "6-Stage Fogler Detective & Error-Signature Guard",
+      "role": "worker",
+      "layer": 2,
+      "boundary": "client-studio"
+    },
+    {
+      "id": "ts-solvers",
+      "label": "Client ChE Math (DIPPR · Swamee-Jain · McCabe · Levenspiel)",
+      "role": "backend",
+      "layer": 2,
+      "boundary": "solver-plane"
+    },
+    {
+      "id": "perry-sidecar",
+      "label": "Python FastAPI Sidecar (CoolProp · Pint · Handcalcs KaTeX)",
+      "role": "backend",
+      "layer": 3,
+      "boundary": "solver-plane"
+    },
+    {
+      "id": "six-book-corpus",
+      "label": "6-Book Corpus (Perry 9e · Fogler 7e · BSL · SVNA · Seader · Crowl)",
+      "role": "storage",
+      "layer": 4,
+      "boundary": "solver-plane"
+    },
+    {
+      "id": "qaqc-sqlite",
+      "label": "Senior EPC QA/QC Calc Sheet & Drizzle SQLite Store",
+      "role": "database",
+      "layer": 3,
+      "boundary": "solver-plane"
+    }
+  ],
+  "connections": [
+    {
+      "from": "zone1-bar",
+      "to": "zone2-canvas",
+      "label": "Switch Lab / Preset Mission",
+      "kind": "sync"
+    },
+    {
+      "from": "zone1-bar",
+      "to": "fogler-engine",
+      "label": "Launch L1-L4 Plant Problem",
+      "kind": "sync"
+    },
+    {
+      "from": "zone2-canvas",
+      "to": "zone3-copilot",
+      "label": "<current-screen> & +Ask Chips",
+      "kind": "bi-directional"
+    },
+    {
+      "from": "zone2-canvas",
+      "to": "ts-solvers",
+      "label": "Scrub SVG / Dials (0ms)",
+      "kind": "sync"
+    },
+    {
+      "from": "fogler-engine",
+      "to": "zone3-copilot",
+      "label": "Rule #12 & 4x/psig Guardrails",
+      "kind": "stream"
+    },
+    {
+      "from": "ts-solvers",
+      "to": "perry-sidecar",
+      "label": "Verify & High-DPI Crop",
+      "kind": "sync"
+    },
+    {
+      "from": "perry-sidecar",
+      "to": "six-book-corpus",
+      "label": "PyMuPDF / EPUB Index",
+      "kind": "sync"
+    },
+    {
+      "from": "zone3-copilot",
+      "to": "qaqc-sqlite",
+      "label": "Compile Rev 0 Calc Sheet",
+      "kind": "sync"
+    }
+  ]
+}

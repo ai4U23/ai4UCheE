@@ -10,6 +10,7 @@ import { VisualVerifierWorkbench } from '../workbenches/visual-verifier-workbenc
 import { AgentChatDrawer } from './agent-chat-drawer';
 import { GuidedMissionBar } from './guided-mission-bar';
 import { PageAxShareMenu } from './page-ax-share-menu';
+import { ShowcaseVideoModal } from './showcase-video-modal';
 
 const WORKBENCH_TABS: ReadonlyArray<{ id: WorkbenchId; label: string; short: string }> = [
   { id: 'wb2-thermo-dippr', label: 'Thermodynamics & Phase', short: "Perry's DIPPR · Smith-Van Ness-Abbott" },
@@ -42,6 +43,7 @@ export const AppShell: React.FC<AppShellProps> = ({
 }) => {
   const { personaMode, setPersonaMode, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
   const [showLabs, setShowLabs] = useState<boolean>(false);
+  const [showTourModal, setShowTourModal] = useState<boolean>(false);
   const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');
   if (activeWorkbench !== 'wb1-visual-verifier') lastSubjectRef.current = activeWorkbench;
 
@@ -143,9 +145,22 @@ export const AppShell: React.FC<AppShellProps> = ({
           <button type="button" data-testid="export-calc-sheet-btn" onClick={onExportCalcSheet}>
             📄 Calc Sheet
           </button>
+          <button
+            type="button"
+            data-testid="open-showcase-guide-btn"
+            title="Watch the Remotion Video Guide & explore the ai4UCheE Feature Showcase"
+            onClick={() => setShowTourModal(true)}
+          >
+            🎬 Guide
+          </button>
           <PageAxShareMenu />
         </div>
       </header>
+      <ShowcaseVideoModal
+        isOpen={showTourModal}
+        onClose={() => setShowTourModal(false)}
+        onSelectWorkbench={(wb) => setActiveWorkbench(wb)}
+      />
 
       <nav
         className={`wb-toolbar ${showLabs ? 'wb-labs-open' : 'studio-drawer-collapsed'}`}
