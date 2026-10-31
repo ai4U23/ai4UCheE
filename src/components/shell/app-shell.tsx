@@ -9,6 +9,7 @@ import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { VisualVerifierWorkbench } from '../workbenches/visual-verifier-workbench';
 import { AgentChatDrawer } from './agent-chat-drawer';
 import { GuidedMissionBar } from './guided-mission-bar';
+import { PageAxShareMenu } from './page-ax-share-menu';
 
 const WORKBENCH_TABS: ReadonlyArray<{ id: WorkbenchId; label: string; short: string }> = [
   { id: 'wb2-thermo-dippr', label: 'Thermodynamics & Phase', short: "Perry's DIPPR · Smith-Van Ness-Abbott" },
@@ -100,16 +101,16 @@ export const AppShell: React.FC<AppShellProps> = ({
           <img src="/ai4u-logo.png" alt="AI4U.now" className="brand-logo" data-testid="ai4u-logo" />
           <div className="brand-title-group">
             <h1>ai4UCheE</h1>
-            <span className="brand-eyebrow">ChemEng&apos;s Intelligent Workbench</span>
+            <span className="brand-eyebrow">6-Book ChE Solver · 55+ Charts · 24 Plant Problems</span>
           </div>
           <button
             type="button"
             className="lab-switcher-pill"
             data-testid="toggle-lab-switcher-btn"
             onClick={() => setShowLabs(!showLabs)}
-            title="Switch Engineering Subject Lab (or let Problem Selection switch automatically)"
+            title="Switch Engineering Subject Lab (5 Subject Labs + Charts Verifier)"
           >
-            🔧 {activeSubjectLabel} {showLabs ? '▴' : '▾'}
+            🔧 {activeSubjectLabel} · 5 Labs {showLabs ? '▴' : '▾'}
           </button>
           <span
             className="dof-badge studio-drawer-collapsed"
@@ -142,6 +143,7 @@ export const AppShell: React.FC<AppShellProps> = ({
           <button type="button" data-testid="export-calc-sheet-btn" onClick={onExportCalcSheet}>
             📄 Calc Sheet
           </button>
+          <PageAxShareMenu />
         </div>
       </header>
 

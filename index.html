@@ -3,7 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChemEng's Intelligent Workbench — ai4UCheE (chemie.ai4u.now)</title>
+    <title>ChemEng's Intelligent Workbench — ai4UCheE (chemeng.ai4u.now)</title>
+    <meta
+      name="description"
+      content="Bi-directional agent-native chemical engineering workbench blending Perry's 9th Ed., Fogler, Bird-Stewart-Lightfoot, Smith-Van Ness-Abbott, Seader &amp; Crowl-Louvar with 55+ interactive charts and 24 real-life plant problems."
+    />
+    <link rel="canonical" href="https://chemeng.ai4u.now/" />
+    <link rel="alternate" type="text/markdown" href="https://chemeng.ai4u.now/index.md" title="Markdown twin" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ai4UCheE — ChemEng's Intelligent Workbench" />
+    <meta property="og:title" content="ChemEng's Intelligent Workbench — ai4UCheE" />
+    <meta
+      property="og:description"
+      content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems."
+    />
+    <meta property="og:url" content="https://chemeng.ai4u.now/" />
+    <meta property="og:image" content="https://chemeng.ai4u.now/og-card.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="ai4UCheE — ChemEng's Intelligent Workbench in Institutional Ivory and Sovereign Deep Navy"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ChemEng's Intelligent Workbench — ai4UCheE" />
+    <meta
+      name="twitter:description"
+      content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems."
+    />
+    <meta name="twitter:image" content="https://chemeng.ai4u.now/og-card.png" />
     <link rel="icon" type="image/png" href="/ai4u-logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -11,9 +39,55 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Karla:wght@400;500;600;700&display=swap"
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://chemeng.ai4u.now/#organization",
+            "name": "AI4U.now",
+            "url": "https://chemeng.ai4u.now/",
+            "logo": "https://chemeng.ai4u.now/ai4u-logo.png"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://chemeng.ai4u.now/#website",
+            "url": "https://chemeng.ai4u.now/",
+            "name": "ai4UCheE — ChemEng's Intelligent Workbench",
+            "publisher": { "@id": "https://chemeng.ai4u.now/#organization" }
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://chemeng.ai4u.now/#app",
+            "name": "ai4UCheE — ChemEng's Intelligent Workbench",
+            "applicationCategory": "EducationalApplication, EngineeringApplication",
+            "operatingSystem": "Web",
+            "url": "https://chemeng.ai4u.now/",
+            "description": "Bi-directional agent-native chemical engineering workbench blending Perry's 9th Ed., Fogler 7th Ed., Bird-Stewart-Lightfoot 2nd Ed., Smith-Van Ness-Abbott 9th Ed., Seader 4th Ed., and Crowl & Louvar 4th Ed. with 55+ interactive charts and 24 real-life plant problems.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main>
+        <h1>ai4UCheE — ChemEng's Intelligent Workbench</h1>
+        <p>
+          Bi-directional agent-native chemical engineering workbench blending 6 canonical textbooks (Perry's 9th Ed.,
+          Fogler 7th Ed., Bird-Stewart-Lightfoot 2nd Ed., Smith-Van Ness-Abbott 9th Ed., Seader 4th Ed., and Crowl &amp;
+          Louvar 4th Ed.) across 5 Subject Labs (Thermodynamics &amp; DIPPR, Fluid &amp; Transport Hydraulics,
+          Separations &amp; McCabe-Thiele Distillation, Kinetics &amp; Reactor Design, and the 25-Section Perry's
+          Atlas), 10 Calibrated Nomographs, and 24 Real-Life Plant Troubleshooting Problems.
+        </p>
+        <p>
+          Machine-readable documentation is available at <a href="/index.md">/index.md</a>,
+          <a href="/llms.txt">/llms.txt</a>, and <a href="/llms-full.txt">/llms-full.txt</a>.
+        </p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

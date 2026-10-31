@@ -1,0 +1,48 @@
+# ai4UCheE — Full Chemical Engineering Reference & Solver Guide (llms-full.txt)
+
+Canonical URL: https://chemeng.ai4u.now/
+Markdown Twin: https://chemeng.ai4u.now/index.md
+Last Updated: 2026-10-31
+
+## 1. Mission & Engineering Rigor Invariants
+`ai4UCheE` (ChemEng's Intelligent Workbench) is the Chemical Engineering AI vertical within the `ai4u` ecosystem (`ai4U23`), built for both students (`🎓 Learn Mode`) and EPC/plant engineers (`🏭 Plant Mode`). Every calculation enforces three non-negotiable physical guardrails:
+1. **Gauge vs. Absolute Pressure (`psig` vs. `psia`):** All thermodynamic (`DIPPR Eq. 101`, `Peng-Robinson`), ideal-gas (`C_A0 = P_abs / RT`), and pump suction (`NPSH_A`) calculations explicitly convert gauge pressure `P_psig` to absolute pressure `P_psia = P_psig + 14.6959` (`101,325 Pa`).
+2. **Fanning (`f_F`) vs. Darcy (`f_D = 4 * f_F`) Friction Factor:** *Perry's 9th Ed., Fig. 6-9 (p. 6-10)* plots the **Fanning** friction factor `f_F`, whereas the Darcy-Weisbach head-loss equation `h_f = f_D * (L/D) * (v^2 / 2g)` requires the **Darcy** friction factor `f_D = 4 * f_F` `[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11]`.
+3. **3-Stage White-Box Equation Proofs:** Every solver displays `Stage 1: Symbolic Equation` → `Stage 2: Live Numerical Substitution` → `Stage 3: Evaluated Result with Units & Textbook Citation`.
+
+## 2. Complete Workbench & Solver Catalog
+
+### WB1 — Calibrated Nomographs & Chart Verifier
+- **10 Calibrated Multi-Book Nomographs:**
+  1. `6-10`: Moody / Fanning Friction Factor `f_F(Re)` `[Perry's 9th Ed., Fig. 6-9, p. 6-10]`
+  2. `14-37`: Fair's Souders-Brown Entrainment Flooding `C_sb(F_LV)` `[Perry's 9th Ed., Fig. 14-32, p. 14-37]`
+  3. `14-57`: Eckert Generalized Pressure Drop Correlation (GPDC) `[Perry's 9th Ed., Fig. 14-55, p. 14-57]`
+  4. `2-53`: DIPPR Eq. 101 Liquid Vapor Pressure `P_vp(T)` `[Perry's 9th Ed., Table 2-8, p. 2-53]`
+  5. `19-6`: Levenspiel CSTR vs. PFR Volume Ratio `V_CSTR / V_PFR` `[Perry's 9th Ed., Sec. 19, p. 19-6; Fogler Ch. 2]`
+  6. `6-52`: Terminal Settling Sphere Drag Coefficient `C_D(Re_p)` `[Perry's 9th Ed., Fig. 6-61, p. 6-52; BSL Ch. 6]`
+  7. `4-18`: Lee-Kesler Compressibility Factor `Z^0(P_r, T_r)` `[Perry's 9th Ed., Sec. 4, p. 4-18; SVNA Ch. 3]`
+  8. `15-10`: Spherical Catalyst Thiele Effectiveness `eta(phi_1)` `[Fogler 7th Ed., Ch. 15; BSL Ch. 18]`
+  9. `14-15`: Kremser Absorption / Stripping Stages `N_OG(A)` `[Perry's 9th Ed., Sec. 14, p. 14-15; Seader Ch. 6]`
+  10. `23-42`: Semenov Thermal Runaway Critical Locus `psi(T_c)` `[Perry's 9th Ed., Sec. 23; Crowl & Louvar Ch. 8]`
+
+### WB2 — Thermodynamics, Phase Equilibria & DIPPR
+- **DIPPR Eq. 101 Vapor Pressure:** `ln P_vp = A + B/T + C*ln(T) + D*T^E` (Pa, K) `[Perry's 9th Ed., Table 2-8, p. 2-53]`.
+- **DIPPR Eq. 106 Heat of Vaporization:** `Delta H_vap = A * (1 - T_r)^(B + C*T_r + D*T_r^2 + E*T_r^3)` (J/kmol) `[Perry's 9th Ed., Table 2-69, p. 2-120]`.
+- **Carlson Property-Package Decision Tree:** Nonpolar hydrocarbons (`Peng-Robinson` / `SRK`), Polar non-electrolytes (`Wilson` / `NRTL` / `UNIQUAC`), Liquid-liquid split LLE (`NRTL` or `UNIQUAC` — never `Wilson`), Vapor-phase carboxylic acid dimerization (`NRTL-HOC`).
+
+### WB3 — Fluid Mechanics, Transport & Piping Hydraulics
+- **Turbulent Colebrook / Haaland Friction & Darcy-Weisbach:** Explicit `f_D = 4 * f_F` guardrail across `Min 70%`, `Normal 100%`, and `Rated 120%` flow cases.
+- **Pump Suction Cavitation (`NPSH_A`):** `NPSH_A = (P_suction,abs - P_vp) / (rho * g) + z_suction - h_f,suction` `[Perry's 9th Ed., Sec. 10, pp. 10-24..25]`.
+- **ISA-75.01 Control Valve Choked Flow:** Liquid pressure recovery factor `F_L`, critical pressure ratio factor `F_F = 0.96 - 0.28 * sqrt(P_v / P_c)`, and choked pressure drop `Delta P_max = F_L^2 * (P_1 - F_F * P_v)` `[Perry's 9th Ed., Eqs. 8-77..8-81, p. 8-71]`.
+
+### WB4 — Separation Processes, McCabe-Thiele & Column Hydraulics
+- **Fenske-Underwood-Gilliland & McCabe-Thiele:** Minimum stages `N_min`, minimum reflux `R_min`, operating reflux `R = (R/R_min) * R_min`, and feed thermal quality `q`-line slope `q / (q - 1)`.
+- **Fair's Entrainment Flooding & Column Sizing:** Flow parameter `F_LV = (L/V) * sqrt(rho_V / rho_L)`, Souders-Brown capacity parameter `C_sb`, flooding velocity `u_n,flood = C_sb * (sigma / 20)^0.2 * sqrt((rho_L - rho_V) / rho_V)`, and percent of flood `[Perry's 9th Ed., Fig. 14-32, p. 14-37]`.
+
+### WB6 — Kinetics, Catalysis & Chemical Reactor Design
+- **Levenspiel CSTR vs. PFR Sizing & PBR Ergun Pressure Drop:** `dX/dW = -r'_A / F_A0`, `dy/dW = -alpha * (1 + epsilon * X) / (2 * y)` where `y = P / P_0` `[Fogler 7th Ed., Ch. 2 & Ch. 5]`.
+- **Internal Pore Diffusion (Thiele Modulus):** Spherical catalyst effectiveness `eta = (3 / phi^2) * (phi * coth(phi) - 1)` `[Fogler 7th Ed., Ch. 15; BSL Ch. 18]`.
+- **Semenov Thermal Runaway:** Heat generation `G(T)` vs. removal `R(T)`, dimensionless Semenov number `psi`, critical runaway limit `psi_crit = 1/e ≈ 0.368` `[Fogler 7th Ed., Ch. 12; Crowl & Louvar 4th Ed., Ch. 8]`.
+
+### WB5 — 6-Book Corpus & 25-Section Perry's Atlas
+- Covers all 25 sections of *Perry's 9th Edition* (`Sec 1` Conversion Factors through `Sec 25` Materials of Construction) with interactive 2-parameter SVG curves and Back-of-Book Index lookup (`pp. 2244–2274`).

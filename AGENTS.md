@@ -20,8 +20,10 @@ Governance and architectural invariants for `ai4UCheE` (ChemEng's Intelligent Wo
    - `deployment-guide.md`
    - `system-architecture.md`
    - `project-roadmap.md`
+7. **UX / AX & Discovery Surface Discipline.** Before making UI, route, or content changes, read `DESIGN.md` and `REVIEW.md`. Keep AX discovery surfaces (`public/robots.txt`, `public/sitemap.xml`, `public/llms.txt`, `public/llms-full.txt`, `public/index.md`, `index.html` JSON-LD/OG metadata, and `<PageAxShareMenu />`) in sync with routes and content, and verify changes across Desktop (`1440×900`), Tablet (`768×1024`), and Mobile (`375×812` + `320×812` reflow).
 
 ## Structure
+- `DESIGN.md` & `REVIEW.md` — Sovereign Design System tokens, motion rules, and UX/AX verification gates.
 - `docs/` — Ecosystem documentation suite.
 - `plans/` — Master implementation plans, phase blueprints, and validation reports.
 - `services/perry-engine/` — Deterministic Python ChE & PDF sidecar (FastAPI + PyMuPDF + CoolProp/SciPy/Pint).

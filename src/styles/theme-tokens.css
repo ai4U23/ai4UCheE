@@ -100,6 +100,23 @@ code, pre, .mono {
 .app-shell > :not(.shell-header), .shell-workspace > *, .wb-split > * { min-width: 0; max-width: 100%; }
 
 /* Stack the outer workspace grid and inner splits on narrow viewports. */
+@media (max-width: 1200px) {
+  .shell-header {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+    row-gap: 0.35rem;
+  }
+  .shell-header > .brand-identity,
+  .shell-header > .wb-actions-row,
+  .shell-header > .mission-bar {
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    white-space: normal;
+    margin: 0;
+  }
+}
+
 @media (max-width: 1080px) {
   .shell-workspace,
   .wb-split {
@@ -116,9 +133,9 @@ code, pre, .mono {
 }
 
 @media (max-width: 767px) {
-  .shell-header { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
-  .shell-header > .wb-actions-row, .brand-identity { flex-wrap: wrap; justify-content: flex-start; white-space: normal; }
-  .shell-header > .mission-bar { max-width: 100%; flex-wrap: wrap; }
+  .shell-header { grid-template-columns: minmax(0, 1fr); justify-items: stretch; padding: 0.28rem 0.65rem; gap: 0.3rem; }
+  .shell-header > .wb-actions-row, .brand-identity { flex-wrap: wrap; justify-content: flex-start; white-space: normal; gap: 0.25rem; }
+  .shell-header > .mission-bar { max-width: 100%; flex-wrap: wrap; padding: 0.18rem 0.32rem; gap: 0.25rem; }
   nav.wb-toolbar { grid-template-columns: 1fr; }
   .mission-bar { flex-wrap: wrap; }
   .mission-bar button { white-space: normal; }

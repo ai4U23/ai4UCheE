@@ -1,0 +1,11 @@
+# ai4UCheE — ChemEng's Intelligent Workbench
+
+> Bi-directional agent-native chemical engineering workbench blending 6 canonical textbooks (Perry's 9th Ed., Fogler 7th Ed., Bird-Stewart-Lightfoot 2nd Ed., Smith-Van Ness-Abbott 9th Ed., Seader 4th Ed., Crowl & Louvar 4th Ed.) with 55+ interactive SVG nomographs/solvers, 3-stage White-Box KaTeX equation proofs, and 24 real-life plant problems across Learn Mode and Plant Mode.
+
+Canonical URL: https://chemeng.ai4u.now/
+Last Updated: 2026-10-31
+
+## Documentation & Machine-Readable Twins
+
+- [Workbench Overview & Subject Catalog (Markdown Twin)](https://chemeng.ai4u.now/index.md): Complete summary of all 5 Chemical Engineering Subject Labs (WB2–WB6), the WB1 Calibrated Nomograph Verifier, the 24-problem library, and bi-directional Co-Pilot API endpoints.
+- [Full Reference Corpus & Solver Guide (llms-full.txt)](https://chemeng.ai4u.now/llms-full.txt): Single-file technical reference covering equations, unit guardrails (`psig` vs `psia`, Fanning `f_F` vs Darcy `f_D = 4*f_F`), all 25 Perry's sections, and all 24 plant troubleshooting scenarios.

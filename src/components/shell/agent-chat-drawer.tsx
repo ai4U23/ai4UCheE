@@ -17,6 +17,15 @@ import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { getQuickActionsForWorkbench, getStarterPromptsForWorkbench } from './copilot-prompts';
 import { GenUiDefaultCard } from './genui-default-card';
 
+const WORKBENCH_FRIENDLY_NAMES: Record<string, string> = {
+  'wb1-visual-verifier': 'Calibrated Nomographs & Charts (WB1)',
+  'wb2-thermo-dippr': 'Thermodynamics & DIPPR (WB2)',
+  'wb3-hydraulics': 'Fluid & Piping Hydraulics (WB3)',
+  'wb4-distillation': 'Separations & Distillation (WB4)',
+  'wb6-kinetics-reactors': 'Kinetics & Reactor Design (WB6)',
+  'wb5-handbook-atlas': '6-Book & 25-Sec ChE Atlas (WB5)',
+};
+
 export interface AgentChatDrawerProps {
   renderInlineExtension?: (payload: GenUiPayload) => React.ReactNode;
   onOpenCalcSheet?: (data: Record<string, unknown>) => void;
@@ -102,7 +111,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
       <div className="chat-messages">
         {messages.length === 0 && (
           <div className="chat-msg chat-agent">
-            <strong>🤖 Agent:</strong> Ready on <strong>{activeWorkbench.toUpperCase()}</strong>. Drag any diagram handle, click <code>+ Ask</code> on any control, or tell me to adjust the dials!
+            <strong>🤖 Agent:</strong> Ready on <strong title={activeWorkbench.toUpperCase()}>{WORKBENCH_FRIENDLY_NAMES[activeWorkbench] ?? activeWorkbench.toUpperCase()}</strong>. Drag any diagram handle, click <code>+ Ask</code> on any control, or tell me to adjust the dials!
           </div>
         )}
         {messages.map((m) => (

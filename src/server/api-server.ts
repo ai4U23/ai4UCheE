@@ -123,17 +123,35 @@ export function createApiServer(dbPath?: string): Express {
     await proxyToSidecar(req, res, req.path);
   });
 
+  app.get(['/', '/index.html'], (req: Request, res: Response, next): void => {
+    res.setHeader('Vary', 'Accept');
+    if (String(req.headers.accept ?? '').includes('text/markdown')) {
+      res.setHeader('X-Robots-Tag', 'noindex');
+      res.type('text/markdown; charset=utf-8').sendFile(path.join(DIST_DIR, 'index.md'));
+      return;
+    }
+    next();
+  });
+
   app.use(
     express.static(DIST_DIR, {
       setHeaders: (res, filePath) => {
         if (filePath.endsWith('.html')) {
           res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+          res.setHeader('Vary', 'Accept');
+        } else if (filePath.endsWith('.md')) {
+          res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+          res.setHeader('X-Robots-Tag', 'noindex');
+        } else if (filePath.endsWith('llms.txt') || filePath.endsWith('llms-full.txt')) {
+          res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+          res.setHeader('X-Robots-Tag', 'noindex');
         }
       },
     }),
   );
   app.get('*', (_req: Request, res: Response): void => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Vary', 'Accept');
     res.sendFile(path.join(DIST_DIR, 'index.html'));
   });
 
