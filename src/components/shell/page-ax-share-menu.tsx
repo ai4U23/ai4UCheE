@@ -45,14 +45,14 @@ export const PageAxShareMenu: React.FC = () => {
         void navigator.clipboard.write([new ClipboardItem({ 'text/plain': textPromise })]).then(
           () => announce('Copied Markdown'),
           () => {
-            void navigator.clipboard.writeText(fallbackMd);
+            void navigator.clipboard.writeText(fallbackMd).catch(() => {});
             announce('Copied Markdown');
           },
         );
         return;
       }
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        void navigator.clipboard.writeText(fallbackMd);
+        void navigator.clipboard.writeText(fallbackMd).catch(() => {});
         announce('Copied Markdown');
         return;
       }
@@ -72,7 +72,7 @@ export const PageAxShareMenu: React.FC = () => {
         }).catch(() => {});
       }
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        void navigator.clipboard.writeText(CANONICAL_URL);
+        void navigator.clipboard.writeText(CANONICAL_URL).catch(() => {});
       }
     } catch {
       // ignore in headless/non-secure contexts

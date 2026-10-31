@@ -164,7 +164,7 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
           data-testid="genui-copy-markdown"
           onClick={() => {
             if (typeof navigator !== 'undefined' && navigator.clipboard) {
-              navigator.clipboard.writeText(String(data.markdown_latex ?? ''));
+              void navigator.clipboard.writeText(String(data.markdown_latex ?? '')).catch(() => {});
             }
           }}
         >
