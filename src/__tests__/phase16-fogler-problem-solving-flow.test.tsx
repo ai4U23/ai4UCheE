@@ -27,7 +27,7 @@ import { getStudentProfile, recordMissionOutcome, resetStudentProfile } from '..
 
 describe('Phase 16 — Fogler & LeBlanc 6-Stage Real-Life Problem-Solving Flow & AI Agent Collaboration', () => {
   beforeEach(() => {
-    resetStudentProfile('default-student');
+    resetStudentProfile();
     resetProblemSolvingStore();
   });
 

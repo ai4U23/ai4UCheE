@@ -82,27 +82,6 @@ export const DistillationWorkbench: React.FC = () => {
         </div>
       </header>
 
-      <LearnModeCallout
-        workbenchId="wb4"
-        title="McCabe-Thiele Stage Stepping, Column Flooding, Kremser, LLE/Adsorption, Psychrometry & Membranes"
-        plainEnglish="Drag McCabe-Thiele handles, column diameter D_c, Kremser A = L/(mV), Ternary LLE/adsorption, or Psychrometric T_db/RH and Membrane stage cut θ."
-        commonTrap="Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, and operating an absorber at A < 1 pinches solute recovery."
-        perryAnchor="[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37]"
-      />
-
-      <DistillationDiagramGallery
-        alpha={alpha} xf={xf} xd={xd} xb={xb} q={q} rOp={rOp} rMin={rMin} rMult={rMult}
-        colDiamM={colDiamM} traySpacingM={traySpacingM} totalStages={solved.totalStages}
-        feedStage={solved.feedStage} fLv={solved.fLv} cSbMs={solved.cSbMs}
-        floodPercent={floodPercent} dpPackingMmH2oM={solved.dpPackingMmH2oM}
-        absorptionA={absorptionA} recoveryFrac={recoveryFrac}
-        soluteFeedZ={soluteFeedZ} peNumber={peNumber}
-        onChangeQ={setQ} onChangeXd={setXd} onChangeXf={setXf} onChangeXb={setXb}
-        onChangeRMult={setRMult} onChangeColDiamM={setColDiamM} onChangeTraySpacingM={setTraySpacingM}
-        onChangeKremser={(na, nr) => { setAbsorptionA(na); setRecoveryFrac(nr); }}
-        onChangeLleAndPe={(nz, npe) => { setSoluteFeedZ(nz); setPeNumber(npe); }}
-      />
-
       <div className="wb-split">
         <div>
           <ScrubbableNumberInput paramId="dist-alpha" label="Relative Volatility α" value={alpha} unit="-" min={1.2} max={6.0} step={0.05} onChange={setAlpha} />
@@ -131,6 +110,27 @@ export const DistillationWorkbench: React.FC = () => {
           </p>
         </aside>
       </div>
+
+      <DistillationDiagramGallery
+        alpha={alpha} xf={xf} xd={xd} xb={xb} q={q} rOp={rOp} rMin={rMin} rMult={rMult}
+        colDiamM={colDiamM} traySpacingM={traySpacingM} totalStages={solved.totalStages}
+        feedStage={solved.feedStage} fLv={solved.fLv} cSbMs={solved.cSbMs}
+        floodPercent={floodPercent} dpPackingMmH2oM={solved.dpPackingMmH2oM}
+        absorptionA={absorptionA} recoveryFrac={recoveryFrac}
+        soluteFeedZ={soluteFeedZ} peNumber={peNumber}
+        onChangeQ={setQ} onChangeXd={setXd} onChangeXf={setXf} onChangeXb={setXb}
+        onChangeRMult={setRMult} onChangeColDiamM={setColDiamM} onChangeTraySpacingM={setTraySpacingM}
+        onChangeKremser={(na, nr) => { setAbsorptionA(na); setRecoveryFrac(nr); }}
+        onChangeLleAndPe={(nz, npe) => { setSoluteFeedZ(nz); setPeNumber(npe); }}
+      />
+
+      <LearnModeCallout
+        workbenchId="wb4"
+        title="McCabe-Thiele Stage Stepping, Column Flooding, Kremser, LLE/Adsorption, Psychrometry & Membranes"
+        plainEnglish="Drag McCabe-Thiele handles, column diameter D_c, Kremser A = L/(mV), Ternary LLE/adsorption, or Psychrometric T_db/RH and Membrane stage cut θ."
+        commonTrap="Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, and operating an absorber at A < 1 pinches solute recovery."
+        perryAnchor="[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37]"
+      />
     </section>
   );
 };

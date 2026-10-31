@@ -84,26 +84,6 @@ export const HydraulicsWorkbench: React.FC = () => {
         </div>
       </header>
 
-      <LearnModeCallout
-        workbenchId="wb3"
-        title="Pipe Friction, Pump Cavitation, BSL Rheology, Choked Valves, HX Cross & Process Safety"
-        plainEnglish="Drag Flow Q, Suction Pressure, BSL Power-Law n, Control Valve ΔP, HX T-Q Cross (Bowman F_T), Nukiyama boiling, or Flammability LOC / Plume dispersion."
-        commonTrap="If NPSHa drops below Pump NPSHr, liquid flashes into vapor bubbles that implode on the impeller (cavitation)."
-        perryAnchor="[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11 & Sec. 8, p. 8-71]"
-      />
-
-      <div className="wb-panel" {...eqGuardrailSelect.selectableProps} data-testid="darcy-fanning-banner">
-        <strong>🛡️ Darcy vs. Fanning Friction Guardrail:</strong> Perry&apos;s <code>Fig. 6-9 (p. 6-10)</code> plots{' '}
-        <em>Fanning</em> <code>f_F = {caseNorm.fFanning.toFixed(5)}</code>, while Darcy-Weisbach head loss uses{' '}
-        <em>Darcy</em> <code>f_D = 4·f_F = {caseNorm.fDarcy.toFixed(5)}</code>{' '}
-        <code>[Perry&apos;s 9th Ed., Eqs. 6-37..6-39, p. 6-11]</code>.
-        <KaTeXBlock latex={'f_D = 4 f_F, \\quad h_f = f_D \\frac{L}{D} \\frac{v^2}{2g}'} testId="katex-darcy-fanning" />
-      </div>
-
-      {solved.equations.map((eq) => (
-        <WhiteBoxEquationCard key={eq.id} equation={eq} personaMode={personaMode} />
-      ))}
-
       <PipingPumpSvgSketch
         npsInch={npsInch} schedule={schedule} dInnerM={solved.dInnerM} flowGpm={flowGpm}
         pSuctionPsig={pSuctionPsig} zSuctionM={zSuctionM} npshaM={npshAvailableM} npshrM={npshrM}
@@ -111,13 +91,6 @@ export const HydraulicsWorkbench: React.FC = () => {
         lengthM={lengthM} valveDpPsi={valveDpPsi}
         onChangeFlowGpm={setFlowGpm} onChangeZSuctionM={setZSuctionM}
         onChangeNpsInch={setNpsInch} onChangeValveDpPsi={setValveDpPsi}
-      />
-
-      <HydraulicsDiagramGallery
-        powerLawN={powerLawN} prandtlPr={prandtlPr} reynolds={caseNorm.re}
-        valveDpPsi={valveDpPsi} pSuctionPsig={pSuctionPsig} cvRated={solved.cvNormal}
-        onChangeRheologyAndPr={(nn, np) => { setPowerLawN(nn); setPrandtlPr(np); }}
-        onChangeValveDpPsi={setValveDpPsi}
       />
 
       <div className="wb-split">
@@ -159,6 +132,33 @@ export const HydraulicsWorkbench: React.FC = () => {
           </p>
         </aside>
       </div>
+
+      <LearnModeCallout
+        workbenchId="wb3"
+        title="Pipe Friction, Pump Cavitation, BSL Rheology, Choked Valves, HX Cross & Process Safety"
+        plainEnglish="Drag Flow Q, Suction Pressure, BSL Power-Law n, Control Valve ΔP, HX T-Q Cross (Bowman F_T), Nukiyama boiling, or Flammability LOC / Plume dispersion."
+        commonTrap="If NPSHa drops below Pump NPSHr, liquid flashes into vapor bubbles that implode on the impeller (cavitation)."
+        perryAnchor="[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11 & Sec. 8, p. 8-71]"
+      />
+
+      <div className="wb-panel" {...eqGuardrailSelect.selectableProps} data-testid="darcy-fanning-banner">
+        <strong>🛡️ Darcy vs. Fanning Friction Guardrail:</strong> Perry&apos;s <code>Fig. 6-9 (p. 6-10)</code> plots{' '}
+        <em>Fanning</em> <code>f_F = {caseNorm.fFanning.toFixed(5)}</code>, while Darcy-Weisbach head loss uses{' '}
+        <em>Darcy</em> <code>f_D = 4·f_F = {caseNorm.fDarcy.toFixed(5)}</code>{' '}
+        <code>[Perry&apos;s 9th Ed., Eqs. 6-37..6-39, p. 6-11]</code>.
+        <KaTeXBlock latex={'f_D = 4 f_F, \\quad h_f = f_D \\frac{L}{D} \\frac{v^2}{2g}'} testId="katex-darcy-fanning" />
+      </div>
+
+      {solved.equations.map((eq) => (
+        <WhiteBoxEquationCard key={eq.id} equation={eq} personaMode={personaMode} />
+      ))}
+
+      <HydraulicsDiagramGallery
+        powerLawN={powerLawN} prandtlPr={prandtlPr} reynolds={caseNorm.re}
+        valveDpPsi={valveDpPsi} pSuctionPsig={pSuctionPsig} cvRated={solved.cvNormal}
+        onChangeRheologyAndPr={(nn, np) => { setPowerLawN(nn); setPrandtlPr(np); }}
+        onChangeValveDpPsi={setValveDpPsi}
+      />
     </section>
   );
 };

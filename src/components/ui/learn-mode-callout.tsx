@@ -37,6 +37,7 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
 }) => {
   const { personaMode } = usePersonaTheme();
   const [showStudio, setShowStudio] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
   if (personaMode !== 'learn') return null;
 
   const fullWb = SUFFIX_TO_WORKBENCH[workbenchId] ?? 'wb1-visual-verifier';
@@ -44,28 +45,36 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
 
   return (
     <FramerEntranceStage className="learn-callout" testId={`learn-callout-${workbenchId}`}>
-      <div className="wb-toolbar" style={{ marginBottom: '0.25rem' }}>
-        <strong>🎓 Student Guide: {title}</strong>
-        <button
-          type="button"
-          data-testid={`open-6stage-board-${workbenchId}`}
-          onClick={() => {
-            markProblemDefinitionReviewed(fullWb);
-            setShowStudio(!showStudio);
-          }}
-        >
-          {showStudio ? '▾ Hide 6-Stage Problem & Hypothesis Studio' : '🔬 Open 6-Stage Problem & Hypothesis Studio'}
-        </button>
+      <div className="wb-toolbar" style={{ marginBottom: '0.15rem' }}>
+        <strong>🎓 {title}</strong>
+        <div className="wb-actions-row">
+          <button
+            type="button"
+            onClick={() => setExpanded(!expanded)}
+            style={{ fontSize: '0.72rem', padding: '0.15rem 0.45rem' }}
+          >
+            {expanded ? '▾ Less Notes' : '▸ Field Notes'}
+          </button>
+          <button
+            type="button"
+            data-testid={`open-6stage-board-${workbenchId}`}
+            onClick={() => {
+              markProblemDefinitionReviewed(fullWb);
+              setShowStudio(!showStudio);
+            }}
+          >
+            {showStudio ? '▾ Hide 6-Stage Studio' : '🔬 Open 6-Stage Problem & Hypothesis Studio'}
+          </button>
+        </div>
       </div>
-      <p data-testid={`why-learn-callout-${workbenchId}`}>
-        <strong>🎯 {spec.whyLearnSubject}</strong>
+      <p data-testid={`why-learn-callout-${workbenchId}`} style={{ fontSize: '0.78rem' }}>
+        <strong>🎯 {spec.whyLearnSubject}</strong> · 🚨 <strong>{spec.plantIncidentTitle}:</strong> {spec.ktDefinition.realProblemDefined}
       </p>
-      <p>
-        🚨 <strong>Real Plant Problem ({spec.plantIncidentTitle}):</strong> {spec.ktDefinition.realProblemDefined}
-      </p>
-      <p>{plainEnglish}</p>
-      <p>⚠️ Watch out: {commonTrap}</p>
-      <code>{perryAnchor} · {spec.foglerBookCitation}</code>
+      <div className={expanded ? '' : 'studio-drawer-collapsed'}>
+        <p>{plainEnglish}</p>
+        <p>⚠️ Watch out: {commonTrap}</p>
+        <code>{perryAnchor} · {spec.foglerBookCitation}</code>
+      </div>
       {showStudio && <HypothesisTroubleshootingBoard workbenchId={fullWb} />}
     </FramerEntranceStage>
   );

@@ -121,22 +121,14 @@ export const ThermoDipprWorkbench: React.FC = () => {
         </div>
       </header>
 
-      <LearnModeCallout
-        workbenchId="wb2"
-        title="Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium"
-        plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T)."
-        commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
-        perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
-      />
-
       <div className="wb-split">
         <div>
+          <DipprPhaseEnvelopeSvg compound={compound} tempK={tKelvin} onChangeTempK={(nextK) => { setTempUnit('K'); setTempK(nextK); }} />
           <ScrubbableNumberInput
             paramId="dippr-temp-k" label="Temperature" value={tempK} unit={TEMP_UNIT_SYMBOLS[tempUnit]}
             min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
-          <DipprPhaseEnvelopeSvg compound={compound} tempK={tKelvin} onChangeTempK={(nextK) => { setTempUnit('K'); setTempK(nextK); }} />
           <div className="wb-panel" {...eq101Select.selectableProps}>
             <WhiteBoxEquationCard equation={solved.equations[0]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-dippr-101' }} />
             <div className="mono" data-testid="dippr-vp-result">
@@ -160,6 +152,14 @@ export const ThermoDipprWorkbench: React.FC = () => {
           tempK={tKelvin} onChangeTempK={(nextK) => { setTempUnit('K'); setTempK(nextK); }}
         />
       </div>
+
+      <LearnModeCallout
+        workbenchId="wb2"
+        title="Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium"
+        plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T)."
+        commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
+        perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
+      />
 
       <ThermoDiagramGallery
         vleX1={vleX1} vleA12={vleA12} prReducedP={prReducedP} prReducedT={prReducedT}
