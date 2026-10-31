@@ -3,19 +3,16 @@
 import React, { useEffect, useState } from 'react';
 import { agentNative } from '../../actions/define-action';
 import { askPerryCopilot } from '../../actions/copilot-responder';
-import { getClientAppState, type WorkbenchId } from '../../actions/view-screen';
+import { getClientAppState, subscribeClientAppState, type WorkbenchId, type WorkbenchLivePayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
+import { buildFoglerDetectiveStamp, detectLiveWorkbenchErrorSignature, TEMPORAL_FAULT_CLUES } from '../../lib/che-error-signature-detector';
 import { getFoglerCaseForWorkbench } from '../../lib/fogler-problem-solving-catalog';
 import {
-  evaluateHypothesisItem,
-  evaluateSixStageProgress,
-  markHandbookReviewed,
-  markProblemDefinitionReviewed,
-  markTheoryReviewed,
-  recordHypothesisVerdict,
-  subscribeProblemSolvingStore,
-  type HypothesisUserVerdict,
+  evaluateHypothesisItem, evaluateSixStageProgress, markHandbookReviewed,
+  markProblemDefinitionReviewed, markTheoryReviewed, recordHypothesisVerdict,
+  subscribeProblemSolvingStore, type HypothesisUserVerdict,
 } from '../../lib/hypothesis-verification-engine';
+import { getStudentProfile, subscribeStudentProfile } from '../../lib/student-adaptive-model';
 import { KaTeXBlock } from '../ui/katex-block';
 
 export interface HypothesisTroubleshootingBoardProps {
@@ -31,13 +28,21 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
   const [, setTick] = useState<number>(0);
   const [expanded, setExpanded] = useState<boolean>(!compactByDefault);
   const [agentReplySnippet, setAgentReplySnippet] = useState<string>('');
+  const [livePayload, setLivePayload] = useState<WorkbenchLivePayload>(
+    () => getClientAppState().payload as WorkbenchLivePayload,
+  );
 
   useEffect(() => subscribeProblemSolvingStore(() => setTick((t) => t + 1)), []);
+  useEffect(() => subscribeStudentProfile(() => setTick((t) => t + 1)), []);
+  useEffect(() => subscribeClientAppState((s) => setLivePayload(s.payload as WorkbenchLivePayload)), []);
 
   const spec = getFoglerCaseForWorkbench(workbenchId);
   const stageStatus = evaluateSixStageProgress(workbenchId, {
     selectedChipIds: selectedChips.map((c) => c.chipId),
   });
+  const temporalClue = TEMPORAL_FAULT_CLUES[workbenchId];
+  const errorSignature = detectLiveWorkbenchErrorSignature(workbenchId, livePayload);
+  const stamp = buildFoglerDetectiveStamp(workbenchId, getStudentProfile());
 
   const handleVerdictClick = (hypId: string, verdict: HypothesisUserVerdict) => {
     const res = recordHypothesisVerdict(workbenchId, hypId, verdict);
@@ -58,11 +63,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
     markTheoryReviewed(workbenchId, spec.fundamentalTheory.equationId);
     markHandbookReviewed(workbenchId);
     const res = await askPerryCopilot({
-      prompt: promptText,
-      activeWorkbench: workbenchId,
-      personaMode,
-      selectedChips,
-      payload: getClientAppState().payload,
+      prompt: promptText, activeWorkbench: workbenchId, personaMode, selectedChips, payload: getClientAppState().payload,
     });
     setAgentReplySnippet(res.reply);
   };
@@ -72,8 +73,7 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
     markTheoryReviewed(workbenchId, spec.fundamentalTheory.equationId);
     markHandbookReviewed(workbenchId);
     toggleChip({
-      kind: 'equation',
-      id: spec.fundamentalTheory.equationId,
+      kind: 'equation', id: spec.fundamentalTheory.equationId,
       label: `${spec.fundamentalTheory.equationTitle} (${spec.applicableHandbook.primaryCitation})`,
       payload: { workbenchId, caseId: spec.caseId },
     });
@@ -90,7 +90,8 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
         <div>
           <strong data-testid="why-learn-subject-banner">🎯 {spec.whyLearnSubject}</strong>
           <div className="wb-subtitle">
-            <span>🚨 Real Plant Problem: <strong>{spec.plantIncidentTitle}</strong></span> · <code>{spec.foglerBookCitation}</code>
+            <span>🚨 Real Plant Problem: <strong>{spec.plantIncidentTitle}</strong></span> · <code>{spec.foglerBookCitation}</code> ·{' '}
+            <span data-testid="fogler-detective-stamp">{stamp.tierLabel}</span>
           </div>
         </div>
         <div className="wb-actions-row">
@@ -113,6 +114,14 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
             <div className="mono" style={{ fontSize: '0.78rem', marginBottom: '0.35rem' }}>
               <strong>1. Problem Observation (Normal vs. Faulty Plant Telemetry):</strong> {spec.observationSummary}
             </div>
+            <div className="mono" data-testid="temporal-fault-clue-badge" style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>
+              <strong>{temporalClue.timeHorizonBadge}:</strong> {temporalClue.rateOfChangeClue} <em>({temporalClue.falsifiesReason})</em>
+            </div>
+            {errorSignature && (
+              <div className="wb-verdict fail mono" data-testid="why-number-wrong-detector" style={{ fontSize: '0.75rem', marginBottom: '0.4rem' }}>
+                <strong>{errorSignature.badgeTitle}:</strong> {errorSignature.plainExplanation} (<code>{errorSignature.mathSignature}</code> · {errorSignature.citation})
+              </div>
+            )}
             <table className="mono" style={{ width: '100%', fontSize: '0.76rem', marginBottom: '0.45rem' }}>
               <thead><tr><th>Telemetry</th><th>Normal Baseline</th><th>Faulty Plant Reading</th><th>Physical Delta</th></tr></thead>
               <tbody>

@@ -33,17 +33,21 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
 }) => {
   const { selectedChips } = usePersonaTheme();
   const [, setStoreTick] = useState<number>(0);
+  const [trapObserved, setTrapObserved] = useState<boolean>(false);
   const [payload, setPayload] = useState<WorkbenchLivePayload>(
     () => getClientAppState().payload as WorkbenchLivePayload,
   );
   useEffect(() => subscribeClientAppState((s) => setPayload(s.payload as WorkbenchLivePayload)), []);
   useEffect(() => subscribeProblemSolvingStore(() => setStoreTick((t) => t + 1)), []);
+  useEffect(() => setTrapObserved(false), [mission?.id]);
 
   if (!mission) return null;
   const inputs = (payload.inputs ?? {}) as Record<string, unknown>;
   const trapLoaded = Object.keys(mission.initialMutations).length > 0;
+  const rawCheckSolved = mission.checkSolved(payload);
+  if (!rawCheckSolved && !trapObserved) setTrapObserved(true);
   const scrubbed = Object.entries(mission.initialMutations).some(([key, val]) => inputs[key] !== val);
-  const solved = mission.checkSolved(payload);
+  const solved = trapObserved && rawCheckSolved;
   const stageStatus = evaluateSixStageProgress(mission.workbench, {
     trapLoaded,
     solved,
@@ -88,7 +92,7 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
         ))}
       </ol>
       {!solved && (
-        <div className="wb-actions-row" style={{ marginBottom: '0.35rem' }}>
+        <div className="wb-actions-row" style={{ marginBottom: '0.35rem', flexWrap: 'wrap' }}>
           {onSocraticHint && (
             <button type="button" data-testid="mission-socratic-hint-btn" onClick={() => onSocraticHint(mission)}>
               💡 Socratic Hint (Keep Full +35% Mastery)
@@ -97,6 +101,11 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
           <button type="button" data-testid="mission-autofix-btn" onClick={() => onAutoFix(mission)}>
             ⚡ Auto-Fix &amp; Ask Copilot ({Object.entries(mission.rescueMutations).map(([k, v]) => `${k}=${v}`).join(', ')})
           </button>
+          {!stageStatus.stage5HypothesesDone && (
+            <span className="mission-pill mono" data-testid="autofix-soft-nudge-banner" style={{ fontSize: '0.73rem' }}>
+              🕵️ Detective Nudge: Test a hypothesis below &amp; scrub sliders yourself for full +35% mastery &amp; Gold Stamp (Auto-Fix gives +12%).
+            </span>
+          )}
         </div>
       )}
       <HypothesisTroubleshootingBoard workbenchId={mission.workbench} />

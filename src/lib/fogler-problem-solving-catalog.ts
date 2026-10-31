@@ -1,6 +1,7 @@
 // Fogler & LeBlanc (2008) *Strategies for Creative Problem Solving, 2nd Ed.* 6-Stage Real-Life
 // Problem-Solving & Woods's Troubleshooting Catalog across all 6 Workbenches (WB1..WB6).
 import type { WorkbenchId } from '../actions/view-screen';
+import { getActiveProblemForWorkbench, problemEntryToFoglerCase } from './problem-library-registry';
 
 export interface TelemetryComparisonRow { metric: string; normalVal: string; faultyVal: string; deltaNote: string; }
 export interface KepnerTregoeDefinition { perceivedProblem: string; realProblemDefined: string; whatIs: string; whatIsNot: string; whenObserved: string; }
@@ -185,5 +186,7 @@ export const FOGLER_PROBLEM_CASES: Readonly<Record<WorkbenchId, FoglerProblemSol
 };
 
 export function getFoglerCaseForWorkbench(wb: WorkbenchId): FoglerProblemSolvingCase {
+  const activeCustom = getActiveProblemForWorkbench(wb);
+  if (activeCustom) return problemEntryToFoglerCase(activeCustom);
   return FOGLER_PROBLEM_CASES[wb] ?? FOGLER_PROBLEM_CASES['wb1-visual-verifier'];
 }

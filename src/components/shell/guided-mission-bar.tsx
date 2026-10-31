@@ -23,12 +23,21 @@ import {
   autoCompleteProblemStagesForRescue,
   markProblemDefinitionReviewed,
 } from '../../lib/hypothesis-verification-engine';
+import {
+  ALL_24_REAL_LIFE_PROBLEMS,
+  problemEntryToMissionScenario,
+  resetActiveProblems,
+  setActiveProblemForWorkbench,
+} from '../../lib/problem-library-registry';
+import type { ProblemCaseEntry } from '../../lib/problem-library-types';
 import { AdaptiveRecommendationRail } from './adaptive-recommendation-rail';
 import { MissionChecklistBanner } from './mission-checklist-banner';
 import { GUIDED_MISSIONS, getMissionById, type GuidedMissionScenario } from './mission-scenarios';
+import { ProblemLibraryBrowser } from './problem-library-browser';
 
 export const GuidedMissionBar: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [libraryOpen, setLibraryOpen] = useState<boolean>(false);
   const [activeMission, setActiveMission] = useState<GuidedMissionScenario | null>(null);
   const [profile, setProfile] = useState<StudentProfileState>(() => getStudentProfile());
   const usedAutoFixRef = useRef<boolean>(false);
@@ -39,11 +48,14 @@ export const GuidedMissionBar: React.FC = () => {
 
   // Observe live payload transitions: debounce continuous slider trap checks (600ms) and record DIY mission solves.
   useEffect(() => {
+    let trapSeen = false;
     return subscribeClientAppState((state) => {
       const payload = (state.payload ?? {}) as WorkbenchLivePayload;
       recordPayloadObservation(state.activeWorkbench as GuidedMissionScenario['workbench'], payload, 600);
-      if (activeMission && state.activeWorkbench === activeMission.workbench && activeMission.checkSolved(payload)) {
-        if (solvedRecordedRef.current !== activeMission.id && !usedAutoFixRef.current) {
+      if (activeMission && state.activeWorkbench === activeMission.workbench) {
+        if (!activeMission.checkSolved(payload)) {
+          trapSeen = true;
+        } else if (trapSeen && solvedRecordedRef.current !== activeMission.id && !usedAutoFixRef.current) {
           solvedRecordedRef.current = activeMission.id;
           recordMissionOutcome(activeMission.id, false);
         }
@@ -105,6 +117,12 @@ export const GuidedMissionBar: React.FC = () => {
     });
   };
 
+  const handleSelectLibraryProblem = (entry: ProblemCaseEntry) => {
+    setActiveProblemForWorkbench(entry);
+    const mission = problemEntryToMissionScenario(entry);
+    runMission(mission, mission.initialMutations);
+  };
+
   const bundle = buildAdaptiveRecommendations(profile, {
     activeWorkbench,
     payload: getClientAppState().payload,
@@ -116,13 +134,20 @@ export const GuidedMissionBar: React.FC = () => {
         {!collapsed && (
           <>
             <span className="mission-pill">🚨 Step 1 · Start from a Real-Life Plant Problem (Fogler &amp; LeBlanc 6-Stage Flow)</span>
+            <button
+              type="button"
+              data-testid="toggle-problem-library-btn"
+              onClick={() => setLibraryOpen(!libraryOpen)}
+            >
+              📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems (L1–L4 · Equipment · 7 Books)
+            </button>
             {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
               <button
                 key={mission.id}
                 type="button"
                 data-testid={mission.id}
                 title={reasonBadge}
-                onClick={() => runMission(mission, mission.initialMutations)}
+                onClick={() => { resetActiveProblems(); runMission(mission, mission.initialMutations); }}
               >
                 {solved ? '✓ ' : ''}
                 {mission.buttonLabel}
@@ -146,6 +171,14 @@ export const GuidedMissionBar: React.FC = () => {
       </div>
       {!collapsed && (
         <>
+          {libraryOpen && (
+            <ProblemLibraryBrowser
+              activeProblemId={activeMission?.id}
+              solvedProblemIds={profile.solvedMissionIds}
+              onSelectProblem={handleSelectLibraryProblem}
+              onClose={() => setLibraryOpen(false)}
+            />
+          )}
           <AdaptiveRecommendationRail
             onRunRecommendedMission={(id) => {
               const target = getMissionById(id);

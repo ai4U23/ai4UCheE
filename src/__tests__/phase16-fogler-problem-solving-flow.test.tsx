@@ -11,6 +11,11 @@ import { App } from '../App';
 import { askPerryCopilot } from '../actions/copilot-responder';
 import { getClientAppState } from '../actions/view-screen';
 import { buildLiveCalcSheet } from '../components/workbenches/calc-sheet-builder';
+import {
+  buildFoglerDetectiveStamp,
+  detectNumericErrorSignature,
+  TEMPORAL_FAULT_CLUES,
+} from '../lib/che-error-signature-detector';
 import { FOGLER_PROBLEM_CASES, getFoglerCaseForWorkbench } from '../lib/fogler-problem-solving-catalog';
 import {
   evaluateHypothesisItem,
@@ -18,7 +23,7 @@ import {
   recordHypothesisVerdict,
   resetProblemSolvingStore,
 } from '../lib/hypothesis-verification-engine';
-import { resetStudentProfile } from '../lib/student-adaptive-model';
+import { getStudentProfile, recordMissionOutcome, resetStudentProfile } from '../lib/student-adaptive-model';
 
 describe('Phase 16 — Fogler & LeBlanc 6-Stage Real-Life Problem-Solving Flow & AI Agent Collaboration', () => {
   beforeEach(() => {
@@ -140,5 +145,46 @@ describe('Phase 16 — Fogler & LeBlanc 6-Stage Real-Life Problem-Solving Flow &
     expect(sheet.markdownReport).toContain('## Fogler & LeBlanc 6-Stage Creative Problem-Solving & Hypothesis Audit');
     expect(sheet.markdownReport).toContain('Real Problem Defined');
     expect(sheet.markdownReport).toContain('ROOT CAUSE (Prove ✅)');
+    expect(sheet.markdownReport).toContain('Time-Horizon Clue (Δt)');
+    expect(sheet.markdownReport).toContain('Prof. Fogler Detective Completion Stamp');
+  });
+
+  it('Test 5 (Research Enhancements): verifies Numeric Error Detector, Δt Time Clues, Fogler Detective Stamp, PhET Before/After Ghost Lines & Auto-Fix Soft Nudge', async () => {
+    // 1. Numeric Error Signature Detector (Khan Perseus style: 4x, +14.696 psi, +273.15 K, 2.303x ln/log10)
+    expect(detectNumericErrorSignature(0.018, 0.0045)?.kind).toBe('fanning_darcy_4x');
+    expect(detectNumericErrorSignature(0, 14.696)?.kind).toBe('psig_psia_datum');
+    expect(detectNumericErrorSignature(100, 373.15)?.kind).toBe('celsius_kelvin_offset');
+    expect(detectNumericErrorSignature(2.3026, 1.0)?.kind).toBe('ln_log10_factor');
+    expect(detectNumericErrorSignature(0.0045, 0.0045)).toBeNull();
+    expect(Object.keys(TEMPORAL_FAULT_CLUES)).toHaveLength(6);
+
+    // 2. Render app and launch Pump P-101 Cavitation mission (WB3)
+    render(<App />);
+    fireEvent.click(screen.getByTestId('persona-learn'));
+    fireEvent.click(screen.getByTestId('mission-pump-npsha'));
+
+    // Verify Soft Nudge on Auto-Fix, Temporal Clue (Δt = 3 Hours), Why-Number-Wrong Detector, Detective Stamp, & WB3 Ghost Line
+    expect(await screen.findByTestId('autofix-soft-nudge-banner')).toBeTruthy();
+    expect(screen.getByTestId('temporal-fault-clue-badge').textContent).toContain('Δt = 3 Hours');
+    expect((await screen.findByTestId('why-number-wrong-detector')).textContent).toContain('Vacuum Suction & Frictional Q² Cavitation Trap');
+    expect(screen.getByTestId('fogler-detective-stamp').textContent).toContain('FOG-WB3-');
+    expect(screen.getByTestId('rail-detective-stamp').textContent).toContain('FOG-WB3-');
+    expect(screen.getByTestId('wb3-ghost-baseline-line')).toBeTruthy();
+
+    // 3. Verify PhET Ghost Baseline on WB2 (298 K Subcooled) and WB6 (φ=5.5 Pore-Starved)
+    fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
+    expect(screen.getByTestId('wb2-ghost-baseline-marker')).toBeTruthy();
+
+    fireEvent.click(screen.getByTestId('tab-wb6-kinetics-reactors'));
+    expect(screen.getByTestId('wb6-ghost-baseline-line')).toBeTruthy();
+
+    // 4. Verify Gold DIY Detective Stamp unlocks when all hypotheses are verified + DIY mission solved
+    recordHypothesisVerdict('wb3-hydraulics', 'wb3-h1', 'disproved');
+    recordHypothesisVerdict('wb3-hydraulics', 'wb3-h2', 'proved');
+    recordHypothesisVerdict('wb3-hydraulics', 'wb3-h3', 'disproved');
+    recordMissionOutcome('mission-pump-npsha', false);
+    const goldStamp = buildFoglerDetectiveStamp('wb3-hydraulics', getStudentProfile(), true);
+    expect(goldStamp.isGoldDiy).toBe(true);
+    expect(goldStamp.code).toMatch(/^FOG-WB3-DIY-[0-9A-F]{6}$/);
   });
 });

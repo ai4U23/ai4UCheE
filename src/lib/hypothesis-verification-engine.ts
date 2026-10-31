@@ -3,6 +3,7 @@
 // 4. Applicable Handbook -> 5. Hypotheses: Prove / Disprove (Rule #12) -> 6. Actual Solution.
 import type { WorkbenchId } from '../actions/view-screen';
 import { FOGLER_PROBLEM_CASES, getFoglerCaseForWorkbench } from './fogler-problem-solving-catalog';
+import { resetActiveProblems } from './problem-library-registry';
 
 export type HypothesisUserVerdict = 'proved' | 'disproved';
 
@@ -121,6 +122,7 @@ export function autoCompleteProblemStagesForRescue(wb: WorkbenchId): void {
 
 export function resetProblemSolvingStore(): void {
   store = createInitialStore();
+  resetActiveProblems();
   notify();
 }
 
