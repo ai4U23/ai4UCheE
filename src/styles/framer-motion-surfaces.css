@@ -77,17 +77,21 @@
   padding: 0.65rem 0.8rem;
 }
 
-/* Collapsible studio drawers: keep DOM nodes mounted & accessible while taking 0px visual space when closed */
+/* Collapsible studio drawers: keep DOM nodes mounted & accessible while taking 0px space in both axes when closed */
 .studio-drawer-collapsed {
+  max-width: 0 !important;
   max-height: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
   overflow: hidden !important;
   opacity: 0 !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   border-width: 0 !important;
   pointer-events: none !important;
+  flex: 0 0 0px !important;
 }
 
 /* Framer Swarm Pulse (NgQ5bLGaW -> TSGDAqBQ2) live status beacon + outer halo ring */

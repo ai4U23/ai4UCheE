@@ -3,14 +3,15 @@
  * chat/GenUI surfaces, verdict & coaching cards, crop stage, and the modal backdrop. */
 
 /* Brand header identity (surface chrome moved out of the token sheet). */
-.brand-identity { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem; }
-.brand-logo { height: 28px; width: auto; filter: drop-shadow(0 0 10px rgba(232, 197, 71, 0.35)); }
-.brand-title-group h1 { margin: 0; font-size: 1.15rem; font-weight: 600; color: var(--ivory); line-height: 1.1; }
+.brand-identity { display: flex; flex-wrap: nowrap; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.brand-logo { height: 26px; width: auto; filter: drop-shadow(0 0 10px rgba(232, 197, 71, 0.35)); }
+.brand-title-group h1 { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--ivory); line-height: 1; }
 .brand-eyebrow { display: none; }
 
 /* Shared flex toolbar rows, control groups, and panel/tutor-card/drawer surfaces. */
 .wb-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .wb-actions-row, .wb-presets, .wb-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 0.4rem; }
+.shell-header > .wb-actions-row { flex-wrap: nowrap; justify-content: flex-end; gap: 0.35rem; white-space: nowrap; }
 .wb-presets { margin-top: 0.45rem; margin-bottom: 0.45rem; }
 .wb-panel, .wb-tutor-card, .chat-drawer { background: var(--bg-panel); border: 1px solid var(--border-grid); border-radius: 10px; padding: 0.85rem 0.95rem; box-shadow: var(--shadow-lift); }
 .wb-panel, .wb-tutor-card { overflow-x: auto; max-width: 100%; }
@@ -52,16 +53,17 @@ nav.wb-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))
 .scrubbable-unit { font-size: 0.72rem; color: var(--ink-muted); min-width: 2.3rem; text-align: right; }
 
 /* Problem-First Studio launcher strip & compact Learn Mode callout. */
-.mission-bar { display: flex; flex-wrap: nowrap; align-items: center; gap: 0.35rem; padding: 0.24rem 0.55rem; background: var(--bg-panel); border: 1px solid var(--border-grid); border-radius: 8px; overflow-x: auto; }
-.shell-header .mission-bar { background: rgba(15, 27, 61, 0.85); border-color: rgba(232, 197, 71, 0.38); padding: 0.16rem 0.35rem; }
-.lab-switcher-pill { font-weight: 700; color: var(--maize-soft) !important; background: rgba(232, 197, 71, 0.14) !important; }
+.mission-bar { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 0.35rem; padding: 0.24rem 0.55rem; background: var(--bg-panel); border: 1px solid var(--border-grid); border-radius: 8px; overflow-x: auto; }
+.shell-header .mission-bar { background: rgba(15, 27, 61, 0.85); border-color: rgba(232, 197, 71, 0.38); padding: 0.2rem 0.4rem; margin: 0 auto; max-width: fit-content; }
+.lab-switcher-pill { font-weight: 700; color: var(--maize-soft) !important; background: rgba(232, 197, 71, 0.14) !important; white-space: nowrap; }
 .studio-disclosure-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid var(--border-grid); }
 .studio-disclosure-bar button { font-size: 0.75rem; font-weight: 700; padding: 0.28rem 0.65rem; border-radius: 8px; background: var(--bg-elevated); }
 .studio-floating-mission-wrap { position: fixed; bottom: 0.85rem; left: 1rem; right: 390px; z-index: 65; max-height: 56vh; overflow-y: auto; }
 .mission-pill { font-size: 0.7rem; font-weight: 700; padding: 0.18rem 0.5rem; border-radius: 999px; border: 1px solid var(--accent-secondary); background: rgba(232, 197, 71, 0.2); color: var(--ink-primary); white-space: nowrap; }
 .mission-bar button { font-size: 0.73rem; padding: 0.24rem 0.55rem; white-space: nowrap; }
-.mission-bar > button:last-child { margin-left: auto; }
 [data-testid="problem-library-browser"], [data-testid="adaptive-recommendation-rail"] { position: fixed; top: 56px; left: 1rem; right: 1rem; max-width: 1140px; margin: 0 auto !important; z-index: 80; background: var(--bg-elevated); box-shadow: 0 24px 48px rgba(7, 26, 51, 0.28); max-height: calc(100vh - 80px); overflow-y: auto; }
+.studio-quick-missions-popover { position: fixed; top: 56px; left: 50%; transform: translateX(-50%); z-index: 82; display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.55rem 0.75rem; background: var(--navy-deep); border: 1px solid var(--maize); border-radius: 9px; box-shadow: 0 18px 40px rgba(7, 26, 51, 0.45); max-width: 94vw; }
+[data-testid="adaptive-recommendation-rail"] { top: 108px; }
 .learn-callout { padding: 0.45rem 0.75rem; margin: 0.45rem 0; border-left: 3px solid var(--maize); background: rgba(232, 197, 71, 0.1); border-radius: 0 7px 7px 0; font-size: 0.8rem; }
 .learn-callout p { margin: 0.2rem 0; }
 

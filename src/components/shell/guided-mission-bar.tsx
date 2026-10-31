@@ -119,7 +119,7 @@ export const GuidedMissionBar: React.FC = () => {
             >
               🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4 · 📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems ▾
             </button>
-            <div className={showScorecardDrawer ? 'wb-actions-row' : 'studio-drawer-collapsed'}>
+            <div className={showScorecardDrawer ? 'studio-quick-missions-popover' : 'studio-drawer-collapsed'}>
               {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
                 <button
                   key={mission.id}

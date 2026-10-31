@@ -70,15 +70,14 @@ code, pre, .mono {
 
 .shell-header {
   margin: 0 -1rem;
-  padding: 0.42rem 1.15rem;
+  padding: 0.38rem 1rem;
   background: var(--navy-deep);
   color: var(--ivory);
   border-bottom: 1px solid rgba(232, 197, 71, 0.28);
   box-shadow: var(--shadow-lift);
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
   gap: 0.65rem;
 }
 
