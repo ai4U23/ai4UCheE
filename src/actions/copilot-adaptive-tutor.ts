@@ -11,6 +11,8 @@ import {
 } from '../lib/adaptive-recommendation-engine';
 import { getFoglerCaseForWorkbench } from '../lib/fogler-problem-solving-catalog';
 import { evaluateSixStageProgress } from '../lib/hypothesis-verification-engine';
+import type { LocaleCode } from '../lib/i18n/locale-types';
+import { CHALLENGE_PROBES_VI, SOCRATIC_HINTS_VI } from '../lib/i18n/vi-copilot-dictionary';
 import {
   detectLivePayloadTraps,
   getEffectiveScaffoldingLevel,
@@ -76,11 +78,13 @@ export function buildAdaptiveCopilotCoaching(input: {
   prompt: string;
   activeWorkbench: string;
   personaMode: 'learn' | 'plant';
+  locale?: LocaleCode;
   payload?: Record<string, unknown>;
   scaffoldingOverride?: ScaffoldingLevel;
   studentProfile?: Partial<StudentProfileState>;
 }): { coachingBlock: string; meta: AdaptiveCopilotMeta } {
   const wb = (input.activeWorkbench || 'wb1-visual-verifier') as WorkbenchId;
+  const loc = input.locale ?? 'en';
   const livePayload = (input.payload ?? {}) as WorkbenchLivePayload;
   const observedProfile = Object.keys(livePayload.inputs ?? {}).length > 0
     ? recordPayloadObservation(wb, livePayload, 0)
@@ -97,15 +101,24 @@ export function buildAdaptiveCopilotCoaching(input: {
   const foglerCase = getFoglerCaseForWorkbench(wb);
   const stageProgress = evaluateSixStageProgress(wb);
 
+  const hintsMap = loc === 'vi' ? SOCRATIC_HINTS_VI : SOCRATIC_HINTS;
+  const probesMap = loc === 'vi' ? CHALLENGE_PROBES_VI : CHALLENGE_PROBES;
+
   const tierBlock =
     level === 'socratic'
-      ? SOCRATIC_HINTS[wb] ?? SOCRATIC_HINTS['wb1-visual-verifier']
+      ? hintsMap[wb] ?? hintsMap['wb1-visual-verifier']
       : level === 'challenge'
-        ? CHALLENGE_PROBES[wb] ?? CHALLENGE_PROBES['wb1-visual-verifier']
-        : `🌱 Guided Step-by-Step (${profile.studentName}): Follow the numbered derivation below, or click "${bundle.primaryRecommendation.title}" to practice this concept.`;
+        ? probesMap[wb] ?? probesMap['wb1-visual-verifier']
+        : loc === 'vi'
+          ? `🌱 Hướng Dẫn Từng Bước (${profile.studentName}): Theo dõi phần chứng minh từng bước bên dưới, hoặc bấm "${bundle.primaryRecommendation.title}" để thực hành.`
+          : `🌱 Guided Step-by-Step (${profile.studentName}): Follow the numbered derivation below, or click "${bundle.primaryRecommendation.title}" to practice this concept.`;
 
-  const foglerLine = `🔬 Fogler & LeBlanc 6-Stage Collaborator ${foglerCase.foglerBookCitation}: ${foglerCase.whyLearnSubject} | K-T Real Problem: ${foglerCase.ktDefinition.realProblemDefined} | Hypotheses Verified: ${stageProgress.correctHypothesisCount}/${stageProgress.totalHypothesisCount} (Rule #12: seek to reject as well as accept — ${foglerCase.applicableHandbook.primaryCitation}).`;
-  const recLine = `🧭 Next Recommended Step: ${bundle.primaryRecommendation.title} — ${bundle.primaryRecommendation.rationale}`;
+  const foglerLine = loc === 'vi'
+    ? `🔬 Quy Trình 6 Bước Fogler & LeBlanc ${foglerCase.foglerBookCitation}: ${foglerCase.whyLearnSubject} | Vấn đề thực K-T: ${foglerCase.ktDefinition.realProblemDefined} | Giả thuyết đã kiểm chứng: ${stageProgress.correctHypothesisCount}/${stageProgress.totalHypothesisCount} (Quy tắc #12: kiểm định bác bỏ lẫn chấp nhận — ${foglerCase.applicableHandbook.primaryCitation}).`
+    : `🔬 Fogler & LeBlanc 6-Stage Collaborator ${foglerCase.foglerBookCitation}: ${foglerCase.whyLearnSubject} | K-T Real Problem: ${foglerCase.ktDefinition.realProblemDefined} | Hypotheses Verified: ${stageProgress.correctHypothesisCount}/${stageProgress.totalHypothesisCount} (Rule #12: seek to reject as well as accept — ${foglerCase.applicableHandbook.primaryCitation}).`;
+  const recLine = loc === 'vi'
+    ? `🧭 Bước Khuyến Nghị Tiếp Theo: ${bundle.primaryRecommendation.title} — ${bundle.primaryRecommendation.rationale}`
+    : `🧭 Next Recommended Step: ${bundle.primaryRecommendation.title} — ${bundle.primaryRecommendation.rationale}`;
   const coachingBlock = [anomalyLine, tierBlock, foglerLine, recLine].filter(Boolean).join('\n');
 
   return {

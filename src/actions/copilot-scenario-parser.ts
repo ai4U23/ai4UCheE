@@ -26,8 +26,8 @@ const FLOODING_RESCUE: Params = { rMult: 1.3, colDiamM: 0.85 };
 const RUNAWAY_RESCUE: Params = { conversionX: 0.80, thielePhi: 1.1, semenovPsi: 0.24 };
 const num = (s: string, re: RegExp): number | undefined => re.exec(s)?.[1] !== undefined ? Number(re.exec(s)![1]) : undefined;
 
-const QUESTION_OPENER_RE = /^\s*(?:🕵️\s*Socratic\s*Hint:|🤝\s*AI\s*Agent:|(?:test|verify)\s+h\d\s+with\s+ai\s+agent:|why\b|how\b|explain\b|derive\b|walk\s+(?:me|through)\b|compare\b|is\s+pump\b|help\b|audit\b|what\s+(?:is|are|does|causes)\b)/i;
-const MUTATION_OPENER_RE = /^\s*(?:⚡\s*)?(?:what\s+if|suppose|set|change|switch|try|fix|stop|prevent|rescue|correct|check\s+sec|test\s+sec)/i;
+const QUESTION_OPENER_RE = /^\s*(?:🕵️\s*(?:Socratic\s*Hint|Gợi\s*Ý\s*Socratic):|🤝\s*AI\s*Agent:|(?:test|verify)\s+h\d\s+with\s+ai\s+agent:|why\b|how\b|explain\b|derive\b|walk\s+(?:me|through)\b|compare\b|is\s+pump\b|help\b|audit\b|what\s+(?:is|are|does|causes)\b|tại\s+sao\b|vì\s+sao\b|làm\s+sao\b|giải\s+thích\b|so\s+sánh\b)/i;
+const MUTATION_OPENER_RE = /^\s*(?:⚡\s*)?(?:what\s+if|suppose|set|change|switch|try|fix|stop|prevent|rescue|correct|check\s+sec|test\s+sec|sửa|đổi|chuyển|chống|cứu|đặt|chỉnh|kiểm\s+tra\s+mục)/i;
 
 /** Guard against conceptual/Socratic questions accidentally mutating live workbench dials. */
 export function isConceptualQuestion(prompt: string): boolean {
@@ -38,13 +38,13 @@ export function isConceptualQuestion(prompt: string): boolean {
 
 function extract(prompt: string): Array<{ wb: WorkbenchId; params: Params; note: string }> {
   const out: Array<{ wb: WorkbenchId; params: Params; note: string }> = [];
-  const cav = /(?:fix|stop|prevent|solve)\s+cavitation/i.test(prompt);
-  const flood = /(?:fix|stop|prevent)\s+(?:column\s+)?flooding/i.test(prompt);
-  const runawayRescue = /(?:rescue|fix|stop|prevent)\s+(?:reactor\s+)?runaway/i.test(prompt);
+  const cav = /(?:fix|stop|prevent|solve)\s+cavitation|(?:sửa|chống|ngăn)\s+xâm\s+thực/i.test(prompt);
+  const flood = /(?:fix|stop|prevent)\s+(?:column\s+)?flooding|(?:sửa|chống)\s+ngập\s+(?:tháp|lụt)/i.test(prompt);
+  const runawayRescue = /(?:rescue|fix|stop|prevent)\s+(?:reactor\s+)?runaway|(?:cứu|sửa|ngăn)\s+lò\s+phản\s+ứng\s+thoát\s+nhiệt/i.test(prompt);
   const convX = num(prompt, /\b(?:conversion|X)\s*(?:=|to|of)\s*(0\.\d+)/i);
   const thielePhi = num(prompt, /(?:thiele|φ|phi)\s*(?:=|to|of)\s*(\d+(?:\.\d+)?)/i);
   const semenovPsi = num(prompt, /(?:semenov|ψ|psi)\s*(?:=|to|of)\s*(0\.\d+)/i);
-  if (runawayRescue || (convX !== undefined && !/\bsec(?:tion)?\b/i.test(prompt)) || thielePhi !== undefined || semenovPsi !== undefined) {
+  if (runawayRescue || (convX !== undefined && !/\b(?:sec(?:tion)?|mục)\b/i.test(prompt)) || thielePhi !== undefined || semenovPsi !== undefined) {
     const params: Params = {
       ...(runawayRescue ? RUNAWAY_RESCUE : {}),
       ...(convX !== undefined ? { conversionX: convX } : {}),
@@ -54,14 +54,15 @@ function extract(prompt: string): Array<{ wb: WorkbenchId; params: Params; note:
     if (Object.keys(params).length) out.push({ wb: 'wb6-kinetics-reactors', params, note: runawayRescue ? 'reactor runaway rescue' : 'Fogler kinetics & reactor What-If' });
   }
   const gpm = num(prompt, /\b(\d+(?:\.\d+)?)\s*gpm\b/i);
-  const npsMatch = /\b(\d+(?:\.\d+)?)\s*(?:inch|in\s+pipe|")\b|(?:diameter|nps|pipe)\s*(?:to|=|of)?\s*(\d+(?:\.\d+)?)\s*in\b/i.exec(prompt);
+  const npsMatch = /\b(\d+(?:\.\d+)?)\s*(?:inch|in\s+pipe|")\b|(?:diameter|nps|pipe|ống)\s*(?:to|=|of)?\s*(\d+(?:\.\d+)?)\s*in\b/i.exec(prompt);
   const nps = npsMatch ? Number(npsMatch[1] ?? npsMatch[2]) : undefined;
   const psig = num(prompt, /\b(-?\d+(?:\.\d+)?)\s*psig\b/i);
-  if (cav || gpm !== undefined || nps !== undefined || (psig !== undefined && !/\bsec(?:tion)?\.?\s*\d/i.test(prompt))) {
+  if (cav || gpm !== undefined || nps !== undefined || (psig !== undefined && !/\b(?:sec(?:tion)?|mục)\.?\s*\d/i.test(prompt))) {
     const params: Params = { ...(cav ? CAVITATION_RESCUE : {}), ...(gpm !== undefined ? { flowGpm: gpm } : {}), ...(nps !== undefined ? { npsInch: nps } : {}), ...(psig !== undefined ? { pSuctionPsig: psig } : {}) };
     if (Object.keys(params).length) out.push({ wb: 'wb3-hydraulics', params, note: cav ? 'cavitation rescue' : 'hydraulic What-If' });
   }
-  const compound = /\b(water|ethanol|benzene|toluene|acetone)\b/i.exec(prompt)?.[1]?.toLowerCase();
+  const rawCompound = /\b(water|ethanol|benzene|toluene|acetone|nước)\b/i.exec(prompt)?.[1]?.toLowerCase();
+  const compound = rawCompound === 'nước' ? 'water' : rawCompound;
   const tempK = num(prompt, /\b(\d{3}(?:\.\d+)?)\s*K\b/i);
   if (compound || tempK !== undefined) {
     out.push({ wb: 'wb2-thermo-dippr', params: { ...(compound ? { compound } : {}), ...(tempK !== undefined ? { tempK } : {}) }, note: 'vapor-pressure What-If' });
@@ -72,7 +73,7 @@ function extract(prompt: string): Array<{ wb: WorkbenchId; params: Params; note:
     const params: Params = { ...(flood ? FLOODING_RESCUE : {}), ...(rMult !== undefined ? { rMult } : {}), ...(alpha !== undefined ? { alpha } : {}) };
     if (Object.keys(params).length) out.push({ wb: 'wb4-distillation', params, note: flood ? 'flooding rescue' : 'distillation What-If' });
   }
-  const reading = /(?:(?:set|change|correct)\s+(?:chart\s+)?reading[^0-9]*|(?:reading|fanning)\s*(?:to|=|of)\s*)(0\.\d+|\d+(?:\.\d+)?)(?![x×\d])/i.exec(prompt)?.[1];
+  const reading = /(?:(?:set|change|correct|sửa)\s+(?:chart\s+|giá\s+trị\s+)?(?:reading|đọc)[^0-9]*|(?:reading|fanning)\s*(?:to|=|of)\s*)(0\.\d+|\d+(?:\.\d+)?)(?![x×\d])/i.exec(prompt)?.[1];
   if (reading !== undefined) out.push({ wb: 'wb1-visual-verifier', params: { userReading: reading }, note: 'chart-reading check' });
   return out;
 }

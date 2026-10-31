@@ -4,6 +4,8 @@
 import React, { useEffect, useState } from 'react';
 import { getClientAppState } from '../../actions/view-screen';
 import { generateCalcSheetAction } from '../../actions/generate-calc-sheet';
+import { usePersonaTheme } from '../../context/persona-theme-context';
+import { getShellCopy } from '../../lib/i18n/vi-shell-dictionary';
 import {
   buildCalcSheetActionInput,
   buildLiveCalcSheet,
@@ -23,6 +25,8 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
   workbenchType,
   onClose,
 }) => {
+  const { locale } = usePersonaTheme();
+  const t = getShellCopy(locale);
   const [projectName, setProjectName] = useState<string>(
     "ChemEng's Intelligent Workbench — Process Design Package",
   );
@@ -33,7 +37,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
   const [checkedBy, setCheckedBy] = useState<string>('Lead ChE / QA-QC');
   const [compiledHtml, setCompiledHtml] = useState<string>('');
   const [compiledMd, setCompiledMd] = useState<string>('');
-  const [copyState, setCopyState] = useState<string>('Copy Markdown QA/QC');
+  const [copyState, setCopyState] = useState<string>('');
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -56,7 +60,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
     } catch {
       setCopyState('Clipboard blocked — see Markdown pane');
     } finally {
-      window.setTimeout(() => setCopyState('Copy Markdown QA/QC'), 2200);
+      window.setTimeout(() => setCopyState(''), 2200);
     }
   };
 
@@ -82,42 +86,24 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
       onClose={onClose}
     >
         <header className="wb-toolbar modal-sticky-header" data-testid="calc-sheet-sticky-header">
-          <h3>📋 Senior-Engineer QA/QC Calculation Sheet Exporter</h3>
+          <h3>{t.calcModalTitle}</h3>
           <button type="button" onClick={onClose} data-testid="close-calc-sheet-modal">
-            Close
+            {t.closeBtn}
           </button>
         </header>
 
         <div className="wb-actions-row" data-testid="qaqc-header-form">
-          <label>
-            Project:
-            <input aria-label="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
-          </label>
-          <label>
-            Project No:
-            <input aria-label="Project No" value={projectNo} onChange={(e) => setProjectNo(e.target.value)} />
-          </label>
-          <label>
-            Equipment Tag:
-            <input aria-label="Equipment Tag" value={equipmentTag} onChange={(e) => setEquipmentTag(e.target.value)} />
-          </label>
-          <label>
-            Revision:
-            <input aria-label="Revision" value={revision} onChange={(e) => setRevision(e.target.value)} />
-          </label>
-          <label>
-            Prepared By:
-            <input aria-label="Prepared By" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} />
-          </label>
-          <label>
-            Checked By:
-            <input aria-label="Checked By" value={checkedBy} onChange={(e) => setCheckedBy(e.target.value)} />
-          </label>
+          <label>Project:<input aria-label="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} /></label>
+          <label>Project No:<input aria-label="Project No" value={projectNo} onChange={(e) => setProjectNo(e.target.value)} /></label>
+          <label>Equipment Tag:<input aria-label="Equipment Tag" value={equipmentTag} onChange={(e) => setEquipmentTag(e.target.value)} /></label>
+          <label>Revision:<input aria-label="Revision" value={revision} onChange={(e) => setRevision(e.target.value)} /></label>
+          <label>Prepared By:<input aria-label="Prepared By" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} /></label>
+          <label>Checked By:<input aria-label="Checked By" value={checkedBy} onChange={(e) => setCheckedBy(e.target.value)} /></label>
         </div>
 
         <div className={`wb-verdict ${sheet.safetyStatus === 'PASS' ? 'pass' : 'fail'}`} data-testid="calc-sheet-safety-badge">
           <SwarmPulseDot tone={sheet.safetyStatus === 'PASS' ? 'emerald' : 'danger'} />
-          {sheet.safetyStatus === 'PASS' ? '✅ SAFETY AUDIT: PASS' : '⛔ SAFETY AUDIT: ACTION REQUIRED'} — {sheet.safetyDetail}
+          {sheet.safetyStatus === 'PASS' ? t.safetyPassPrefix : t.safetyFailPrefix} — {sheet.safetyDetail}
         </div>
 
         <table className="mono" style={{ width: '100%', fontSize: '0.8rem' }} data-testid="calc-sheet-rows">
@@ -149,10 +135,10 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
 
         <div className="wb-actions-row" style={{ marginTop: '0.6rem' }}>
           <button type="button" data-testid="compile-calc-sheet-btn" onClick={handleGenerate}>
-            Compile &amp; Save QA/QC Calc Sheet
+            {t.compileCalcBtn}
           </button>
           <button type="button" data-testid="copy-calc-sheet-md" onClick={() => void handleCopyMarkdown()}>
-            {copyState}
+            {copyState || 'Copy Markdown QA/QC'}
           </button>
           <button
             type="button"
@@ -160,7 +146,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
               if (typeof window !== 'undefined' && window.print) window.print();
             }}
           >
-            Print-to-PDF (@media print)
+            {t.printPdfBtn}
           </button>
         </div>
 

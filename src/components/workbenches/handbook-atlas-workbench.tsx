@@ -4,6 +4,7 @@ import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
+import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
 import { ALL_25_PERRY_SECTIONS, PERRY_CLUSTERS, getPerrySectionByNumber } from '../../lib/perry-sections/perry-atlas-registry';
 import type { PerryClusterId } from '../../lib/perry-sections/perry-section-types';
 import { TEXTBOOK_CORPUS_CATALOG } from '../../lib/textbook-corpus-registry';
@@ -15,7 +16,8 @@ import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
 import { PerryAtlasPdfExplorer } from './perry-atlas-pdf-explorer';
 
 export const HandbookAtlasWorkbench: React.FC = () => {
-  const { personaMode, setActiveWorkbench } = usePersonaTheme();
+  const { personaMode, locale, setActiveWorkbench } = usePersonaTheme();
+  const t = getWorkbenchCopy(locale);
   const [clusterFilter, setClusterFilter] = useState<PerryClusterId | 'all'>('all');
   const [secNum, setSecNum] = useState<number>(1);
   const descriptor = getPerrySectionByNumber(secNum);
@@ -122,13 +124,13 @@ export const HandbookAtlasWorkbench: React.FC = () => {
 
       <div className="studio-disclosure-bar">
         <button type="button" onClick={() => setShowSectionBrowser(!showSectionBrowser)}>
-          {showSectionBrowser ? '▾' : '▸'} 📚 Browse All 25 Perry Sections
+          {t.wb5BrowseBtn(showSectionBrowser)}
         </button>
         <button type="button" onClick={() => setShowProofsAndIndex(!showProofsAndIndex)}>
-          {showProofsAndIndex ? '▾' : '▸'} 📐 Show Math Proofs &amp; 6-Book Index
+          {t.wb5ProofsIndexBtn(showProofsAndIndex)}
         </button>
         <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
-          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+          {t.investigationBtn(showInvestigation)}
         </button>
       </div>
 

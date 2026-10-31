@@ -4,6 +4,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
+import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
@@ -15,7 +16,8 @@ import { DIPPR_COMPOUNDS, solveThermo } from './thermo-solver-math';
 const TEMP_UNIT_SYMBOLS = { K: 'K', degC: '°C', degF: '°F', degR: '°R' } as const;
 
 export const ThermoDipprWorkbench: React.FC = () => {
-  const { personaMode } = usePersonaTheme();
+  const { personaMode, locale } = usePersonaTheme();
+  const t = getWorkbenchCopy(locale);
   const [compound, setCompound] = useState<string>('water');
   const [tempK, setTempK] = useState<number>(373.15);
   const [tempUnit, setTempUnit] = useState<'K' | 'degC' | 'degF' | 'degR'>('K');
@@ -85,7 +87,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb2-thermo-dippr">
       <header className="wb-toolbar">
         <div>
-          <h2>🔥 Thermodynamics, Phase Equilibria &amp; DIPPR Engine</h2>
+          <h2>{t.wb2Title}</h2>
           <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb2-blended-sources-badge">
             📚 Blended Sources: <code>Perry&apos;s Sec 1/2/4/24 · Smith-Van Ness-Abbott 9th Ed. Ch. 3/8/9/10/12/14 · Fogler Ch. 11 · Seader Ch. 2</code>
           </p>
@@ -120,7 +122,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
         </div>
         <div>
           <ScrubbableNumberInput
-            paramId="dippr-temp-k" label="Temperature" value={tempK} unit={TEMP_UNIT_SYMBOLS[tempUnit]}
+            paramId="dippr-temp-k" label={t.wb2TempLabel} value={tempK} unit={TEMP_UNIT_SYMBOLS[tempUnit]}
             min={tempUnit === 'degC' ? -50 : tempUnit === 'degF' ? -60 : 200}
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
@@ -136,13 +138,13 @@ export const ThermoDipprWorkbench: React.FC = () => {
 
       <div className="studio-disclosure-bar">
         <button type="button" onClick={() => setShowProofs(!showProofs)}>
-          {showProofs ? '▾' : '▸'} 📐 Show Math Proofs &amp; Model Advisor (2)
+          {t.wb2ProofsBtn(showProofs)}
         </button>
         <button type="button" onClick={() => setShowMoreDiagrams(!showMoreDiagrams)}>
-          {showMoreDiagrams ? '▾' : '▸'} 📊 More Diagrams (Binary VLE, Peng-Robinson, Rankine)
+          {t.wb2MoreDiagramsBtn(showMoreDiagrams)}
         </button>
         <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
-          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+          {t.investigationBtn(showInvestigation)}
         </button>
       </div>
 
@@ -174,9 +176,9 @@ export const ThermoDipprWorkbench: React.FC = () => {
       <div className={showInvestigation ? '' : 'studio-drawer-collapsed'}>
         <LearnModeCallout
           workbenchId="wb2"
-          title="Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium"
-          plainEnglish="A liquid boils when its vapor pressure P_vp equals the surrounding absolute pressure. Scrub the DIPPR curve, Binary VLE lens, Peng-Robinson dome, Rankine T-S cycle, or Van 't Hoff X_eq(T)."
-          commonTrap="Plant gauges read psig (gauge). Always add 14.696 psi to convert psig → psia before plugging into thermodynamic equations, and never use Wilson for two liquid phases (LLE)."
+          title={t.wb2CalloutTitle}
+          plainEnglish={t.wb2CalloutPlain}
+          commonTrap={t.wb2CalloutTrap}
           perryAnchor="[Perry's 9th Ed., Table 2-8, p. 2-53 & Sec. 4, p. 4-18]"
         />
       </div>

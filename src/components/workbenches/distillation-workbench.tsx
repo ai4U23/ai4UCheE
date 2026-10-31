@@ -4,6 +4,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
+import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
@@ -11,7 +12,8 @@ import { DistillationDiagramGallery } from './distillation-diagram-gallery';
 import { solveDistillation } from './distillation-solver-math';
 
 export const DistillationWorkbench: React.FC = () => {
-  const { personaMode } = usePersonaTheme();
+  const { personaMode, locale } = usePersonaTheme();
+  const t = getWorkbenchCopy(locale);
   const [alpha, setAlpha] = useState<number>(2.45);
   const [xf, setXf] = useState<number>(0.5);
   const [xd, setXd] = useState<number>(0.95);
@@ -69,7 +71,7 @@ export const DistillationWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb4-distillation">
       <header className="wb-toolbar">
         <div>
-          <h2>🗼 Column T-201 McCabe-Thiele &amp; Fair Flooding</h2>
+          <h2>{t.wb4Title}</h2>
           <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb4-blended-sources-badge">
             📚 Blended Sources: <code>Seader, Henley &amp; Roper 4th Ed. Ch. 6/7/8/9/14/15/18 · Perry&apos;s Sec 12–16/20 · SVNA Ch. 10</code>
           </p>
@@ -105,27 +107,27 @@ export const DistillationWorkbench: React.FC = () => {
 
       <div className="wb-split">
         <div>
-          <ScrubbableNumberInput paramId="dist-alpha" label="Relative Volatility α" value={alpha} unit="-" min={1.2} max={6.0} step={0.05} onChange={setAlpha} />
-          <ScrubbableNumberInput paramId="dist-xf" label="Feed Mole Fraction z_F" value={xf} unit="mol/mol" min={0.1} max={0.9} step={0.02} onChange={setXf} />
-          <ScrubbableNumberInput paramId="dist-xd" label="Distillate Purity x_D" value={xd} unit="mol/mol" min={0.7} max={0.995} step={0.01} onChange={setXd} />
-          <ScrubbableNumberInput paramId="dist-xb" label="Bottoms Impurity x_B" value={xb} unit="mol/mol" min={0.005} max={0.25} step={0.01} onChange={setXb} />
+          <ScrubbableNumberInput paramId="dist-alpha" label={t.wb4AlphaLabel} value={alpha} unit="-" min={1.2} max={6.0} step={0.05} onChange={setAlpha} />
+          <ScrubbableNumberInput paramId="dist-xf" label={t.wb4XfLabel} value={xf} unit="mol/mol" min={0.1} max={0.9} step={0.02} onChange={setXf} />
+          <ScrubbableNumberInput paramId="dist-xd" label={t.wb4XdLabel} value={xd} unit="mol/mol" min={0.7} max={0.995} step={0.01} onChange={setXd} />
+          <ScrubbableNumberInput paramId="dist-xb" label={t.wb4XbLabel} value={xb} unit="mol/mol" min={0.005} max={0.25} step={0.01} onChange={setXb} />
         </div>
         <div>
-          <ScrubbableNumberInput paramId="dist-q" label="Feed Thermal Quality q" value={q} unit="-" min={-0.3} max={1.4} step={0.05} onChange={setQ} />
-          <ScrubbableNumberInput paramId="dist-rmult" label="Reflux Ratio R / R_min" value={rMult} unit="×" min={1.05} max={4.5} step={0.05} onChange={setRMult} />
-          <ScrubbableNumberInput paramId="dist-diam" label="Column Diameter D_c" value={colDiamM} unit="m" min={0.5} max={3.5} step={0.05} onChange={setColDiamM} />
+          <ScrubbableNumberInput paramId="dist-q" label={t.wb4QLabel} value={q} unit="-" min={-0.3} max={1.4} step={0.05} onChange={setQ} />
+          <ScrubbableNumberInput paramId="dist-rmult" label={t.wb4RmultLabel} value={rMult} unit="×" min={1.05} max={4.5} step={0.05} onChange={setRMult} />
+          <ScrubbableNumberInput paramId="dist-diam" label={t.wb4DiamLabel} value={colDiamM} unit="m" min={0.5} max={3.5} step={0.05} onChange={setColDiamM} />
         </div>
       </div>
 
       <div className="studio-disclosure-bar">
         <button type="button" onClick={() => setShowProofs(!showProofs)}>
-          {showProofs ? '▾' : '▸'} 📐 Show Math Proofs ({solved.equations.length})
+          {t.wb4ProofsBtn(showProofs, solved.equations.length)}
         </button>
         <button type="button" onClick={() => setShowMoreDiagrams(!showMoreDiagrams)}>
-          {showMoreDiagrams ? '▾' : '▸'} 📊 More Diagrams (Kremser, Ternary LLE, Psychrometry, Membrane)
+          {t.wb4MoreDiagramsBtn(showMoreDiagrams)}
         </button>
         <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
-          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+          {t.investigationBtn(showInvestigation)}
         </button>
       </div>
 
@@ -149,9 +151,9 @@ export const DistillationWorkbench: React.FC = () => {
       <div className={showInvestigation ? '' : 'studio-drawer-collapsed'}>
         <LearnModeCallout
           workbenchId="wb4"
-          title="McCabe-Thiele Stage Stepping, Column Flooding, Kremser, LLE/Adsorption, Psychrometry & Membranes"
-          plainEnglish="Drag McCabe-Thiele handles, column diameter D_c, Kremser A = L/(mV), Ternary LLE/adsorption, or Psychrometric T_db/RH and Membrane stage cut θ."
-          commonTrap="Operating above ~80–85% of Fair's entrainment flood velocity blows liquid up into the tray above, and operating an absorber at A < 1 pinches solute recovery."
+          title={t.wb4CalloutTitle}
+          plainEnglish={t.wb4CalloutPlain}
+          commonTrap={t.wb4CalloutTrap}
           perryAnchor="[Perry's 9th Ed., Sec. 13, p. 13-36 & Fig. 14-32, p. 14-37]"
         />
       </div>

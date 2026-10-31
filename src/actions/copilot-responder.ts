@@ -2,6 +2,8 @@
 // Perry's 9th Ed. with white-box rigor (psia = psig + 14.696; Darcy f_D = 4 · Fanning f_F),
 // live What-If parsing (`copilot-scenario-parser`), and per-student adaptive coaching (`copilot-adaptive-tutor`).
 import { z } from 'zod';
+import { getActiveLocale } from '../lib/i18n/locale-types';
+import { formatCopilotReplyBody, TIER1_VI_KNOWLEDGE } from '../lib/i18n/vi-copilot-dictionary';
 import { agentNative, defineAction, type GenUiPayload } from './define-action';
 import { buildAdaptiveCopilotCoaching, type AdaptiveCopilotMeta } from './copilot-adaptive-tutor';
 import { parseCopilotScenario } from './copilot-scenario-parser';
@@ -11,6 +13,7 @@ export const CopilotRequestSchema = z.object({
   prompt: z.string().default(''),
   activeWorkbench: z.string().default('wb1-visual-verifier'),
   personaMode: z.enum(['learn', 'plant']).default('learn'),
+  locale: z.enum(['en', 'vi']).optional(),
   selectedChips: z.array(z.object({ chipId: z.string(), label: z.string().optional(), kind: z.string().optional(), payload: z.record(z.unknown()).optional() })).default([]),
   payload: z.record(z.unknown()).optional(),
   scaffoldingOverride: z.enum(['guided', 'socratic', 'challenge']).optional(),
@@ -32,10 +35,10 @@ export interface CopilotResponse {
 type Intent = 'wb2-thermo' | 'wb3-hydraulics' | 'wb4-distillation' | 'wb6-kinetics' | 'wb1-charts';
 
 const INTENT_KEYWORDS: ReadonlyArray<[Intent, readonly string[]]> = [
-  ['wb6-kinetics', ['wb6', 'fogler', 'levenspiel', 'cstr', 'pfr', 'thiele', 'semenov', 'runaway', 'ergun', 'catalyst']],
-  ['wb2-thermo', ['wb2', 'dippr', 'vapor', 'vapour', 'carlson', 'psig', 'psia', 'boiling', 'wilson', 'lle', 'van ness']],
-  ['wb3-hydraulics', ['wb3', 'hydraulics', 'cavitation', 'npsha', 'npshr', 'valve', ' cv', 'cv ', 'bsl']],
-  ['wb4-distillation', ['wb4', 'distillation', 'mccabe', 'flooding', 'r_min', 'n_min', 'reflux', 'fenske', 'underwood', 'seader']],
+  ['wb6-kinetics', ['wb6', 'fogler', 'levenspiel', 'cstr', 'pfr', 'thiele', 'semenov', 'runaway', 'ergun', 'catalyst', 'thoát nhiệt', 'xúc tác', 'lò phản ứng']],
+  ['wb2-thermo', ['wb2', 'dippr', 'vapor', 'vapour', 'carlson', 'psig', 'psia', 'boiling', 'wilson', 'lle', 'van ness', 'áp suất hơi', 'sôi']],
+  ['wb3-hydraulics', ['wb3', 'hydraulics', 'cavitation', 'npsha', 'npshr', 'valve', ' cv', 'cv ', 'bsl', 'xâm thực', 'thủy lực']],
+  ['wb4-distillation', ['wb4', 'distillation', 'mccabe', 'flooding', 'r_min', 'n_min', 'reflux', 'fenske', 'underwood', 'seader', 'ngập tháp', 'ngập lụt', 'chưng cất', 'hồi lưu']],
 ];
 
 function detectIntent(input: CopilotRequest): Intent {
@@ -52,17 +55,12 @@ function card(type: GenUiPayload['type'], title: string, data: Record<string, un
   return { type, title, data };
 }
 
-interface Tier1Knowledge {
-  learn: string;
-  plant: string;
-  citations: string[];
-  cards: GenUiPayload[];
-}
+interface Tier1Knowledge { learn: string; plant: string; citations: string[]; cards: GenUiPayload[]; }
 
 function wb2Thermo(): Tier1Knowledge {
   const citation = "[Perry's 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53; Smith, Van Ness & Abbott 9th Ed., Ch. 10 & 12]";
   return {
-    learn: 'Water boils at 100 °C = 373.15 K. DIPPR Eq. 101 (Perry Table 2-8 constants) gives P_vp = 101,325 Pa — the vapor pressure exactly balances 1 atm, the normal boiling point.\n1) Gauge pressure (psig) reads relative to the surrounding atmosphere; absolute (psia) reads from vacuum.\n2) Conversion: psia = psig + 14.696, so 101,325 Pa = 14.70 psia = 0.00 psig at this boiling point.\n3) Never use the Wilson equation for LLE (Smith, Van Ness & Abbott Ch. 12): Wilson local-composition G^E always yields a single liquid phase, so it cannot predict a liquid split — use NRTL or UNIQUAC.',
+    learn: 'Water boils at 100 °C = 373.15 K. DIPPR Eq. 101 (Perry Table 2-8 constants) gives P_vp = 101,325 Pa — the vapor pressure balances 1 atm, the normal boiling point.\n1) Gauge pressure (psig) reads relative to the surrounding atmosphere; absolute (psia) reads from vacuum.\n2) Conversion: psia = psig + 14.696, so 101,325 Pa = 14.70 psia = 0.00 psig at this boiling point.\n3) Never use the Wilson equation for LLE (Smith, Van Ness & Abbott Ch. 12): Wilson local-composition G^E always yields a single liquid phase, so it cannot predict a liquid split — use NRTL or UNIQUAC.',
     plant: 'Check: T = 373.15 K → P_vp(water) = 101,325 Pa = 14.70 psia = 0.00 psig (psia = psig + 14.696).\nMargin: rated design pressure must exceed P_vp at the maximum attainable process temperature.\nLLE: Wilson G^E cannot predict a liquid split — re-run the property package with NRTL/UNIQUAC.',
     citations: [citation],
     cards: [card('equation-proof-card', 'DIPPR Eq. 101 — Vapor-Pressure White-Box Proof', {
@@ -148,21 +146,26 @@ const KNOWLEDGE: Record<Intent, () => Tier1Knowledge> = {
 /** Deterministic Tier-1 responder: intent-matched tutoring + exact citations + GenUI cards + adaptive coaching. */
 export function runCopilotResponder(input: unknown, options?: { emitUi?: boolean }): CopilotResponse {
   const parsed = CopilotRequestSchema.parse(input);
+  const loc = parsed.locale ?? getActiveLocale();
   const scenario = parseCopilotScenario(parsed.prompt, {
     activeWorkbench: parsed.activeWorkbench, personaMode: parsed.personaMode, payload: parsed.payload ?? {},
   });
   const adaptive = buildAdaptiveCopilotCoaching({
     prompt: parsed.prompt, activeWorkbench: parsed.activeWorkbench, personaMode: parsed.personaMode,
-    payload: parsed.payload, scaffoldingOverride: parsed.scaffoldingOverride, studentProfile: parsed.studentProfile,
+    locale: loc, payload: parsed.payload, scaffoldingOverride: parsed.scaffoldingOverride, studentProfile: parsed.studentProfile,
   });
-  const { learn, plant, citations, cards } = KNOWLEDGE[detectIntent(parsed)]();
+  const intent = detectIntent(parsed);
+  const { learn: enLearn, plant: enPlant, citations, cards } = KNOWLEDGE[intent]();
+  const viText = TIER1_VI_KNOWLEDGE[intent];
+  const learn = loc === 'vi' ? viText.learn : enLearn;
+  const plant = loc === 'vi' ? viText.plant : enPlant;
   const allCitations = [...citations, ...scenario.citations];
   const allCards = [...cards, ...scenario.cards];
-  const tail = `Citations: ${allCitations.join(' | ')}`;
-  const base = parsed.personaMode === 'learn'
-    ? `🎓 Student Intuition (${adaptive.meta.scaffoldingLevel.toUpperCase()}):\n${adaptive.coachingBlock}\n\n${learn}`
-    : `🏭 EPC Verification:\n${plant}\n${adaptive.coachingBlock}\nSynced with <current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`;
-  const reply = scenario.liveReply ? `${scenario.liveReply}\n\n${base}\n\n${tail}` : `${base}\n\n${tail}`;
+  const reply = formatCopilotReplyBody({
+    locale: loc, personaMode: parsed.personaMode, activeWorkbench: parsed.activeWorkbench,
+    scaffoldingLevel: adaptive.meta.scaffoldingLevel, coachingBlock: adaptive.coachingBlock,
+    learnText: learn, plantText: plant, liveReply: scenario.liveReply, citations: allCitations,
+  });
   if (options?.emitUi !== false) allCards.forEach((c) => agentNative.ui.output(c));
   return {
     reply, model: 'perry-tier1-deterministic', tier: 'tier1-deterministic',

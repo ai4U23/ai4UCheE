@@ -73,8 +73,9 @@ export async function callGeminiGateway(
     const chips = parsed.selectedChips.map((c) => c.label ?? c.chipId).join(', ') || 'none';
     const live = (parsed.payload ?? {}) as { inputs?: unknown; metrics?: unknown; summary?: unknown };
     const userContent = [
-      `<current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}">`,
+      `<current-screen workbench="${parsed.activeWorkbench}" personaMode="${parsed.personaMode}"${parsed.locale === 'vi' ? ' locale="vi"' : ''}>`,
       tier1.adaptiveMeta?.studentProfileXml ?? '<student-profile scaffolding="guided" />',
+      parsed.locale === 'vi' ? 'Language instruction: Respond in Vietnamese (Tiếng Việt) while preserving exact ChE equations, psig/psia (+14.696), f_D = 4*f_F, and [Perry\'s 9th Ed., ...] citations.' : 'Language instruction: Respond in English.',
       live.summary ? `Live summary: ${String(live.summary)}` : 'Live summary: (payload empty — scrub a control to ground the copilot)',
       `Live inputs: ${JSON.stringify(live.inputs ?? {})}`,
       `Live metrics: ${JSON.stringify(live.metrics ?? {})}`,

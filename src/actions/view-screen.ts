@@ -45,6 +45,7 @@ export interface ClientScreenState {
   activeWorkbench: string;
   personaMode: 'learn' | 'plant';
   themeMode: 'paper';
+  locale?: 'en' | 'vi';
   selectedChips: string[];
   payload: Record<string, unknown>;
   updatedAt?: number;
@@ -58,6 +59,7 @@ let currentState: ClientScreenState = {
   activeWorkbench: 'wb1-visual-verifier',
   personaMode: 'plant',
   themeMode: 'paper',
+  locale: 'en',
   selectedChips: [],
   payload: {},
   updatedAt: Date.now(),
@@ -147,8 +149,9 @@ export function serializeCurrentScreenTag(state: ClientScreenState = currentStat
           '  </payload>',
         ].join('\n')
       : `  <payload>${JSON.stringify(payload)}</payload>`;
+  const localeAttr = state.locale === 'vi' ? ` locale="vi"` : '';
   return [
-    `<current-screen workbench="${escapeAttr(state.activeWorkbench)}" personaMode="${escapeAttr(state.personaMode)}" themeMode="${escapeAttr(state.themeMode)}">`,
+    `<current-screen workbench="${escapeAttr(state.activeWorkbench)}" personaMode="${escapeAttr(state.personaMode)}" themeMode="${escapeAttr(state.themeMode)}"${localeAttr}>`,
     '  <selected-chips>',
     chipsXml || '    <!-- none -->',
     '  </selected-chips>',
@@ -164,6 +167,7 @@ export const viewScreenAction = defineAction({
     activeWorkbench: z.string().optional(),
     personaMode: z.enum(['learn', 'plant']).optional(),
     themeMode: z.literal('paper').optional(),
+    locale: z.enum(['en', 'vi']).optional(),
     selectedChips: z.array(z.string()).optional(),
     payload: z.record(z.unknown()).optional(),
   }),

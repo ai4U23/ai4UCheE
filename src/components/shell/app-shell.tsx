@@ -5,28 +5,14 @@ import { motion } from 'motion/react';
 import { dispatchWorkbenchMutation } from '../../actions/view-screen';
 import { usePersonaTheme, type PersonaMode, type WorkbenchId } from '../../context/persona-theme-context';
 import { FRAMER_LAYOUT_SPRING } from '../../lib/framer-motion-tokens';
+import { getShellCopy, getWorkbenchTabs, SUBJECT_DEFAULT_FIGURE } from '../../lib/i18n/vi-shell-dictionary';
 import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { VisualVerifierWorkbench } from '../workbenches/visual-verifier-workbench';
 import { AgentChatDrawer } from './agent-chat-drawer';
 import { GuidedMissionBar } from './guided-mission-bar';
+import { LocaleSwitcherPill } from './locale-switcher-pill';
 import { PageAxShareMenu } from './page-ax-share-menu';
 import { ShowcaseVideoModal } from './showcase-video-modal';
-
-const WORKBENCH_TABS: ReadonlyArray<{ id: WorkbenchId; label: string; short: string }> = [
-  { id: 'wb2-thermo-dippr', label: 'Thermodynamics & Phase', short: "Perry's DIPPR · Smith-Van Ness-Abbott" },
-  { id: 'wb3-hydraulics', label: 'Fluid & Transport Hydraulics', short: "BSL Transport · Perry's Sec 6/8/10" },
-  { id: 'wb4-distillation', label: 'Separations & Distillation', short: "Seader 4th Ed. · Perry's Sec 13–16" },
-  { id: 'wb6-kinetics-reactors', label: 'Kinetics & Reactor Design', short: "Fogler 7th Ed. · Perry's Sec 7/19 · Crowl" },
-  { id: 'wb5-handbook-atlas', label: '6-Book & 25-Sec ChE Atlas', short: 'All 6 Textbooks & Perry Sec 1–25 Index' },
-];
-
-const SUBJECT_DEFAULT_FIGURE: Partial<Record<WorkbenchId, { secPage: string; exactValue: number }>> = {
-  'wb2-thermo-dippr': { secPage: '2-53', exactValue: 101325 },
-  'wb3-hydraulics': { secPage: '6-10', exactValue: 0.0045 },
-  'wb4-distillation': { secPage: '14-37', exactValue: 0.082 },
-  'wb6-kinetics-reactors': { secPage: '19-6', exactValue: 2.45 },
-  'wb5-handbook-atlas': { secPage: '6-10', exactValue: 0.0045 },
-};
 
 export interface AppShellProps {
   renderWorkbench?: (active: WorkbenchId) => React.ReactNode;
@@ -41,14 +27,15 @@ export const AppShell: React.FC<AppShellProps> = ({
   chatDrawer,
   dofStatus = 'DoF = 0 · Fully Specified',
 }) => {
-  const { personaMode, setPersonaMode, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
+  const { personaMode, setPersonaMode, locale, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
   const [showLabs, setShowLabs] = useState<boolean>(false);
   const [showTourModal, setShowTourModal] = useState<boolean>(false);
   const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');
   if (activeWorkbench !== 'wb1-visual-verifier') lastSubjectRef.current = activeWorkbench;
 
-  const activeSubjectLabel =
-    WORKBENCH_TABS.find((t) => t.id === activeWorkbench)?.label ?? 'Charts & Nomographs';
+  const tabs = getWorkbenchTabs(locale);
+  const t = getShellCopy(locale);
+  const activeSubjectLabel = tabs.find((tab) => tab.id === activeWorkbench)?.label ?? t.defaultVerifierLabel;
 
   const openVisualVerifierTool = () => {
     if (activeWorkbench === 'wb1-visual-verifier') {
@@ -70,7 +57,7 @@ export const AppShell: React.FC<AppShellProps> = ({
     if (wb === 'wb1-visual-verifier') return <VisualVerifierWorkbench />;
     return (
       <section className="wb-panel" data-testid={`panel-${wb}`}>
-        <h2>{WORKBENCH_TABS.find((t) => t.id === wb)?.label}</h2>
+        <h2>{tabs.find((tab) => tab.id === wb)?.label}</h2>
         <p className="wb-subtitle">Active workbench surface ({wb}) — ready for solver input.</p>
       </section>
     );
@@ -103,7 +90,7 @@ export const AppShell: React.FC<AppShellProps> = ({
           <img src="/ai4u-logo.png" alt="AI4U.now" className="brand-logo" data-testid="ai4u-logo" />
           <div className="brand-title-group">
             <h1>ai4UCheE</h1>
-            <span className="brand-eyebrow">6-Book ChE Solver · 55+ Charts · 24 Plant Problems</span>
+            <span className="brand-eyebrow">{t.brandEyebrow}</span>
           </div>
           <button
             type="button"
@@ -112,7 +99,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             onClick={() => setShowLabs(!showLabs)}
             title="Switch Engineering Subject Lab (5 Subject Labs + Charts Verifier)"
           >
-            🔧 {activeSubjectLabel} · 5 Labs {showLabs ? '▴' : '▾'}
+            🔧 {activeSubjectLabel} · {t.labsSuffix} {showLabs ? '▴' : '▾'}
           </button>
           <span
             className="dof-badge studio-drawer-collapsed"
@@ -128,8 +115,8 @@ export const AppShell: React.FC<AppShellProps> = ({
 
         <div className="wb-actions-row">
           <div className="wb-actions-row" role="tablist" aria-label="Persona Lens Switcher">
-            {renderPersonaButton('learn', '🎓 Learn')}
-            {renderPersonaButton('plant', '🏭 Plant')}
+            {renderPersonaButton('learn', t.learnLabel)}
+            {renderPersonaButton('plant', t.plantLabel)}
           </div>
           <button
             type="button"
@@ -140,10 +127,10 @@ export const AppShell: React.FC<AppShellProps> = ({
             onClick={openVisualVerifierTool}
           >
             {isVerifierActive && <motion.span layoutId="active-verifier-pill" className="motion-pill framer-pill-glow" transition={FRAMER_LAYOUT_SPRING} />}
-            <span>📐 Charts</span>
+            <span>{t.chartsBtn}</span>
           </button>
           <button type="button" data-testid="export-calc-sheet-btn" onClick={onExportCalcSheet}>
-            📄 Calc Sheet
+            {t.calcSheetBtn}
           </button>
           <button
             type="button"
@@ -151,8 +138,9 @@ export const AppShell: React.FC<AppShellProps> = ({
             title="Watch the Remotion Video Guide & explore the ai4UCheE Feature Showcase"
             onClick={() => setShowTourModal(true)}
           >
-            🎬 Guide
+            {t.guideBtn}
           </button>
+          <LocaleSwitcherPill />
           <PageAxShareMenu />
         </div>
       </header>
@@ -167,7 +155,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         role="tablist"
         aria-label="Engineering Subject Workbenches"
       >
-        {WORKBENCH_TABS.map((tab) => {
+        {tabs.map((tab) => {
           const isActive = activeWorkbench === tab.id;
           return (
             <button

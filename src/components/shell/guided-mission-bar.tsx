@@ -7,6 +7,7 @@ import { agentNative } from '../../actions/define-action';
 import { dispatchWorkbenchMutation, getClientAppState, subscribeClientAppState, type WorkbenchLivePayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { buildAdaptiveRecommendations } from '../../lib/adaptive-recommendation-engine';
+import { getShellCopy, MISSION_BUTTON_LABELS_VI } from '../../lib/i18n/vi-shell-dictionary';
 import { getStudentProfile, recordMissionOutcome, recordPayloadObservation, subscribeStudentProfile, type StudentProfileState } from '../../lib/student-adaptive-model';
 import { autoCompleteProblemStagesForRescue, markProblemDefinitionReviewed } from '../../lib/hypothesis-verification-engine';
 import { ALL_24_REAL_LIFE_PROBLEMS, problemEntryToMissionScenario, resetActiveProblems, setActiveProblemForWorkbench } from '../../lib/problem-library-registry';
@@ -24,7 +25,8 @@ export const GuidedMissionBar: React.FC = () => {
   const [profile, setProfile] = useState<StudentProfileState>(() => getStudentProfile());
   const usedAutoFixRef = useRef<boolean>(false);
   const solvedRecordedRef = useRef<string | null>(null);
-  const { activeWorkbench, setPersonaMode, setActiveWorkbench, clearChips, toggleChip } = usePersonaTheme();
+  const { activeWorkbench, locale, setPersonaMode, setActiveWorkbench, clearChips, toggleChip } = usePersonaTheme();
+  const t = getShellCopy(locale);
 
   useEffect(() => subscribeStudentProfile((p) => setProfile({ ...p })), []);
 
@@ -111,14 +113,14 @@ export const GuidedMissionBar: React.FC = () => {
       <div className="mission-bar" data-testid="guided-mission-bar">
         {!collapsed && (
           <>
-            <span className="studio-drawer-collapsed">Start from a Real-Life Plant Problem (Fogler &amp; LeBlanc 6-Stage Flow)</span>
+            <span className="studio-drawer-collapsed">{t.missionLeadText}</span>
             <button
               type="button"
               data-testid="toggle-problem-library-btn"
               onClick={() => setLibraryOpen(!libraryOpen)}
               title="Browse all 24 Real-Life Plant Problems across 🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4"
             >
-              🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4 · 📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems ▾
+              {t.browseProblemsBtn(ALL_24_REAL_LIFE_PROBLEMS.length)}
             </button>
             <div className={showScorecardDrawer ? 'studio-quick-missions-popover' : 'studio-drawer-collapsed'}>
               {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
@@ -130,7 +132,7 @@ export const GuidedMissionBar: React.FC = () => {
                   onClick={() => { resetActiveProblems(); setShowScorecardDrawer(false); runMission(mission, mission.initialMutations); }}
                 >
                   {solved ? '✓ ' : ''}
-                  {mission.buttonLabel}
+                  {locale === 'vi' ? (MISSION_BUTTON_LABELS_VI[mission.id] ?? mission.buttonLabel) : mission.buttonLabel}
                   {isRecommendedNext && (
                     <span data-testid="recommended-mission-badge" style={{ marginLeft: '0.3rem' }}>
                       ⭐
@@ -144,7 +146,7 @@ export const GuidedMissionBar: React.FC = () => {
               onClick={() => setShowScorecardDrawer(!showScorecardDrawer)}
               title="Toggle Quick Missions & Student Progress Drawer"
             >
-              {showScorecardDrawer ? '▾ Less' : '⚙️ Coach'}
+              {t.coachBtn(showScorecardDrawer)}
             </button>
           </>
         )}

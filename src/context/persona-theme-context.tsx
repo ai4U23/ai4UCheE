@@ -1,9 +1,15 @@
-// Persona ('learn' | 'plant') + Institutional Ivory ('paper' #FBF6EC) context.
+// Persona ('learn' | 'plant'), Locale ('en' | 'vi'), + Institutional Ivory ('paper' #FBF6EC) context.
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { writeClientAppState } from '../actions/view-screen';
+import {
+  resolveInitialLocale,
+  setActiveLocale,
+  type LocaleCode,
+} from '../lib/i18n/locale-types';
 
 export type PersonaMode = 'learn' | 'plant';
 export type ThemeMode = 'paper';
+export type { LocaleCode };
 export type WorkbenchId =
   | 'wb1-visual-verifier'
   | 'wb2-thermo-dippr'
@@ -25,6 +31,8 @@ export interface PersonaThemeState {
   setPersonaMode: (mode: PersonaMode) => void;
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
+  locale: LocaleCode;
+  setLocale: (locale: LocaleCode) => void;
   activeWorkbench: WorkbenchId;
   setActiveWorkbench: (wb: WorkbenchId) => void;
   selectedChips: SelectedChip[];
@@ -39,11 +47,13 @@ export const PersonaThemeProvider: React.FC<{
   children: React.ReactNode;
   initialPersona?: PersonaMode;
   initialTheme?: ThemeMode;
+  initialLocale?: LocaleCode;
   initialWorkbench?: WorkbenchId;
 }> = ({
   children,
   initialPersona = 'plant',
   initialTheme = 'paper',
+  initialLocale,
   initialWorkbench,
 }) => {
   const resolvedInitialWb = React.useMemo<WorkbenchId>(() => {
@@ -65,10 +75,17 @@ export const PersonaThemeProvider: React.FC<{
   }, [initialWorkbench]);
   const [personaMode, setPersonaMode] = useState<PersonaMode>(initialPersona);
   const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme);
+  const [locale, setLocaleState] = useState<LocaleCode>(() => resolveInitialLocale(initialLocale));
   const [activeWorkbench, setActiveWorkbench] = useState<WorkbenchId>(resolvedInitialWb);
   const [selectedChips, setSelectedChips] = useState<SelectedChip[]>([]);
 
+  const setLocale = useCallback((next: LocaleCode) => {
+    const valid = setActiveLocale(next, { persist: true });
+    setLocaleState(valid);
+  }, []);
+
   useEffect(() => {
+    setActiveLocale(locale, { persist: false });
     if (typeof document !== 'undefined') {
       document.documentElement.setAttribute('data-theme', themeMode);
       document.documentElement.setAttribute('data-persona', personaMode);
@@ -77,9 +94,10 @@ export const PersonaThemeProvider: React.FC<{
       activeWorkbench,
       personaMode,
       themeMode,
+      locale,
       selectedChips: selectedChips.map((c) => c.chipId),
     });
-  }, [activeWorkbench, themeMode, personaMode, selectedChips]);
+  }, [activeWorkbench, themeMode, personaMode, locale, selectedChips]);
 
   const toggleChip = useCallback((chip: Omit<SelectedChip, 'chipId'>) => {
     const chipId = `agent-select:${chip.kind}:${chip.id}`;
@@ -103,6 +121,8 @@ export const PersonaThemeProvider: React.FC<{
         setPersonaMode,
         themeMode,
         setThemeMode,
+        locale,
+        setLocale,
         activeWorkbench,
         setActiveWorkbench,
         selectedChips,

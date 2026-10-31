@@ -6,6 +6,7 @@ import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
+import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
 import { SUBJECT_WORKBENCH_BLENDS } from '../../lib/textbook-corpus-registry';
 import { LevenspielReactorSvgCanvas } from '../sketches/levenspiel-reactor-svg-canvas';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
@@ -15,7 +16,8 @@ import { KineticsDiagramGallery } from './kinetics-diagram-gallery';
 import { solveKineticsReactor } from './kinetics-solver-math';
 
 export const KineticsReactorWorkbench: React.FC = () => {
-  const { personaMode } = usePersonaTheme();
+  const { personaMode, locale } = usePersonaTheme();
+  const t = getWorkbenchCopy(locale);
   const [conversionX, setConversionX] = useState<number>(0.80);
   const [tempK, setTempK] = useState<number>(450);
   const [pInletPsig, setPInletPsig] = useState<number>(45);
@@ -90,7 +92,7 @@ export const KineticsReactorWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb6-kinetics-reactors">
       <header className="wb-toolbar">
         <div>
-          <h2>⚗️ Reactor R-401 Levenspiel Sizing &amp; Runaway Safety</h2>
+          <h2>{t.wb6Title}</h2>
           <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb6-blended-sources-badge">
             📚 Blended Sources: <code>{blend.blendedSourcesBadge}</code>
           </p>
@@ -130,25 +132,25 @@ export const KineticsReactorWorkbench: React.FC = () => {
         </div>
 
         <div>
-          <ScrubbableNumberInput paramId="kin-conv-x" label="Target Conversion X" value={conversionX} unit="mol/mol" min={0.05} max={0.96} step={0.02} onChange={setConversionX} />
-          <ScrubbableNumberInput paramId="kin-temp-k" label="Reactor Temperature T" value={tempK} unit="K" min={300} max={750} step={5} onChange={setTempK} />
-          <ScrubbableNumberInput paramId="kin-pin-psig" label="Inlet Gauge Pressure P_in" value={pInletPsig} unit="psig" min={-10} max={500} step={5} onChange={setPInletPsig} />
-          <ScrubbableNumberInput paramId="kin-eps-a" label="Gas Expansion Factor ε_A" value={epsilonA} unit="-" min={-0.5} max={1.5} step={0.05} onChange={setEpsilonA} />
-          <ScrubbableNumberInput paramId="kin-alpha-ergun" label="Ergun PBR Pressure Parameter α" value={alphaErgun} unit="kg⁻¹" min={0} max={0.04} step={0.002} onChange={setAlphaErgun} />
-          <ScrubbableNumberInput paramId="kin-thiele-phi" label="Thiele Modulus φ (Spherical Pellet)" value={thielePhi} unit="-" min={0.1} max={15.0} step={0.1} onChange={setThielePhi} />
-          <ScrubbableNumberInput paramId="kin-semenov-psi" label="Semenov Heat-Release Number ψ" value={semenovPsi} unit="-" min={0.05} max={0.95} step={0.02} onChange={setSemenovPsi} />
+          <ScrubbableNumberInput paramId="kin-conv-x" label={t.wb6ConvLabel} value={conversionX} unit="mol/mol" min={0.05} max={0.96} step={0.02} onChange={setConversionX} />
+          <ScrubbableNumberInput paramId="kin-temp-k" label={t.wb6TempLabel} value={tempK} unit="K" min={300} max={750} step={5} onChange={setTempK} />
+          <ScrubbableNumberInput paramId="kin-pin-psig" label={t.wb6PinLabel} value={pInletPsig} unit="psig" min={-10} max={500} step={5} onChange={setPInletPsig} />
+          <ScrubbableNumberInput paramId="kin-eps-a" label={t.wb6EpsLabel} value={epsilonA} unit="-" min={-0.5} max={1.5} step={0.05} onChange={setEpsilonA} />
+          <ScrubbableNumberInput paramId="kin-alpha-ergun" label={t.wb6AlphaLabel} value={alphaErgun} unit="kg⁻¹" min={0} max={0.04} step={0.002} onChange={setAlphaErgun} />
+          <ScrubbableNumberInput paramId="kin-thiele-phi" label={t.wb6ThieleLabel} value={thielePhi} unit="-" min={0.1} max={15.0} step={0.1} onChange={setThielePhi} />
+          <ScrubbableNumberInput paramId="kin-semenov-psi" label={t.wb6SemenovLabel} value={semenovPsi} unit="-" min={0.05} max={0.95} step={0.02} onChange={setSemenovPsi} />
         </div>
       </div>
 
       <div className="studio-disclosure-bar">
         <button type="button" onClick={() => setShowProofs(!showProofs)}>
-          {showProofs ? '▾' : '▸'} 📐 Show Math Proofs ({solved.equations.length})
+          {t.wb6ProofsBtn(showProofs, solved.equations.length)}
         </button>
         <button type="button" onClick={() => setShowMoreDiagrams(!showMoreDiagrams)}>
-          {showMoreDiagrams ? '▾' : '▸'} 📊 More Diagrams (Semenov, Selectivity/RTD, LHHW, Electro)
+          {t.wb6MoreDiagramsBtn(showMoreDiagrams)}
         </button>
         <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
-          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+          {t.investigationBtn(showInvestigation)}
         </button>
       </div>
 
@@ -171,9 +173,9 @@ export const KineticsReactorWorkbench: React.FC = () => {
       <div className={showInvestigation ? '' : 'studio-drawer-collapsed'}>
         <LearnModeCallout
           workbenchId="wb6"
-          title="Levenspiel CSTR/PFR, Thiele η, Semenov Runaway, Selectivity/RTD, LHHW/Bioreactor & Electro-Catalysis"
-          plainEnglish="Drag the Levenspiel plot, Semenov G(T)/R(T) S-curve, Series selectivity / RTD, LHHW rate roof / Monod chemostat, or Butler-Volmer polarization curve."
-          commonTrap="Three classic traps: (1) forgetting psig → psia (+14.696) before computing gas concentration C_A0 = P_abs/(RT), (2) mixing open-pipe Fanning f_F / Darcy f_D = 4·f_F with packed-bed Ergun friction, and (3) operating above Semenov ψ_crit = 1/e ≈ 0.368."
+          title={t.wb6CalloutTitle}
+          plainEnglish={t.wb6CalloutPlain}
+          commonTrap={t.wb6CalloutTrap}
           perryAnchor="[Fogler 7th Ed., Ch. 2, 5, 8–12, 15, 16–19; BSL 2nd Ed., Ch. 18; Crowl & Louvar 4th Ed., Ch. 8; Perry's 9th Ed., Sec. 7 & 19]"
         />
       </div>

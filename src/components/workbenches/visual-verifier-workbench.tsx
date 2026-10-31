@@ -5,6 +5,7 @@ import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
+import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
 import { PRESET_ANCHORS, resolvePresetForSection, sanitizeSecPageInput, type PerryPresetAnchor } from '../../lib/perry-figure-chart-meta';
 import { samplePerryCurveAtPct, type PerryCurveSampleResult } from '../../lib/perry-figure-curve-sampler';
 import { clientPointToViewBox, safeSetPointerCapture } from '../../lib/svg-drag-math';
@@ -14,7 +15,8 @@ import { PerryFigureSvgPreview } from './perry-figure-svg-preview';
 import { VisualVerifierTutorCard } from './visual-verifier-tutor-card';
 
 export const VisualVerifierWorkbench: React.FC = () => {
-  const { personaMode } = usePersonaTheme();
+  const { personaMode, locale } = usePersonaTheme();
+  const t = getWorkbenchCopy(locale);
   const [secNum, setSecNum] = useState<number>(6);
   const [secPage, setSecPage] = useState<string>('6-10');
   const [userReading, setUserReading] = useState<string>('0.018');
@@ -93,7 +95,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb1-visual-verifier">
       <header className="wb-toolbar">
         <div>
-          <h2>📐 Calibrated Nomographs &amp; Chart Verifier</h2>
+          <h2>{t.wb1Title}</h2>
           <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb1-blended-sources-badge">
             📚 Blended Sources: <code>Perry&apos;s 9th Ed. · BSL Transport · SVNAS · Seader · Fogler · Crowl &amp; Louvar</code> · 10 Calibrated Charts
           </p>
@@ -164,10 +166,10 @@ export const VisualVerifierWorkbench: React.FC = () => {
 
       <div className="studio-disclosure-bar">
         <button type="button" onClick={() => setShowPresetsDrawer(!showPresetsDrawer)}>
-          {showPresetsDrawer ? '▾' : '▸'} 📊 All 10 Calibrated Charts ({PRESET_ANCHORS.length})
+          {t.wb1AllChartsBtn(showPresetsDrawer, PRESET_ANCHORS.length)}
         </button>
         <button type="button" onClick={() => setShowInvestigationDrawer(!showInvestigationDrawer)}>
-          {showInvestigationDrawer ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+          {t.investigationBtn(showInvestigationDrawer)}
         </button>
       </div>
 
@@ -184,9 +186,9 @@ export const VisualVerifierWorkbench: React.FC = () => {
 
       <div className={showInvestigationDrawer ? '' : 'studio-drawer-collapsed'}>
         <LearnModeCallout
-          workbenchId="wb1" title="How to Read Log-Log & Multi-Book ChE Nomographs"
-          plainEnglish="Pick any of the 10 calibrated multi-book nomographs above, drag the crosshair across the curve to scrub live readings, or type your visual estimate to verify against textbook benchmarks."
-          commonTrap="Perry's Fig. 6-9 plots Fanning f_F, which is 4× smaller than the Moody Darcy friction factor f_D = 4·f_F."
+          workbenchId="wb1" title={t.wb1CalloutTitle}
+          plainEnglish={t.wb1CalloutPlain}
+          commonTrap={t.wb1CalloutTrap}
           perryAnchor="[Perry's 9th Ed., Fig. 6-9, p. 6-10]"
         />
       </div>

@@ -4,12 +4,14 @@
 import React, { useState } from 'react';
 import { getClientAppState } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
+import { getShellCopy } from '../../lib/i18n/vi-shell-dictionary';
 
 const CANONICAL_URL = 'https://chemeng.ai4u.now/';
 const MARKDOWN_TWIN_URL = 'https://chemeng.ai4u.now/index.md';
 
 export const PageAxShareMenu: React.FC = () => {
-  const { activeWorkbench, personaMode } = usePersonaTheme();
+  const { activeWorkbench, personaMode, locale } = usePersonaTheme();
+  const t = getShellCopy(locale);
   const [open, setOpen] = useState<boolean>(false);
   const [toast, setToast] = useState<string>('');
 
@@ -43,23 +45,23 @@ export const PageAxShareMenu: React.FC = () => {
           .catch(() => fallbackMd)
           .then((md) => new Blob([`${fallbackMd}\n\n---\n\n${md}`], { type: 'text/plain' }));
         void navigator.clipboard.write([new ClipboardItem({ 'text/plain': textPromise })]).then(
-          () => announce('Copied Markdown'),
+          () => announce(t.copiedMarkdownToast),
           () => {
             void navigator.clipboard.writeText(fallbackMd).catch(() => {});
-            announce('Copied Markdown');
+            announce(t.copiedMarkdownToast);
           },
         );
         return;
       }
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
         void navigator.clipboard.writeText(fallbackMd).catch(() => {});
-        announce('Copied Markdown');
+        announce(t.copiedMarkdownToast);
         return;
       }
     } catch {
       // Fallback announcement below
     }
-    announce('Copied Markdown');
+    announce(t.copiedMarkdownToast);
   };
 
   const handleCopyUrl = () => {
@@ -77,7 +79,7 @@ export const PageAxShareMenu: React.FC = () => {
     } catch {
       // ignore in headless/non-secure contexts
     }
-    announce('Copied URL');
+    announce(t.copiedUrlToast);
   };
 
   const aiPrompt = encodeURIComponent(
@@ -94,7 +96,7 @@ export const PageAxShareMenu: React.FC = () => {
         title="Copy page as Markdown, copy canonical URL, or open in ChatGPT, Claude, or Perplexity"
         onClick={() => setOpen(!open)}
       >
-        🔗 Share / AI {open ? '▴' : '▾'}
+        {t.shareBtn} {open ? '▴' : '▾'}
       </button>
       <span role="status" aria-live="polite" className="ax-share-toast" data-testid="ax-share-toast">
         {toast}
@@ -102,7 +104,7 @@ export const PageAxShareMenu: React.FC = () => {
       {open && (
         <div className="ax-share-popover" role="menu" aria-label="Page Markdown and AI Actions">
           <button type="button" role="menuitem" data-testid="ax-copy-markdown-btn" onClick={handleCopyMarkdown}>
-            <span>📋 Copy Page (Markdown)</span>
+            <span>{t.copyMarkdownLabel}</span>
           </button>
           <a
             role="menuitem"
@@ -112,11 +114,11 @@ export const PageAxShareMenu: React.FC = () => {
             data-testid="ax-view-markdown-link"
             onClick={() => setOpen(false)}
           >
-            <span>📄 View as Markdown</span>
+            <span>{t.viewMarkdownLabel}</span>
             <span>↗</span>
           </a>
           <button type="button" role="menuitem" data-testid="ax-copy-url-btn" onClick={handleCopyUrl}>
-            <span>🔗 Copy Canonical URL</span>
+            <span>{t.copyUrlLabel}</span>
           </button>
           <a
             role="menuitem"

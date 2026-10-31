@@ -15,6 +15,7 @@ import { VisualVerifierWorkbench } from './components/workbenches/visual-verifie
 import {
   PersonaThemeProvider,
   usePersonaTheme,
+  type LocaleCode,
   type PersonaMode,
   type WorkbenchId,
 } from './context/persona-theme-context';
@@ -74,8 +75,11 @@ const WorkbenchSurface: React.FC = () => {
   );
 };
 
-export const App: React.FC<{ initialPersona?: PersonaMode }> = ({ initialPersona }) => (
-  <PersonaThemeProvider initialPersona={initialPersona}>
+export const App: React.FC<{ initialPersona?: PersonaMode; initialLocale?: LocaleCode }> = ({
+  initialPersona,
+  initialLocale,
+}) => (
+  <PersonaThemeProvider initialPersona={initialPersona} initialLocale={initialLocale}>
     <WorkbenchSurface />
   </PersonaThemeProvider>
 );

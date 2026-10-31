@@ -4,6 +4,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
+import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
 import { PipingPumpSvgSketch } from '../sketches/piping-pump-svg-sketch';
 import { KaTeXBlock } from '../ui/katex-block';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
@@ -13,7 +14,8 @@ import { HydraulicsDiagramGallery } from './hydraulics-diagram-gallery';
 import { solveHydraulics } from './hydraulics-solver-math';
 
 export const HydraulicsWorkbench: React.FC = () => {
-  const { personaMode } = usePersonaTheme();
+  const { personaMode, locale } = usePersonaTheme();
+  const t = getWorkbenchCopy(locale);
   const [npsInch, setNpsInch] = useState<number>(4);
   const [schedule, setSchedule] = useState<'40' | '80'>('40');
   const [flowGpm, setFlowGpm] = useState<number>(250);
@@ -67,7 +69,7 @@ export const HydraulicsWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb3-hydraulics">
       <header className="wb-toolbar">
         <div>
-          <h2>🔧 Pump P-101 Suction Hydraulics &amp; Piping</h2>
+          <h2>{t.wb3Title}</h2>
           <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb3-blended-sources-badge">
             📚 Blended Sources: <code>BSL Transport 2nd Ed. Ch. 2/6/7/10/14 · Perry&apos;s Sec 5/6/8/10/11/23 · Crowl &amp; Louvar Ch. 4/5/6</code> · Explicit <code>f_D = 4·f_F</code>
           </p>
@@ -103,24 +105,24 @@ export const HydraulicsWorkbench: React.FC = () => {
           />
         </div>
         <div>
-          <ScrubbableNumberInput paramId="hyd-flow-gpm" label="Normal Flow Q" value={flowGpm} unit="gpm" min={20} max={1200} step={10} onChange={setFlowGpm} />
-          <ScrubbableNumberInput paramId="hyd-length-m" label="Pipe Length L" value={lengthM} unit="m" min={5} max={1000} step={5} onChange={setLengthM} />
-          <ScrubbableNumberInput paramId="hyd-psuc-psig" label="Suction Pressure" value={pSuctionPsig} unit="psig" min={-14} max={100} step={1} onChange={setPSuctionPsig} />
-          <ScrubbableNumberInput paramId="hyd-z-m" label="Suction Static Head z" value={zSuctionM} unit="m" min={-5} max={20} step={0.5} onChange={setZSuctionM} />
-          <ScrubbableNumberInput paramId="hyd-npshr-m" label="Pump NPSHr" value={npshrM} unit="m" min={1} max={12} step={0.2} onChange={setNpshrM} />
-          <ScrubbableNumberInput paramId="hyd-valve-dp" label="Valve ΔP" value={valveDpPsi} unit="psi" min={2} max={90} step={2} onChange={setValveDpPsi} />
+          <ScrubbableNumberInput paramId="hyd-flow-gpm" label={t.wb3FlowLabel} value={flowGpm} unit="gpm" min={20} max={1200} step={10} onChange={setFlowGpm} />
+          <ScrubbableNumberInput paramId="hyd-length-m" label={t.wb3LengthLabel} value={lengthM} unit="m" min={5} max={1000} step={5} onChange={setLengthM} />
+          <ScrubbableNumberInput paramId="hyd-psuc-psig" label={t.wb3PsucLabel} value={pSuctionPsig} unit="psig" min={-14} max={100} step={1} onChange={setPSuctionPsig} />
+          <ScrubbableNumberInput paramId="hyd-z-m" label={t.wb3HeadLabel} value={zSuctionM} unit="m" min={-5} max={20} step={0.5} onChange={setZSuctionM} />
+          <ScrubbableNumberInput paramId="hyd-npshr-m" label={t.wb3NpshrLabel} value={npshrM} unit="m" min={1} max={12} step={0.2} onChange={setNpshrM} />
+          <ScrubbableNumberInput paramId="hyd-valve-dp" label={t.wb3ValveDpLabel} value={valveDpPsi} unit="psi" min={2} max={90} step={2} onChange={setValveDpPsi} />
         </div>
       </div>
 
       <div className="studio-disclosure-bar">
         <button type="button" onClick={() => setShowProofs(!showProofs)}>
-          {showProofs ? '▾' : '▸'} 📐 Show Math Proofs &amp; 3-Case Table ({solved.equations.length})
+          {t.wb3ProofsBtn(showProofs, solved.equations.length)}
         </button>
         <button type="button" onClick={() => setShowMoreDiagrams(!showMoreDiagrams)}>
-          {showMoreDiagrams ? '▾' : '▸'} 📊 More Diagrams (Valves, Boiling, Safety)
+          {t.wb3MoreDiagramsBtn(showMoreDiagrams)}
         </button>
         <button type="button" onClick={() => setShowInvestigation(!showInvestigation)}>
-          {showInvestigation ? '▾' : '▸'} 🕵️ 6-Stage Investigation
+          {t.investigationBtn(showInvestigation)}
         </button>
       </div>
 
@@ -179,9 +181,9 @@ export const HydraulicsWorkbench: React.FC = () => {
       <div className={showInvestigation ? '' : 'studio-drawer-collapsed'}>
         <LearnModeCallout
           workbenchId="wb3"
-          title="Pipe Friction, Pump Cavitation, BSL Rheology, Choked Valves, HX Cross & Process Safety"
-          plainEnglish="Drag Flow Q, Suction Pressure, BSL Power-Law n, Control Valve ΔP, HX T-Q Cross (Bowman F_T), Nukiyama boiling, or Flammability LOC / Plume dispersion."
-          commonTrap="If NPSHa drops below Pump NPSHr, liquid flashes into vapor bubbles that implode on the impeller (cavitation)."
+          title={t.wb3CalloutTitle}
+          plainEnglish={t.wb3CalloutPlain}
+          commonTrap={t.wb3CalloutTrap}
           perryAnchor="[Perry's 9th Ed., Eqs. 6-37..6-39, p. 6-11 & Sec. 8, p. 8-71]"
         />
       </div>
