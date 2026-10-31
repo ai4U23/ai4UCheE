@@ -128,6 +128,10 @@
       box-shadow: 0 8px 24px rgba(7, 26, 51, 0.28);
     }
     .brand-cluster { display: flex; align-items: center; gap: 0.65rem; }
+    .brand-logo {
+      height: 30px; width: auto;
+      filter: drop-shadow(0 0 10px rgba(232, 197, 71, 0.35));
+    }
     .brand-badge {
       width: 34px; height: 34px; border-radius: 8px;
       background: var(--maize); color: var(--navy-deep);
@@ -341,7 +345,7 @@
 <body>
   <header class="showcase-masthead">
     <div class="brand-cluster">
-      <span class="brand-badge">ChE</span>
+      <img src="/ai4u-logo.png" alt="AI4U.now" class="brand-logo" data-testid="ai4u-logo" />
       <div>
         <h1>ai4UCheE — ChemEng's Intelligent Workbench</h1>
         <small>6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Plant Problems</small>
@@ -356,8 +360,12 @@
       <a href="#calc-sheet-cta">06 · EPC Calc Sheet</a>
     </nav>
     <div class="nav-links" role="group" aria-label="Theme and Workbench Controls">
+      <span class="locale-pill" role="group" aria-label="Language Switcher" data-testid="locale-toggle">
+        <button type="button" class="ctrl-btn active" id="locale-en" data-testid="locale-en" onclick="setShowcaseLocale('en')" title="English">EN</button>
+        <button type="button" class="ctrl-btn" id="locale-vi" data-testid="locale-vi" onclick="setShowcaseLocale('vi')" title="Tiếng Việt">VI</button>
+      </span>
       <button type="button" class="ctrl-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️ Theme: Light</button>
-      <a class="ctrl-btn active" href="/app">🚀 Launch Workbench</a>
+      <a class="ctrl-btn active" id="launch-wb-masthead-btn" href="/app">🚀 Launch Workbench</a>
     </div>
   </header>
 
@@ -1750,6 +1758,76 @@
       document.querySelectorAll('.chapter-btn').forEach(function(b) { b.classList.remove('active'); });
       if (btnEl) btnEl.classList.add('active');
     }
+    var SHOWCASE_COPY = {
+      en: {
+        sub: '6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Plant Problems',
+        nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · EPC Calc Sheet'],
+        launch: '🚀 Launch Workbench',
+        heroEyebrow: '✨ SOVEREIGN CHEMICAL ENGINEERING WORKBENCH · 1 BAR · 1 CANVAS · 1 AGENT',
+        heroTitle: 'Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio.',
+        heroCta: '🚀 Launch Live Workbench (/app)',
+        videoCta: '🎬 Watch 5-Step Video Guide',
+        videoTitle: 'Master the Workbench in 5 Guided Video Chapters.',
+        labsTitle: 'Every Core Chemical Engineering Subject—Interactive & Citation-Backed.',
+        probTitle: 'Start from a Real Plant Upset—Not a Disconnected Textbook Formula.',
+        wbTitle: '3-Stage White-Box Proofs & Validated Agent-Native System Architecture.',
+        calcTitle: 'From Classroom Intuition to Print-Ready EPC Deliverables.'
+      },
+      vi: {
+        sub: '6 Giáo trình Chuẩn ChE · 55+ Giản đồ SVG Tương tác · 24 Sự cố Nhà máy Thực tế',
+        nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính EPC'],
+        launch: '🚀 Mở Phòng Thí Nghiệm',
+        heroEyebrow: '✨ BÀN LÀM VIỆC KỸ THUẬT HÓA HỌC THÔNG MINH · 1 THANH · 1 ĐỒ THỊ · 1 TRỢ LÝ AI',
+        heroTitle: 'Kết hợp 6 Giáo trình Kỹ thuật Hóa học Kinh điển với Phòng Thí nghiệm Tương tác AI.',
+        heroCta: '🚀 Mở Phòng Thí Nghiệm Trực Tiếp (/app?lang=vi)',
+        videoCta: '🎬 Xem Video Hướng Dẫn 5 Bước',
+        videoTitle: 'Làm chủ Bàn làm việc qua 5 Chương Video Hướng dẫn.',
+        labsTitle: 'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản.',
+        probTitle: 'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc.',
+        wbTitle: 'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native.',
+        calcTitle: 'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC).'
+      }
+    };
+    function setShowcaseLocale(loc) {
+      var l = loc === 'vi' ? 'vi' : 'en';
+      document.documentElement.setAttribute('lang', l);
+      document.documentElement.setAttribute('data-locale', l);
+      try { localStorage.setItem('ai4uchee_locale', l); } catch (e) {}
+      var enBtn = document.getElementById('locale-en');
+      var viBtn = document.getElementById('locale-vi');
+      if (enBtn) enBtn.classList.toggle('active', l === 'en');
+      if (viBtn) viBtn.classList.toggle('active', l === 'vi');
+      var c = SHOWCASE_COPY[l];
+      var subEl = document.querySelector('.brand-cluster small');
+      if (subEl) subEl.textContent = c.sub;
+      var navAs = document.querySelectorAll('nav[aria-label="Showcase Sections"] a');
+      c.nav.forEach(function(txt, i) { if (navAs[i]) navAs[i].textContent = txt; });
+      var launchBtn = document.getElementById('launch-wb-masthead-btn');
+      if (launchBtn) launchBtn.textContent = c.launch;
+      var heroEye = document.querySelector('#hero .eyebrow-pill');
+      if (heroEye) heroEye.textContent = c.heroEyebrow;
+      var titles = document.querySelectorAll('.section-title');
+      var tMap = [c.heroTitle, c.videoTitle, c.labsTitle, c.probTitle, c.wbTitle, c.calcTitle];
+      tMap.forEach(function(txt, i) { if (titles[i]) titles[i].textContent = txt; });
+      document.querySelectorAll('a[href^="/app"]').forEach(function(a) {
+        var raw = a.getAttribute('href') || '/app';
+        var base = raw.replace(/([?&])lang=(en|vi)(&|$)/, '$1').replace(/[?&]$/, '');
+        a.setAttribute('href', l === 'vi' ? base + (base.indexOf('?') >= 0 ? '&lang=vi' : '?lang=vi') : base);
+      });
+      var heroPrimaryCta = document.querySelector('#hero .cta-btn:not(.secondary)');
+      if (heroPrimaryCta) heroPrimaryCta.textContent = c.heroCta;
+      var heroSecCta = document.querySelector('#hero .cta-btn.secondary');
+      if (heroSecCta) heroSecCta.textContent = c.videoCta;
+    }
+    (function initShowcaseLocale() {
+      var q = new URLSearchParams(window.location.search);
+      var ql = q.get('lang') || q.get('locale');
+      var saved = null;
+      try { saved = localStorage.getItem('ai4uchee_locale'); } catch (e) {}
+      if ((ql && ql.toLowerCase().indexOf('vi') === 0) || saved === 'vi') {
+        setShowcaseLocale('vi');
+      }
+    })();
   </script>
 </body>
 </html>

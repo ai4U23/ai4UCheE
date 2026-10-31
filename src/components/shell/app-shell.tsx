@@ -114,6 +114,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         <GuidedMissionBar />
 
         <div className="wb-actions-row">
+          <LocaleSwitcherPill />
           <div className="wb-actions-row" role="tablist" aria-label="Persona Lens Switcher">
             {renderPersonaButton('learn', t.learnLabel)}
             {renderPersonaButton('plant', t.plantLabel)}
@@ -140,7 +141,6 @@ export const AppShell: React.FC<AppShellProps> = ({
           >
             {t.guideBtn}
           </button>
-          <LocaleSwitcherPill />
           <PageAxShareMenu />
         </div>
       </header>
