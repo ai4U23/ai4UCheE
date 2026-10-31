@@ -1,12 +1,16 @@
 // Fogler & LeBlanc (2008) 6-Stage Creative Problem-Solving & Root-Cause Hypothesis Falsification
 // section generator for the Senior QA/QC Calculation Sheet (`calc-sheet-builder.ts`).
 import type { WorkbenchId } from '../../actions/view-screen';
+import { buildFoglerDetectiveStamp, TEMPORAL_FAULT_CLUES } from '../../lib/che-error-signature-detector';
 import { getFoglerCaseForWorkbench } from '../../lib/fogler-problem-solving-catalog';
 import { evaluateHypothesisItem, evaluateSixStageProgress } from '../../lib/hypothesis-verification-engine';
+import { getStudentProfile } from '../../lib/student-adaptive-model';
 
 export function buildFoglerTroubleshootingMarkdownSection(wb: WorkbenchId, solved: boolean): string {
   const spec = getFoglerCaseForWorkbench(wb);
   const stageStatus = evaluateSixStageProgress(wb, { solved });
+  const temporal = TEMPORAL_FAULT_CLUES[wb];
+  const stamp = buildFoglerDetectiveStamp(wb, getStudentProfile(), solved);
   const hypLines = spec.hypotheses.map((h) => {
     const ev = evaluateHypothesisItem(wb, h.id);
     const expectedTag = h.isRootCause ? 'ROOT CAUSE (Prove ✅)' : 'DECOY TRAP (Disprove ❌)';
@@ -18,11 +22,13 @@ export function buildFoglerTroubleshootingMarkdownSection(wb: WorkbenchId, solve
     '## Fogler & LeBlanc 6-Stage Creative Problem-Solving & Hypothesis Audit',
     `- **Why Learn Subject**: ${spec.whyLearnSubject}`,
     `- **1. Problem Observation (Normal vs. Faulty)**: ${spec.observationSummary}`,
+    `- **Time-Horizon Clue (Δt)**: ${temporal.timeHorizonBadge} — ${temporal.rateOfChangeClue} (${temporal.falsifiesReason})`,
     `- **2. Problem Definition (K-T IS / IS NOT)**: Perceived: "${spec.ktDefinition.perceivedProblem}" → **Real Problem Defined**: ${spec.ktDefinition.realProblemDefined} (IS: ${spec.ktDefinition.whatIs} | IS NOT: ${spec.ktDefinition.whatIsNot})`,
     `- **3. Fundamental Theory**: ${spec.fundamentalTheory.equationTitle} — \\(${spec.fundamentalTheory.symbolicLatex}\\) (${spec.fundamentalTheory.governingTermsNote})`,
     `- **4. Applicable Handbook**: ${spec.applicableHandbook.primaryCitation} · ${spec.applicableHandbook.chartOrTableRef}`,
     `- **5. Hypotheses: Prove / Disprove (Rule #12 — ${stageStatus.correctHypothesisCount}/${stageStatus.totalHypothesisCount} Verified)**:`,
     ...hypLines,
     `- **6. Actual Solution & Verification**: ${spec.actualSolutionSummary} (${spec.foglerBookCitation})`,
+    `- **Prof. Fogler Detective Completion Stamp**: \`${stamp.code}\` — ${stamp.tierLabel}`,
   ].join('\n');
 }

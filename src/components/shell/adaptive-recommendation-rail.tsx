@@ -13,6 +13,7 @@ import {
   buildAdaptiveRecommendations,
   type AdaptiveRecommendation,
 } from '../../lib/adaptive-recommendation-engine';
+import { buildFoglerDetectiveStamp } from '../../lib/che-error-signature-detector';
 import {
   evaluateSixStageProgress,
   resetProblemSolvingStore,
@@ -129,6 +130,10 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
 
       <span className="mission-pill" data-testid="hypothesis-verified-badge" title="Fogler & LeBlanc Rule #12 Hypotheses Proved/Disproved">
         🔬 Hypotheses: {stageStatus.correctHypothesisCount}/{stageStatus.totalHypothesisCount}
+      </span>
+
+      <span className="mission-pill" data-testid="rail-detective-stamp" title={buildFoglerDetectiveStamp(activeWorkbench, profile).tierLabel}>
+        🕵️ {buildFoglerDetectiveStamp(activeWorkbench, profile).code}
       </span>
 
       <label className="mono" style={{ fontSize: '0.76rem' }}>

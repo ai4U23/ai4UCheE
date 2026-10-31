@@ -48,6 +48,15 @@ export const PumpSystemCurveSvg: React.FC<PumpSystemCurveSvgProps> = ({
     npshrM,
     valveDpPsi,
   });
+  const ghostBaseline = buildHydraulicsCurveGeometry({
+    flowGpm: 450,
+    dInnerM,
+    lengthM,
+    zSuctionM,
+    pSuctionPsig: -10,
+    npshrM: 8,
+    valveDpPsi,
+  });
 
   const scrubFlowFromEvent = (e: React.PointerEvent<SVGSVGElement | SVGCircleElement>) => {
     if (!onChangeFlowGpm) return;
@@ -94,6 +103,15 @@ export const PumpSystemCurveSvg: React.FC<PumpSystemCurveSvgProps> = ({
       <text x="292" y={geom.npshrY - 3} fontSize="8.5" textAnchor="end" fill="var(--status-danger)" fontWeight="700">
         NPSHr = {npshrM.toFixed(1)} m
       </text>
+
+      {/* PhET-Style Before (Broken 450 gpm / -10 psig Cavitation Baseline) Ghost Curve & Marker */}
+      <g data-testid="wb3-ghost-baseline-line" opacity={0.42}>
+        <polyline points={ghostBaseline.npshaPoints} fill="none" stroke="var(--status-danger)" strokeWidth="1.4" strokeDasharray="2 3" />
+        <circle cx={ghostBaseline.case100.x} cy={ghostBaseline.case100.ySys} r="4.5" fill="none" stroke="var(--status-danger)" strokeWidth="1.5" strokeDasharray="2 2" />
+        <text x={ghostBaseline.case100.x - 4} y={ghostBaseline.case100.ySys + 11} fontSize="7.5" textAnchor="end" fill="var(--status-danger)">
+          Before (450 gpm / -10 psig)
+        </text>
+      </g>
 
       {/* NPSHa(Q) Curve */}
       <polyline points={geom.npshaPoints} fill="none" stroke="var(--status-pass)" strokeWidth="1.8" strokeDasharray="4 2" />

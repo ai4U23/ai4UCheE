@@ -126,6 +126,12 @@ export const DipprPhaseEnvelopeSvg: React.FC<DipprPhaseEnvelopeSvgProps> = ({
           onClick={(e) => { e.stopPropagation(); onChangeTempK?.(Number((fluid.tcK - 0.5).toFixed(2))); }}
         />
         <text x={env.x(fluid.tcK) - 42} y={env.y(fluid.pcPa / 1000) + 14} fontSize="10" fill="var(--status-danger)" fontWeight="700">C.P. ({fluid.tcK.toFixed(1)} K)</text>
+        {/* PhET-Style Before (Broken 298 K Subcooled Baseline) Ghost Line & Marker */}
+        <g data-testid="wb2-ghost-baseline-marker" opacity={0.42}>
+          <line x1={env.x(298)} y1={MT} x2={env.x(298)} y2={H - MB} stroke="var(--status-danger)" strokeWidth="1.4" strokeDasharray="2 3" />
+          <circle cx={env.x(298)} cy={env.y(env.pSatKpa(298))} r="5" fill="none" stroke="var(--status-danger)" strokeWidth="1.5" strokeDasharray="2 2" />
+          <text x={env.x(298) + 5} y={H - MB - 6} fontSize="8.5" fill="var(--status-danger)">Before (298 K Subcooled)</text>
+        </g>
         {/*Draggables: vertical T line, horizontal P_sat line, H_vap marker & main operating handle*/}
         <line x1={opX} y1={MT} x2={opX} y2={H - MB} stroke="var(--maize)" strokeWidth="1.6" strokeDasharray="3 3" />
         <line x1={ML} y1={opY} x2={opX} y2={opY} stroke="var(--accent-primary)" strokeWidth="1.4" strokeDasharray="3 3" />

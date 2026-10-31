@@ -6,6 +6,7 @@ import { clientPointToViewBox, safeSetPointerCapture } from '../../lib/svg-drag-
 import {
   inverseLevenspielSvgDrag,
   LEVENSPIEL_VIEW_BOX,
+  solveKineticsReactor,
   type KineticsReactorSolution,
 } from '../workbenches/kinetics-solver-math';
 
@@ -44,6 +45,11 @@ export const LevenspielReactorSvgCanvas: React.FC<LevenspielReactorSvgCanvasProp
   const op = solved.operatingPoint;
 
   const polylinePoints = solved.curvePoints.map((pt) => `${pt.sx},${pt.sy}`).join(' ');
+  const ghostBaseline = solveKineticsReactor({
+    conversionX: solved.conversionX, tempK: solved.tempK, pInletPsig: -5,
+    epsilonA: solved.epsilonA, alphaErgun: solved.alphaErgun, thielePhi: 5.5, semenovPsi: 0.52,
+  });
+  const ghostPolylinePoints = ghostBaseline.curvePoints.map((pt) => `${pt.sx},${pt.sy}`).join(' ');
   const pfrAreaPoints = [
     `${plotX},${baselineY}`,
     ...solved.curvePoints.filter((pt) => pt.x <= solved.conversionX + 0.01).map((pt) => `${pt.sx},${pt.sy}`),
@@ -107,6 +113,15 @@ export const LevenspielReactorSvgCanvas: React.FC<LevenspielReactorSvgCanvasProp
           strokeWidth={1.2}
           data-testid="levenspiel-pfr-area"
         />
+
+        {/* PhET-Style Before (Broken φ=5.5 Pore-Starved / -5 psig Baseline) Ghost Curve */}
+        <g data-testid="wb6-ghost-baseline-line" opacity={0.42}>
+          <polyline fill="none" stroke="#dc2626" strokeWidth={1.8} strokeDasharray="3 3" points={ghostPolylinePoints} />
+          <circle cx={ghostBaseline.operatingPoint.sx} cy={ghostBaseline.operatingPoint.sy} r={5} fill="none" stroke="#dc2626" strokeWidth={1.5} strokeDasharray="2 2" />
+          <text x={plotX + plotW - 6} y={plotY + 16} fontSize={8.8} textAnchor="end" fill="#dc2626">
+            Before Baseline (φ=5.5 Pore-Starved)
+          </text>
+        </g>
 
         {/* Reciprocal Rate Curve FA0 / (-rA) vs Conversion X */}
         <polyline
