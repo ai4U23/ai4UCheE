@@ -93,6 +93,10 @@ const REGEX_REPLACEMENTS: ReadonlyArray<[RegExp, string]> = [
   [/⚠️ Wet Exhaust/g, '⚠️ Hơi thoát ẩm'],
   [/✅ Safe Exhaust Quality/g, '✅ Độ khô hơi thoát an toàn'],
   [/No Azeotrope/g, 'Không có đẳng phí'],
+  [/^Sec (\d+)$/, 'Chg $1'],
+  [/4× higher trap/g, 'bẫy gấp 4×'],
+  [/Cursor Y = /g, 'Tung độ con trỏ Y = '],
+  [/ \[p\. ([^\]]+)\]/g, ' [tr. $1]'],
 ];
 
 const nodeCache = new WeakMap<Text, { en: string; vi: string }>();
@@ -105,6 +109,12 @@ function translateTextString(raw: string): string {
     const lead = raw.match(/^\s*/)?.[0] ?? '';
     const trail = raw.match(/\s*$/)?.[0] ?? '';
     return `${lead}${exact}${trail}`;
+  }
+  const citeMatch = trimmed.match(/^(.+) \[p\. ([^\]]+)\]$/);
+  if (citeMatch && COMBINED_EXACT[citeMatch[1]]) {
+    const lead = raw.match(/^\s*/)?.[0] ?? '';
+    const trail = raw.match(/\s*$/)?.[0] ?? '';
+    return `${lead}${COMBINED_EXACT[citeMatch[1]]} [tr. ${citeMatch[2]}]${trail}`;
   }
   let out = raw;
   for (const [pattern, replacement] of REGEX_REPLACEMENTS) {

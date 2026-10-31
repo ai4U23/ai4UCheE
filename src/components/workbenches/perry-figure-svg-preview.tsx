@@ -95,7 +95,7 @@ export const PerryFigureSvgPreview: React.FC<PerryFigureSvgPreviewProps> = ({
       ))}
 
       <text x="62" y="19" fontSize="11.2" fontWeight="700" fill="currentColor">
-        {meta.title} [p. {secPage}]
+        {`${meta.title} [p. ${secPage}]`}
       </text>
 
       {secondaryD && (
