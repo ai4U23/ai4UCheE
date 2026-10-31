@@ -50,3 +50,8 @@ coverage/
 *.sqlite3
 *.sqlite-shm
 *.sqlite-wal
+
+# Local screenshot & render-check scratch directories
+gui-test-screenshots/
+render-check/
+plans/reports/render-check-*/

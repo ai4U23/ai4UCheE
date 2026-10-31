@@ -93,12 +93,12 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
         </header>
 
         <div className="wb-actions-row" data-testid="qaqc-header-form">
-          <label>Project:<input aria-label="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} /></label>
-          <label>Project No:<input aria-label="Project No" value={projectNo} onChange={(e) => setProjectNo(e.target.value)} /></label>
-          <label>Equipment Tag:<input aria-label="Equipment Tag" value={equipmentTag} onChange={(e) => setEquipmentTag(e.target.value)} /></label>
-          <label>Revision:<input aria-label="Revision" value={revision} onChange={(e) => setRevision(e.target.value)} /></label>
-          <label>Prepared By:<input aria-label="Prepared By" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} /></label>
-          <label>Checked By:<input aria-label="Checked By" value={checkedBy} onChange={(e) => setCheckedBy(e.target.value)} /></label>
+          <label>{locale === 'vi' ? 'Dự án:' : 'Project:'}<input aria-label="Project Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} /></label>
+          <label>{locale === 'vi' ? 'Mã dự án:' : 'Project No:'}<input aria-label="Project No" value={projectNo} onChange={(e) => setProjectNo(e.target.value)} /></label>
+          <label>{locale === 'vi' ? 'Mã thiết bị:' : 'Equipment Tag:'}<input aria-label="Equipment Tag" value={equipmentTag} onChange={(e) => setEquipmentTag(e.target.value)} /></label>
+          <label>{locale === 'vi' ? 'Phiên bản:' : 'Revision:'}<input aria-label="Revision" value={revision} onChange={(e) => setRevision(e.target.value)} /></label>
+          <label>{locale === 'vi' ? 'Người lập:' : 'Prepared By:'}<input aria-label="Prepared By" value={preparedBy} onChange={(e) => setPreparedBy(e.target.value)} /></label>
+          <label>{locale === 'vi' ? 'Người kiểm tra:' : 'Checked By:'}<input aria-label="Checked By" value={checkedBy} onChange={(e) => setCheckedBy(e.target.value)} /></label>
         </div>
 
         <div className={`wb-verdict ${sheet.safetyStatus === 'PASS' ? 'pass' : 'fail'}`} data-testid="calc-sheet-safety-badge">
@@ -109,11 +109,11 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
         <table className="mono" style={{ width: '100%', fontSize: '0.8rem' }} data-testid="calc-sheet-rows">
           <thead>
             <tr>
-              <th>Parameter</th>
-              <th>Symbol</th>
-              <th>Value</th>
-              <th>Units</th>
-              <th>Basis</th>
+              <th>{locale === 'vi' ? 'Thông số kỹ thuật' : 'Parameter'}</th>
+              <th>{locale === 'vi' ? 'Ký hiệu' : 'Symbol'}</th>
+              <th>{locale === 'vi' ? 'Giá trị' : 'Value'}</th>
+              <th>{locale === 'vi' ? 'Đơn vị' : 'Units'}</th>
+              <th>{locale === 'vi' ? 'Cơ sở / Nguồn chuẩn' : 'Basis'}</th>
             </tr>
           </thead>
           <tbody>

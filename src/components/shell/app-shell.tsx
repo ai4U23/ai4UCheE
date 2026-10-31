@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { dispatchWorkbenchMutation } from '../../actions/view-screen';
 import { usePersonaTheme, type PersonaMode, type WorkbenchId } from '../../context/persona-theme-context';
 import { FRAMER_LAYOUT_SPRING } from '../../lib/framer-motion-tokens';
+import { useVietnameseDomTranslator } from '../../lib/i18n/vi-dom-translator';
 import { getShellCopy, getWorkbenchTabs, SUBJECT_DEFAULT_FIGURE } from '../../lib/i18n/vi-shell-dictionary';
 import { SwarmPulseDot } from '../ui/framer-motion-primitives';
 import { VisualVerifierWorkbench } from '../workbenches/visual-verifier-workbench';
@@ -28,6 +29,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   dofStatus = 'DoF = 0 · Fully Specified',
 }) => {
   const { personaMode, setPersonaMode, locale, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
+  useVietnameseDomTranslator(locale);
   const [showLabs, setShowLabs] = useState<boolean>(false);
   const [showTourModal, setShowTourModal] = useState<boolean>(false);
   const lastSubjectRef = React.useRef<WorkbenchId>('wb3-hydraulics');

@@ -3,6 +3,8 @@
 // plus secondary filters for Equipment Tag, Symptom Archetype, Subject Workbench, and search.
 import React, { useState } from 'react';
 import type { WorkbenchId } from '../../actions/view-screen';
+import { getActiveLocale } from '../../lib/i18n/locale-types';
+import { VI_PROBLEMS_AND_FOGLER_MAP } from '../../lib/i18n/vi-problems-and-fogler-phrases';
 import { getTroubleshootingCopy } from '../../lib/i18n/vi-troubleshooting-copy';
 import { ALL_24_REAL_LIFE_PROBLEMS, filterProblemLibrary } from '../../lib/problem-library-registry';
 import {
@@ -32,6 +34,8 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
   const [wbFilter, setWbFilter] = useState<WorkbenchId | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const ts = getTroubleshootingCopy();
+  const isVi = getActiveLocale() === 'vi';
+  const tr = (s: string) => (isVi ? (VI_PROBLEMS_AND_FOGLER_MAP[s] ?? s) : s);
 
   const filtered = filterProblemLibrary({
     tier: tierFilter, equipment: equipFilter, symptom: symptomFilter, workbench: wbFilter, searchQuery,
@@ -93,12 +97,12 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
           {ts.libSubjectLabel}
           <select aria-label="Filter by Subject Workbench" data-testid="filter-subject-select" value={wbFilter} onChange={(e) => setWbFilter(e.target.value as WorkbenchId | 'all')}>
             <option value="all">{ts.libAllSubjectsOpt}</option>
-            <option value="wb2-thermo-dippr">Subject 1 · Thermodynamics (WB2)</option>
-            <option value="wb3-hydraulics">Subject 2 · Fluid &amp; Transport (WB3)</option>
-            <option value="wb4-distillation">Subject 3 · Separations (WB4)</option>
-            <option value="wb6-kinetics-reactors">Subject 4 · Kinetics &amp; Reactors (WB6)</option>
-            <option value="wb5-handbook-atlas">Subject 5 · 25-Sec Atlas &amp; Safety (WB5)</option>
-            <option value="wb1-visual-verifier">Charts &amp; Nomograph Verifier (WB1)</option>
+            <option value="wb2-thermo-dippr">{tr('Subject 1 · Thermodynamics (WB2)')}</option>
+            <option value="wb3-hydraulics">{tr('Subject 2 · Fluid & Transport (WB3)')}</option>
+            <option value="wb4-distillation">{tr('Subject 3 · Separations (WB4)')}</option>
+            <option value="wb6-kinetics-reactors">{tr('Subject 4 · Kinetics & Reactors (WB6)')}</option>
+            <option value="wb5-handbook-atlas">{tr('Subject 5 · 25-Sec Atlas & Safety (WB5)')}</option>
+            <option value="wb1-visual-verifier">{tr('Charts & Nomograph Verifier (WB1)')}</option>
           </select>
         </label>
 
@@ -129,16 +133,16 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
               style={{ padding: '0.55rem 0.65rem', border: isSelected ? '2px solid var(--accent-primary)' : undefined }}
             >
               <div className="mono" style={{ fontSize: '0.72rem', display: 'flex', justifyContent: 'space-between', gap: '0.35rem' }}>
-                <span><strong>#{p.number}</strong> · {p.tierBadge}</span>
+                <span><strong>#{p.number}</strong> · {tr(p.tierBadge)}</span>
                 <span>{eqMeta.icon} <code>{p.equipmentTag}</code></span>
               </div>
               <div style={{ fontSize: '0.82rem', fontWeight: 700, margin: '0.2rem 0' }}>
-                {isSolved ? '✓ ' : ''}{p.title}
+                {isSolved ? '✓ ' : ''}{tr(p.title)}
               </div>
               <div className="mono" style={{ fontSize: '0.72rem', opacity: 0.9, marginBottom: '0.25rem' }}>
-                {p.timeHorizonBadge} · <em>{p.subjectLabel}</em>
+                {p.timeHorizonBadge} · <em>{tr(p.subjectLabel)}</em>
               </div>
-              <div style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>{p.observationSummary}</div>
+              <div style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>{tr(p.observationSummary)}</div>
               <div className="wb-actions-row" style={{ justifyContent: 'space-between' }}>
                 <code style={{ fontSize: '0.68rem' }}>{p.sourceBookCitation.slice(0, 42)}…</code>
                 <button type="button" data-testid={`launch-${p.problemId}`} onClick={() => onSelectProblem(p)}>

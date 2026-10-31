@@ -98,12 +98,15 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
     fireEvent.click(screen.getByTestId('toggle-problem-library-btn'));
     expect(screen.getByTestId('problem-library-browser').textContent).toContain('Thư viện 24 Sự cố Nhà máy Thực tế');
     expect(screen.getByTestId('problem-library-browser').textContent).toContain('Giải Sự cố #1');
+    expect(screen.getByTestId('problem-library-browser').textContent).toContain('Sai lệch 400% khi Kiểm định ΔP Đường ống');
 
     // Open QA/QC Calc Sheet Modal in Vietnamese
     fireEvent.click(screen.getByTestId('export-calc-sheet-btn'));
     expect(screen.getByTestId('calc-sheet-sticky-header').textContent).toContain('Xuất Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC)');
     expect(screen.getByTestId('calc-sheet-safety-badge').textContent).toContain('KIỂM ĐỊNH AN TOÀN');
     expect(screen.getByTestId('compile-calc-sheet-btn').textContent).toContain('Biên dịch & Lưu Bản tính QA/QC');
+    expect(screen.getByTestId('calc-sheet-modal').textContent).toContain('Dự án:');
+    expect(screen.getByTestId('calc-sheet-modal').textContent).toContain('Mã thiết bị:');
   });
 
   it('Test 3 (Vietnamese AI Co-Pilot Tutoring, ChE Rigor Guardrails & Natural-Language What-If Slider Mutation): responds in Vietnamese and mutates WB3 dials', async () => {

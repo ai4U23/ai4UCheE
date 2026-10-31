@@ -1734,16 +1734,26 @@
     </ol>
   </footer>
 
-  <script>
+    <script>
     var themes = ['light', 'dark', 'system'];
     var themeIdx = 0;
+    function getActiveShowcaseLocale() {
+      return document.documentElement.getAttribute('data-locale') === 'vi' ? 'vi' : 'en';
+    }
+    function updateThemeBtnLabel() {
+      var next = themes[themeIdx];
+      var l = getActiveShowcaseLocale();
+      var icons = l === 'vi'
+        ? { light: '☀️ Giao diện: Sáng', dark: '🌙 Giao diện: Tối', system: '💻 Giao diện: Hệ thống' }
+        : { light: '☀️ Theme: Light', dark: '🌙 Theme: Dark', system: '💻 Theme: System' };
+      var btn = document.getElementById('theme-toggle-btn');
+      if (btn) btn.textContent = icons[next];
+    }
     function cycleTheme() {
       themeIdx = (themeIdx + 1) % themes.length;
       var next = themes[themeIdx];
       document.documentElement.setAttribute('data-theme', next);
-      var btn = document.getElementById('theme-toggle-btn');
-      var icons = { light: '☀️ Theme: Light', dark: '🌙 Theme: Dark', system: '💻 Theme: System' };
-      if (btn) btn.textContent = icons[next];
+      updateThemeBtnLabel();
       var diag = document.querySelector('.ak-diagram-root');
       if (diag) diag.setAttribute('data-theme', next === 'dark' ? 'dark' : 'light');
     }
@@ -1754,12 +1764,14 @@
         v.play().catch(function(){});
       }
       var status = document.getElementById('video-status-label');
-      if (status) status.textContent = '▶ ' + label;
+      var stEl = btnEl ? btnEl.querySelector('strong') : null;
+      if (status) status.textContent = '▶ ' + (stEl ? stEl.textContent : label);
       document.querySelectorAll('.chapter-btn').forEach(function(b) { b.classList.remove('active'); });
       if (btnEl) btnEl.classList.add('active');
     }
     var SHOWCASE_COPY = {
       en: {
+        h1: "ai4UCheE — ChemEng's Intelligent Workbench",
         sub: '6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Plant Problems',
         nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · EPC Calc Sheet'],
         launch: '🚀 Launch Workbench',
@@ -1783,6 +1795,38 @@
           "<strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.",
           'Rendered with <code>/ak:remotion</code> in React—click any chapter on the right to seek the video directly to that workflow step.'
         ],
+        monoBadges: [
+          '3-ZONE AI-NATIVE STUDIO ARCHITECTURE',
+          '6 CANONICAL REFERENCE TEXTBOOKS INDEXED',
+          'SUBJECT 1 · WB2',
+          'SUBJECT 2 · WB3',
+          'SUBJECT 3 · WB4',
+          'SUBJECT 4 · WB6',
+          'SUBJECT 5 · WB5',
+          'UTILITY TOOL · WB1',
+          '4 ENGINEERING PROGRESSION TIERS (24 PROBLEMS)',
+          'FOGLER RULE #12 · HYPOTHESIS FALSIFICATION STUDIO',
+          'STAGE 1 · SYMBOLIC EQUATION',
+          'STAGE 2 · SUBSTITUTED WITH UNITS',
+          'STAGE 3 · EVALUATED RESULT & CITATION',
+          'REV 0 — ISSUED FOR REVIEW · SQLITE PERSISTED',
+          'READY TO SOLVE? · START IN 1 CLICK'
+        ],
+        heroZones: [
+          '<strong>Zone 1 (Top Bar):</strong> Switch 5 Subject Labs, launch 24 L1–L4 Plant Problems, toggle <code>🎓 Learn</code> ↔ <code>🏭 Plant</code>, or open <code>📐 Charts</code> &amp; <code>📄 Calc Sheet</code>.',
+          '<strong>Zone 2 (Engineering Canvas):</strong> Drag duty points on SVG curves and scrub 34px number dials with zero-latency client solvers.',
+          '<strong>Zone 3 (AI Co-Pilot):</strong> Live <code>&lt;current-screen&gt;</code> sync, <code>+ Ask</code> chips, and natural-language slider mutations.'
+        ],
+        heroBooks: [
+          "<strong>1. Perry's 9th Ed.</strong><br/>25 Sections · 2,274 pp. PDF<br/><code>[Sec 1–25 + S-P Index]</code>",
+          '<strong>2. Fogler 7th Ed.</strong><br/>Reaction Engineering<br/><code>[19 Ch. EPUB · CSTR/PFR]</code>',
+          '<strong>3. BSL Revised 2nd Ed.</strong><br/>Transport Phenomena<br/><code>[Momentum · Heat · Mass]</code>',
+          '<strong>4. SVNA 9th Ed.</strong><br/>ChE Thermodynamics<br/><code>[VLE · Cubic EOS · Cycles]</code>',
+          '<strong>5. Seader 4th Ed.</strong><br/>Separation Principles<br/><code>[McCabe · Kremser · LLE]</code>',
+          '<strong>6. Crowl &amp; Louvar 4e</strong><br/>Process Safety<br/><code>[Semenov · LOC · Reliefs]</code>'
+        ],
+        heroDofLine: '✓ DoF = 0 Verified · Explicit psig ↔ psia · Explicit Fanning f_F vs. Darcy f_D = 4·f_F',
+        videoDefaultLabel: '▶ Chapter 01 · 3-Zone AI-Native Studio (00:00)',
         heroCta: '🚀 Launch Live Workbench (/app)',
         videoCta: '🎬 Watch 5-Step Video Guide',
         cardH3: [
@@ -1818,9 +1862,47 @@
           'Cross-subject header utility auto-syncing the active lab\'s chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).'
         ],
         openLabBtn: 'Open Lab →',
-        openChartsBtn: 'Open Charts →'
+        openChartsBtn: 'Open Charts →',
+        tiers: [
+          '<strong>🌱 Tier L1 · Unit/Concept Trap</strong><br/>Catch 4× Fanning/Darcy &amp; psig/psia datum traps before sizing equipment.',
+          '<strong>🔧 Tier L2 · Equipment Bottleneck</strong><br/>Resolve Pump P-101 suction cavitation &amp; sieve-tray flooding bottlenecks.',
+          '<strong>🕵️ Tier L3 · Multi-Hypothesis Upset</strong><br/>Diagnose Fogler Ch. 10 Boiler Feedwater Heater drop (70°C → 42°C) with ⏱️ Δt clues.',
+          '<strong>🚨 Tier L4 · Coupled Safety/Design</strong><br/>Stabilize Semenov reactor runaway (ψ &gt; 1/e) &amp; API 520 relief sizing.'
+        ],
+        problemCard1Footer: '8 Equipment Categories · 5 Symptom Archetypes · Multi-Student Adaptive Scorecard',
+        foglerList: [
+          '<strong>Stage 1 · Problem Observation:</strong> Inspect Normal vs. Faulty plant telemetry &amp; <code>⏱️ Δt</code> temporal clues.',
+          '<strong>Stage 2 · Problem Definition:</strong> Kepner-Tregoe <code>IS / IS NOT</code> matrix &amp; Real Root Problem statement.',
+          '<strong>Stage 3 · Fundamental Theory:</strong> Cite governing transport, thermodynamic, or kinetic equations.',
+          '<strong>Stage 4 · Applicable Handbook:</strong> Verify empirical parameters against <em>Perry\'s 9th Ed.</em> page crops.',
+          '<strong>Stage 5 · Hypotheses (Prove ✅ / Disprove ❌):</strong> Enforce Rule #12 (<em>"seek to reject as well as to accept"</em>).',
+          '<strong>Stage 6 · Actual Solution Verified:</strong> Restore safe plant margins &amp; earn a <code>FOG-WB*-DIY-XXXXXX</code> stamp.'
+        ],
+        foglerFooterPill: '✓ DIY Solve (+35% Mastery) · 💡 Socratic Hint · 🔧 Auto-Fix Rescue (+12% Mastery)',
+        whiteboxDescs: [
+          'Every equation states its symbol basis and textbook equation number before any numbers are plugged in.',
+          'Automatic ChE Error-Signature Detector flags <code>4×</code> Fanning/Darcy, <code>±14.7 psi</code> gauge/abs, <code>±273.15</code> K/°C, and <code>2.303×</code> ln/log10 mistakes.',
+          'Click <code>📖 Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.'
+        ],
+        calcIntro: 'Click <code>📄 Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:',
+        calcBullets: [
+          '<strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Revision <code>Rev 0</code>, and Basis of Design.',
+          '<strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief cases.',
+          '<strong>3-Stage White-Box Derivations &amp; 6-Stage Root-Cause Audit:</strong> Complete with Fogler Detective Stamp &amp; Markdown download.'
+        ],
+        calcPill: '✓ Persisted to SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable',
+        axLead: 'Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>🔗 Share / AI</code> menu for ChatGPT, Claude, and Perplexity.',
+        ctaButtons: [
+          '🚀 Open Interactive Workbench (/app)',
+          '📄 View Markdown Twin (/index.md)',
+          '🤖 Read /llms-full.txt'
+        ],
+        footerStrong: 'References & Canonical Textbook Citations (ai4UCheE · https://chemeng.ai4u.now)',
+        diagTitle: '<span>📊</span> ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture<span class="ak-diagram-subtitle"> - 6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional &lt;current-screen&gt; Co-Pilot</span>',
+        diagSearch: 'Search (/) ...'
       },
       vi: {
+        h1: 'ai4UCheE — Bàn làm việc Kỹ thuật Hóa học Thông minh',
         sub: '6 Giáo trình Chuẩn ChE · 55+ Giản đồ SVG Tương tác · 24 Sự cố Nhà máy Thực tế',
         nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính EPC'],
         launch: '🚀 Mở Phòng Thí Nghiệm',
@@ -1844,6 +1926,38 @@
           '<strong>ai4UCheE</strong> kết hợp <em>Perry 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em> và <em>Crowl &amp; Louvar</em> với <strong>hơn 55 giản đồ SVG tương tác hai chiều</strong>, <strong>chứng minh KaTeX 3 bước</strong> và <strong>24 sự cố nhà máy thực tế</strong>.',
           'Được kết xuất bằng <code>/ak:remotion</code> trong React — bấm vào bất kỳ chương nào bên phải để tua video tới đúng bước thao tác.'
         ],
+        monoBadges: [
+          'KIẾN TRÚC STUDIO AI-NATIVE 3 VÙNG',
+          '6 GIÁO TRÌNH KỸ THUẬT HÓA HỌC CHUẨN ĐƯỢC LẬP CHỈ MỤC',
+          'HỌC PHẦN 1 · WB2',
+          'HỌC PHẦN 2 · WB3',
+          'HỌC PHẦN 3 · WB4',
+          'HỌC PHẦN 4 · WB6',
+          'HỌC PHẦN 5 · WB5',
+          'CÔNG CỤ TIỆN ÍCH · WB1',
+          '4 CẤP ĐỘ SỰ CỐ KỸ THUẬT (24 BÀI TOÁN NHÀ MÁY)',
+          'QUY TẮC FOGLER #12 · PHÒNG THÍ NGHIỆM BÁC BỎ GIẢ THUYẾT',
+          'BƯỚC 1 · PHƯƠNG TRÌNH KÝ HIỆU',
+          'BƯỚC 2 · THAY SỐ KÈM ĐƠN VỊ',
+          'BƯỚC 3 · KẾT QUẢ ĐÁNH GIÁ & TRÍCH DẪN',
+          'REV 0 — BAN HÀNH KIỂM ĐỊNH · LƯU TRỮ SQLITE',
+          'SẴN SÀNG GIẢI QUYẾT? · BẮT ĐẦU VỚI 1 CÚ NHẤP'
+        ],
+        heroZones: [
+          '<strong>Vùng 1 (Thanh Điều khiển Trên cùng):</strong> Chuyển đổi 5 Phòng Lab chuyên ngành, mở 24 Sự cố Nhà máy L1–L4, bật <code>🎓 Học tập</code> ↔ <code>🏭 Nhà máy</code>, hoặc mở <code>📐 Giản đồ</code> &amp; <code>📄 Bản tính</code>.',
+          '<strong>Vùng 2 (Không gian Đồ thị Kỹ thuật):</strong> Kéo điểm làm việc trực tiếp trên đường cong SVG và xoay núm số 34px với bộ giải phản hồi tức thì.',
+          '<strong>Vùng 3 (Trợ lý AI Co-Pilot):</strong> Đồng bộ <code>&lt;current-screen&gt;</code> thời gian thực, gắn thẻ ngữ cảnh <code>+ Hỏi</code> và điều chỉnh thanh trượt bằng ngôn ngữ tự nhiên.'
+        ],
+        heroBooks: [
+          "<strong>1. Perry's 9th Ed.</strong><br/>25 Chương · 2.274 tr. PDF<br/><code>[Chương 1–25 + Chỉ mục S-P]</code>",
+          '<strong>2. Fogler 7th Ed.</strong><br/>Kỹ thuật Phản ứng Hóa học<br/><code>[19 Chương EPUB · CSTR/PFR]</code>',
+          '<strong>3. BSL Revised 2nd Ed.</strong><br/>Các Hiện tượng Truyền vận<br/><code>[Động lượng · Nhiệt · Khối]</code>',
+          '<strong>4. SVNA 9th Ed.</strong><br/>Nhiệt động học Kỹ thuật Hóa học<br/><code>[VLE · Phương trình EOS · Chu trình]</code>',
+          '<strong>5. Seader 4th Ed.</strong><br/>Nguyên lý Quá trình Tách<br/><code>[McCabe · Kremser · Trích ly LLE]</code>',
+          '<strong>6. Crowl &amp; Louvar 4e</strong><br/>An toàn Quá trình Hóa học<br/><code>[Semenov · LOC · Van xả áp]</code>'
+        ],
+        heroDofLine: '✓ Bậc tự do DoF = 0 Đã kiểm chứng · Chuyển đổi tường minh psig ↔ psia · Phân biệt tường minh Fanning f_F vs. Darcy f_D = 4·f_F',
+        videoDefaultLabel: '▶ Chương 01 · Kiến trúc Studio AI-Native 3 Vùng (00:00)',
         heroCta: '🚀 Mở Phòng Thí Nghiệm Trực Tiếp (/app?lang=vi)',
         videoCta: '🎬 Xem Video Hướng Dẫn 5 Bước',
         cardH3: [
@@ -1879,7 +1993,44 @@
           'Công cụ tra cứu giản đồ tự động đồng bộ theo phòng Lab đang mở (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Cầu rơi, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).'
         ],
         openLabBtn: 'Mở Phòng Lab →',
-        openChartsBtn: 'Mở Giản đồ →'
+        openChartsBtn: 'Mở Giản đồ →',
+        tiers: [
+          '<strong>🌱 Cấp L1 · Bẫy Đơn vị / Khái niệm</strong><br/>Phát hiện bẫy hệ số 4× Fanning/Darcy &amp; chuẩn áp suất psig/psia trước khi tính chọn thiết bị.',
+          '<strong>🔧 Cấp L2 · Điểm Nghẽn Thiết bị</strong><br/>Khắc phục xâm thực cửa hút bơm P-101 &amp; ngập lụt đĩa lỗ tháp chưng luyện.',
+          '<strong>🕵️ Cấp L3 · Sự cố Đa Giả thuyết</strong><br/>Chẩn đoán sụt nhiệt độ gia nhiệt nước cấp lò hơi Fogler Ch. 10 (70°C → 42°C) với manh mối thời gian ⏱️ Δt.',
+          '<strong>🚨 Cấp L4 · Nguy cơ An toàn / Thiết kế Ghép nối</strong><br/>Ổn định thoát nhiệt lò phản ứng Semenov (ψ &gt; 1/e) &amp; tính chọn van xả áp API 520.'
+        ],
+        problemCard1Footer: '8 Nhóm Thiết bị · 5 Mẫu Triệu chứng · Bảng Điểm Thích ứng Đa Sinh viên',
+        foglerList: [
+          '<strong>Bước 1 · Quan sát Sự cố:</strong> Đối chiếu thông số vận hành Bình thường vs. Sự cố &amp; manh mối thời gian <code>⏱️ Δt</code>.',
+          '<strong>Bước 2 · Xác định Vấn đề:</strong> Lập ma trận Kepner-Tregoe <code>LÀ / KHÔNG LÀ</code> &amp; phát biểu đúng nguyên nhân gốc.',
+          '<strong>Bước 3 · Lý thuyết Cơ sở:</strong> Trích dẫn phương trình truyền vận, nhiệt động học hoặc động học chi phối.',
+          '<strong>Bước 4 · Sổ tay Tra cứu:</strong> Kiểm chứng thông số thực nghiệm đối chiếu bản cắt trang sách <em>Perry\'s 9th Ed.</em>',
+          '<strong>Bước 5 · Giả thuyết (Chứng minh ✅ / Bác bỏ ❌):</strong> Áp dụng Quy tắc #12 (<em>"tìm bằng chứng bác bỏ cũng như chấp nhận"</em>).',
+          '<strong>Bước 6 · Nghiệm thu Giải pháp Thực tế:</strong> Khôi phục biên độ vận hành an toàn &amp; nhận dấu kiểm định <code>FOG-WB*-DIY-XXXXXX</code>.'
+        ],
+        foglerFooterPill: '✓ Tự Giải DIY (+35% Thành thạo) · 💡 Gợi ý Socratic · 🔧 Tự động Khắc phục (+12% Thành thạo)',
+        whiteboxDescs: [
+          'Mọi phương trình đều nêu rõ ký hiệu cơ sở và số hiệu phương trình giáo trình trước khi thay bất kỳ con số nào.',
+          'Bộ phát hiện bẫy sai số ChE tự động cảnh báo nhầm lẫn <code>4×</code> Fanning/Darcy, <code>±14,7 psi</code> áp suất dư/tuyệt đối, <code>±273,15</code> K/°C và <code>2,303×</code> ln/log10.',
+          'Bấm <code>📖 Trích dẫn Lý thuyết Bước 3</code> hoặc <code>+ Hỏi</code> trên bất kỳ thẻ nào để gửi toàn bộ chứng minh sang Trợ lý AI Co-Pilot.'
+        ],
+        calcIntro: 'Bấm <code>📄 Bản tính</code> trên thanh tiêu đề để biên dịch hồ sơ kiểm định QA/QC hoàn chỉnh gồm:',
+        calcBullets: [
+          '<strong>Tiêu đề Kiểm soát Tài liệu:</strong> Mã thiết bị (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Phiên bản <code>Rev 0</code> và Cơ sở Thiết kế.',
+          '<strong>Ma trận Vận hành 3 Chế độ:</strong> 70% Giảm tải (Turndown), 100% Bình thường và 120% Thiết kế / Xả áp.',
+          '<strong>Chứng minh White-Box 3 Bước &amp; Kiểm toán Nguyên nhân Gốc 6 Bước:</strong> Đầy đủ dấu chứng nhận Điều tra viên Fogler &amp; xuất tệp Markdown.'
+        ],
+        calcPill: '✓ Lưu trữ bền vững vào SQLite <code>saved_calculations</code> · Sẵn sàng In ấn &amp; Xuất Markdown',
+        axLead: 'Tích hợp đầy đủ bề mặt khám phá AI-Experience (AX) (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) và menu <code>🔗 Chia sẻ / AI</code> cho ChatGPT, Claude và Perplexity.',
+        ctaButtons: [
+          '🚀 Mở Phòng Thí Nghiệm Tương Tác (/app?lang=vi)',
+          '📄 Xem Bản Sao Markdown (/index.md)',
+          '🤖 Đọc /llms-full.txt'
+        ],
+        footerStrong: 'Tài liệu Tham khảo & Giáo trình Chuẩn Kỹ thuật Hóa học (ai4UCheE · https://chemeng.ai4u.now)',
+        diagTitle: '<span>📊</span> ai4UCheE — Kiến trúc Studio Kỹ thuật Hóa học AI-Native 3 Vùng<span class="ak-diagram-subtitle"> - 6 Giáo trình Chuẩn · Bộ giải Tất định Python/TS · Đồng bộ Hai chiều &lt;current-screen&gt;</span>',
+        diagSearch: 'Tìm kiếm sơ đồ (/) ...'
       }
     };
     function setShowcaseLocale(loc) {
@@ -1892,8 +2043,11 @@
       if (enBtn) enBtn.classList.toggle('active', l === 'en');
       if (viBtn) viBtn.classList.toggle('active', l === 'vi');
       var c = SHOWCASE_COPY[l];
+      var h1El = document.querySelector('.brand-cluster h1');
+      if (h1El) h1El.textContent = c.h1;
       var subEl = document.querySelector('.brand-cluster small');
       if (subEl) subEl.textContent = c.sub;
+      updateThemeBtnLabel();
       var navAs = document.querySelectorAll('nav[aria-label="Showcase Sections"] a');
       c.nav.forEach(function(txt, i) { if (navAs[i]) navAs[i].textContent = txt; });
       var launchBtn = document.getElementById('launch-wb-masthead-btn');
@@ -1904,6 +2058,18 @@
       c.titles.forEach(function(txt, i) { if (titles[i]) titles[i].textContent = txt; });
       var leads = document.querySelectorAll('.section-lead');
       c.leads.forEach(function(html, i) { if (leads[i]) leads[i].innerHTML = html; });
+      var badges = document.querySelectorAll('.mono-badge');
+      c.monoBadges.forEach(function(txt, i) { if (badges[i]) badges[i].textContent = txt; });
+      var heroLis = document.querySelectorAll('#hero .card-navy ul li');
+      c.heroZones.forEach(function(html, i) { if (heroLis[i]) heroLis[i].innerHTML = html; });
+      var heroBooks = document.querySelectorAll('#hero .grid-6 .stage-pill');
+      c.heroBooks.forEach(function(html, i) { if (heroBooks[i]) heroBooks[i].innerHTML = html; });
+      var heroCards = document.querySelectorAll('#hero .card');
+      if (heroCards[1] && heroCards[1].lastElementChild) {
+        heroCards[1].lastElementChild.textContent = c.heroDofLine;
+      }
+      var vidStatus = document.getElementById('video-status-label');
+      if (vidStatus) vidStatus.textContent = c.videoDefaultLabel;
       var h3s = document.querySelectorAll('.card h3');
       c.cardH3.forEach(function(txt, i) { if (h3s[i]) h3s[i].textContent = txt; });
       var chBtns = document.querySelectorAll('.chapter-btn');
@@ -1919,6 +2085,60 @@
       c.labDescs.forEach(function(html, i) { if (labPs[i]) labPs[i].innerHTML = html; });
       var labAs = document.querySelectorAll('#six-books-labs .card a.ctrl-btn');
       labAs.forEach(function(a, i) { a.textContent = i === 5 ? c.openChartsBtn : c.openLabBtn; });
+      var tierPills = document.querySelectorAll('#problem-solving .card:not(.card-navy) .stage-pill');
+      c.tiers.forEach(function(html, i) { if (tierPills[i]) tierPills[i].innerHTML = html; });
+      var probCard1 = document.querySelector('#problem-solving .card:not(.card-navy)');
+      if (probCard1 && probCard1.lastElementChild) probCard1.lastElementChild.textContent = c.problemCard1Footer;
+      var foglerLis = document.querySelectorAll('#problem-solving .card-navy ol li');
+      c.foglerList.forEach(function(html, i) { if (foglerLis[i]) foglerLis[i].innerHTML = html; });
+      var foglerPill = document.querySelector('#problem-solving .card-navy .stage-pill');
+      if (foglerPill) foglerPill.textContent = c.foglerFooterPill;
+      var wbPs = document.querySelectorAll('#whitebox-copilot .grid-3 .card p');
+      c.whiteboxDescs.forEach(function(html, i) { if (wbPs[i]) wbPs[i].innerHTML = html; });
+      var calcCard1P = document.querySelector('#calc-sheet-cta .card:not(.card-navy) p');
+      if (calcCard1P) calcCard1P.innerHTML = c.calcIntro;
+      var calcLis = document.querySelectorAll('#calc-sheet-cta .card:not(.card-navy) ul li');
+      c.calcBullets.forEach(function(html, i) { if (calcLis[i]) calcLis[i].innerHTML = html; });
+      var calcPillEl = document.querySelector('#calc-sheet-cta .card:not(.card-navy) .stage-pill');
+      if (calcPillEl) calcPillEl.innerHTML = c.calcPill;
+      var axLeadEl = document.querySelector('#calc-sheet-cta .card-navy p');
+      if (axLeadEl) axLeadEl.innerHTML = c.axLead;
+      var ctaBtns = document.querySelectorAll('#calc-sheet-cta .card-navy .cta-btn');
+      c.ctaButtons.forEach(function(txt, i) { if (ctaBtns[i]) ctaBtns[i].textContent = txt; });
+      var footerStrongEl = document.querySelector('footer.showcase-footer > strong');
+      if (footerStrongEl) footerStrongEl.textContent = c.footerStrong;
+      var diagTitleEl = document.querySelector('.ak-diagram-title');
+      if (diagTitleEl) diagTitleEl.innerHTML = c.diagTitle;
+      var diagSearchEl = document.querySelector('.ak-diagram-search-input');
+      if (diagSearchEl) diagSearchEl.setAttribute('placeholder', c.diagSearch);
+      var diagSvgTitle = document.querySelector('.ak-diagram-svg .ak-title');
+      if (diagSvgTitle) diagSvgTitle.textContent = l === 'vi'
+        ? 'ai4UCheE — Kiến trúc Studio Kỹ thuật Hóa học AI-Native 3 Vùng'
+        : 'ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture';
+      var diagSvgSub = document.querySelector('.ak-diagram-svg .ak-subtitle');
+      if (diagSvgSub) diagSvgSub.textContent = l === 'vi'
+        ? '6 Giáo trình Chuẩn · Bộ giải Tất định Python/TS · Đồng bộ Hai chiều <current-screen> Co-Pilot'
+        : '6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional <current-screen> Co-Pilot';
+      var diagEdgeTexts = l === 'vi'
+        ? ['Chuyển Phòng Lab / Sự cố', 'Mở Sự cố Nhà máy L1-L4', '<current-screen> & Thẻ +Hỏi', 'Kéo SVG / Núm số (0ms)', 'Quy tắc #12 & Bẫy 4x/psig', 'Kiểm chứng & Cắt PDF', 'Chỉ mục PyMuPDF / EPUB', 'Biên dịch Bản tính Rev 0']
+        : ['Switch Lab / Preset Mission', 'Launch L1-L4 Plant Problem', '<current-screen> & +Ask Chips', 'Scrub SVG / Dials (0ms)', 'Rule #12 & 4x/psig Guardrails', 'Verify & High-DPI Crop', 'PyMuPDF / EPUB Index', 'Compile Rev 0 Calc Sheet'];
+      document.querySelectorAll('.ak-edge-label text').forEach(function(tEl, i) { if (diagEdgeTexts[i]) tEl.textContent = diagEdgeTexts[i]; });
+      var diagNodeLabels = l === 'vi'
+        ? ['Vùng 1 · Thanh Điều khiển (5 Lab…', 'Vùng 2 · 55+ Đồ thị SVG Tương…', 'Vùng 3 · Trợ lý AI Co-Pilot…', 'Bảng Điều tra 6 Bước Fogler…', 'Toán ChE Client (DIPPR · Sw…', 'Sidecar Python FastAPI (Cool…', 'Kho 6 Sách (Perry 9e · Fogler…', 'Bản tính EPC QA/QC & SQLite…']
+        : ['Zone 1 · Top Studio Bar (5 La…', 'Zone 2 · 55+ Interactive SVG…', 'Zone 3 · Bi-Directional AI Co…', '6-Stage Fogler Detective & Err…', 'Client ChE Math (DIPPR · Sw…', 'Python FastAPI Sidecar (Cool…', '6-Book Corpus (Perry 9e · Fo…', 'Senior EPC QA/QC Calc Shee…'];
+      document.querySelectorAll('.ak-node-label').forEach(function(nEl, i) { if (diagNodeLabels[i]) nEl.textContent = diagNodeLabels[i]; });
+      var diagToolbarBtns = [
+        ['.ak-btn-reach-down', l === 'vi' ? '↓ Xuôi dòng' : '↓ Reach'],
+        ['.ak-btn-reach-up', l === 'vi' ? '↑ Ngược dòng' : '↑ Reach'],
+        ['.ak-btn-route', l === 'vi' ? '📍 Tuyến' : '📍 Route'],
+        ['.ak-btn-lens', l === 'vi' ? '🔍 Vai trò' : '🔍 Lens'],
+        ['.ak-btn-motion', l === 'vi' ? '▶ Phát lại' : '▶ Replay'],
+        ['.ak-btn-share', l === 'vi' ? '📤 Thẻ chia sẻ' : '📤 Card']
+      ];
+      diagToolbarBtns.forEach(function(pair) {
+        var b = document.querySelector(pair[0]);
+        if (b) b.textContent = pair[1];
+      });
       document.querySelectorAll('a[href^="/app"]').forEach(function(a) {
         var raw = a.getAttribute('href') || '/app';
         var base = raw.replace(/([?&])lang=(en|vi)(&|$)/, '$1').replace(/[?&]$/, '');
