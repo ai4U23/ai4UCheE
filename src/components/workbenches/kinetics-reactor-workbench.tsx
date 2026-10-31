@@ -114,14 +114,6 @@ export const KineticsReactorWorkbench: React.FC = () => {
         </div>
       </header>
 
-      <LearnModeCallout
-        workbenchId="wb6"
-        title="Levenspiel CSTR/PFR, Thiele η, Semenov Runaway, Selectivity/RTD, LHHW/Bioreactor & Electro-Catalysis"
-        plainEnglish="Drag the Levenspiel plot, Semenov G(T)/R(T) S-curve, Series selectivity / RTD, LHHW rate roof / Monod chemostat, or Butler-Volmer polarization curve."
-        commonTrap="Three classic traps: (1) forgetting psig → psia (+14.696) before computing gas concentration C_A0 = P_abs/(RT), (2) mixing open-pipe Fanning f_F / Darcy f_D = 4·f_F with packed-bed Ergun friction, and (3) operating above Semenov ψ_crit = 1/e ≈ 0.368."
-        perryAnchor="[Fogler 7th Ed., Ch. 2, 5, 8–12, 15, 16–19; BSL 2nd Ed., Ch. 18; Crowl & Louvar 4th Ed., Ch. 8; Perry's 9th Ed., Sec. 7 & 19]"
-      />
-
       <div className="wb-split">
         <div>
           <LevenspielReactorSvgCanvas
@@ -147,6 +139,14 @@ export const KineticsReactorWorkbench: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <LearnModeCallout
+        workbenchId="wb6"
+        title="Levenspiel CSTR/PFR, Thiele η, Semenov Runaway, Selectivity/RTD, LHHW/Bioreactor & Electro-Catalysis"
+        plainEnglish="Drag the Levenspiel plot, Semenov G(T)/R(T) S-curve, Series selectivity / RTD, LHHW rate roof / Monod chemostat, or Butler-Volmer polarization curve."
+        commonTrap="Three classic traps: (1) forgetting psig → psia (+14.696) before computing gas concentration C_A0 = P_abs/(RT), (2) mixing open-pipe Fanning f_F / Darcy f_D = 4·f_F with packed-bed Ergun friction, and (3) operating above Semenov ψ_crit = 1/e ≈ 0.368."
+        perryAnchor="[Fogler 7th Ed., Ch. 2, 5, 8–12, 15, 16–19; BSL 2nd Ed., Ch. 18; Crowl & Louvar 4th Ed., Ch. 8; Perry's 9th Ed., Sec. 7 & 19]"
+      />
 
       <KineticsDiagramGallery
         coolantTcK={coolantTcK}

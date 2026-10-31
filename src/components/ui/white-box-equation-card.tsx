@@ -40,7 +40,6 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
       data-testid={`white-box-eq-${equation.id}`}
       initial={{ opacity: 1, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -3, scale: 1.008 }}
       transition={FRAMER_BOUNCE_SPRING}
     >
       <header className="white-box-eq-header">

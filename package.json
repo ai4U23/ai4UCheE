@@ -1,7 +1,7 @@
 {
   "name": "ai4uchee-perrys-workbench",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "ChemEng's Intelligent Workbench — bi-directional agent-native chemical engineering workbench grounded in Perry's 9th Ed.",
   "scripts": {

@@ -1,7 +1,7 @@
 // Live multi-workbench QA/QC calculation sheet compiler: converts the active <current-screen>
 // payload (inputs, metrics, 3-stage white-box equations, safety status) into preview rows, a
 // Markdown sign-off report, and the inputs_summary/equations shape generateCalcSheetAction consumes.
-import type { ClientScreenState, WhiteBoxStageEquation } from '../../actions/view-screen';
+import type { ClientScreenState, WhiteBoxStageEquation, WorkbenchId } from '../../actions/view-screen';
 import { solveHydraulics, type HydraulicsInputs } from './hydraulics-solver-math';
 import { solveThermo } from './thermo-solver-math';
 import { solveDistillation, type DistillationInputs } from './distillation-solver-math';
@@ -162,7 +162,7 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
     '## White-Box Derivations',
     ...equations.map((e) => `1. **${e.title}** ${e.citation}\n   - Symbolic: \\(${e.symbolicLatex}\\)\n   - Substituted: \\(${e.substitutedLatex}\\)\n   - Result: \\(${e.resultLatex}\\)`),
     '',
-    buildFoglerTroubleshootingMarkdownSection(wb, safetyStatus === 'PASS'),
+    buildFoglerTroubleshootingMarkdownSection(wb as WorkbenchId, safetyStatus === 'PASS'),
     '',
     '---',
     'Prepared by: ____________  |  Checked by: ____________  |  Date: ____________',

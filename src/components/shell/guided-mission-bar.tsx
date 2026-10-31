@@ -4,40 +4,22 @@
 // Auto-Fix (+12%) mastery in `student-adaptive-model.ts`, and mounts `AdaptiveRecommendationRail`.
 import React, { useEffect, useRef, useState } from 'react';
 import { agentNative } from '../../actions/define-action';
-import {
-  dispatchWorkbenchMutation,
-  getClientAppState,
-  subscribeClientAppState,
-  type WorkbenchLivePayload,
-} from '../../actions/view-screen';
+import { dispatchWorkbenchMutation, getClientAppState, subscribeClientAppState, type WorkbenchLivePayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { buildAdaptiveRecommendations } from '../../lib/adaptive-recommendation-engine';
-import {
-  getStudentProfile,
-  recordMissionOutcome,
-  recordPayloadObservation,
-  subscribeStudentProfile,
-  type StudentProfileState,
-} from '../../lib/student-adaptive-model';
-import {
-  autoCompleteProblemStagesForRescue,
-  markProblemDefinitionReviewed,
-} from '../../lib/hypothesis-verification-engine';
-import {
-  ALL_24_REAL_LIFE_PROBLEMS,
-  problemEntryToMissionScenario,
-  resetActiveProblems,
-  setActiveProblemForWorkbench,
-} from '../../lib/problem-library-registry';
+import { getStudentProfile, recordMissionOutcome, recordPayloadObservation, subscribeStudentProfile, type StudentProfileState } from '../../lib/student-adaptive-model';
+import { autoCompleteProblemStagesForRescue, markProblemDefinitionReviewed } from '../../lib/hypothesis-verification-engine';
+import { ALL_24_REAL_LIFE_PROBLEMS, problemEntryToMissionScenario, resetActiveProblems, setActiveProblemForWorkbench } from '../../lib/problem-library-registry';
 import type { ProblemCaseEntry } from '../../lib/problem-library-types';
 import { AdaptiveRecommendationRail } from './adaptive-recommendation-rail';
 import { MissionChecklistBanner } from './mission-checklist-banner';
-import { GUIDED_MISSIONS, getMissionById, type GuidedMissionScenario } from './mission-scenarios';
+import { getMissionById, type GuidedMissionScenario } from './mission-scenarios';
 import { ProblemLibraryBrowser } from './problem-library-browser';
 
 export const GuidedMissionBar: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [libraryOpen, setLibraryOpen] = useState<boolean>(false);
+  const [showScorecardDrawer, setShowScorecardDrawer] = useState<boolean>(false);
   const [activeMission, setActiveMission] = useState<GuidedMissionScenario | null>(null);
   const [profile, setProfile] = useState<StudentProfileState>(() => getStudentProfile());
   const usedAutoFixRef = useRef<boolean>(false);
@@ -53,9 +35,8 @@ export const GuidedMissionBar: React.FC = () => {
       const payload = (state.payload ?? {}) as WorkbenchLivePayload;
       recordPayloadObservation(state.activeWorkbench as GuidedMissionScenario['workbench'], payload, 600);
       if (activeMission && state.activeWorkbench === activeMission.workbench) {
-        if (!activeMission.checkSolved(payload)) {
-          trapSeen = true;
-        } else if (trapSeen && solvedRecordedRef.current !== activeMission.id && !usedAutoFixRef.current) {
+        if (!activeMission.checkSolved(payload)) trapSeen = true;
+        else if (trapSeen && solvedRecordedRef.current !== activeMission.id && !usedAutoFixRef.current) {
           solvedRecordedRef.current = activeMission.id;
           recordMissionOutcome(activeMission.id, false);
         }
@@ -64,13 +45,9 @@ export const GuidedMissionBar: React.FC = () => {
   }, [activeMission]);
 
   const applyMutations = (mission: GuidedMissionScenario, params: Record<string, number | string>) => {
-    const dispatch = () =>
-      dispatchWorkbenchMutation({ targetWorkbench: mission.workbench, params, reason: mission.id });
-    if (typeof window === 'undefined') {
-      dispatch();
-    } else {
-      window.setTimeout(dispatch, 80);
-    }
+    const dispatch = () => dispatchWorkbenchMutation({ targetWorkbench: mission.workbench, params, reason: mission.id });
+    if (typeof window === 'undefined') dispatch();
+    else window.setTimeout(dispatch, 80);
   };
 
   const runMission = (mission: GuidedMissionScenario, params: Record<string, number | string>) => {
@@ -139,25 +116,34 @@ export const GuidedMissionBar: React.FC = () => {
               data-testid="toggle-problem-library-btn"
               onClick={() => setLibraryOpen(!libraryOpen)}
             >
-              📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems (L1–L4 · Equipment · 7 Books)
+              📚 Browse All {ALL_24_REAL_LIFE_PROBLEMS.length} Problems (🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4)
             </button>
-            {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
-              <button
-                key={mission.id}
-                type="button"
-                data-testid={mission.id}
-                title={reasonBadge}
-                onClick={() => { resetActiveProblems(); runMission(mission, mission.initialMutations); }}
-              >
-                {solved ? '✓ ' : ''}
-                {mission.buttonLabel}
-                {isRecommendedNext && (
-                  <span data-testid="recommended-mission-badge" style={{ marginLeft: '0.3rem' }}>
-                    ⭐
-                  </span>
-                )}
-              </button>
-            ))}
+            <div className={showScorecardDrawer ? 'wb-actions-row' : 'studio-drawer-collapsed'}>
+              {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
+                <button
+                  key={mission.id}
+                  type="button"
+                  data-testid={mission.id}
+                  title={reasonBadge}
+                  onClick={() => { resetActiveProblems(); runMission(mission, mission.initialMutations); }}
+                >
+                  {solved ? '✓ ' : ''}
+                  {mission.buttonLabel}
+                  {isRecommendedNext && (
+                    <span data-testid="recommended-mission-badge" style={{ marginLeft: '0.3rem' }}>
+                      ⭐
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowScorecardDrawer(!showScorecardDrawer)}
+              title="Toggle Quick Missions & Student Progress Drawer"
+            >
+              {showScorecardDrawer ? '▾ Less' : '⚙️ Quick Missions & Coach'}
+            </button>
           </>
         )}
         <button
@@ -179,12 +165,14 @@ export const GuidedMissionBar: React.FC = () => {
               onClose={() => setLibraryOpen(false)}
             />
           )}
-          <AdaptiveRecommendationRail
-            onRunRecommendedMission={(id) => {
-              const target = getMissionById(id);
-              if (target) runMission(target, target.initialMutations);
-            }}
-          />
+          <div className={showScorecardDrawer ? '' : 'studio-drawer-collapsed'}>
+            <AdaptiveRecommendationRail
+              onRunRecommendedMission={(id) => {
+                const target = getMissionById(id);
+                if (target) runMission(target, target.initialMutations);
+              }}
+            />
+          </div>
           <MissionChecklistBanner
             mission={activeMission}
             onAutoFix={handleAutoFix}

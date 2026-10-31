@@ -104,16 +104,12 @@ export const HandbookAtlasWorkbench: React.FC = () => {
         ))}
       </div>
 
-      <LearnModeCallout
-        workbenchId="wb5"
-        title={`Sec ${solved.secNum} — ${solved.learnCallout.title}`}
-        plainEnglish={solved.learnCallout.plainEnglish}
-        commonTrap={solved.learnCallout.commonTrap}
-        perryAnchor={solved.citation}
-      />
-
       <div className="wb-split">
         <div>
+          <PerrySectionInteractiveSvg
+            descriptor={descriptor} result={solved}
+            onScrubParameters={(nextP, nextS) => { setPrimaryVal(nextP); setSecondaryVal(nextS); }}
+          />
           <ScrubbableNumberInput
             paramId={`atlas-primary-${solved.secNum}`} label={descriptor.primaryParam.label} value={solved.primaryVal}
             unit={descriptor.primaryParam.unit} min={descriptor.primaryParam.min} max={descriptor.primaryParam.max}
@@ -123,11 +119,6 @@ export const HandbookAtlasWorkbench: React.FC = () => {
             paramId={`atlas-secondary-${solved.secNum}`} label={descriptor.secondaryParam.label} value={solved.secondaryVal}
             unit={descriptor.secondaryParam.unit} min={descriptor.secondaryParam.min} max={descriptor.secondaryParam.max}
             step={descriptor.secondaryParam.step} onChange={setSecondaryVal}
-          />
-
-          <PerrySectionInteractiveSvg
-            descriptor={descriptor} result={solved}
-            onScrubParameters={(nextP, nextS) => { setPrimaryVal(nextP); setSecondaryVal(nextS); }}
           />
 
           <div className="wb-panel" data-testid="atlas-status-banner">
@@ -155,6 +146,14 @@ export const HandbookAtlasWorkbench: React.FC = () => {
           />
         </div>
       </div>
+
+      <LearnModeCallout
+        workbenchId="wb5"
+        title={`Sec ${solved.secNum} — ${solved.learnCallout.title}`}
+        plainEnglish={solved.learnCallout.plainEnglish}
+        commonTrap={solved.learnCallout.commonTrap}
+        perryAnchor={solved.citation}
+      />
     </section>
   );
 };

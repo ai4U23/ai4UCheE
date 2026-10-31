@@ -64,7 +64,6 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
       data-testid={`scrub-${paramId}`}
       data-agent-select={selectable.selectableProps['data-agent-select']}
       data-agent-selected={selectable.selectableProps['data-agent-selected']}
-      whileHover={{ y: -2, scale: 1.005 }}
       transition={FRAMER_BOUNCE_SPRING}
     >
       <div className="scrubbable-header">

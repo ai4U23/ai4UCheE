@@ -80,37 +80,16 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
   return (
     <aside className="chat-drawer" aria-label="Agent Co-Pilot Drawer" data-testid="agent-chat-drawer">
       <header className="wb-toolbar">
-        <strong>🤖 ChemEng&apos;s Agent Co-Pilot</strong>
-        <span className="dof-badge" data-testid="copilot-model-badge">
-          <SwarmPulseDot tone="gold" />⚡ gemini-4-argon-low · gateway.ai4u.now
-        </span>
-        <span className="mono screen-sync-pill" data-testid="current-screen-badge" title={currentScreenXml}>
-          <SwarmPulseDot tone="emerald" />Live Sync: {activeWorkbench.toUpperCase()} ({personaMode.toUpperCase()})
-        </span>
+        <strong>🤖 AI Co-Pilot</strong>
+        <div className="wb-actions-row">
+          <span className="dof-badge" data-testid="copilot-model-badge" style={{ fontSize: '0.68rem', padding: '0.15rem 0.45rem' }}>
+            <SwarmPulseDot tone="gold" />⚡ gemini-4-argon-low
+          </span>
+          <span className="mono screen-sync-pill" data-testid="current-screen-badge" title={currentScreenXml}>
+            <SwarmPulseDot tone="emerald" />{activeWorkbench.toUpperCase()} ({personaMode.toUpperCase()})
+          </span>
+        </div>
       </header>
-
-      <div className="chip-tray" data-testid="composer-chip-tray">
-        {selectedChips.length === 0 ? (
-          <span className="wb-subtitle">Click any equation, chart, pipe, or stage to attach a Point-and-Ask chip.</span>
-        ) : (
-          <>
-            {selectedChips.map((chip) => (
-              <motion.span
-                key={chip.chipId}
-                className="composer-chip"
-                data-testid={`chip-${chip.chipId}`}
-                initial={{ opacity: 1, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={FRAMER_BOUNCE_SPRING}
-              >
-                <strong className="composer-chip-label" title={chip.chipId}>{chip.label || chip.chipId}</strong>
-                <button type="button" aria-label={`Remove ${chip.chipId}`} onClick={() => removeChip(chip.chipId)}>×</button>
-              </motion.span>
-            ))}
-            <button type="button" onClick={clearChips}>Clear all</button>
-          </>
-        )}
-      </div>
 
       <div className="genui-stream" data-testid="genui-stream">
         {genUiCards.slice(-2).map((card) =>
@@ -122,8 +101,8 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
         {messages.length === 0 && (
           <div className="chat-msg chat-agent">
             <strong>ChemEng&apos;s Agent:</strong> Ready to coach <strong>{activeWorkbench.toUpperCase()}</strong> in{' '}
-            <strong>{personaMode === 'learn' ? '🎓 Learn Mode' : '🏭 Plant Mode'}</strong>. Click a starter question
-            below or any equation/equipment on the left to inspect its step-by-step Perry derivation.
+            <strong>{personaMode === 'learn' ? '🎓 Learn Mode' : '🏭 Plant Mode'}</strong>. Click any equation, pipe, or
+            stage on the canvas (`+ Ask`) or tap a quick action below.
           </div>
         )}
         {messages.map((m) => (
@@ -143,6 +122,29 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
             )}
           </motion.div>
         ))}
+      </div>
+
+      <div className="chip-tray" data-testid="composer-chip-tray">
+        {selectedChips.length === 0 ? (
+          <span className="wb-subtitle">Click any equation, chart, pipe, or stage (`+ Ask`) to attach context chips.</span>
+        ) : (
+          <>
+            {selectedChips.map((chip) => (
+              <motion.span
+                key={chip.chipId}
+                className="composer-chip"
+                data-testid={`chip-${chip.chipId}`}
+                initial={{ opacity: 1, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={FRAMER_BOUNCE_SPRING}
+              >
+                <strong className="composer-chip-label" title={chip.chipId}>{chip.label || chip.chipId}</strong>
+                <button type="button" aria-label={`Remove ${chip.chipId}`} onClick={() => removeChip(chip.chipId)}>×</button>
+              </motion.span>
+            ))}
+            <button type="button" onClick={clearChips}>Clear all</button>
+          </>
+        )}
       </div>
 
       <div className="starter-prompts" data-testid="copilot-quick-actions">
