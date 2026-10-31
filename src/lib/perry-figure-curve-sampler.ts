@@ -4,6 +4,8 @@
 // '15-10' (Thiele eta), '14-15' (Kremser N_OG), and '23-42' (Semenov psi).
 import { clampDomainValue, inverseLinearMap, inverseLog10Map } from './svg-drag-math';
 import { DIPPR_COMPOUNDS, dippr101 } from '../components/workbenches/thermo-solver-math';
+import { VALID_SEC_PAGE_RE } from './perry-figure-chart-meta';
+import { getPerrySectionByNumber } from './perry-sections/perry-atlas-registry';
 
 export interface PerryCurveSampleResult {
   secPage: string;
@@ -148,7 +150,27 @@ export function samplePerryCurveAtPct(
     };
   }
 
-  // Default / '2-53' DIPPR Eq. 101 Water Vapor Pressure
+  const secMatch = VALID_SEC_PAGE_RE.exec(secPage.trim());
+  const parsedSec = secMatch ? Number(secMatch[1]) : 2;
+  if (secPage !== '2-53' && parsedSec !== 2) {
+    const desc = getPerrySectionByNumber(parsedSec);
+    const xVal = Number(inverseLinearMap(u, desc.primaryParam.min, desc.primaryParam.max).toFixed(2));
+    const solved = desc.solve(xVal, desc.secondaryParam.defaultVal);
+    const sMin = desc.solve(desc.primaryParam.min, desc.secondaryParam.defaultVal).responseVal;
+    const sMax = desc.solve(desc.primaryParam.max, desc.secondaryParam.defaultVal).responseVal;
+    const lo = Math.min(sMin, sMax);
+    const hi = Math.max(sMin, sMax, lo + 1e-6);
+    const yCurve = solved.responseVal;
+    const yCursor = Number(inverseLinearMap(1 - v, lo, hi).toFixed(4));
+    const yCurvePct = clampDomainValue((1 - (yCurve - lo) / (hi - lo)) * 100, 8, 92);
+    return {
+      secPage: desc.secPage, xDomain: xVal, yCurve, yCursor, yCurvePct,
+      readoutText: `${ solved.readoutText } · Cursor Y = ${yCursor} ${solved.responseUnit}`,
+      citation: solved.citation,
+    };
+  }
+
+  // '2-53' / Sec 2 DIPPR Eq. 101 Water Vapor Pressure
   const tempK = Number(inverseLinearMap(u, 273.15, 473.15).toFixed(2));
   const pPa = Math.round(dippr101(DIPPR_COMPOUNDS.water, tempK));
   const pPsia = pPa / 6894.757;

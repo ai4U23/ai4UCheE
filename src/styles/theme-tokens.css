@@ -105,6 +105,9 @@ code, pre, .mono {
   .wb-split {
     grid-template-columns: minmax(0, 1fr);
   }
+  .studio-floating-mission-wrap {
+    right: 1rem;
+  }
 }
 
 /* Mobile & tablet ergonomics: 2-column workbench tab grid on tablet, 44px touch targets on mobile. */
@@ -113,6 +116,9 @@ code, pre, .mono {
 }
 
 @media (max-width: 767px) {
+  .shell-header { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+  .shell-header > .wb-actions-row, .brand-identity { flex-wrap: wrap; justify-content: flex-start; white-space: normal; }
+  .shell-header > .mission-bar { max-width: 100%; flex-wrap: wrap; }
   nav.wb-toolbar { grid-template-columns: 1fr; }
   .mission-bar { flex-wrap: wrap; }
   .mission-bar button { white-space: normal; }

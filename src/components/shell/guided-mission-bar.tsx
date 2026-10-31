@@ -96,6 +96,7 @@ export const GuidedMissionBar: React.FC = () => {
 
   const handleSelectLibraryProblem = (entry: ProblemCaseEntry) => {
     setActiveProblemForWorkbench(entry);
+    setLibraryOpen(false);
     const mission = problemEntryToMissionScenario(entry);
     runMission(mission, mission.initialMutations);
   };
@@ -126,7 +127,7 @@ export const GuidedMissionBar: React.FC = () => {
                   type="button"
                   data-testid={mission.id}
                   title={reasonBadge}
-                  onClick={() => { resetActiveProblems(); runMission(mission, mission.initialMutations); }}
+                  onClick={() => { resetActiveProblems(); setShowScorecardDrawer(false); runMission(mission, mission.initialMutations); }}
                 >
                   {solved ? '✓ ' : ''}
                   {mission.buttonLabel}

@@ -48,7 +48,9 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
     const res = recordHypothesisVerdict(workbenchId, hypId, verdict);
     agentNative.ui.output({
       type: 'equation-proof-card',
-      title: `🔬 Hypothesis ${verdict.toUpperCase()} (${spec.subjectName})`,
+      title: res.isCorrect
+        ? `✅ Hypothesis Verified (${verdict.toUpperCase()} — ${spec.subjectName})`
+        : `⚠️ Rule #12 Falsification (${verdict.toUpperCase()} re-check — ${spec.subjectName})`,
       data: {
         symbolic_latex: spec.fundamentalTheory.symbolicLatex,
         substituted_latex: `\\text{${res.isCorrect ? 'Matches Observation & Theory' : 'Rule \\#12 Falsification Alert'}}`,

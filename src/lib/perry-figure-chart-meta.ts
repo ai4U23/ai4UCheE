@@ -1,5 +1,6 @@
 // Metadata & preset anchor catalog for WB1's 10 calibrated multi-book nomographs/charts
 // across Perry's 9th Ed., BSL 2nd Ed., SVNAS 9th Ed., Seader 4th Ed., Fogler 7th Ed., and Crowl & Louvar 4th Ed.
+import { getPerrySectionByNumber } from './perry-sections/perry-atlas-registry';
 
 export interface PerryPresetAnchor {
   secPage: string;
@@ -121,3 +122,44 @@ export const PERRY_CHART_META: Record<string, PerryChartMeta> = {
     secondaryOffsetPct: -10,
   },
 };
+
+export const VALID_SEC_PAGE_RE = /^([1-9]|1\d|2[0-5])-\d{1,3}$/;
+
+/** Resolve the calibrated preset for any Perry section 1..25 (never leaves exactValue stale). */
+export function resolvePresetForSection(secNum: number): PerryPresetAnchor {
+  const clamped = Math.min(Math.max(Math.round(secNum) || 6, 1), 25);
+  const direct = PRESET_ANCHORS.find((p) => Number(p.secPage.split('-')[0]) === clamped);
+  if (direct) return direct;
+  const desc = getPerrySectionByNumber(clamped);
+  const solved = desc.solve(desc.primaryParam.defaultVal, desc.secondaryParam.defaultVal);
+  return {
+    secPage: desc.secPage,
+    label: `Sec. ${clamped} — ${desc.secTitle} (p. ${desc.secPage})`,
+    exactVal: solved.responseVal,
+    xVal: desc.primaryParam.defaultVal,
+    yVal: solved.responseVal,
+    bookRef: desc.citation,
+  };
+}
+
+/** Validate a user-typed Sec-Page string; prevents fabricated citations like [Perry's 9th Ed., p. zz-99]. */
+export function sanitizeSecPageInput(raw: string, fallbackSecNum = 6): {
+  validSecPage: string;
+  secNum: number;
+  preset: PerryPresetAnchor;
+  isValidFormat: boolean;
+} {
+  const trimmed = raw.trim();
+  const direct = PRESET_ANCHORS.find((p) => p.secPage === trimmed);
+  if (direct) {
+    return { validSecPage: direct.secPage, secNum: Number(direct.secPage.split('-')[0]), preset: direct, isValidFormat: true };
+  }
+  const m = VALID_SEC_PAGE_RE.exec(trimmed);
+  if (m) {
+    const sNum = Number(m[1]);
+    const preset = resolvePresetForSection(sNum);
+    return { validSecPage: trimmed, secNum: sNum, preset: { ...preset, secPage: trimmed }, isValidFormat: true };
+  }
+  const fallback = resolvePresetForSection(fallbackSecNum);
+  return { validSecPage: fallback.secPage, secNum: Number(fallback.secPage.split('-')[0]), preset: fallback, isValidFormat: false };
+}

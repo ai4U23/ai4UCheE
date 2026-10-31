@@ -122,4 +122,56 @@ describe('Phase 17/19 — 24 Real-Life Plant Problem Library & Engineering Progr
       expect(screen.getByTestId('mission-checklist-banner').textContent).toContain('Mission Solved');
     });
   });
+
+  it('Test 4 (Round-2 GUI Audit Regressions — DEF-1/1b, DEF-2, DEF-5, DEF-6, OBS-1, OBS-3): guards citations, conceptual questions, quick actions, and hypothesis tallies', async () => {
+    render(<App />);
+
+    // OBS-1: Launching a problem from the library auto-closes the library drawer
+    fireEvent.click(screen.getByTestId('toggle-problem-library-btn'));
+    expect(screen.queryByTestId('problem-library-browser')).not.toBeNull();
+    fireEvent.click(screen.getByTestId('launch-prob-01-fanning-darcy-audit'));
+    expect(screen.queryByTestId('problem-library-browser')).toBeNull();
+    await new Promise((r) => setTimeout(r, 100));
+
+    // DEF-5: Any 2 hypothesis Prove/Disprove interactions increment the tally (2/3) and complete Stage 5
+    fireEvent.click(screen.getByTestId('hyp-prove-wb1-h1'));
+    fireEvent.click(screen.getByTestId('hyp-disprove-wb1-h2'));
+    expect(screen.getByTestId('hypothesis-verified-badge').textContent).toContain('2/3');
+    expect(screen.getByTestId('fogler-6stage-stepper').textContent).toContain(
+      '☑ Stage 5 · Hypotheses: Prove ✅ / Disprove ❌ (Rule #12)',
+    );
+
+    // DEF-1: Switching WB1 Section selector to Sec 14 updates Sec-Page to 14-37 and exactValue to 0.082 (not stale 0.0045)
+    fireEvent.change(screen.getByLabelText('Section selector'), { target: { value: '14' } });
+    expect((screen.getByLabelText('Sec-Page code') as HTMLInputElement).value).toBe('14-37');
+    expect(getClientAppState().payload.inputs).toMatchObject({ secPage: '14-37', exactValue: 0.082 });
+
+    // DEF-1b: Typing invalid Sec-Page "zz-99" shows warning and never fabricates [Perry's 9th Ed., p. zz-99]
+    fireEvent.change(screen.getByLabelText('Sec-Page code'), { target: { value: 'zz-99' } });
+    expect(screen.getByTestId('invalid-secpage-warning').textContent).toContain('zz-99');
+    expect((getClientAppState().payload.inputs as Record<string, unknown>).secPage).toBe('14-37');
+
+    // OBS-3: Empty reading + Verify prompts for a numeric reading
+    fireEvent.change(screen.getByLabelText('Section selector'), { target: { value: '6' } });
+    fireEvent.change(screen.getByLabelText('Chart reading value'), { target: { value: '' } });
+    fireEvent.click(screen.getByText('Verify & Reveal Crosshair'));
+    expect(screen.getByTestId('chart-verdict').textContent).toContain('Enter a numeric chart reading');
+
+    // DEF-2: WB1 quick action "⚡ Correct Chart Reading to Perry-Exact (0.0045)" updates reading to 0.0045 and reveals PASS
+    fireEvent.click(screen.getByTestId('copilot-quick-action-0'));
+    await waitFor(() => {
+      expect((screen.getByLabelText('Chart reading value') as HTMLInputElement).value).toBe('0.0045');
+      expect(screen.getByTestId('chart-verdict').textContent).toContain('PASS');
+    });
+
+    // DEF-6: Asking conceptual question "Why is my reading 4x higher than Perry's value?" does NOT mutate reading to 4
+    const chatInput = screen.getByLabelText("Ask ChemEng's Agent");
+    fireEvent.change(chatInput, { target: { value: "Why is my reading 4x higher than Perry's value?" } });
+    fireEvent.submit(chatInput.closest('form')!);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('copilot-agent-message')).toHaveLength(2);
+      expect((screen.getByLabelText('Chart reading value') as HTMLInputElement).value).toBe('0.0045');
+      expect(screen.getAllByTestId('copilot-mutation-pill')).toHaveLength(1);
+    });
+  });
 });

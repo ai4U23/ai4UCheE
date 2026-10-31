@@ -150,7 +150,8 @@ export function evaluateSixStageProgress(
   const cur = getWorkbenchProblemProgress(wb);
   const hasEquationChip = (options.selectedChipIds ?? []).some((c) => c.includes('equation') || c.includes('figure'));
   const evaluated = spec.hypotheses.map((h) => evaluateHypothesisItem(wb, h.id));
-  const correctHypothesisCount = evaluated.filter((e) => e.isCorrect).length;
+  const testedCount = evaluated.filter((e) => Boolean(e.userVerdict)).length;
+  const correctHypothesisCount = Math.max(evaluated.filter((e) => e.isCorrect).length, testedCount);
   const rootCauseProved = spec.hypotheses.filter((h) => h.isRootCause).every((h) => cur.hypothesisVerdicts[h.id] === 'proved');
   const decoysDisproved = spec.hypotheses.filter((h) => !h.isRootCause).some((h) => cur.hypothesisVerdicts[h.id] === 'disproved');
 
@@ -158,7 +159,7 @@ export function evaluateSixStageProgress(
   const stage2DefinitionDone = cur.definitionReviewed || cur.theoryReviewed || Boolean(options.solved);
   const stage3TheoryDone = cur.theoryReviewed || hasEquationChip || Boolean(options.solved);
   const stage4HandbookDone = cur.handbookReviewed || cur.theoryReviewed || hasEquationChip || Boolean(options.solved);
-  const stage5HypothesesDone = (rootCauseProved && decoysDisproved) || Boolean(options.solved);
+  const stage5HypothesesDone = (rootCauseProved && decoysDisproved) || testedCount >= 2 || Boolean(options.solved);
   const stage6SolutionDone = Boolean(options.solved);
 
   const verifiedWorkbenchCount = ALL_WORKBENCHES.filter((w) => {

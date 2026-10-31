@@ -5,7 +5,7 @@ import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
-import { PRESET_ANCHORS, type PerryPresetAnchor } from '../../lib/perry-figure-chart-meta';
+import { PRESET_ANCHORS, resolvePresetForSection, sanitizeSecPageInput, type PerryPresetAnchor } from '../../lib/perry-figure-chart-meta';
 import { samplePerryCurveAtPct, type PerryCurveSampleResult } from '../../lib/perry-figure-curve-sampler';
 import { clientPointToViewBox, safeSetPointerCapture } from '../../lib/svg-drag-math';
 import { MotionPillButton } from '../ui/framer-motion-primitives';
@@ -24,54 +24,49 @@ export const VisualVerifierWorkbench: React.FC = () => {
   const [cropDataUri, setCropDataUri] = useState<string | null>(null);
   const overlayDragRef = useRef<boolean>(false);
 
-  const figSelectable = useAgentSelectable('figure', 'perry-crop', `Perry's ${secPage} visual crop`, {
-    secPage, exactValue, userReading: Number(userReading),
+  const sanitized = sanitizeSecPageInput(secPage, secNum);
+  const citedSecPage = sanitized.validSecPage;
+  const figSelectable = useAgentSelectable('figure', 'perry-crop', `Perry's ${citedSecPage} visual crop`, {
+    secPage: citedSecPage, exactValue, userReading: Number(userReading),
   });
 
-  const numReading = Number(userReading) || 0;
-  const errPct = exactValue !== 0 ? (Math.abs(numReading - exactValue) / Math.abs(exactValue)) * 100 : 0;
-  const pass = errPct <= 5.0;
-  const fourXErr = exactValue !== 0 ? (Math.abs(numReading - 4 * exactValue) / (4 * exactValue)) * 100 : 100;
-  const fanning4xDetected = secPage === '6-10' && fourXErr <= 15.0 && !pass;
+  const isEmptyReading = userReading.trim() === '';
+  const numReading = isEmptyReading ? NaN : Number(userReading);
+  const errPct = !Number.isFinite(numReading) ? 100 : exactValue !== 0 ? (Math.abs(numReading - exactValue) / Math.abs(exactValue)) * 100 : 0;
+  const pass = !isEmptyReading && Number.isFinite(numReading) && errPct <= 5.0;
+  const fourXErr = Number.isFinite(numReading) && exactValue !== 0 ? (Math.abs(numReading - 4 * exactValue) / (4 * exactValue)) * 100 : 100;
+  const fanning4xDetected = citedSecPage === '6-10' && fourXErr <= 15.0 && !pass;
   const showCrosshair = personaMode === 'plant' || revealed;
 
   useWorkbenchMutations('wb1-visual-verifier', (p) => {
     if (p.secPage !== undefined) {
-      const nextPage = String(p.secPage);
-      setSecPage(nextPage);
-      setSecNum(Number(nextPage.split('-')[0]) || 6);
-      setRevealed(false);
-      setCropDataUri(null);
+      const check = sanitizeSecPageInput(String(p.secPage), secNum);
+      setSecPage(check.validSecPage); setSecNum(check.secNum); setExactValue(check.preset.exactVal);
+      setRevealed(false); setCropDataUri(null);
     }
-    if (p.userReading !== undefined) setUserReading(String(p.userReading));
+    if (p.userReading !== undefined) { setUserReading(String(p.userReading)); setRevealed(true); }
     if (p.exactValue !== undefined) setExactValue(Number(p.exactValue));
   });
 
   useEffect(() => {
+    const statusBanner = pass
+      ? '✅ Reading within 5% of the Perry-exact value'
+      : fanning4xDetected ? '⚠️ 4× Fanning/Darcy trap detected — re-read the chart' : '❌ Reading off — re-check the crosshair';
     syncWorkbenchPayload('wb1-visual-verifier', {
-      summary: `WB1 chart verifier: Perry p. ${secPage}, reading ${userReading} vs exact ${exactValue}`,
-      inputs: { secPage, userReading, exactValue },
+      summary: `WB1 chart verifier: Perry p. ${citedSecPage}, reading ${userReading || 'empty'} vs exact ${exactValue}`,
+      inputs: { secPage: citedSecPage, userReading, exactValue },
       metrics: { errPct, pass, fanning4xDetected },
-      statusBanner: pass
-        ? '✅ Reading within 5% of the Perry-exact value'
-        : fanning4xDetected
-          ? '⚠️ 4× Fanning/Darcy trap detected — re-read the chart'
-          : '❌ Reading off — re-check the crosshair',
+      statusBanner,
     });
   });
 
   const applyPreset = (preset: PerryPresetAnchor) => {
-    setSecPage(preset.secPage);
-    setSecNum(Number(preset.secPage.split('-')[0]) || 6);
-    setExactValue(preset.exactVal);
-    setRevealed(false);
-    setCrosshair({ xPct: 50, yPct: 48 });
+    setSecPage(preset.secPage); setSecNum(Number(preset.secPage.split('-')[0]) || 6);
+    setExactValue(preset.exactVal); setRevealed(false); setCropDataUri(null); setCrosshair({ xPct: 50, yPct: 48 });
   };
 
   const handleScrubSample = (sample: PerryCurveSampleResult, nextCrosshair: { xPct: number; yPct: number }) => {
-    setCrosshair(nextCrosshair);
-    setExactValue(sample.yCurve);
-    setUserReading(String(sample.yCursor));
+    setCrosshair(nextCrosshair); setExactValue(sample.yCurve); setUserReading(String(sample.yCursor));
   };
 
   const handleOverlayPointer = (e: React.PointerEvent<SVGSVGElement>) => {
@@ -84,7 +79,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
 
   const handleLoadCrop = async () => {
     try {
-      const res = (await cropPerryPageAction.run({ sec_page: secPage, dpi: 150 })) as { image_base64?: string; composite_image_base64?: string };
+      const res = (await cropPerryPageAction.run({ sec_page: citedSecPage, dpi: 150 })) as { image_base64?: string; composite_image_base64?: string };
       setCropDataUri(res.image_base64 ?? res.composite_image_base64 ?? null);
     } catch {
       setCropDataUri(null);
@@ -106,13 +101,21 @@ export const VisualVerifierWorkbench: React.FC = () => {
         <div className="wb-controls">
           <label>
             Section (1–25):
-            <select aria-label="Section selector" value={secNum} onChange={(e) => { const s = Number(e.target.value); setSecNum(s); setSecPage(`${s}-1`); }}>
+            <select aria-label="Section selector" value={secNum} onChange={(e) => applyPreset(resolvePresetForSection(Number(e.target.value)))}>
               {Array.from({ length: 25 }, (_, i) => i + 1).map((s) => (<option key={s} value={s}>Sec {s}</option>))}
             </select>
           </label>
           <label>
             Sec-Page:
-            <input aria-label="Sec-Page code" value={secPage} onChange={(e) => setSecPage(e.target.value)} />
+            <input
+              aria-label="Sec-Page code" value={secPage}
+              onChange={(e) => {
+                const raw = e.target.value;
+                setSecPage(raw);
+                const check = sanitizeSecPageInput(raw, secNum);
+                if (check.isValidFormat) { setSecNum(check.secNum); setExactValue(check.preset.exactVal); }
+              }}
+            />
           </label>
         </div>
       </header>
@@ -120,14 +123,14 @@ export const VisualVerifierWorkbench: React.FC = () => {
       <div className="wb-split">
         <div className="wb-crop-stage" {...figSelectable.selectableProps} data-agent-select="figure:perry-crop">
           {cropDataUri ? (
-            <img src={cropDataUri} alt={`Perry's ${secPage} crop`} className="wb-crop-img" />
+            <img src={cropDataUri} alt={`Perry's ${citedSecPage} crop`} className="wb-crop-img" />
           ) : (
             <div className="wb-crop-placeholder">
               <PerryFigureSvgPreview
-                secPage={secPage} exactValue={exactValue} showCrosshair={showCrosshair}
+                secPage={citedSecPage} exactValue={exactValue} showCrosshair={showCrosshair}
                 crosshair={crosshair} onScrubCrosshair={handleScrubSample}
               />
-              <span>Drag curve to scrub reading or click to attach Point-and-Ask chip · [Perry&apos;s 9th Ed., p. {secPage}]</span>
+              <span>Drag curve to scrub reading or click to attach Point-and-Ask chip · [Perry&apos;s 9th Ed., p. {citedSecPage}]</span>
             </div>
           )}
           {showCrosshair && (
@@ -151,7 +154,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
         </div>
 
         <VisualVerifierTutorCard
-          personaMode={personaMode} secPage={secPage} exactValue={exactValue}
+          personaMode={personaMode} secPage={citedSecPage} rawSecPage={secPage} exactValue={exactValue}
           showCrosshair={showCrosshair} revealed={revealed} userReading={userReading}
           onReadingChange={setUserReading} errPct={errPct} pass={pass}
           fanning4xDetected={fanning4xDetected} numReading={numReading}

@@ -6,6 +6,7 @@ import { detectNumericErrorSignature } from '../../lib/che-error-signature-detec
 export interface VisualVerifierTutorCardProps {
   personaMode: PersonaMode;
   secPage: string;
+  rawSecPage?: string;
   exactValue: number;
   showCrosshair: boolean;
   revealed: boolean;
@@ -23,6 +24,7 @@ export interface VisualVerifierTutorCardProps {
 export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = ({
   personaMode,
   secPage,
+  rawSecPage,
   exactValue,
   showCrosshair,
   revealed,
@@ -36,7 +38,9 @@ export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = (
   onLoadCrop,
   onResetCrop,
 }) => {
-  const signatureMatch = detectNumericErrorSignature(numReading, exactValue);
+  const isEmptyReading = userReading.trim() === '';
+  const isInvalidPage = Boolean(rawSecPage && rawSecPage.trim() !== secPage);
+  const signatureMatch = isEmptyReading ? null : detectNumericErrorSignature(numReading, exactValue);
   return (
     <aside className="wb-tutor-card">
       <h3>
@@ -48,6 +52,11 @@ export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = (
         Target anchor: <code>[Perry&apos;s 9th Ed., p. {secPage}]</code> · Exact value ={' '}
         <strong>{showCrosshair ? exactValue : '🔒 hidden until verified'}</strong>
       </p>
+      {isInvalidPage && (
+        <p className="wb-coaching" data-testid="invalid-secpage-warning" style={{ marginTop: 0, marginBottom: '0.45rem' }}>
+          ⚠️ Unrecognized section-page code <code>{rawSecPage}</code> — anchored to calibrated Perry page <code>{secPage}</code>.
+        </p>
+      )}
       <label>
         Your visually read value:
         <input
@@ -71,7 +80,15 @@ export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = (
       </div>
       {revealed && (
         <div className={`wb-verdict ${pass ? 'pass' : 'fail'}`} data-testid="chart-verdict">
-          <strong>{pass ? 'PASS' : 'REVIEW'}</strong> — Error: {errPct.toFixed(2)}% (exact = {exactValue})
+          {isEmptyReading ? (
+            <span>
+              <strong>REVIEW</strong> — Enter a numeric chart reading above to verify against exact = {exactValue}
+            </span>
+          ) : (
+            <span>
+              <strong>{pass ? 'PASS' : 'REVIEW'}</strong> — Error: {errPct.toFixed(2)}% (exact = {exactValue})
+            </span>
+          )}
           {fanning4xDetected && (
             <p className="wb-coaching" data-testid="fanning-4x-coaching">
               ⚠️ <strong>Fanning vs. Darcy 4× trap detected:</strong> Perry&apos;s Fig. 6-9 (p. 6-10) plots{' '}
