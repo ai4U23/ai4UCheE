@@ -145,7 +145,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
             {t.compileCalcBtn}
           </button>
           <button type="button" data-testid="copy-calc-sheet-md" onClick={() => void handleCopyMarkdown()}>
-            {copyState || 'Copy Markdown QA/QC'}
+            {copyState || (locale === 'vi' ? 'Sao chép Markdown QA/QC' : 'Copy Markdown QA/QC')}
           </button>
           <button
             type="button"
@@ -173,7 +173,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
         {compiledHtml && (
           <div className="wb-split" data-testid="compiled-calc-sheet-output">
             <div>
-              <h4>EPC Print-Ready Sheet Preview</h4>
+              <h4>{locale === 'vi' ? 'Xem trước Phiếu tính Sàng lọc Sơ bộ (Chuẩn in EPC)' : 'Preliminary EPC-Style Sheet Preview'}</h4>
               <div className="mono" data-testid="calc-sheet-summary">
                 {projectName} · Tag: {equipmentTag} · {revision} · Prepared: {preparedBy} · Checked: {checkedBy}
               </div>
@@ -182,7 +182,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
               </div>
             </div>
             <div>
-              <h4>Markdown / LaTeX Archive</h4>
+              <h4>{locale === 'vi' ? 'Lưu trữ Markdown / LaTeX' : 'Markdown / LaTeX Archive'}</h4>
               <pre className="mono" data-testid="calc-sheet-markdown">{compiledMd}</pre>
             </div>
           </div>

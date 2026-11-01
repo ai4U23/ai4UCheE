@@ -49,8 +49,8 @@ const SYMPTOM_VI: Record<SymptomCategoryId, string> = {
 };
 
 const TS_EN: TroubleshootingCopy = {
-  libHeader: '24 Real-Life Plant Problem Library (7 Reference Books · Engineering Progression Tiers L1–L4)',
-  libSubtitle: 'Select any real plant problem by Difficulty Tier (L1–L4), Equipment, or Symptom to launch its 6-Stage Fogler & LeBlanc Investigation',
+  libHeader: '24 Real-Life Plant Problem Library (Realistic Composite Cases · 7 Reference Books · Tiers L1–L4)',
+  libSubtitle: 'Select any realistic composite plant problem by Difficulty Tier (L1–L4), Equipment, or Symptom to launch its 6-Stage Fogler & LeBlanc Investigation',
   libCloseBtn: 'Close Library', libAllTiers: (n) => `All Tiers (${n})`, libTierLabel: (t) => PROGRESSION_TIER_META[t].label,
   libEquipLabel: 'Equipment:', libAllEquipOpt: 'All 8 Equipment Families', libEquipOpt: (k) => EQUIPMENT_CATEGORY_META[k].label,
   libSymptomLabel: 'Symptom:', libAllSymptomOpt: 'All 5 Failure Symptoms', libSymptomOpt: (k) => SYMPTOM_CATEGORY_META[k].label,
@@ -81,8 +81,8 @@ const TS_EN: TroubleshootingCopy = {
 };
 
 const TS_VI: TroubleshootingCopy = {
-  libHeader: 'Thư viện 24 Sự cố Nhà máy Thực tế (7 Giáo trình · 4 Cấp độ L1–L4)',
-  libSubtitle: 'Chọn sự cố theo Cấp độ (L1–L4), Thiết bị hoặc Triệu chứng để mở Điều tra 6 Bước Fogler & LeBlanc',
+  libHeader: 'Thư viện 24 Sự cố Nhà máy Thực tế (Kịch bản Tổng hợp Đào tạo · 7 Giáo trình · 4 Cấp độ L1–L4)',
+  libSubtitle: 'Chọn tình huống sự cố tổng hợp theo Cấp độ (L1–L4), Thiết bị hoặc Triệu chứng để mở Điều tra 6 Bước Fogler & LeBlanc',
   libCloseBtn: 'Đóng Thư viện', libAllTiers: (n) => `Tất cả Cấp độ (${n})`, libTierLabel: (t) => TIER_VI[t],
   libEquipLabel: 'Thiết bị:', libAllEquipOpt: 'Tất cả 8 Nhóm Thiết bị', libEquipOpt: (k) => EQUIP_VI[k],
   libSymptomLabel: 'Triệu chứng:', libAllSymptomOpt: 'Tất cả 5 Nhóm Triệu chứng', libSymptomOpt: (k) => SYMPTOM_VI[k],

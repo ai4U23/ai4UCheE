@@ -175,4 +175,6 @@ export const VI_EXACT_WB_AND_SVG_MAP: Readonly<Record<string, string>> = {
   'Revision:': 'Phiên bản:', 'Prepared By:': 'Người lập:', 'Checked By:': 'Người kiểm tra:',
   'Parameter': 'Thông số kỹ thuật', 'Symbol': 'Ký hiệu', 'Value': 'Giá trị', 'Units': 'Đơn vị', 'Basis': 'Cơ sở / Nguồn chuẩn',
   'Symbolic: ': 'Công thức ký hiệu: ', 'Substituted: ': 'Thay số trực tiếp: ', 'Result: ': 'Kết quả tính toán: ',
+  'Preliminary EPC-Style Sheet Preview': 'Xem trước Phiếu tính Sàng lọc Sơ bộ (Chuẩn in EPC)',
+  'Markdown / LaTeX Archive': 'Lưu trữ Markdown / LaTeX',
 };

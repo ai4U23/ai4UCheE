@@ -6,6 +6,9 @@
   <title>ai4UCheE — Understand the Core Subjects Behind Real Plant Problems | Undergraduate ChE Workbench</title>
   <meta name="description" content="Practice undergraduate chemical engineering (Year 2 Thermodynamics, Fluid Mechanics, Separations, Reaction Engineering, and Process Design) by connecting real plant problems to governing equations and interactive diagrams." />
   <link rel="canonical" href="https://chemeng.ai4u.now/" />
+  <link rel="alternate" hreflang="en" href="https://chemeng.ai4u.now/" />
+  <link rel="alternate" hreflang="vi" href="https://chemeng.ai4u.now/?lang=vi" />
+  <link rel="alternate" hreflang="x-default" href="https://chemeng.ai4u.now/" />
   <link rel="alternate" type="text/markdown" href="https://chemeng.ai4u.now/index.md" title="Markdown twin" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
@@ -109,7 +112,7 @@
       }
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
     body {
       margin: 0;
       background: var(--bg-canvas);
@@ -205,12 +208,34 @@
     /* Section Containers — fit cleanly across 16:9, 9:16, and 1:1 viewports */
     .showcase-section {
       min-height: 92vh;
+      scroll-margin-top: 5.5rem;
       padding: 2.2rem clamp(1rem, 4vw, 3.5rem);
       display: flex;
       flex-direction: column;
       justify-content: center;
       border-bottom: 1px solid var(--border-grid);
       position: relative;
+    }
+    .step-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.45rem;
+    }
+    .step-flow-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-grid);
+      border-radius: 7px;
+      padding: 0.45rem 0.65rem;
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+    .step-flow-item strong {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      margin-bottom: 0.15rem;
     }
     .section-inner {
       max-width: 1320px;
@@ -421,11 +446,13 @@
 
         <div class="stage-pill" data-testid="five-step-story-bridge" style="margin: 0 0 1rem; padding: 0.75rem 1rem; border-left: 3px solid var(--maize); font-size: 0.84rem; line-height: 1.55;">
           <strong>5-Step Learning Path:</strong>
-          <code>1. Observe Plant Symptom</code> (cavitation, 4× ΔP error, column flood, thermal runaway) →
-          <code>2. Pick Your Course Subject (Year 2–4)</code> (Thermodynamics → Fluid Mechanics → Separations → Reaction Engineering → Capstone Design) →
-          <code>3. Inspect the Governing Equation</code> (symbolic law + unit substitution) →
-          <code>4. Test Fixes on the Interactive Diagram</code> (drag operating points &amp; sliders) →
-          <code>5. Check Operating Window &amp; Summary</code> (preliminary educational screening &amp; printable summary)
+          <div class="step-flow-grid">
+            <div class="step-flow-item"><strong>1. Observe Plant Symptom</strong>Cavitation, 4× ΔP error, column flood, or thermal runaway</div>
+            <div class="step-flow-item"><strong>2. Pick Course Subject (Year 2–4)</strong>Thermodynamics → Fluid Mechanics → Separations → Kinetics → Capstone</div>
+            <div class="step-flow-item"><strong>3. Inspect Governing Equation</strong>Symbolic law + explicit psig/psia &amp; f_D = 4·f_F unit substitution</div>
+            <div class="step-flow-item"><strong>4. Test Fixes on SVG Diagram</strong>Drag operating points &amp; sliders with zero-latency feedback</div>
+            <div class="step-flow-item"><strong>5. Check Screening Window</strong>Verify preliminary educational screening &amp; printable summary</div>
+          </div>
         </div>
 
         <div class="grid-2">
@@ -450,8 +477,8 @@
               <span class="mono-badge">6 Canonical Reference Textbooks Indexed</span>
               <h3 style="margin-top:0.55rem;">Every Equation &amp; Chart Grounded in Verbatim Page Citations</h3>
               <div class="grid-6" style="margin-top: 0.65rem;">
-                <div class="stage-pill"><strong>1. Perry's 9th Ed.</strong><br/>25 Sections · 2,274 pp. PDF<br/><code>[Sec 1–25 + S-P Index]</code></div>
-                <div class="stage-pill"><strong>2. Fogler 7th Ed.</strong><br/>Reaction Engineering<br/><code>[19 Ch. EPUB · CSTR/PFR]</code></div>
+                <div class="stage-pill"><strong>1. Perry's 9th Ed.</strong><br/>25 Sections · 2,274 pp. Reference<br/><code>[Sec 1–25 + S-P Index]</code></div>
+                <div class="stage-pill"><strong>2. Fogler 7th Ed.</strong><br/>Reaction Engineering<br/><code>[19 Ch. Textbook · CSTR/PFR]</code></div>
                 <div class="stage-pill"><strong>3. BSL Revised 2nd Ed.</strong><br/>Transport Phenomena<br/><code>[Momentum · Heat · Mass]</code></div>
                 <div class="stage-pill"><strong>4. SVNA 9th Ed.</strong><br/>ChE Thermodynamics<br/><code>[VLE · Cubic EOS · Cycles]</code></div>
                 <div class="stage-pill"><strong>5. Seader 4th Ed.</strong><br/>Separation Principles<br/><code>[McCabe · Kremser · LLE]</code></div>
@@ -477,7 +504,7 @@
 
         <div class="grid-2">
           <div class="video-stage">
-            <video id="guide-video-el" src="/ai4uchee-guide.mp4" poster="/ai4uchee-guide-poster.svg" controls playsinline preload="metadata">
+            <video id="guide-video-el" src="/ai4uchee-guide.mp4" poster="/ai4uchee-guide-poster.svg" aria-label="15-second chemical engineering workbench overview video with English and Vietnamese captions" controls playsinline preload="metadata">
               <track kind="captions" src="/ai4uchee-guide-en.vtt" srclang="en" label="English" default />
               <track kind="captions" src="/ai4uchee-guide-vi.vtt" srclang="vi" label="Tiếng Việt" />
             </video>
@@ -530,12 +557,14 @@
         <h2 class="section-title">Every Core Chemical Engineering Subject — Interactive &amp; Citation-Backed</h2>
 
         <div class="stage-pill" data-testid="course-sequence-map" style="margin: 0 0 1rem; padding: 0.8rem 1rem; border-left: 3px solid var(--maize); font-size: 0.82rem; line-height: 1.55;">
-          <strong>Suggested Undergraduate Course Order (Year 2 → Year 4):</strong><br/>
-          <strong>1. Year 2 · Thermodynamics &amp; Phase Equilibria</strong> (Prereq: Material &amp; Energy Balances → Outcome: predict boiling points, vapor pressure &amp; VLE phase splits) →
-          <strong>2. Year 2/3 · Fluid Mechanics &amp; Piping Hydraulics</strong> (Prereq: Thermo I → Outcome: size pipes, distinguish Fanning vs. Darcy friction &amp; prevent pump cavitation) →
-          <strong>3. Year 3 · Separation Processes</strong> (Prereq: Phase Equilibria → Outcome: step off McCabe-Thiele stages &amp; check Fair column flooding) →
-          <strong>4. Year 3/4 · Reaction Engineering &amp; Kinetics</strong> (Prereq: Thermo &amp; Transport → Outcome: size CSTR/PFR reactors &amp; prevent Semenov thermal runaway) →
-          <strong>5. Year 4 · Process Design, Economics &amp; Safety Atlas</strong> (Prereq: Core ChE Sequence → Outcome: run multi-section preliminary equipment &amp; relief checks).<br/>
+          <strong>Suggested Undergraduate Course Order (Year 2 → Year 4):</strong>
+          <div class="step-flow-grid" style="margin-bottom: 0.45rem;">
+            <div class="step-flow-item"><strong>1. Year 2 · Thermodynamics &amp; Phase Equilibria</strong>Prereq: Material &amp; Energy Balances → Predict boiling points, vapor pressure &amp; VLE phase splits</div>
+            <div class="step-flow-item"><strong>2. Year 2/3 · Fluid Mechanics &amp; Hydraulics</strong>Prereq: Thermo I → Size pipes, distinguish Fanning vs. Darcy friction &amp; prevent pump cavitation</div>
+            <div class="step-flow-item"><strong>3. Year 3 · Separation Processes</strong>Prereq: Phase Equilibria → Step off McCabe-Thiele stages &amp; check Fair column flooding</div>
+            <div class="step-flow-item"><strong>4. Year 3/4 · Reaction Engineering</strong>Prereq: Thermo &amp; Transport → Size CSTR/PFR reactors &amp; screen Semenov thermal stability</div>
+            <div class="step-flow-item"><strong>5. Year 4 · Capstone Design &amp; Safety</strong>Prereq: Core ChE Sequence → Run multi-section preliminary equipment &amp; relief checks</div>
+          </div>
           <span style="color:var(--ink-muted);"><strong>Textbook Access &amp; Copyright Policy:</strong> ai4UCheE is an independent bibliographic section/page index and deterministic equation solver designed for use alongside your own course textbooks — no copyrighted textbook PDFs or EPUB files are hosted or distributed.</span>
         </div>
 
@@ -624,13 +653,13 @@
     <!-- SECTION 4: PROBLEM-FIRST 6-STAGE FOGLER & LEBLANC FLOW -->
     <section id="problem-solving" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">24 Real-Life Plant Problems · Fogler &amp; LeBlanc 6-Stage Flow</span>
-        <h2 class="section-title">Start from a Real Plant Upset — Not a Disconnected Textbook Formula</h2>
+        <span class="eyebrow-pill">24 Realistic Composite Plant Cases · Fogler &amp; LeBlanc 6-Stage Flow</span>
+        <h2 class="section-title">Start from a Realistic Plant Upset — Not a Disconnected Textbook Formula</h2>
 
         <div class="grid-2">
           <div class="card">
             <div>
-              <span class="mono-badge">4 Engineering Progression Tiers (24 Problems)</span>
+              <span class="mono-badge">4 Engineering Progression Tiers (24 Educational Composite Cases)</span>
               <h3 style="margin-top:0.5rem;">From Unit-Conversion Traps to Coupled Runaway Hazards</h3>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; margin-top:0.65rem;">
                 <div class="stage-pill">
@@ -647,12 +676,12 @@
                 </div>
                 <div class="stage-pill">
                   <strong>Tier L4 · Coupled Safety/Design</strong><br/>
-                  Stabilize Semenov reactor runaway (ψ &gt; 1/e) &amp; API 520 relief sizing.
+                  Screen Semenov reactor thermal stability (ψ &gt; 1/e) &amp; preliminary API 520 relief sizing.
                 </div>
               </div>
             </div>
             <div style="margin-top:0.75rem; font-family:var(--font-mono); font-size:0.78rem;">
-              8 Equipment Categories · 5 Symptom Archetypes · Multi-Student Adaptive Scorecard
+              24 Realistic Educational Composite Cases · 8 Equipment Categories · 5 Symptom Archetypes · Local Browser Practice Scorecard
             </div>
           </div>
 
@@ -1762,25 +1791,25 @@
       </div>
     </section>
 
-    <!-- SECTION 6: SENIOR EPC QA/QC CALC SHEET & LAUNCH CTA -->
+    <!-- SECTION 6: PRELIMINARY EPC-STYLE QA/QC CALC SHEET & LAUNCH CTA -->
     <section id="calc-sheet-cta" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">Senior EPC QA/QC Calculation Sheets · AX / GEO Ready</span>
-        <h2 class="section-title">From Classroom Intuition to Print-Ready EPC Deliverables</h2>
+        <span class="eyebrow-pill">Preliminary EPC-Style Calculation Sheets (Educational Screening · Not PE Sign-Off)</span>
+        <h2 class="section-title">From Classroom Intuition to Preliminary EPC-Style Calculation Sheets</h2>
 
         <div class="grid-2">
           <div class="card">
             <div>
-              <span class="mono-badge">Rev 0 — Issued for Review · SQLite Persisted</span>
-              <h3 style="margin-top:0.5rem;">One-Click Senior Engineer Calculation Sheet Compiler</h3>
-              <p style="font-size:0.9rem;">Click <code>Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:</p>
+              <span class="mono-badge">Preliminary Screening Only · Not for Construction or PE Sign-Off</span>
+              <h3 style="margin-top:0.5rem;">One-Click Preliminary Calculation Sheet Compiler (14-Field EPC Format)</h3>
+              <p style="font-size:0.9rem;">Click <code>Calc Sheet</code> in the studio header to compile a structured preliminary screening sheet containing:</p>
               <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.55;">
-                <li><strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Revision <code>Rev 0</code>, and Basis of Design.</li>
-                <li><strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief cases.</li>
+                <li><strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Preliminary Screening Revision, and Textbook Basis of Design.</li>
+                <li><strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief screening cases.</li>
                 <li><strong>3-Stage White-Box Derivations &amp; 6-Stage Root-Cause Audit:</strong> Complete with Fogler Detective Stamp &amp; Markdown download.</li>
               </ul>
             </div>
-            <div class="stage-pill">✓ Persisted anonymously to local SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable</div>
+            <div class="stage-pill">✓ Persisted anonymously to local SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable (Educational Screening Only)</div>
           </div>
 
           <div class="card card-navy">
@@ -1799,6 +1828,7 @@
 
         <div class="stage-pill" data-testid="showcase-engineering-boundary" style="margin-top: 1rem; padding: 0.75rem 1rem; border-left: 3px solid var(--status-warn); font-size: 0.82rem; line-height: 1.55;">
           <strong>Educational &amp; Preliminary Engineering Boundary &amp; Data Privacy:</strong> Calculations use steady-state textbook correlations (DIPPR, Churchill, McCabe-Thiele, Fogler) for undergraduate instruction and preliminary screening — never use them for licensed PE sign-off, API 520/521 relief certification, or HAZOP/SIL safety audits.<br/>
+          <strong>AI Co-Pilot Data Flow:</strong> Interactive sliders and equations run 100% locally in your browser without external calls. When you send a chat message to the AI Co-Pilot (<code>POST /api/copilot</code>), only your prompt text, selected context chips, and current numerical workbench parameters (<code>&lt;current-screen&gt;</code>) are sent to the AI4U.now LLM gateway (<code>gateway.ai4u.now</code>, model <code>gemini-4-argon-low</code>, with zero-network local deterministic fallback if offline); zero personal identifiers are attached and prompts are processed ephemerally without server-side conversation retention.<br/>
           <strong>Practice Points &amp; Data Deletion:</strong> Solving a plant case by scrubbing sliders yourself awards <code>+35 pts</code> (DIY); using Auto-Fix awards <code>+12 pts</code> (Assisted); mastery % is the average across 6 ChE concept domains stored only in your browser's <code>localStorage</code> (reset anytime via <code>↺ Reset Scorecard</code> in the app). Compiled calculation sheets persist anonymously in local SQLite (<code>saved_calculations</code>) and can be deleted anytime in 1 click via <code>🗑️ Delete Saved SQLite Sheets</code> inside the Calc Sheet modal.<br/>
           <strong>Owner &amp; Support Contact:</strong> Maintained by the <strong>AI4U.now Engineering Education Team</strong> · Support, privacy &amp; corrections: <a href="mailto:support@ai4u.now">support@ai4u.now</a> · <a href="https://github.com/ai4U23/ai4UCheE/issues" target="_blank" rel="noreferrer">github.com/ai4U23/ai4UCheE/issues</a>.
         </div>
@@ -1857,43 +1887,53 @@
       en: {
         h1: "ai4UCheE — ChemEng's Intelligent Workbench",
         sub: '6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Plant Problems',
-        nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · EPC Calc Sheet'],
+        nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · Calc Sheet'],
         launch: 'Launch Workbench',
         eyebrows: [
           'Undergraduate Chemical Engineering Studio · Year 2 to Year 4 Progression',
           '15-Second Quick Overview · 1920×1080 · 30 FPS · EN/VI Captions',
           '5 Subject Workbenches + Cross-Subject Charts Verifier',
-          '24 Real-Life Plant Problems · Fogler & LeBlanc 6-Stage Flow',
+          '24 Realistic Composite Plant Cases · Fogler & LeBlanc 6-Stage Flow',
           'White-Box Proofs · Error-Signature Detector · System Topology',
-          'Senior EPC QA/QC Calculation Sheets · AX / GEO Ready'
+          'Preliminary EPC-Style Calculation Sheets (Educational Screening · Not PE Sign-Off)'
         ],
         titles: [
           'Understand the Core Subjects Behind Real Plant Problems',
           '15-Second Quick Overview: 5 Guided Workflow Snapshots',
           'Every Core Chemical Engineering Subject — Interactive & Citation-Backed',
-          'Start from a Real Plant Upset — Not a Disconnected Textbook Formula',
+          'Start from a Realistic Plant Upset — Not a Disconnected Textbook Formula',
           '3-Stage White-Box Proofs & Validated Agent-Native System Architecture',
-          'From Classroom Intuition to Print-Ready EPC Deliverables'
+          'From Classroom Intuition to Preliminary EPC-Style Calculation Sheets'
         ],
         leads: [
           '<strong>ai4UCheE</strong> helps chemical engineering students see why pump cavitation, column flooding, and reactor runaway happen by connecting <strong>real plant symptoms</strong> directly to <strong>governing textbook equations</strong>, <strong>interactive SVG diagrams</strong>, and <strong>step-by-step unit checks</strong>.',
           'A 15-second visual preview of the 5 studio workflow steps — click any 3-second snapshot on the right to jump straight to that moment or read the full transcript below.'
         ],
+        fiveStepBridgeHtml: '<strong>5-Step Learning Path:</strong><div class="step-flow-grid"><div class="step-flow-item"><strong>1. Observe Plant Symptom</strong>Cavitation, 4× ΔP error, column flood, or thermal runaway</div><div class="step-flow-item"><strong>2. Pick Course Subject (Year 2–4)</strong>Thermodynamics → Fluid Mechanics → Separations → Kinetics → Capstone</div><div class="step-flow-item"><strong>3. Inspect Governing Equation</strong>Symbolic law + explicit psig/psia &amp; f_D = 4·f_F unit substitution</div><div class="step-flow-item"><strong>4. Test Fixes on SVG Diagram</strong>Drag operating points &amp; sliders with zero-latency feedback</div><div class="step-flow-item"><strong>5. Check Screening Window</strong>Verify preliminary educational screening &amp; printable summary</div></div>',
+        courseSequenceMapHtml: '<strong>Suggested Undergraduate Course Order (Year 2 → Year 4):</strong><div class="step-flow-grid" style="margin-bottom: 0.45rem;"><div class="step-flow-item"><strong>1. Year 2 · Thermodynamics &amp; Phase Equilibria</strong>Prereq: Material &amp; Energy Balances → Predict boiling points, vapor pressure &amp; VLE phase splits</div><div class="step-flow-item"><strong>2. Year 2/3 · Fluid Mechanics &amp; Hydraulics</strong>Prereq: Thermo I → Size pipes, distinguish Fanning vs. Darcy friction &amp; prevent pump cavitation</div><div class="step-flow-item"><strong>3. Year 3 · Separation Processes</strong>Prereq: Phase Equilibria → Step off McCabe-Thiele stages &amp; check Fair column flooding</div><div class="step-flow-item"><strong>4. Year 3/4 · Reaction Engineering</strong>Prereq: Thermo &amp; Transport → Size CSTR/PFR reactors &amp; screen Semenov thermal stability</div><div class="step-flow-item"><strong>5. Year 4 · Capstone Design &amp; Safety</strong>Prereq: Core ChE Sequence → Run multi-section preliminary equipment &amp; relief checks</div></div><span style="color:var(--ink-muted);"><strong>Textbook Access &amp; Copyright Policy:</strong> ai4UCheE is an independent bibliographic section/page index and deterministic equation solver designed for use alongside your own course textbooks — no copyrighted textbook PDFs or EPUB files are hosted or distributed.</span>',
+        transcriptSummary: 'Transcript / Captions (00:00–00:15 · EN/VI)',
+        transcriptItems: [
+          '<strong>00:00–00:03 · Ch. 1:</strong> Connect real plant symptoms to 6 undergraduate ChE textbooks and 28 calibrated solvers.',
+          '<strong>00:03–00:06 · Ch. 2:</strong> Progress from Year 2 Thermodynamics (DIPPR 101/105) and Fluid Hydraulics (f_D = 4·f_F, NPSHa) to Separations, Kinetics, and the Atlas.',
+          '<strong>00:06–00:09 · Ch. 3:</strong> Diagnose failure modes via the Fogler 6-stage flow (+35 pts DIY / +12 pts Assisted in your local browser practice meter).',
+          '<strong>00:09–00:12 · Ch. 4:</strong> Scrub interactive SVG handles and inspect 3-stage Symbolic → Substituted → Result KaTeX proofs.',
+          '<strong>00:12–00:15 · Ch. 5:</strong> Export 14-field preliminary calculation sheets with explicit psig/psia conversion and switch EN/VI instantaneously.'
+        ],
         monoBadges: [
           '3-Zone Studio Architecture',
           '6 Canonical Reference Textbooks Indexed',
-          'Subject 1 · WB2',
-          'Subject 2 · WB3',
-          'Subject 3 · WB4',
-          'Subject 4 · WB6',
-          'Subject 5 · WB5',
-          'Utility Tool · WB1',
-          '4 Engineering Progression Tiers (24 Problems)',
+          'Subject 1 · WB2 · Year 2 Foundation',
+          'Subject 2 · WB3 · Year 2/3 Transport',
+          'Subject 3 · WB4 · Year 3 Separations',
+          'Subject 4 · WB6 · Year 3/4 Kinetics',
+          'Subject 5 · WB5 · Year 4 Capstone & Safety',
+          'Utility Tool · WB1 · All Years',
+          '4 Engineering Progression Tiers (24 Educational Composite Cases)',
           'Fogler Rule #12 · Hypothesis Falsification Studio',
           'Stage 1 · Symbolic Equation',
           'Stage 2 · Substituted with Units',
           'Stage 3 · Evaluated Result & Citation',
-          'Rev 0 — Issued for Review · SQLite Persisted',
+          'Preliminary Screening Only · Not for Construction or PE Sign-Off',
           'Ready to Solve · Start in 1 Click'
         ],
         heroZones: [
@@ -1902,8 +1942,8 @@
           '<strong>Zone 3 (AI Co-Pilot):</strong> Live <code>&lt;current-screen&gt;</code> sync, <code>+ Ask</code> chips, and natural-language slider mutations.'
         ],
         heroBooks: [
-          "<strong>1. Perry's 9th Ed.</strong><br/>25 Sections · 2,274 pp. PDF<br/><code>[Sec 1–25 + S-P Index]</code>",
-          '<strong>2. Fogler 7th Ed.</strong><br/>Reaction Engineering<br/><code>[19 Ch. EPUB · CSTR/PFR]</code>',
+          "<strong>1. Perry's 9th Ed.</strong><br/>25 Sections · 2,274 pp. Reference<br/><code>[Sec 1–25 + S-P Index]</code>",
+          '<strong>2. Fogler 7th Ed.</strong><br/>Reaction Engineering<br/><code>[19 Ch. Textbook · CSTR/PFR]</code>',
           '<strong>3. BSL Revised 2nd Ed.</strong><br/>Transport Phenomena<br/><code>[Momentum · Heat · Mass]</code>',
           '<strong>4. SVNA 9th Ed.</strong><br/>ChE Thermodynamics<br/><code>[VLE · Cubic EOS · Cycles]</code>',
           '<strong>5. Seader 4th Ed.</strong><br/>Separation Principles<br/><code>[McCabe · Kremser · LLE]</code>',
@@ -1927,7 +1967,7 @@
           'Exact First-Principles Form',
           'Explicit Unit & Datum Guardrails',
           'Deterministic Verdict Badge',
-          'One-Click Senior Engineer Calculation Sheet Compiler',
+          'One-Click Preliminary Calculation Sheet Compiler (14-Field EPC Format)',
           'Explore ai4UCheE Live or Share with Any AI Agent'
         ],
         chapters: [
@@ -1935,15 +1975,15 @@
           ['02 · 00:03 — Dual Persona (Learn ↔ Plant) & 5 Subject Labs', 'Switch between Socratic student coaching and 3-case EPC plant engineering across WB2–WB6.'],
           ['03 · 00:06 — 24 Real-Life Plant Problems & Fogler 6-Stage Detective Board', 'Walk through Observation, K-T IS/IS NOT, Theory, Handbook, and Rule #12 Hypothesis Falsification.'],
           ['04 · 00:09 — Interactive SVG Handle Scrubbing & 3-Stage White-Box Proofs', 'Drag Pump P-101 out of cavitation while inspecting Symbolic → Substituted → Result KaTeX cards.'],
-          ['05 · 00:12 — Point-and-Ask (+ Ask), What-If Mutations & EPC QA/QC Export', 'Attach context chips, mutate sliders in plain English, and export a Rev 0 QA/QC Calculation Sheet.']
+          ['05 · 00:12 — Point-and-Ask (+ Ask), What-If Mutations & EPC QA/QC Export', 'Attach context chips, mutate sliders in plain English, and export a Rev 0 preliminary calculation sheet.']
         ],
         labDescs: [
-          "Exact DIPPR Eq. 101/106 correlations, Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, Peng-Robinson EOS <em>Z(P_r, T_r)</em> dome, and Rankine/Van 't Hoff cycles.",
-          'Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail, 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em>, BSL Non-Newtonian velocity profiles, ISA-75.01 valves, and Bowman <em>F_T</em> heat exchangers.',
-          "Bi-directional 5-handle McCabe-Thiele canvas, Fenske-Underwood-Gilliland shortcuts, Fair's Souders-Brown flooding, Eckert GPDC, Kremser <em>N_OG</em> absorption, and Ternary LLE.",
-          'Interactive Levenspiel CSTR rectangle vs. PFR integral plot, Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; effectiveness <em>η</em>, Semenov thermal runaway S-curve, LHHW &amp; Butler-Volmer.',
-          "Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Unit Conversions &amp; Economics to API 520 Relief Sizing &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274).",
-          'Cross-subject header utility auto-syncing the active lab\'s chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).'
+          'Exact DIPPR Eq. 101/106 correlations (5-parameter pure-component vapor pressure &amp; ΔH_vap), Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, and Peng-Robinson EOS dome. <strong>Prereq:</strong> Material &amp; Energy Balances.',
+          'Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail (Darcy piping factor = 4× Fanning transport factor), 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em> (suction head margin above boiling), and ISA-75.01 valves. <strong>Prereq:</strong> Thermo I.',
+          "Bi-directional 5-handle McCabe-Thiele stage-stepping canvas, Fenske-Underwood-Gilliland shortcuts (minimum stages &amp; pinch reflux <em>R_min</em>), Fair's Souders-Brown flooding, Eckert GPDC, and Kremser <em>N_OG</em> absorption. <strong>Prereq:</strong> Phase Equilibria.",
+          'Interactive Levenspiel plot (<em>-r_A⁻¹</em> vs. <em>X</em> where CSTR is a rectangle and PFR is the integral area), Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; catalyst effectiveness <em>η</em>, and Semenov thermal runaway S-curve. <strong>Prereq:</strong> Thermo &amp; Transport.',
+          "Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Economics Lang factor &amp; Pinch ΔT_min to API 520 Relief Sizing, LOPA safety audits &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274). <strong>Prereq:</strong> Core ChE Sequence.",
+          'Cross-subject header utility auto-syncing the active lab\'s chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov) with white-box analytical telemetry.'
         ],
         openLabBtn: 'Open Lab →',
         openChartsBtn: 'Open Charts →',
@@ -1951,9 +1991,9 @@
           '<strong>Tier L1 · Unit/Concept Trap</strong><br/>Catch 4× Fanning/Darcy &amp; psig/psia datum traps before sizing equipment.',
           '<strong>Tier L2 · Equipment Bottleneck</strong><br/>Resolve Pump P-101 suction cavitation &amp; sieve-tray flooding bottlenecks.',
           '<strong>Tier L3 · Multi-Hypothesis Upset</strong><br/>Diagnose Fogler Ch. 10 Boiler Feedwater Heater drop (70°C → 42°C) with Δt clues.',
-          '<strong>Tier L4 · Coupled Safety/Design</strong><br/>Stabilize Semenov reactor runaway (ψ &gt; 1/e) &amp; API 520 relief sizing.'
+          '<strong>Tier L4 · Coupled Safety/Design</strong><br/>Screen Semenov reactor thermal stability (ψ &gt; 1/e) &amp; preliminary API 520 relief sizing.'
         ],
-        problemCard1Footer: '8 Equipment Categories · 5 Symptom Archetypes · Multi-Student Adaptive Scorecard',
+        problemCard1Footer: '24 Realistic Educational Composite Cases · 8 Equipment Categories · 5 Symptom Archetypes · Local Browser Practice Scorecard',
         foglerList: [
           '<strong>Stage 1 · Problem Observation:</strong> Inspect Normal vs. Faulty plant telemetry &amp; <code>Δt</code> temporal clues.',
           '<strong>Stage 2 · Problem Definition:</strong> Kepner-Tregoe <code>IS / IS NOT</code> matrix &amp; Real Root Problem statement.',
@@ -1963,68 +2003,84 @@
           '<strong>Stage 6 · Actual Solution Verified:</strong> Restore safe plant margins &amp; earn a <code>FOG-WB*-DIY-XXXXXX</code> stamp.'
         ],
         foglerFooterPill: '✓ DIY Solve (+35 pts Practice Score) · Socratic Hint · Auto-Fix Rescue (+12 pts Assisted · Local Browser Demo)',
+        whiteboxStagePills: [
+          'f_D = 4 · f_F &nbsp;|&nbsp; NPSH_A = (P_suc,abs - P_vp)/(ρg) + z_s - h_f,s',
+          'P_suc,abs = 15.0 psig + 14.696 psi = 29.70 psia · T = 373.15 K',
+          "NPSH_A = 21.82 m ≥ NPSH_R (3.0 m) → Preliminary Screening Pass (Steady-State Textbook Basis · Not PE Sign-Off) [Perry's 9e p. 10-28]"
+        ],
         whiteboxDescs: [
           'Every equation states its symbol basis and textbook equation number before any numbers are plugged in.',
           'Automatic ChE Error-Signature Detector flags <code>4×</code> Fanning/Darcy, <code>±14.7 psi</code> gauge/abs, <code>±273.15</code> K/°C, and <code>2.303×</code> ln/log10 mistakes.',
-          'Click <code>Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.'
+          'Click <code>Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof and its model assumptions straight into the AI Co-Pilot.'
         ],
-        calcIntro: 'Click <code>Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:',
+        calcIntro: 'Click <code>Calc Sheet</code> in the studio header to compile a structured preliminary screening sheet containing:',
         calcBullets: [
-          '<strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Revision <code>Rev 0</code>, and Basis of Design.',
-          '<strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief cases.',
+          '<strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Preliminary Screening Revision, and Textbook Basis of Design.',
+          '<strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief screening cases.',
           '<strong>3-Stage White-Box Derivations &amp; 6-Stage Root-Cause Audit:</strong> Complete with Fogler Detective Stamp &amp; Markdown download.'
         ],
-        calcPill: '✓ Persisted to SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable',
+        calcPill: '✓ Persisted anonymously to local SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable (Educational Screening Only)',
         axLead: 'Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>Share / AI</code> menu for ChatGPT, Claude, and Perplexity.',
         ctaButtons: [
           'Open Interactive Workbench (/app)',
           'View Markdown Twin (/index.md)',
           'Read /llms-full.txt'
         ],
+        engineeringBoundaryHtml: '<strong>Educational &amp; Preliminary Engineering Boundary &amp; Data Privacy:</strong> Calculations use steady-state textbook correlations (DIPPR, Churchill, McCabe-Thiele, Fogler) for undergraduate instruction and preliminary screening — never use them for licensed PE sign-off, API 520/521 relief certification, or HAZOP/SIL safety audits.<br/><strong>AI Co-Pilot Data Flow:</strong> Interactive sliders and equations run 100% locally in your browser without external calls. When you send a chat message to the AI Co-Pilot (<code>POST /api/copilot</code>), only your prompt text, selected context chips, and current numerical workbench parameters (<code>&lt;current-screen&gt;</code>) are sent to the AI4U.now LLM gateway (<code>gateway.ai4u.now</code>, model <code>gemini-4-argon-low</code>, with zero-network local deterministic fallback if offline); zero personal identifiers are attached and prompts are processed ephemerally without server-side conversation retention.<br/><strong>Practice Points &amp; Data Deletion:</strong> Solving a plant case by scrubbing sliders yourself awards <code>+35 pts</code> (DIY); using Auto-Fix awards <code>+12 pts</code> (Assisted); mastery % is the average across 6 ChE concept domains stored only in your browser\'s <code>localStorage</code> (reset anytime via <code>↺ Reset Scorecard</code> in the app). Compiled calculation sheets persist anonymously in local SQLite (<code>saved_calculations</code>) and can be deleted anytime in 1 click via <code>🗑️ Delete Saved SQLite Sheets</code> inside the Calc Sheet modal.<br/><strong>Owner &amp; Support Contact:</strong> Maintained by the <strong>AI4U.now Engineering Education Team</strong> · Support, privacy &amp; corrections: <a href="mailto:support@ai4u.now">support@ai4u.now</a> · <a href="https://github.com/ai4U23/ai4UCheE/issues" target="_blank" rel="noreferrer">github.com/ai4U23/ai4UCheE/issues</a>.',
         footerStrong: 'References & Canonical Textbook Citations (ai4UCheE · https://chemeng.ai4u.now)',
         diagTitle: 'ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture<span class="ak-diagram-subtitle"> - 6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional &lt;current-screen&gt; Co-Pilot</span>',
         diagSearch: 'Search (/)'
       },
       vi: {
         h1: 'ai4UCheE — Bàn làm việc Kỹ thuật Hóa học Thông minh',
-        sub: '6 Giáo trình Chuẩn ChE · 55+ Giản đồ SVG Tương tác · 24 Sự cố Nhà máy Thực tế',
-        nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính EPC'],
+        sub: '6 Giáo trình Chuẩn ChE · 55+ Giản đồ SVG Tương tác · 24 Sự cố Nhà máy Tổng hợp',
+        nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính Sơ bộ'],
         launch: 'Mở Phòng Thí Nghiệm',
         eyebrows: [
           'Phòng Thí Nghiệm Kỹ Thuật Hóa Học Đại Học · Lộ Trình Năm 2 đến Năm 4',
           'Tổng Quan Nhanh 15 Giây · 1920×1080 · 30 FPS · Phụ đề EN/VI',
           '5 Phòng Lab Chuyên ngành + Trình kiểm tra Giản đồ Hiệu chuẩn',
-          '24 Sự cố Nhà máy Thực tế · Quy trình 6 Bước Fogler & LeBlanc',
+          '24 Tình huống Nhà máy Tổng hợp Sát thực tế · Quy trình 6 Bước Fogler & LeBlanc',
           'Chứng minh White-Box · Phát hiện Bẫy Đơn vị · Kiến trúc Hệ thống',
-          'Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC) · Chuẩn AX / GEO'
+          'Phiếu Tính Sàng lọc Sơ bộ Định dạng EPC (Phục vụ Đào tạo · Không thay thế Phê duyệt PE)'
         ],
         titles: [
           'Hiểu Rõ Các Học Phần Cốt Lõi Đằng Sau Sự Cố Nhà Máy Thực Tế',
           'Tổng Quan Nhanh 15 Giây: 5 Bước Thao Tác Trực Quan',
           'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản',
-          'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc',
+          'Bắt đầu từ Tình huống Sự cố Nhà máy — Không chỉ là Công thức Rời rạc',
           'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native',
-          'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC)'
+          'Từ Trực giác Sinh viên đến Phiếu Tính Sàng lọc Sơ bộ Định dạng EPC'
         ],
         leads: [
-          '<strong>ai4UCheE</strong> giúp sinh viên Kỹ thuật Hóa học hiểu rõ nguyên nhân xâm thực bơm, ngập lụt tháp chưng cất và thoát nhiệt lò phản ứng bằng cách kết nối <strong>triệu chứng nhà máy thực tế</strong> với <strong>phương trình giáo trình</strong>, <strong>giản đồ SVG tương tác</strong> và <strong>kiểm tra đơn vị từng bước</strong>.',
-          'Video tóm tắt trực quan dài 15 giây về 5 bước thao tác — bấm vào bất kỳ phân đoạn 3 giây nào bên phải để xem ngay hoặc đọc toàn bộ phụ đề bên dưới.'
+          '<strong>ai4UCheE</strong> giúp sinh viên Kỹ thuật Hóa học hiểu rõ nguyên nhân xâm thực bơm, ngập lụt tháp chưng cất và thoát nhiệt lò phản ứng bằng cách kết nối <strong>triệu chứng nhà máy sát thực tế</strong> với <strong>phương trình giáo trình</strong>, <strong>giản đồ SVG tương tác</strong> và <strong>kiểm tra đơn vị từng bước</strong>.',
+          'Video tóm tắt trực quan dài 15 giây về 5 bước thao tác — bấm vào bất kỳ phân đoạn 3 giây nào bên phải để xem ngay hoặc đọc toàn bộ phụ đề tiếng Việt bên dưới.'
+        ],
+        fiveStepBridgeHtml: '<strong>Lộ trình Học tập 5 Bước:</strong><div class="step-flow-grid"><div class="step-flow-item"><strong>1. Quan sát Triệu chứng Nhà máy</strong>Xâm thực bơm, sai số ΔP gấp 4×, ngập lụt tháp hoặc thoát nhiệt lò phản ứng</div><div class="step-flow-item"><strong>2. Chọn Học phần (Năm 2–4)</strong>Nhiệt động học → Cơ học Lưu chất → Quá trình Tách → Động học → Đồ án Thiết kế</div><div class="step-flow-item"><strong>3. Kiểm tra Phương trình Chi phối</strong>Công thức ký hiệu + thay số tường minh psig/psia &amp; f_D = 4·f_F</div><div class="step-flow-item"><strong>4. Thử nghiệm trên Giản đồ SVG</strong>Kéo điểm làm việc &amp; thanh trượt với phản hồi tức thì</div><div class="step-flow-item"><strong>5. Kiểm tra Vùng Sàng lọc Sơ bộ</strong>Xác nhận kết quả sàng lọc giáo dục sơ bộ &amp; xuất bản tóm tắt</div></div>',
+        courseSequenceMapHtml: '<strong>Thứ tự Học phần Đại học Đề xuất (Năm 2 → Năm 4):</strong><div class="step-flow-grid" style="margin-bottom: 0.45rem;"><div class="step-flow-item"><strong>1. Năm 2 · Nhiệt động học &amp; Cân bằng Pha</strong>Tiên quyết: Cân bằng Vật chất &amp; Năng lượng → Dự đoán điểm sôi, áp suất hơi &amp; cân bằng pha VLE</div><div class="step-flow-item"><strong>2. Năm 2/3 · Cơ học Lưu chất &amp; Thủy lực</strong>Tiên quyết: Nhiệt động I → Tính đường ống, phân biệt ma sát Fanning vs. Darcy &amp; chống xâm thực bơm</div><div class="step-flow-item"><strong>3. Năm 3 · Quá trình &amp; Thiết bị Tách</strong>Tiên quyết: Cân bằng Pha → Vẽ bậc McCabe-Thiele &amp; kiểm tra ngập lụt tháp Fair</div><div class="step-flow-item"><strong>4. Năm 3/4 · Kỹ thuật Phản ứng &amp; Động học</strong>Tiên quyết: Nhiệt động &amp; Truyền vận → Tính thể tích CSTR/PFR &amp; sàng lọc ổn định nhiệt Semenov</div><div class="step-flow-item"><strong>5. Năm 4 · Thiết kế Quá trình &amp; An toàn</strong>Tiên quyết: Chuỗi học phần cơ sở ngành → Kiểm tra sơ bộ liên chương thiết bị &amp; van an toàn</div></div><span style="color:var(--ink-muted);"><strong>Chính sách Truy cập Giáo trình &amp; Bản quyền:</strong> ai4UCheE là chỉ mục chương/trang độc lập và bộ giải phương trình tất định dùng kèm giáo trình trên lớp — không lưu trữ hay phân phối tệp PDF/EPUB có bản quyền.</span>',
+        transcriptSummary: 'Phụ đề / Bản gỡ băng Video (00:00–00:15 · Tiếng Việt)',
+        transcriptItems: [
+          '<strong>00:00–00:03 · Phần 1:</strong> Kết nối triệu chứng nhà máy với 6 giáo trình Kỹ thuật Hóa học đại học và 28 bộ giải hiệu chuẩn.',
+          '<strong>00:03–00:06 · Phần 2:</strong> Đi theo lộ trình từ Nhiệt động học Năm 2 (DIPPR 101/105) và Thủy lực (f_D = 4·f_F, NPSHa) đến Quá trình Tách, Động học và Atlas.',
+          '<strong>00:06–00:09 · Phần 3:</strong> Chẩn đoán nguyên nhân sự cố qua quy trình 6 bước Fogler (+35 điểm Tự giải / +12 điểm Có gợi ý lưu cục bộ trên trình duyệt).',
+          '<strong>00:09–00:12 · Phần 4:</strong> Kéo điểm nút đồ thị SVG tương tác và kiểm tra chứng minh KaTeX 3 bước Ký hiệu → Thay số → Kết quả.',
+          '<strong>00:12–00:15 · Phần 5:</strong> Xuất phiếu tính sàng lọc sơ bộ 14 trường với quy đổi psig/psia tường minh và chuyển đổi ngôn ngữ Anh/Việt tức thì.'
         ],
         monoBadges: [
           'Kiến trúc Studio AI-Native 3 Vùng',
           '6 Giáo trình Kỹ thuật Hóa học Chuẩn Được Lập Chỉ mục',
-          'Học phần 1 · WB2',
-          'Học phần 2 · WB3',
-          'Học phần 3 · WB4',
-          'Học phần 4 · WB6',
-          'Học phần 5 · WB5',
-          'Công cụ Tiện ích · WB1',
-          '4 Cấp độ Sự cố Kỹ thuật (24 Bài toán Nhà máy)',
+          'Học phần 1 · WB2 · Nền tảng Năm 2',
+          'Học phần 2 · WB3 · Truyền vận Năm 2/3',
+          'Học phần 3 · WB4 · Quá trình Tách Năm 3',
+          'Học phần 4 · WB6 · Động học Năm 3/4',
+          'Học phần 5 · WB5 · Đồ án & An toàn Năm 4',
+          'Công cụ Tiện ích · WB1 · Mọi Năm học',
+          '4 Cấp độ Kỹ thuật (24 Tình huống Tổng hợp Đào tạo)',
           'Quy tắc Fogler #12 · Phòng thí nghiệm Bác bỏ Giả thuyết',
           'Bước 1 · Phương trình Ký hiệu',
           'Bước 2 · Thay số kèm Đơn vị',
           'Bước 3 · Kết quả Đánh giá & Trích dẫn',
-          'Rev 0 — Ban hành Kiểm định · Lưu trữ SQLite',
+          'Chỉ Sàng lọc Giáo dục Sơ bộ · Không dùng Thi công hay Phê duyệt PE',
           'Sẵn sàng Giải quyết · Bắt đầu với 1 Cú Nhấp'
         ],
         heroZones: [
@@ -2033,8 +2089,8 @@
           '<strong>Vùng 3 (Trợ lý AI Co-Pilot):</strong> Đồng bộ <code>&lt;current-screen&gt;</code> thời gian thực, gắn thẻ ngữ cảnh <code>+ Hỏi</code> và điều chỉnh thanh trượt bằng ngôn ngữ tự nhiên.'
         ],
         heroBooks: [
-          "<strong>1. Perry's 9th Ed.</strong><br/>25 Chương · 2.274 tr. PDF<br/><code>[Chương 1–25 + Chỉ mục S-P]</code>",
-          '<strong>2. Fogler 7th Ed.</strong><br/>Kỹ thuật Phản ứng Hóa học<br/><code>[19 Chương EPUB · CSTR/PFR]</code>',
+          "<strong>1. Perry's 9th Ed.</strong><br/>25 Chương · 2.274 tr. Sách chuẩn<br/><code>[Chương 1–25 + Chỉ mục S-P]</code>",
+          '<strong>2. Fogler 7th Ed.</strong><br/>Kỹ thuật Phản ứng Hóa học<br/><code>[19 Chương Giáo trình · CSTR/PFR]</code>',
           '<strong>3. BSL Revised 2nd Ed.</strong><br/>Các Hiện tượng Truyền vận<br/><code>[Động lượng · Nhiệt · Khối]</code>',
           '<strong>4. SVNA 9th Ed.</strong><br/>Nhiệt động học Kỹ thuật Hóa học<br/><code>[VLE · Phương trình EOS · Chu trình]</code>',
           '<strong>5. Seader 4th Ed.</strong><br/>Nguyên lý Quá trình Tách<br/><code>[McCabe · Kremser · Trích ly LLE]</code>',
@@ -2058,22 +2114,22 @@
           'Dạng Phương trình Nguyên lý Cơ bản Chính xác',
           'Cảnh báo Tự động Bẫy Đơn vị & Hệ quy chiếu Áp suất',
           'Nhãn Kết luận Kiểm định Tất định',
-          'Trình Biên dịch Bản tính Kỹ sư Trưởng (EPC) Chỉ với 1 Cú Nhấp',
+          'Trình Biên dịch Phiếu Tính Sàng lọc Sơ bộ (14 Trường Định dạng EPC)',
           'Khám phá ai4UCheE Trực tiếp hoặc Chia sẻ với Bất kỳ AI Agent Nào'
         ],
         chapters: [
           ['01 · 00:00 — Kiến trúc Studio 3 Vùng ("1 Thanh · 1 Đồ thị · 1 Trợ lý AI")', 'Tổng quan Thanh điều khiển trên cùng, Không gian Đồ thị SVG tương tác và Ngăn Trợ lý AI Co-Pilot.'],
-          ['02 · 00:03 — Chế độ Kép (Học tập ↔ Nhà máy) & 5 Phòng Lab', 'Chuyển đổi giữa chế độ gia sư Socratic cho sinh viên và bảng thiết kế EPC 3 chế độ qua WB2–WB6.'],
+          ['02 · 00:03 — Chế độ Kép (Học tập ↔ Nhà máy) & 5 Phòng Lab', 'Chuyển đổi giữa chế độ gia sư Socratic cho sinh viên và bảng thiết kế 3 chế độ qua WB2–WB6.'],
           ['03 · 00:06 — 24 Sự cố Nhà máy Thực tế & Bảng Điều tra 6 Bước Fogler', 'Thực hành Quan sát, Phân tích K-T IS/IS NOT, Lý thuyết, Sổ tay và Kiểm định Giả thuyết (Quy tắc #12).'],
           ['04 · 00:09 — Kéo Điểm Nút Đồ thị SVG & Chứng minh White-Box 3 Bước', 'Kéo bơm P-101 thoát khỏi vùng xâm thực đồng thời kiểm tra thẻ phương trình Ký hiệu → Thay số → Kết quả.'],
-          ['05 · 00:12 — Thẻ + Hỏi, Giả lập What-If & Xuất Bản tính QA/QC EPC', 'Gắn thẻ ngữ cảnh, ra lệnh chỉnh thanh trượt bằng tiếng Việt/Anh và xuất Bản tính Kiểm định QA/QC Rev 0.']
+          ['05 · 00:12 — Thẻ + Hỏi, Giả lập What-If & Xuất Phiếu Tính Sơ bộ', 'Gắn thẻ ngữ cảnh, ra lệnh chỉnh thanh trượt bằng tiếng Việt/Anh và xuất Phiếu tính Sàng lọc Sơ bộ.']
         ],
         labDescs: [
-          'Tương quan chính xác DIPPR Eq. 101/106, cây quyết định mô hình Carlson, giản đồ đẳng phí VLE 2 cấu tử <em>T-x-y</em>, vòm Peng-Robinson <em>Z(P_r, T_r)</em> và chu trình Rankine/Van \'t Hoff.',
-          'Tính toán ống thương mại Sch 40/80, cảnh báo tường minh <em>f_D = 4·f_F</em>, kiểm tra xâm thực bơm <em>NPSH_A</em> vs. <em>NPSH_R</em>, lưu biến phi Newton BSL, van ISA-75.01 và trao đổi nhiệt Bowman <em>F_T</em>.',
-          'Đồ thị McCabe-Thiele 5 điểm kéo hai chiều, công thức Fenske-Underwood-Gilliland, ngập lụt Fair Souders-Brown, Eckert GPDC, hấp thụ Kremser <em>N_OG</em> và trích ly lỏng-lỏng tam giác.',
-          'Đồ thị Levenspiel so sánh CSTR và PFR, độ sụt áp lớp xúc tác Ergun PBR, mô-đun Thiele <em>φ</em> &amp; hệ số hữu hiệu <em>η</em>, đường cong chữ S thoát nhiệt Semenov, động học LHHW &amp; điện hóa Butler-Volmer.',
-          'Bộ giải đồ thị SVG tương tác riêng cho toàn bộ 25 chương của <em>Perry 9th Ed.</em> (từ Quy đổi đơn vị &amp; Kinh tế đến Van an toàn API 520 &amp; Ăn mòn PREN) kèm Chỉ mục cuối sách (tr. 2244–2274).',
+          'Tương quan chính xác DIPPR Eq. 101/106 (áp suất hơi 5 tham số &amp; nhiệt hóa hơi ΔH_vap), cây quyết định mô hình Carlson, giản đồ đẳng phí VLE 2 cấu tử <em>T-x-y</em> và vòm Peng-Robinson. <strong>Tiên quyết:</strong> Cân bằng Vật chất &amp; Năng lượng.',
+          'Tính toán ống thương mại Sch 40/80, cảnh báo tường minh <em>f_D = 4·f_F</em> (hệ số Darcy đường ống gấp 4× hệ số Fanning), kiểm tra xâm thực bơm <em>NPSH_A</em> vs. <em>NPSH_R</em> (cột áp hút dự trữ trên điểm sôi) và van ISA-75.01. <strong>Tiên quyết:</strong> Nhiệt động I.',
+          'Đồ thị McCabe-Thiele 5 điểm kéo hai chiều, công thức Fenske-Underwood-Gilliland (số bậc tối thiểu &amp; hồi lưu tối thiểu <em>R_min</em>), ngập lụt Fair Souders-Brown, Eckert GPDC và hấp thụ Kremser <em>N_OG</em>. <strong>Tiên quyết:</strong> Cân bằng Pha.',
+          'Đồ thị Levenspiel (<em>-r_A⁻¹</em> theo <em>X</em> với CSTR là hình chữ nhật và PFR là diện tích tích phân), độ sụt áp Ergun PBR, mô-đun Thiele <em>φ</em> &amp; hệ số hữu hiệu <em>η</em>, và đường cong chữ S thoát nhiệt Semenov. <strong>Tiên quyết:</strong> Nhiệt động &amp; Truyền vận.',
+          'Bộ giải đồ thị SVG tương tác riêng cho toàn bộ 25 chương của <em>Perry 9th Ed.</em> (từ Kinh tế hệ số Lang &amp; Pinch ΔT_min đến Van an toàn API 520, LOPA &amp; Ăn mòn PREN) kèm Chỉ mục cuối sách (tr. 2244–2274). <strong>Tiên quyết:</strong> Chuỗi học phần cơ sở ngành.',
           'Công cụ tra cứu giản đồ tự động đồng bộ theo phòng Lab đang mở (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Cầu rơi, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).'
         ],
         openLabBtn: 'Mở Phòng Lab →',
@@ -2082,9 +2138,9 @@
           '<strong>Cấp L1 · Bẫy Đơn vị / Khái niệm</strong><br/>Phát hiện bẫy hệ số 4× Fanning/Darcy &amp; chuẩn áp suất psig/psia trước khi tính chọn thiết bị.',
           '<strong>Cấp L2 · Điểm Nghẽn Thiết bị</strong><br/>Khắc phục xâm thực cửa hút bơm P-101 &amp; ngập lụt đĩa lỗ tháp chưng luyện.',
           '<strong>Cấp L3 · Sự cố Đa Giả thuyết</strong><br/>Chẩn đoán sụt nhiệt độ gia nhiệt nước cấp lò hơi Fogler Ch. 10 (70°C → 42°C) với manh mối thời gian Δt.',
-          '<strong>Cấp L4 · Nguy cơ An toàn / Thiết kế Ghép nối</strong><br/>Ổn định thoát nhiệt lò phản ứng Semenov (ψ &gt; 1/e) &amp; tính chọn van xả áp API 520.'
+          '<strong>Cấp L4 · Nguy cơ An toàn / Thiết kế Ghép nối</strong><br/>Sàng lọc ổn định nhiệt lò phản ứng Semenov (ψ &gt; 1/e) &amp; tính chọn sơ bộ van xả áp API 520.'
         ],
-        problemCard1Footer: '8 Nhóm Thiết bị · 5 Mẫu Triệu chứng · Bảng Điểm Thích ứng Đa Sinh viên',
+        problemCard1Footer: '24 Tình huống Tổng hợp Sát thực tế · 8 Nhóm Thiết bị · 5 Mẫu Triệu chứng · Bảng Điểm Luyện tập Trình duyệt Cục bộ',
         foglerList: [
           '<strong>Bước 1 · Quan sát Sự cố:</strong> Đối chiếu thông số vận hành Bình thường vs. Sự cố &amp; manh mối thời gian <code>Δt</code>.',
           '<strong>Bước 2 · Xác định Vấn đề:</strong> Lập ma trận Kepner-Tregoe <code>LÀ / KHÔNG LÀ</code> &amp; phát biểu đúng nguyên nhân gốc.',
@@ -2094,24 +2150,30 @@
           '<strong>Bước 6 · Nghiệm thu Giải pháp Thực tế:</strong> Khôi phục biên độ vận hành an toàn &amp; nhận dấu kiểm định <code>FOG-WB*-DIY-XXXXXX</code>.'
         ],
         foglerFooterPill: '✓ Tự Giải DIY (+35 điểm Luyện tập) · Gợi ý Socratic · Tự động Khắc phục (+12 điểm Gợi ý · Trình duyệt Cục bộ)',
+        whiteboxStagePills: [
+          'f_D = 4 · f_F &nbsp;|&nbsp; NPSH_A = (P_suc,abs - P_vp)/(ρg) + z_s - h_f,s',
+          'P_suc,abs = 15,0 psig + 14,696 psi = 29,70 psia · T = 373,15 K',
+          "NPSH_A = 21,82 m ≥ NPSH_R (3,0 m) → Đạt Sàng lọc Sơ bộ (Cơ sở Giáo trình Trạng thái Ổn định · Không thay thế Phê duyệt PE) [Perry's 9e tr. 10-28]"
+        ],
         whiteboxDescs: [
           'Mọi phương trình đều nêu rõ ký hiệu cơ sở và số hiệu phương trình giáo trình trước khi thay bất kỳ con số nào.',
           'Bộ phát hiện bẫy sai số ChE tự động cảnh báo nhầm lẫn <code>4×</code> Fanning/Darcy, <code>±14,7 psi</code> áp suất dư/tuyệt đối, <code>±273,15</code> K/°C và <code>2,303×</code> ln/log10.',
-          'Bấm <code>Trích dẫn Lý thuyết Bước 3</code> hoặc <code>+ Hỏi</code> trên bất kỳ thẻ nào để gửi toàn bộ chứng minh sang Trợ lý AI Co-Pilot.'
+          'Bấm <code>Trích dẫn Lý thuyết Bước 3</code> hoặc <code>+ Hỏi</code> trên bất kỳ thẻ nào để gửi toàn bộ chứng minh và giả thiết mô hình sang Trợ lý AI Co-Pilot.'
         ],
-        calcIntro: 'Bấm <code>Bản tính</code> trên thanh tiêu đề để biên dịch hồ sơ kiểm định QA/QC hoàn chỉnh gồm:',
+        calcIntro: 'Bấm <code>Bản tính</code> trên thanh tiêu đề để biên dịch phiếu tính sàng lọc sơ bộ 14 trường gồm:',
         calcBullets: [
-          '<strong>Tiêu đề Kiểm soát Tài liệu:</strong> Mã thiết bị (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Phiên bản <code>Rev 0</code> và Cơ sở Thiết kế.',
-          '<strong>Ma trận Vận hành 3 Chế độ:</strong> 70% Giảm tải (Turndown), 100% Bình thường và 120% Thiết kế / Xả áp.',
+          '<strong>Tiêu đề Kiểm soát Tài liệu:</strong> Mã thiết bị (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Phiên bản Sàng lọc Sơ bộ và Cơ sở Giáo trình.',
+          '<strong>Ma trận Vận hành 3 Chế độ:</strong> 70% Giảm tải (Turndown), 100% Bình thường và 120% Thiết kế / Xả áp sơ bộ.',
           '<strong>Chứng minh White-Box 3 Bước &amp; Kiểm toán Nguyên nhân Gốc 6 Bước:</strong> Đầy đủ dấu chứng nhận Điều tra viên Fogler &amp; xuất tệp Markdown.'
         ],
-        calcPill: '✓ Lưu trữ bền vững vào SQLite <code>saved_calculations</code> · Sẵn sàng In ấn &amp; Xuất Markdown',
+        calcPill: '✓ Lưu trữ ẩn danh vào SQLite cục bộ <code>saved_calculations</code> · Sẵn sàng In ấn &amp; Xuất Markdown (Chỉ Sàng lọc Giáo dục Sơ bộ)',
         axLead: 'Tích hợp đầy đủ bề mặt khám phá AI-Experience (AX) (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) và menu <code>Chia sẻ / AI</code> cho ChatGPT, Claude và Perplexity.',
         ctaButtons: [
           'Mở Phòng Thí Nghiệm Tương Tác (/app?lang=vi)',
           'Xem Bản Sao Markdown (/index.md)',
           'Đọc /llms-full.txt'
         ],
+        engineeringBoundaryHtml: '<strong>Ranh giới Giáo dục &amp; Kỹ thuật Sơ bộ &amp; Quyền riêng tư Dữ liệu:</strong> Các phép tính sử dụng tương quan giáo trình trạng thái ổn định (DIPPR, Churchill, McCabe-Thiele, Fogler) phục vụ giảng dạy đại học và sàng lọc sơ bộ — tuyệt đối không dùng để phê duyệt Kỹ sư Chuyên nghiệp (PE), chứng nhận van an toàn API 520/521 hay kiểm định an toàn HAZOP/SIL.<br/><strong>Luồng Dữ liệu Trợ lý AI Co-Pilot:</strong> Các thanh trượt và phương trình chạy 100% cục bộ trên trình duyệt của bạn. Khi bạn gửi câu hỏi cho Trợ lý AI Co-Pilot (<code>POST /api/copilot</code>), chỉ nội dung câu hỏi, thẻ ngữ cảnh đã chọn và thông số số học hiện tại (<code>&lt;current-screen&gt;</code>) được gửi tới cổng LLM AI4U.now (<code>gateway.ai4u.now</code>, mô hình <code>gemini-4-argon-low</code>, có bộ giải tất định cục bộ dự phòng khi ngoại tuyến); không đính kèm định danh cá nhân và câu hỏi được xử lý tạm thời không lưu lịch sử hội thoại trên máy chủ.<br/><strong>Điểm Luyện tập &amp; Xóa Dữ liệu:</strong> Tự kéo thanh trượt giải sự cố nhận <code>+35 điểm</code> (Tự giải DIY); dùng Tự động sửa nhận <code>+12 điểm</code> (Có gợi ý); % thành thạo là trung bình qua 6 lĩnh vực ChE chỉ lưu trong <code>localStorage</code> trình duyệt của bạn (đặt lại bất kỳ lúc nào qua nút <code>↺ Đặt lại Điểm</code>). Phiếu tính biên dịch được lưu ẩn danh trong SQLite cục bộ (<code>saved_calculations</code>) và có thể xóa sạch chỉ với 1 cú nhấp qua nút <code>🗑️ Xóa Phiếu tính SQLite đã lưu</code>.<br/><strong>Đơn vị Chủ quản &amp; Liên hệ Hỗ trợ:</strong> Vận hành bởi <strong>Nhóm Giáo dục Kỹ thuật AI4U.now</strong> · Hỗ trợ, quyền riêng tư &amp; góp ý hiệu đính: <a href="mailto:support@ai4u.now">support@ai4u.now</a> · <a href="https://github.com/ai4U23/ai4UCheE/issues" target="_blank" rel="noreferrer">github.com/ai4U23/ai4UCheE/issues</a>.',
         footerStrong: 'Tài liệu Tham khảo & Giáo trình Chuẩn Kỹ thuật Hóa học (ai4UCheE · https://chemeng.ai4u.now)',
         diagTitle: 'ai4UCheE — Kiến trúc Studio Kỹ thuật Hóa học AI-Native 3 Vùng<span class="ak-diagram-subtitle"> - 6 Giáo trình Chuẩn · Bộ giải Tất định Python/TS · Đồng bộ Hai chiều &lt;current-screen&gt;</span>',
         diagSearch: 'Tìm kiếm sơ đồ (/)'
@@ -2119,6 +2181,22 @@
     };
     function setShowcaseLocale(loc, persistStorage) {
       var l = loc === 'vi' ? 'vi' : 'en';
+      var anchorTarget = null;
+      if (persistStorage !== false && typeof window !== 'undefined') {
+        if (window.location.hash && window.location.hash.length > 1) {
+          anchorTarget = document.querySelector(window.location.hash);
+        }
+        if (!anchorTarget && window.scrollY > 120) {
+          var secs = document.querySelectorAll('.showcase-section');
+          for (var si = 0; si < secs.length; si++) {
+            var rect = secs[si].getBoundingClientRect();
+            if (rect.top <= 160 && rect.bottom > 160) {
+              anchorTarget = secs[si];
+              break;
+            }
+          }
+        }
+      }
       document.documentElement.setAttribute('lang', l);
       document.documentElement.setAttribute('data-locale', l);
       if (persistStorage !== false) {
@@ -2130,7 +2208,7 @@
       var descMeta = document.querySelector('meta[name="description"]');
       if (descMeta) {
         descMeta.setAttribute('content', l === 'vi'
-          ? 'Thực hành Kỹ thuật Hóa học đại học (Nhiệt động học Năm 2, Cơ học Lưu chất, Quá trình Tách, Kỹ thuật Phản ứng và Thiết kế Quá trình) bằng cách kết nối sự cố nhà máy thực tế với phương trình giáo trình và giản đồ tương tác.'
+          ? 'Thực hành Kỹ thuật Hóa học đại học (Nhiệt động học Năm 2, Cơ học Lưu chất, Quá trình Tách, Kỹ thuật Phản ứng và Thiết kế Quá trình) bằng cách kết nối sự cố nhà máy tổng hợp sát thực tế với phương trình giáo trình và giản đồ tương tác.'
           : 'Practice undergraduate chemical engineering (Year 2 Thermodynamics, Fluid Mechanics, Separations, Reaction Engineering, and Process Design) by connecting real plant problems to governing equations and interactive diagrams.');
       }
       var ogLocaleMeta = document.querySelector('meta[property="og:locale"]');
@@ -2157,6 +2235,35 @@
       c.titles.forEach(function(txt, i) { if (titles[i]) titles[i].textContent = txt; });
       var leads = document.querySelectorAll('.section-lead');
       c.leads.forEach(function(html, i) { if (leads[i]) leads[i].innerHTML = html; });
+      var fiveStepEl = document.querySelector('[data-testid="five-step-story-bridge"]');
+      if (fiveStepEl && c.fiveStepBridgeHtml) fiveStepEl.innerHTML = c.fiveStepBridgeHtml;
+      var courseMapEl = document.querySelector('[data-testid="course-sequence-map"]');
+      if (courseMapEl && c.courseSequenceMapHtml) courseMapEl.innerHTML = c.courseSequenceMapHtml;
+      var trSummaryEl = document.querySelector('[data-testid="showcase-video-transcript"] > summary');
+      if (trSummaryEl && c.transcriptSummary) trSummaryEl.textContent = c.transcriptSummary;
+      var trLis = document.querySelectorAll('[data-testid="showcase-video-transcript"] ol li');
+      if (c.transcriptItems) {
+        c.transcriptItems.forEach(function(html, i) { if (trLis[i]) trLis[i].innerHTML = html; });
+      }
+      var vidEl = document.getElementById('guide-video-el');
+      if (vidEl) {
+        vidEl.setAttribute('aria-label', l === 'vi'
+          ? 'Video tổng quan 15 giây về bàn làm việc kỹ thuật hóa học có phụ đề Việt/Anh'
+          : '15-second chemical engineering workbench overview video with English and Vietnamese captions');
+        var tracks = vidEl.querySelectorAll('track');
+        tracks.forEach(function(tr) {
+          var srclang = tr.getAttribute('srclang');
+          if (srclang === l) tr.setAttribute('default', '');
+          else tr.removeAttribute('default');
+        });
+        if (vidEl.textTracks && vidEl.textTracks.length) {
+          for (var ti = 0; ti < vidEl.textTracks.length; ti++) {
+            var tt = vidEl.textTracks[ti];
+            if (tt.language === l) tt.mode = 'showing';
+            else if (tt.mode === 'showing') tt.mode = 'disabled';
+          }
+        }
+      }
       var badges = document.querySelectorAll('.mono-badge');
       c.monoBadges.forEach(function(txt, i) { if (badges[i]) badges[i].textContent = txt; });
       var heroLis = document.querySelectorAll('#hero .card-navy ul li');
@@ -2194,6 +2301,10 @@
       c.foglerList.forEach(function(html, i) { if (foglerLis[i]) foglerLis[i].innerHTML = html; });
       var foglerPill = document.querySelector('#problem-solving .card-navy .stage-pill');
       if (foglerPill) foglerPill.textContent = c.foglerFooterPill;
+      var wbStagePills = document.querySelectorAll('#whitebox-copilot .grid-3 .card .stage-pill');
+      if (c.whiteboxStagePills) {
+        c.whiteboxStagePills.forEach(function(html, i) { if (wbStagePills[i]) wbStagePills[i].innerHTML = html; });
+      }
       var wbPs = document.querySelectorAll('#whitebox-copilot .grid-3 .card p');
       c.whiteboxDescs.forEach(function(html, i) { if (wbPs[i]) wbPs[i].innerHTML = html; });
       var calcCard1P = document.querySelector('#calc-sheet-cta .card:not(.card-navy) p');
@@ -2206,6 +2317,8 @@
       if (axLeadEl) axLeadEl.innerHTML = c.axLead;
       var ctaBtns = document.querySelectorAll('#calc-sheet-cta .card-navy .cta-btn');
       c.ctaButtons.forEach(function(txt, i) { if (ctaBtns[i]) ctaBtns[i].textContent = txt; });
+      var engBoundaryEl = document.querySelector('[data-testid="showcase-engineering-boundary"]');
+      if (engBoundaryEl && c.engineeringBoundaryHtml) engBoundaryEl.innerHTML = c.engineeringBoundaryHtml;
       var footerStrongEl = document.querySelector('footer.showcase-footer > strong');
       if (footerStrongEl) footerStrongEl.textContent = c.footerStrong;
       var diagTitleEl = document.querySelector('.ak-diagram-title');
@@ -2249,6 +2362,12 @@
       if (heroPrimaryCta) heroPrimaryCta.textContent = c.heroCta;
       var heroSecCta = document.querySelector('#hero .cta-btn.secondary');
       if (heroSecCta) heroSecCta.textContent = c.videoCta;
+      if (anchorTarget && typeof window !== 'undefined') {
+        var mh = document.querySelector('.showcase-masthead');
+        var mhH = mh ? mh.offsetHeight : 68;
+        var topY = Math.max(0, anchorTarget.getBoundingClientRect().top + window.scrollY - mhH - 10);
+        window.scrollTo({ top: topY, behavior: 'auto' });
+      }
     }
     (function initShowcaseLocale() {
       var q = new URLSearchParams(window.location.search);

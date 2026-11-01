@@ -165,10 +165,10 @@ export function solveKineticsReactor(raw: KineticsReactorInputs): KineticsReacto
       symbolicLatex: '\\psi = \\frac{(-\\Delta H_{\\mathrm{rxn}}) k(T_c) C_{A0} V E_a}{U A R T_c^2} \\le \\psi_{\\mathrm{crit}} = \\frac{1}{e} \\approx 0.3679',
       substitutedLatex: `\\psi = ${semenovPsi.toFixed(3)} \\; \\text{vs.} \\; \\psi_{\\mathrm{crit}} = 0.3679 \\; (T = ${tempK.toFixed(1)}\\text{ K}, \\; k = ${kRateSInv.toFixed(3)}\\text{ s}^{-1})`,
       resultLatex: isRunaway
-        ? `\\psi = ${semenovPsi.toFixed(3)} > 0.368 \\Rightarrow \\text{SEMENOV THERMAL RUNAWAY HAZARD}`
-        : `\\psi = ${semenovPsi.toFixed(3)} \\le 0.368 \\Rightarrow \\text{STABLE THERMAL OPERATING ENVELOPE}`,
+        ? `\\psi = ${semenovPsi.toFixed(3)} > 0.368 \\Rightarrow \\text{SEMENOV THERMAL RUNAWAY HAZARD (MODEL)}`
+        : `\\psi = ${semenovPsi.toFixed(3)} \\le 0.368 \\Rightarrow \\text{PRELIMINARY SCREENING PASS (MODEL ENVELOPE)}`,
       plainExplanation: 'Semenov balances exponential Arrhenius heat generation against linear jacket heat removal. Above ψ = 1/e ≈ 0.368, heat generation tangentially exceeds cooling and the reactor runs away.',
-      warningText: 'If ψ exceeds 0.368, increase jacket heat-transfer area UA, lower coolant temperature T_c, or dilute feed concentration C_A0 immediately (Crowl & Louvar Ch. 8).',
+      warningText: 'Model sensitivity note: in this lumped Semenov screening model, reducing ψ below 0.368 requires higher heat-transfer area UA, lower coolant temperature T_c, or lower feed concentration C_A0 (Crowl & Louvar Ch. 8 — educational model only, not plant operating instructions).',
     },
   ];
 

@@ -170,10 +170,24 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
   });
 
   it('Test 5 (Phase 20 UX/AX & Curriculum Progression Governance): verifies Year 2–4 curriculum badges, trust boundary disclosures, and server-side ?lang=vi HTML attribute injection', () => {
-    const sampleHtml = '<!doctype html><html lang="en" data-theme="dark"><head><meta property="og:locale" content="en_US" /></head></html>';
-    const viHtml = transformHtmlForRequest(sampleHtml, '/app?lang=vi');
-    expect(viHtml).toContain('<html lang="vi" data-locale="vi"');
-    expect(viHtml).toContain('property="og:locale" content="vi_VN"');
+    const sampleHomeHtml = '<!doctype html><html lang="en" data-theme="dark"><head><title>En Home</title><meta name="description" content="En Desc" /><meta property="og:locale" content="en_US" /><meta property="og:title" content="En OG" /><meta property="og:description" content="En OG Desc" /></head></html>';
+    const viHomeHtml = transformHtmlForRequest(sampleHomeHtml, '/?lang=vi');
+    expect(viHomeHtml).toContain('<html lang="vi" data-locale="vi"');
+    expect(viHomeHtml).toContain('property="og:locale" content="vi_VN"');
+    expect(viHomeHtml).toContain('<title>ai4UCheE — Hiểu Rõ Các Học Phần Cốt Lõi');
+    expect(viHomeHtml).toContain('Thực hành Kỹ thuật Hóa học đại học');
+
+    const sampleAppHtml = '<!doctype html><html lang="en"><head><title>Interactive ChE Workbench (/app)</title><meta name="description" content="En App Desc" /><meta property="og:locale" content="en_US" /></head></html>';
+    const viAppHtml = transformHtmlForRequest(sampleAppHtml, '/app?lang=vi');
+    expect(viAppHtml).toContain('<title>Bàn làm việc Kỹ thuật Hóa học Tương tác (/app)');
+    expect(viAppHtml).toContain('Phòng thí nghiệm Kỹ thuật Hóa học tương tác trực tiếp (/app)');
+
+    // Verify public/showcase.html includes complete Vietnamese translations for all callouts, transcript, and boundary
+    const showcaseContent = fs.readFileSync(path.resolve(__dirname, '../../public/showcase.html'), 'utf8');
+    expect(showcaseContent).toContain('Lộ trình Học tập 5 Bước:');
+    expect(showcaseContent).toContain('Thứ tự Học phần Đại học Đề xuất (Năm 2 → Năm 4):');
+    expect(showcaseContent).toContain('Luồng Dữ liệu Trợ lý AI Co-Pilot:');
+    expect(showcaseContent).toContain('hreflang="vi"');
 
     // Bare /app defaults to Learn mode on Subject 1 (Year 2 Thermodynamics)
     render(<App />);
@@ -197,9 +211,10 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
     fireEvent.click(screen.getByTestId('toggle-problem-library-btn'));
     expect(screen.getByTestId('corpus-provenance-notice').textContent).toContain('Curated 6-book index & pedagogical problem bank');
 
-    // Engineering Boundary Notice, Delete Saved SQLite Sheets button, & Support Contact in QA/QC Calc Sheet Modal
+    // Engineering Boundary Notice, AI Co-Pilot Data Flow, Delete Saved SQLite Sheets button, & Support Contact in QA/QC Calc Sheet Modal
     fireEvent.click(screen.getByTestId('export-calc-sheet-btn'));
     expect(screen.getByTestId('engineering-boundary-notice').textContent).toContain('Educational & Preliminary Engineering Boundary');
+    expect(screen.getByTestId('support-privacy-notice').textContent).toContain('gateway.ai4u.now');
     expect(screen.getByTestId('support-privacy-notice').textContent).toContain('support@ai4u.now');
     expect(screen.getByTestId('delete-saved-calc-sheets-btn')).toBeTruthy();
   });

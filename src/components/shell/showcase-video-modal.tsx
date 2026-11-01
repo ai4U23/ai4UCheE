@@ -2,7 +2,7 @@
 // Introduces ai4UCheE's features, plays the Remotion user-guide video (/ai4uchee-guide.mp4),
 // provides an interactive 5-step walkthrough, and links to the standalone /showcase.html page.
 import React, { useState } from 'react';
-import type { WorkbenchId } from '../../context/persona-theme-context';
+import { usePersonaTheme, type WorkbenchId } from '../../context/persona-theme-context';
 import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { FramerModalShell } from '../ui/framer-motion-primitives';
 
@@ -13,9 +13,10 @@ export interface ShowcaseVideoModalProps {
 }
 
 export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, onClose, onSelectWorkbench }) => {
+  const { locale } = usePersonaTheme();
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
-  const ui = getUiSubcomponentCopy();
+  const ui = getUiSubcomponentCopy(locale);
   const chapters = ui.guideChapters;
 
   if (!isOpen) return null;
@@ -78,11 +79,12 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
             controls
             playsInline
             preload="metadata"
+            aria-label={locale === 'vi' ? 'Video tổng quan 15 giây về bàn làm việc kỹ thuật hóa học có phụ đề Việt/Anh' : '15-second chemical engineering workbench overview video with English and Vietnamese captions'}
             data-testid="remotion-guide-video"
             style={{ width: '100%', borderRadius: 8, display: 'block', background: '#071a33' }}
           >
-            <track kind="captions" src="/ai4uchee-guide-en.vtt" srcLang="en" label="English" default />
-            <track kind="captions" src="/ai4uchee-guide-vi.vtt" srcLang="vi" label="Tiếng Việt" />
+            <track kind="captions" src="/ai4uchee-guide-en.vtt" srcLang="en" label="English" default={locale !== 'vi'} />
+            <track kind="captions" src="/ai4uchee-guide-vi.vtt" srcLang="vi" label="Tiếng Việt" default={locale === 'vi'} />
           </video>
           <div style={{ color: 'var(--ivory)', padding: '0.45rem 0.35rem 0.15rem', fontSize: '0.82rem' }}>
             <strong style={{ color: 'var(--maize)' }}>{active.step}:</strong> {active.title} —{' '}

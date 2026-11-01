@@ -130,7 +130,7 @@ describe('Phase 12 — Subject-First 6-Textbook Blending & WB6 Kinetics/Reactor 
 
     // Rescue safe design
     fireEvent.click(screen.getByTestId('wb6-rescue-safe'));
-    expect(screen.getByTestId('wb6-status-banner').textContent).toContain('STABLE REACTOR OPERATION');
+    expect(screen.getByTestId('wb6-status-banner').textContent).toContain('PRELIMINARY SCREENING PASS');
 
     // Scrub interactive Levenspiel SVG canvas
     const svg = screen.getByTestId('levenspiel-reactor-svg');

@@ -57,11 +57,21 @@ export function syncDomLocaleAttributes(locale: LocaleCode): void {
   if (typeof document !== 'undefined' && document.documentElement) {
     document.documentElement.setAttribute('lang', locale);
     document.documentElement.setAttribute('data-locale', locale);
-    document.title = locale === 'vi'
+    const title = locale === 'vi'
       ? 'Bàn làm việc Kỹ thuật Hóa học Tương tác (/app) — ai4UCheE (Chương trình Năm 2–4 & 28 Bộ giải SVG)'
       : 'Interactive ChE Workbench (/app) — ai4UCheE (Year 2–4 Curriculum & 28 SVG Solvers)';
+    const desc = locale === 'vi'
+      ? 'Phòng thí nghiệm Kỹ thuật Hóa học tương tác trực tiếp (/app) khởi đầu tại Nhiệt động học Năm 2 (DIPPR 101/105) ở Chế độ Học tập, với 6 giáo trình chuẩn, 28 giản đồ SVG hai chiều, 24 tình huống sự cố tổng hợp và xuất phiếu tính sơ bộ 14 trường.'
+      : 'Live interactive chemical engineering studio (/app) starting at Year 2 Thermodynamics (DIPPR 101/105) in Learn Mode, with 6 core textbooks, 28 bi-directional SVG nomographs, 24 realistic composite plant problems, and 14-field preliminary calculation sheet export.';
+    document.title = title;
     const ogLocale = document.querySelector('meta[property="og:locale"]');
     if (ogLocale) ogLocale.setAttribute('content', locale === 'vi' ? 'vi_VN' : 'en_US');
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', desc);
   }
 }
 

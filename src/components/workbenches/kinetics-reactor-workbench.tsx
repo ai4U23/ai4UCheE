@@ -52,10 +52,10 @@ export const KineticsReactorWorkbench: React.FC = () => {
   });
 
   const statusBanner = solved.isRunaway
-    ? `🔥 SEMENOV RUNAWAY HAZARD: ψ = ${solved.semenovPsi.toFixed(3)} > ψ_crit (0.368) [Fogler Ch. 12; Crowl & Louvar Ch. 8]`
+    ? `🔥 SEMENOV RUNAWAY HAZARD (Model ψ > 0.368): ψ = ${solved.semenovPsi.toFixed(3)} > ψ_crit (0.368) [Fogler Ch. 12; Crowl & Louvar Ch. 8]`
     : solved.isDiffusionLimited
-      ? `⚠️ PORE DIFFUSION LIMITED: Thiele φ = ${solved.thielePhi.toFixed(2)} → η = ${(solved.effectivenessEta * 100).toFixed(1)}% [Fogler Ch. 15; BSL Ch. 18]`
-      : `✅ STABLE REACTOR OPERATION: V_CSTR/V_PFR = ${solved.vRatioCstrPfr.toFixed(2)}× · η = ${(solved.effectivenessEta * 100).toFixed(1)}% · ψ = ${solved.semenovPsi.toFixed(3)}`;
+      ? `⚠️ PORE DIFFUSION LIMITED (Model η < 50%): Thiele φ = ${solved.thielePhi.toFixed(2)} → η = ${(solved.effectivenessEta * 100).toFixed(1)}% [Fogler Ch. 15; BSL Ch. 18]`
+      : `✅ PRELIMINARY SCREENING PASS (Steady-State Model: ψ ≤ 0.368): V_CSTR/V_PFR = ${solved.vRatioCstrPfr.toFixed(2)}× · η = ${(solved.effectivenessEta * 100).toFixed(1)}% · ψ = ${solved.semenovPsi.toFixed(3)}`;
 
   useEffect(() => {
     syncWorkbenchPayload('wb6-kinetics-reactors', {

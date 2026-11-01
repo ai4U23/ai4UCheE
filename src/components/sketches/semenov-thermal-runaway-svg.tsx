@@ -55,7 +55,7 @@ export const SemenovThermalRunawaySvg: React.FC<SemenovThermalRunawaySvgProps> =
         <strong>🔥 Fogler Ch. 12 / Crowl Ch. 8 Semenov G(T) Heat Generation vs. R(T) Removal S-Curve</strong>
         <span className="mono" data-testid="wb6-semenov-readout">
           T_c={sem.tcK.toFixed(0)} K · ψ={sem.semenovPsi.toFixed(3)} (ψ_crit=1/e≈0.368) · Roots={sem.steadyStatesK.length} ·{' '}
-          {sem.isRunaway ? '🔥 THERMAL RUNAWAY / IGNITION' : '✅ STABLE LOWER ROOT'}
+          {sem.isRunaway ? '🔥 THERMAL RUNAWAY / IGNITION (Model)' : '✅ MODEL LOWER-ROOT PASS (Preliminary Screening)'}
         </span>
       </div>
       <svg
