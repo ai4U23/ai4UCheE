@@ -5,8 +5,8 @@
 .brand-identity { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; white-space: nowrap; flex-shrink: 0; }
 .brand-logo { height: 28px; width: auto; flex-shrink: 0; display: block; }
 .brand-title-group { display: flex; flex-direction: column; gap: 2px; }
-.brand-title-group h1 { margin: 0; font-size: 18px; font-weight: 600; color: var(--ivory); line-height: 1; }
-.brand-eyebrow { display: block; font-size: 11px; font-weight: 500; color: var(--maize-soft); letter-spacing: 0.01em; line-height: 1.2; }
+.brand-title-group h1 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; color: var(--ivory); line-height: 1.15; }
+.brand-eyebrow { display: block; font-family: var(--font-sans); font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--maize-soft); line-height: 1.2; }
 @media (max-width: 640px) { .brand-eyebrow { display: none; } }
 
 /* Shared flex toolbar rows, control groups, and panel/tutor-card/drawer surfaces. */
@@ -15,15 +15,16 @@
 .shell-header > .wb-actions-row { flex-wrap: nowrap; justify-content: flex-end; gap: 4px; white-space: nowrap; }
 .wb-presets { margin-top: 8px; margin-bottom: 8px; }
 .wb-panel, .wb-tutor-card, .chat-drawer { background: var(--bg-panel); color: var(--ink-primary); border: 1px solid var(--border-grid); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-lift); }
-.wb-panel h2, .wb-tutor-card h3 { margin-bottom: 4px; font-size: 20px; font-weight: 600; line-height: 1.2; }
+.wb-panel h2 { margin-bottom: 4px; font-size: clamp(22px, 2vw, 28px); font-weight: 600; line-height: 1.15; letter-spacing: -0.015em; }
+.wb-tutor-card h3, .modal-sticky-header h3 { margin-bottom: 4px; font-size: 20px; font-weight: 600; line-height: 1.25; letter-spacing: -0.015em; }
 .wb-panel, .wb-tutor-card { overflow-x: auto; max-width: 100%; }
 .wb-split > div > .wb-panel { background: var(--bg-elevated); margin-top: 8px; border-radius: 10px; padding: 12px; cursor: pointer; transition: border-color 150ms cubic-bezier(0.22, 1, 0.36, 1), background-color 150ms cubic-bezier(0.22, 1, 0.36, 1); }
 .wb-split > div > .wb-panel:hover { border-color: var(--maize); }
-.wb-subtitle { margin: 4px 0 0; font-size: 13px; color: var(--ink-muted); }
+.wb-subtitle { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink-muted); }
 
 /* Base control elements & inline label ergonomics (4px scale, 8px radius, weights 500-600). */
-label { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
-button, select, input { font: inherit; font-size: 13px; color: var(--ink-primary); background: var(--bg-elevated); border: 1px solid var(--border-grid); border-radius: 8px; padding: 6px 12px; transition: border-color 150ms cubic-bezier(0.22, 1, 0.36, 1), background-color 150ms cubic-bezier(0.22, 1, 0.36, 1), color 150ms cubic-bezier(0.22, 1, 0.36, 1); }
+label { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+button, select, input { font: inherit; font-size: 14px; color: var(--ink-primary); background: var(--bg-elevated); border: 1px solid var(--border-grid); border-radius: 8px; padding: 6px 12px; transition: border-color 150ms cubic-bezier(0.22, 1, 0.36, 1), background-color 150ms cubic-bezier(0.22, 1, 0.36, 1), color 150ms cubic-bezier(0.22, 1, 0.36, 1); }
 button { cursor: pointer; font-weight: 500; }
 button:hover { border-color: var(--maize); }
 button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--maize); outline-offset: 2px; }
@@ -74,7 +75,7 @@ nav.wb-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))
 [data-testid="problem-library-browser"], [data-testid="adaptive-recommendation-rail"] { position: fixed; top: 56px; left: 16px; right: 16px; max-width: 1140px; margin: 0 auto !important; z-index: 80; background: var(--bg-elevated); color: var(--ink-primary); box-shadow: 0 16px 40px rgba(7, 26, 51, 0.22); max-height: calc(100vh - 80px); overflow-y: auto; flex-wrap: wrap; border-radius: 12px; }
 .studio-quick-missions-popover { position: fixed; top: 56px; left: 50%; transform: translateX(-50%); z-index: 82; display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px; background: var(--navy-deep); color: var(--ivory); border: 1px solid rgba(251, 246, 236, 0.18); border-radius: 10px; box-shadow: 0 16px 36px rgba(7, 26, 51, 0.36); max-width: 94vw; }
 [data-testid="adaptive-recommendation-rail"] { top: 108px; }
-.learn-callout { padding: 12px 16px; margin: 8px 0; border-left: 3px solid var(--maize); background: var(--bg-elevated); border-radius: 0 8px 8px 0; font-size: 13px; }
+.learn-callout { padding: 12px 16px; margin: 8px 0; border-left: 3px solid var(--maize); background: var(--bg-elevated); border-radius: 0 8px 8px 0; font-size: 14px; line-height: 1.55; }
 .learn-callout p { margin: 4px 0; }
 
 /* Minimalist Zone 3 AI Co-Pilot Inspector drawer, Point-and-Ask chips, single-row pill rails & GenUI stream. */
@@ -85,19 +86,19 @@ nav.wb-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))
 .starter-prompts { display: flex; flex-wrap: wrap; gap: 6px; padding-bottom: 2px; }
 .starter-prompts button { font-size: 12px; text-align: left; padding: 4px 10px; border-radius: 6px; background: var(--bg-elevated); white-space: normal; max-width: 100%; }
 .genui-stream { display: flex; flex-direction: column; gap: 8px; max-height: 212px; overflow-y: auto; }
-.genui-card { border: 1px solid var(--border-grid); border-radius: 8px; padding: 8px 12px; background: var(--bg-elevated); overflow-x: auto; font-size: 13px; }
+.genui-card { border: 1px solid var(--border-grid); border-radius: 8px; padding: 8px 12px; background: var(--bg-elevated); overflow-x: auto; font-size: 14px; line-height: 1.55; }
 .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 96px; }
-.chat-msg { border-radius: 8px; padding: 8px 12px; font-size: 13px; max-width: 96%; line-height: 1.45; }
+.chat-msg { border-radius: 8px; padding: 8px 12px; font-size: 14px; max-width: 96%; line-height: 1.55; }
 .chat-user { align-self: flex-end; background: var(--bg-panel); border: 1px solid var(--accent-secondary); }
 .chat-agent { align-self: flex-start; background: var(--bg-elevated); border: 1px solid var(--border-grid); }
 .chat-drawer form.wb-actions-row { display: flex; width: 100%; gap: 8px; margin-top: auto; }
 .chat-drawer form.wb-actions-row input { flex: 1; min-width: 0; }
 
 /* Verdict, coaching, tables & chart-crop visuals. */
-.wb-verdict { margin-top: 8px; padding: 8px 12px; border-radius: 8px; font-size: 13px; border: 1px solid var(--border-grid); }
+.wb-verdict { margin-top: 8px; padding: 8px 12px; border-radius: 8px; font-size: 14px; line-height: 1.55; border: 1px solid var(--border-grid); }
 .wb-verdict.pass { border-color: var(--status-pass); color: var(--status-pass); background: rgba(21, 128, 61, 0.08); }
 .wb-verdict.fail { border-color: var(--status-warn); color: var(--status-warn); background: rgba(180, 83, 9, 0.08); }
-.wb-coaching { margin: 8px 0 0; padding: 8px 12px; border-left: 3px solid var(--status-warn); background: rgba(180, 83, 9, 0.08); border-radius: 0 6px 6px 0; font-size: 13px; color: var(--ink-primary); }
+.wb-coaching { margin: 8px 0 0; padding: 8px 12px; border-left: 3px solid var(--status-warn); background: rgba(180, 83, 9, 0.08); border-radius: 0 6px 6px 0; font-size: 14px; line-height: 1.55; color: var(--ink-primary); }
 .wb-chip { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-grid); background: var(--bg-elevated); color: var(--ink-primary); }
 .wb-crop-stage { position: relative; min-height: 292px; background: var(--bg-elevated); border: 1px solid var(--border-grid); border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; color: var(--accent-primary); cursor: pointer; }
 .wb-crop-placeholder { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 12px; color: var(--ink-muted); font-size: 13px; width: 100%; }
@@ -130,8 +131,8 @@ span.katex-block { display: inline-block; margin: 2px 0; padding: 2px 6px; }
 .white-box-stage-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
 .white-box-stage-pill { padding: 8px 10px; border: 1px solid var(--border-grid); border-radius: 8px; background: var(--bg-panel); min-width: 0; }
 .white-box-stage-label { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.01em; color: var(--ink-muted); margin-bottom: 4px; }
-.white-box-plain-note { margin: 8px 0 0; padding: 8px 12px; border-left: 3px solid var(--maize); background: var(--bg-panel); border-radius: 0 6px 6px 0; font-size: 13px; color: var(--ink-primary); }
-.white-box-warning-note { margin: 8px 0 0; padding: 8px 12px; border-left: 3px solid var(--status-danger); background: rgba(185, 28, 28, 0.08); border-radius: 0 6px 6px 0; font-size: 13px; color: var(--status-danger); font-weight: 500; }
+.white-box-plain-note { margin: 8px 0 0; padding: 8px 12px; border-left: 3px solid var(--maize); background: var(--bg-panel); border-radius: 0 6px 6px 0; font-size: 14px; line-height: 1.55; color: var(--ink-primary); }
+.white-box-warning-note { margin: 8px 0 0; padding: 8px 12px; border-left: 3px solid var(--status-danger); background: rgba(185, 28, 28, 0.08); border-radius: 0 6px 6px 0; font-size: 14px; line-height: 1.55; color: var(--status-danger); font-weight: 500; }
 @media (max-width: 900px) { .white-box-stage-grid { grid-template-columns: 1fr; } .white-box-citation-badge { white-space: normal; word-break: break-word; } }
 
 /* Mission checklist banner (Observe Trap → Scrub Control → Verify Proof). */

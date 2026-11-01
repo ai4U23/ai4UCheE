@@ -29,10 +29,18 @@
 | `--status-warn` | `#b45309` | Engineering caution / coaching callout |
 | `--status-danger` | `#b91c1c` | Cavitation, flooding, or Semenov runaway hazard |
 
-### Typography
-- **Display & Headings (`--font-display`):** `'Cormorant Garamond', ui-serif, Georgia, serif` (weight `600`, never `700`/`800`; `letter-spacing: -0.02em`, `text-wrap: balance`, no trailing periods on headings).
-- **UI & Narrative Body (`--font-sans`):** `'Karla', -apple-system, BlinkMacSystemFont, sans-serif` (weights 400, 500, 600; `line-height: 1.5`).
-- **Calculations, Units & Citations (`--font-mono`):** `'JetBrains Mono', monospace` with `font-variant-numeric: tabular-nums` and `<KaTeXBlock />` for symbolic/substituted equations. Mono badges and stage labels use `11px`–`12px`, `font-weight: 500`, `letter-spacing: 0.01em`, and sentence/title case (never wide-tracked all-caps).
+### Typography (Synchronized with `ai4UMasterplan` / `https://quyhoach.ai4u.now/`)
+- **Google Fonts Bundle (`index.html` & `public/showcase.html`):** `Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500;600&family=Karla:wght@300;400;500;600;700&display=swap`.
+- **Display & Headings (`--font-display`):** `'Cormorant Garamond', ui-serif, Georgia, serif` (weight `600`, `letter-spacing: -0.015em` to `-0.025em`, `font-feature-settings: "lnum", "tnum"`, `text-wrap: balance`, no trailing periods on headings).
+  - **Masthead Brand Title (`.brand-title-group h1` / `.brand-cluster h1`):** `18px` (`1.125rem`), `font-weight: 600`.
+  - **Showcase Section Display (`h2.section-title`):** `clamp(2.25rem, 3.8vw, 3.5rem)`, `line-height: 1.04`, `letter-spacing: -0.025em`.
+  - **Showcase Card Heading (`.card h3`):** `24px` (`1.5rem`), `line-height: 1.2`.
+  - **Workbench Lab Heading (`.wb-panel h2`):** `clamp(22px, 2vw, 28px)` (`1.375rem`–`1.75rem`), `line-height: 1.15`.
+  - **Tutor / Sub-Panel / Modal Heading (`.wb-tutor-card h3`, `.modal-sticky-header h3`):** `20px` (`1.25rem`), `line-height: 1.25`.
+- **UI & Narrative Body (`--font-sans`):** `'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif` (weights 300–700; `line-height: 1.5`, `-webkit-font-smoothing: antialiased`, `text-rendering: optimizeLegibility`).
+  - **Showcase Base & Lead:** `16px` (`1rem`) body, `clamp(1rem, 1.25vw, 1.125rem)` section lead, `14px` (`0.875rem`) card body copy, `11px` (`0.6875rem`) uppercase tracked eyebrows (`letter-spacing: 0.22em`).
+  - **Interactive Workbench Studio (`/app`):** `14px` (`0.875rem`) application body, panel subtitles, controls (`button`, `select`, `input`, `label`), chat messages, GenUI cards, verdicts, and coaching notes; `12px` (`0.75rem`) compact header/toolbar pills and table cells; `10px` (`0.625rem`) uppercase masthead eyebrow.
+- **Calculations, Units & Citations (`--font-mono`):** `'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace` with `font-variant-numeric: tabular-nums lining-nums` and `<KaTeXBlock />` for symbolic/substituted equations. Mono badges and stage labels use `11px`–`12px`, `font-weight: 500`–`600`.
 
 ### Spacing, Nested Radii & Elevation
 - **4px Spacing Grid:** `--space-1` (`4px`), `--space-2` (`8px`), `--space-3` (`12px`), `--space-4` (`16px`), `--header-height` (`52px`).

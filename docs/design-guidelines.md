@@ -9,10 +9,16 @@
    - **Masthead & Brand**: Sovereign Deep Navy header (`#071a33`) with the canonical `ai4U` logo (`/ai4u-logo.png`, Maize drop-shadow glow), `Cormorant Garamond` display title, and Maize Gold (`--maize: #e8c547`) eyebrow & hairline border.
    - **Accents**: Maize Gold (`--maize: #e8c547`, `--maize-soft: #f7dca6`) for active workbench tabs, Point-and-Ask selection halos, and citation badges; Navy (`--navy: #0f1b3d`) for primary traces.
 
-## Typography
-- **Display & Section Headings**: `Cormorant Garamond`, serif (weights 500, 600, 700).
-- **UI & Narrative Body**: `Karla`, sans-serif (weights 400, 500, 600, 700).
-- **Calculations, Units & Citations**: `JetBrains Mono` (`tabular-nums`) and `KaTeX`.
+## Typography (Aligned with `ai4UMasterplan` / `https://quyhoach.ai4u.now/`)
+- **Google Fonts Bundle (`index.html` & `public/showcase.html`)**: `Cormorant Garamond` (`400, 500, 600, 700` + italics `400, 500, 600`), `Karla` (`300, 400, 500, 600, 700`), and `JetBrains Mono` (`400, 500, 600`) with `display=swap`.
+- **Display & Section Headings (`--font-display`)**: `'Cormorant Garamond', ui-serif, Georgia, serif` (`font-weight: 600`, `letter-spacing: -0.015em`, `font-feature-settings: "lnum", "tnum"`).
+  - Masthead Brand Title: `18px` (`1.125rem`).
+  - Showcase Section Headings: `clamp(2.25rem, 3.8vw, 3.5rem)`, `line-height: 1.04`, `letter-spacing: -0.025em`.
+  - Showcase Card Headings: `24px` (`1.5rem`), `line-height: 1.2`.
+  - Workbench Panel Headings (`.wb-panel h2`): `clamp(22px, 2vw, 28px)`, `line-height: 1.15`.
+  - Tutor & Modal Headings (`.wb-tutor-card h3`, `.modal-sticky-header h3`): `20px` (`1.25rem`), `line-height: 1.25`.
+- **UI & Narrative Body (`--font-sans`)**: `'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif` (`16px` base on Showcase `/`, `14px` / `0.875rem` application density on Studio `/app`, `12px` compact pills/table rows, `10px`–`11px` uppercase eyebrows).
+- **Calculations, Units & Citations (`--font-mono`)**: `'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace` (`font-variant-numeric: tabular-nums lining-nums`) and `KaTeX`.
 
 ## Interactive Ergonomics
 - **Point-and-Ask (`useAgentSelectable`)**: Clicking any calculation result, table cell, or diagram region attaches an `agent-select:<kind>:<id>` context pill to the chat composer with a `--maize` (`#e8c547`) selection outline.

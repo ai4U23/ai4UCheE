@@ -20,6 +20,12 @@
   <meta name="twitter:description" content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems." />
   <meta name="twitter:image" content="https://chemeng.ai4u.now/og-card.png" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23E8C547'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='monospace' font-weight='800' font-size='26' fill='%23071A33'%3EChE%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=JetBrains+Mono:wght@400;500;600&family=Karla:wght@300;400;500;600;700&display=swap"
+  />
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -70,9 +76,9 @@
       --status-warn: #92400e;
       --status-danger: #991b1b;
       --shadow-lift: 0 1px 2px rgba(7,26,51,0.06), 0 4px 12px rgba(7,26,51,0.06);
-      --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', ui-serif, serif;
-      --font-sans: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+      --font-display: 'Cormorant Garamond', ui-serif, Georgia, serif;
+      --font-sans: 'Karla', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     }
     [data-theme="dark"] {
       --bg-canvas: #071a33;
@@ -106,9 +112,22 @@
       background: var(--bg-canvas);
       color: var(--ink-primary);
       font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
       overflow-x: hidden;
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      font-feature-settings: "lnum", "tnum";
+    }
+    code, pre {
+      font-family: var(--font-mono);
+      font-variant-numeric: tabular-nums lining-nums;
     }
 
     /* Top Sticky Masthead */
@@ -139,18 +158,19 @@
     }
     .brand-cluster h1 {
       font-family: var(--font-display);
-      font-size: 1.25rem; font-weight: 600; margin: 0; color: var(--ivory);
+      font-size: 1.125rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.015em; margin: 0; color: var(--ivory);
     }
     .brand-cluster small {
-      display: block; font-size: 0.68rem; color: var(--maize-soft); font-family: var(--font-mono);
+      display: block; font-size: 0.625rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--maize-soft); font-family: var(--font-sans);
     }
     .nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
     .nav-links a, .ctrl-btn {
       font-family: var(--font-sans);
-      font-size: 0.78rem; font-weight: 600;
+      font-size: 0.6875rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.14em;
       color: var(--ivory); background: var(--navy);
       border: 1px solid rgba(232, 197, 71, 0.35);
-      border-radius: 8px; padding: 0.45rem 0.85rem;
+      border-radius: 8px; padding: 0.45rem 0.75rem;
       text-decoration: none; cursor: pointer;
       min-height: 44px; min-width: 44px;
       display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
@@ -191,24 +211,26 @@
     }
     .eyebrow-pill {
       display: inline-flex; align-items: center; gap: 0.4rem;
-      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+      font-family: var(--font-sans); font-size: 0.6875rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.22em;
       padding: 0.25rem 0.65rem; border-radius: 6px;
       background: rgba(232, 197, 71, 0.14);
       border: 1px solid var(--border-grid);
       color: var(--ink-primary);
       margin-bottom: 0.65rem;
-      letter-spacing: 0.01em;
     }
     .section-title {
       font-family: var(--font-display);
-      font-size: clamp(1.85rem, 3.4vw, 3.1rem);
+      font-size: clamp(2.25rem, 3.8vw, 3.5rem);
       font-weight: 600;
-      line-height: 1.12;
-      margin: 0 0 0.45rem;
-      letter-spacing: -0.02em;
+      line-height: 1.04;
+      margin: 0 0 0.55rem;
+      letter-spacing: -0.025em;
+      text-wrap: balance;
     }
     .section-lead {
-      font-size: clamp(0.95rem, 1.25vw, 1.12rem);
+      font-size: clamp(1rem, 1.25vw, 1.125rem);
+      line-height: 1.625;
       max-width: 65ch;
       margin: 0 0 1.25rem;
       color: var(--ink-muted);
@@ -236,14 +258,21 @@
     }
     .card h3 {
       font-family: var(--font-display);
-      font-size: 1.32rem;
+      font-size: 1.5rem;
       font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.015em;
       margin: 0 0 0.35rem;
+    }
+    .card p, .card ul, .card ol {
+      font-size: 0.875rem;
+      line-height: 1.625;
     }
     .mono-badge {
       font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 500;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       padding: 0.2rem 0.5rem;
       border-radius: 6px;
       background: var(--bg-panel);
@@ -647,8 +676,8 @@
   --ak-edge-active: #2563eb;
   --ak-badge-bg: #f1f5f9;
   --ak-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --ak-font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --ak-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --ak-font-sans: var(--font-sans);
+  --ak-font-mono: var(--font-mono);
   
   font-family: var(--ak-font-sans);
   background-color: var(--ak-bg);
