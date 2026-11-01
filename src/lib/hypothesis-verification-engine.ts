@@ -157,8 +157,8 @@ export function evaluateSixStageProgress(
 
   const stage1ObservationDone = options.trapLoaded ?? true;
   const stage2DefinitionDone = cur.definitionReviewed || cur.theoryReviewed || Boolean(options.solved);
-  const stage3TheoryDone = cur.theoryReviewed || hasEquationChip || Boolean(options.solved);
-  const stage4HandbookDone = cur.handbookReviewed || cur.theoryReviewed || hasEquationChip || Boolean(options.solved);
+  const stage3TheoryDone = cur.theoryReviewed || Boolean(options.solved);
+  const stage4HandbookDone = cur.handbookReviewed || cur.theoryReviewed || Boolean(options.solved);
   const stage5HypothesesDone = (rootCauseProved && decoysDisproved) || testedCount >= 2 || Boolean(options.solved);
   const stage6SolutionDone = Boolean(options.solved);
 

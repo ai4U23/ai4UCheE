@@ -112,16 +112,23 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
 
   if (type === 'equation-proof-card') {
     const substituted = String(data.substituted_latex ?? '');
+    const resultStr = String(data.result_latex ?? '');
+    const renderLatexOrText = (raw: string, disp = true) =>
+      raw.trim().startsWith('\\text{') && raw.trim().endsWith('}') ? (
+        <span className="mono" style={{ display: disp ? 'block' : 'inline', margin: disp ? '4px 0' : 0, whiteSpace: 'normal', overflowWrap: 'anywhere' }}>
+          {raw.trim().slice(6, -1).replace(/\\cdot/g, '·').replace(/\\ge/g, '≥').replace(/\\le/g, '≤').replace(/\\Delta/g, 'Δ')}
+        </span>
+      ) : (
+        <KaTeXBlock latex={raw} displayMode={disp} />
+      );
     return (
       <div className="wb-panel" data-testid="genui-equation-proof-card">
         <strong>{title ?? '3-Stage White-Box Equation Proof'}</strong>
-        <KaTeXBlock latex={String(data.symbolic_latex ?? 'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu}')} />
-        {substituted && <KaTeXBlock latex={substituted} />}
-        <div className="mono">
+        {renderLatexOrText(String(data.symbolic_latex ?? 'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu}'))}
+        {substituted && renderLatexOrText(substituted)}
+        <div className="mono" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere' }}>
           <strong>Result: </strong>
-          <strong>
-            <KaTeXBlock latex={String(data.result_latex ?? '')} displayMode={false} />
-          </strong>{' '}
+          <strong>{renderLatexOrText(resultStr, false)}</strong>{' '}
           <code className="mono">{String(data.citation ?? "[Perry's 9th Ed., p. 6-10]")}</code>
         </div>
         <OperatingWindowSparkline />

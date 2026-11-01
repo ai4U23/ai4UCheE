@@ -9,7 +9,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { buildAdaptiveRecommendations } from '../../lib/adaptive-recommendation-engine';
 import { getShellCopy, MISSION_BUTTON_LABELS_VI } from '../../lib/i18n/vi-shell-dictionary';
 import { getStudentProfile, recordMissionOutcome, recordPayloadObservation, subscribeStudentProfile, type StudentProfileState } from '../../lib/student-adaptive-model';
-import { autoCompleteProblemStagesForRescue, markProblemDefinitionReviewed } from '../../lib/hypothesis-verification-engine';
+import { autoCompleteProblemStagesForRescue, resetProblemSolvingStore } from '../../lib/hypothesis-verification-engine';
 import { ALL_24_REAL_LIFE_PROBLEMS, problemEntryToMissionScenario, resetActiveProblems, setActiveProblemForWorkbench } from '../../lib/problem-library-registry';
 import type { ProblemCaseEntry } from '../../lib/problem-library-types';
 import { AdaptiveRecommendationRail } from './adaptive-recommendation-rail';
@@ -57,7 +57,6 @@ export const GuidedMissionBar: React.FC = () => {
     solvedRecordedRef.current = null;
     setPersonaMode('learn');
     setActiveWorkbench(mission.workbench);
-    markProblemDefinitionReviewed(mission.workbench);
     clearChips();
     toggleChip(mission.chip);
     agentNative.ui.output(mission.proofCard);

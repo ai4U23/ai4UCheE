@@ -57,6 +57,11 @@ export function syncDomLocaleAttributes(locale: LocaleCode): void {
   if (typeof document !== 'undefined' && document.documentElement) {
     document.documentElement.setAttribute('lang', locale);
     document.documentElement.setAttribute('data-locale', locale);
+    document.title = locale === 'vi'
+      ? 'Bàn làm việc Kỹ thuật Hóa học Tương tác (/app) — ai4UCheE (Chương trình Năm 2–4 & 28 Bộ giải SVG)'
+      : 'Interactive ChE Workbench (/app) — ai4UCheE (Year 2–4 Curriculum & 28 SVG Solvers)';
+    const ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.setAttribute('content', locale === 'vi' ? 'vi_VN' : 'en_US');
   }
 }
 

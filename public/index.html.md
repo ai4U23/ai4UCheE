@@ -24,7 +24,10 @@ Last Updated: 2026-11-01
 - **24 Real-Life Plant Problems (`🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4`):** Fogler & LeBlanc 6-stage troubleshooting workflow with hypothesis testing and Socratic AI Co-Pilot coaching.
 - **Feature Showcase Homepage (`/`) & Remotion Video Guide (`/ai4uchee-guide.mp4`):** Interactive feature showcase homepage at `/` with a 5-step Remotion video guide walking users through the 3-Zone Studio, Dual Persona Switcher, 24 Plant Problems, White-Box Proofs, and EPC QA/QC Calc Sheets, plus one-click launch into `/app` (`?wb=wb2-thermo-dippr`, `?wb=wb3-hydraulics`, `?wb=wb4-distillation`, `?wb=wb6-kinetics-reactors`, `?wb=wb5-handbook-atlas`, `?wb=wb1-visual-verifier`).
 
-## Agent & API Endpoints
+## Agent, Persistence & Support Boundary
 - `GET /api/screen-state`: Returns current workbench state (`activeWorkbench`, `personaMode`, `locale`, `selectedChips`, `payload`) and `<current-screen>` XML tag.
 - `POST /api/copilot`: Natural-language ChE Co-Pilot (bilingual English `en` & Vietnamese `vi`) with bi-directional `actionMutations` slider scrubbing.
 - `POST /api/actions/:actionName`: Invokes registered deterministic ChE actions (`generate_calc_sheet`, `crop_perry_page`, `search_perry_pdf`).
+- `DELETE /api/saved-calculations`: Deletes all anonymously persisted calculation sheets from local SQLite (`saved_calculations`).
+- **Textbook Copyright & Access Policy:** Independent bibliographic section/page index and deterministic equation solver for use alongside a student's own course textbooks; no copyrighted textbook PDFs or EPUB files are hosted or distributed.
+- **Owner & Support Contact:** Maintained by the AI4U.now Engineering Education Team (`support@ai4u.now`, `https://github.com/ai4U23/ai4UCheE/issues`).

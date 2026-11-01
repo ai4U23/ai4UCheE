@@ -12,6 +12,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
 import {
   evaluateSixStageProgress,
+  resetProblemSolvingStore,
   subscribeProblemSolvingStore,
 } from '../../lib/hypothesis-verification-engine';
 import { MISSION_BUTTON_LABELS_VI } from '../../lib/i18n/vi-shell-dictionary';
@@ -80,6 +81,19 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
           <SwarmPulseDot tone={solved ? 'emerald' : 'gold'} />
           {solved ? ts.missionSolvedTitle : ts.missionActiveTitle} — {missionTitle} {ts.missionFlowSuffix}
         </strong>
+        <span className="mission-pill mono" data-testid="mission-preset-point-formula" style={{ fontSize: '0.7rem' }}>
+          {locale === 'vi'
+            ? 'Ca mẫu đã nạp (Bước 1) · Tự giải thanh trượt: +35 đ · Auto-Fix: +12 đ (localStorage)'
+            : 'Worked Case Loaded (Stage 1 Observed) · DIY slider solve: +35 pts · Auto-Fix: +12 pts (localStorage)'}
+        </span>
+        <button
+          type="button"
+          data-testid="reset-mission-clean-btn"
+          onClick={() => resetProblemSolvingStore()}
+          title="Reset Stages 2–6 to a clean unchecked start"
+        >
+          {locale === 'vi' ? '↺ Đặt lại Ca' : '↺ Reset Case'}
+        </button>
         <button type="button" onClick={onDismiss} aria-label="Dismiss mission">✕</button>
       </div>
       <ol className="mission-steps" data-testid="fogler-6stage-stepper">

@@ -181,13 +181,26 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
     expect(screen.getByTestId('curriculum-stage-badge').textContent).toContain('Year 2 · Core Foundation 1');
     expect(screen.getByTestId('causal-story-chain-wb2').textContent).toContain('DIPPR Eq. 101');
     expect(screen.getByTestId('local-demo-profile-badge').textContent).toContain('Local Browser Demo · localStorage only');
+    expect(screen.getByTestId('screening-assumptions-badge').textContent).toContain('preliminary educational screening only');
+
+    // Launch a mission and verify only Stage 1 is checked initially while Stages 2–6 start unchecked
+    fireEvent.click(screen.getByTestId('mission-boil-water'));
+    const steps = screen.getByTestId('fogler-6stage-stepper').querySelectorAll('li');
+    expect(steps[0].textContent).toContain('☑');
+    expect(steps[1].textContent).toContain('☐');
+    expect(steps[2].textContent).toContain('☐');
+    expect(steps[3].textContent).toContain('☐');
+    expect(screen.getByTestId('mission-preset-point-formula').textContent).toContain('+35 pts');
+    expect(screen.getByTestId('reset-mission-clean-btn')).toBeTruthy();
 
     // Problem Library corpus provenance disclosure
     fireEvent.click(screen.getByTestId('toggle-problem-library-btn'));
     expect(screen.getByTestId('corpus-provenance-notice').textContent).toContain('Curated 6-book index & pedagogical problem bank');
 
-    // Engineering Boundary Notice in QA/QC Calc Sheet Modal
+    // Engineering Boundary Notice, Delete Saved SQLite Sheets button, & Support Contact in QA/QC Calc Sheet Modal
     fireEvent.click(screen.getByTestId('export-calc-sheet-btn'));
     expect(screen.getByTestId('engineering-boundary-notice').textContent).toContain('Educational & Preliminary Engineering Boundary');
+    expect(screen.getByTestId('support-privacy-notice').textContent).toContain('support@ai4u.now');
+    expect(screen.getByTestId('delete-saved-calc-sheets-btn')).toBeTruthy();
   });
 });

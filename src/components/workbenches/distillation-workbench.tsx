@@ -5,6 +5,7 @@ import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
@@ -80,6 +81,7 @@ export const DistillationWorkbench: React.FC = () => {
           <span className={`wb-verdict ${isFlooding ? 'fail' : 'pass'}`} style={{ margin: 0, padding: '0.2rem 0.6rem', fontSize: '0.76rem' }}>
             {t.wb4Verdict(isFlooding, floodPercent.toFixed(1), solved.totalStages)}
           </span>
+          <span className="wb-chip mono" data-testid="screening-assumptions-badge" style={{ fontSize: '0.68rem', padding: '0.18rem 0.45rem' }}>{TRUST_BOUNDARY_COPY[locale].wbAssumptions.wb4}</span>
           <label>
             {t.wb4TraySpacingLabel}
             <select aria-label="Tray spacing" value={traySpacingM} onChange={(e) => setTraySpacingM(Number(e.target.value))}>

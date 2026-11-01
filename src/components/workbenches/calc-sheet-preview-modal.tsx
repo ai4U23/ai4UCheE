@@ -109,7 +109,8 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
 
         <div className="wb-coaching" data-testid="engineering-boundary-notice" style={{ fontSize: '12px', marginTop: '6px' }}>
           <strong>{TRUST_BOUNDARY_COPY[locale].engineeringBoundaryTitle}:</strong> {TRUST_BOUNDARY_COPY[locale].engineeringBoundaryBody}{' '}
-          <span className="mono">{TRUST_BOUNDARY_COPY[locale].calcSheetPersistenceNote}</span>
+          <span className="mono">{TRUST_BOUNDARY_COPY[locale].calcSheetPersistenceNote}</span>{' '}
+          <span className="mono" data-testid="support-privacy-notice">{TRUST_BOUNDARY_COPY[locale].supportPrivacyNote}</span>
         </div>
 
         <table className="mono" style={{ width: '100%', fontSize: '0.8rem' }} data-testid="calc-sheet-rows">
@@ -153,6 +154,19 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
             }}
           >
             {t.printPdfBtn}
+          </button>
+          <button
+            type="button"
+            data-testid="delete-saved-calc-sheets-btn"
+            onClick={() => {
+              void fetch('/api/saved-calculations', { method: 'DELETE' }).catch(() => {});
+              setCompiledHtml('');
+              setCompiledMd('');
+              setCopyState(TRUST_BOUNDARY_COPY[locale].deletedSavedSheetsToast);
+              window.setTimeout(() => setCopyState(''), 2500);
+            }}
+          >
+            {TRUST_BOUNDARY_COPY[locale].deleteSavedSheetsLabel}
           </button>
         </div>
 

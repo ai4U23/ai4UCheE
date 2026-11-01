@@ -5,6 +5,7 @@ import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
 import { ScrubbableNumberInput } from '../ui/scrubbable-number-input';
 import { WhiteBoxEquationCard } from '../ui/white-box-equation-card';
@@ -131,7 +132,8 @@ export const ThermoDipprWorkbench: React.FC = () => {
             <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
           </div>
           <div className="wb-panel mono">
-            T_r = {solved.tr.toFixed(4)} → ΔH_vap = <strong>{hVapJkmol.toExponential(3)} J/kmol</strong> · Model: <strong>{recommendedModel}</strong>
+            T_r = {solved.tr.toFixed(4)} → ΔH_vap = <strong>{hVapJkmol.toExponential(3)} J/kmol</strong> · Model: <strong>{recommendedModel}</strong> ·{' '}
+            <span className="wb-chip" data-testid="screening-assumptions-badge" style={{ display: 'inline-block', marginTop: 4, fontSize: 11 }}>{TRUST_BOUNDARY_COPY[locale].wbAssumptions.wb2}</span>
           </div>
         </div>
       </div>

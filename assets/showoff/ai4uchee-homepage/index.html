@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ai4UCheE — ChemEng's Intelligent Workbench | Feature Showcase &amp; Remotion Guide</title>
-  <meta name="description" content="Bi-directional agent-native chemical engineering workbench blending 6 canonical textbooks (Perry's 9th Ed., Fogler 7th Ed., BSL, SVNA, Seader, Crowl) with 55+ interactive SVG nomographs, 24 real-life plant problems, and a Remotion user guide." />
+  <title>ai4UCheE — Understand the Core Subjects Behind Real Plant Problems | Undergraduate ChE Workbench</title>
+  <meta name="description" content="Practice undergraduate chemical engineering (Year 2 Thermodynamics, Fluid Mechanics, Separations, Reaction Engineering, and Process Design) by connecting real plant problems to governing equations and interactive diagrams." />
   <link rel="canonical" href="https://chemeng.ai4u.now/" />
   <link rel="alternate" type="text/markdown" href="https://chemeng.ai4u.now/index.md" title="Markdown twin" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:site_name" content="ai4UCheE — ChemEng's Intelligent Workbench" />
-  <meta property="og:title" content="ai4UCheE — ChemEng's Intelligent Workbench | Feature Showcase &amp; Remotion Guide" />
-  <meta property="og:description" content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems." />
+  <meta property="og:title" content="ai4UCheE — Understand the Core Subjects Behind Real Plant Problems | Undergraduate ChE Workbench" />
+  <meta property="og:description" content="Practice undergraduate chemical engineering (Year 2–4 curriculum) by connecting real plant symptoms to governing equations, interactive SVG diagrams, and preliminary calculation sheets." />
   <meta property="og:url" content="https://chemeng.ai4u.now/" />
   <meta property="og:image" content="https://chemeng.ai4u.now/og-card.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="ai4UCheE — ChemEng's Intelligent Workbench in Institutional Ivory and Sovereign Deep Navy" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="ai4UCheE — ChemEng's Intelligent Workbench" />
-  <meta name="twitter:description" content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems." />
+  <meta name="twitter:title" content="ai4UCheE — Understand the Core Subjects Behind Real Plant Problems" />
+  <meta name="twitter:description" content="Practice undergraduate chemical engineering (Year 2–4 curriculum) by connecting real plant symptoms to governing equations, interactive SVG diagrams, and preliminary calculation sheets." />
   <meta name="twitter:image" content="https://chemeng.ai4u.now/og-card.png" />
   <meta name="twitter:image:alt" content="ai4UCheE — ChemEng's Intelligent Workbench in Institutional Ivory and Sovereign Deep Navy" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23E8C547'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='monospace' font-weight='800' font-size='26' fill='%23071A33'%3EChE%3C/text%3E%3C/svg%3E" />
@@ -188,12 +189,17 @@
       min-height: 44px !important;
       min-width: 44px !important;
     }
-    .showcase-footer a {
+    .showcase-footer a, .stage-pill a, details[data-testid="showcase-video-transcript"] > summary {
       display: inline-flex;
       align-items: center;
       min-height: 44px;
       padding: 0 0.25rem;
       color: var(--maize-soft);
+    }
+    .stage-pill a {
+      color: var(--ink-primary);
+      font-weight: 700;
+      text-decoration: underline;
     }
 
     /* Section Containers — fit cleanly across 16:9, 9:16, and 1:1 viewports */
@@ -407,19 +413,19 @@
     <!-- SECTION 1: HERO -->
     <section id="hero" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">Chemical Engineering Workbench · 1 Bar · 1 Canvas · 1 Agent</span>
-        <h2 class="section-title">Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio</h2>
+        <span class="eyebrow-pill">Undergraduate Chemical Engineering Studio · Year 2 to Year 4 Progression</span>
+        <h2 class="section-title">Understand the Core Subjects Behind Real Plant Problems</h2>
         <p class="section-lead">
-          <strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.
+          <strong>ai4UCheE</strong> helps chemical engineering students see why pump cavitation, column flooding, and reactor runaway happen by connecting <strong>real plant symptoms</strong> directly to <strong>governing textbook equations</strong>, <strong>interactive SVG diagrams</strong>, and <strong>step-by-step unit checks</strong>.
         </p>
 
         <div class="stage-pill" data-testid="five-step-story-bridge" style="margin: 0 0 1rem; padding: 0.75rem 1rem; border-left: 3px solid var(--maize); font-size: 0.84rem; line-height: 1.55;">
-          <strong>5-Step Causal Engineering Story:</strong>
-          <code>1. Plant Symptom</code> (cavitation, 4× ΔP, flood, runaway) →
-          <code>2. ChE Subject (Year 2–4)</code> (Thermo → Fluids → Sep → Kinetics → Design) →
-          <code>3. Governing Equation</code> (DIPPR 101, Churchill, McCabe-Thiele, Fogler) →
-          <code>4. Interactive SVG Lab</code> (scrub T, P, Re, R/R_min, X) →
-          <code>5. Verified Result</code> (14-field SHA-256 Calc Sheet)
+          <strong>5-Step Learning Path:</strong>
+          <code>1. Observe Plant Symptom</code> (cavitation, 4× ΔP error, column flood, thermal runaway) →
+          <code>2. Pick Your Course Subject (Year 2–4)</code> (Thermodynamics → Fluid Mechanics → Separations → Reaction Engineering → Capstone Design) →
+          <code>3. Inspect the Governing Equation</code> (symbolic law + unit substitution) →
+          <code>4. Test Fixes on the Interactive Diagram</code> (drag operating points &amp; sliders) →
+          <code>5. Check Operating Window &amp; Summary</code> (preliminary educational screening &amp; printable summary)
         </div>
 
         <div class="grid-2">
@@ -463,10 +469,10 @@
     <!-- SECTION 2: REMOTION VIDEO GUIDE -->
     <section id="video-guide" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">Remotion Video Guide · 1920×1080 · 30 FPS</span>
-        <h2 class="section-title">Master the Workbench in 5 Guided Video Chapters</h2>
+        <span class="eyebrow-pill">15-Second Quick Overview · 1920×1080 · 30 FPS · EN/VI Captions</span>
+        <h2 class="section-title">15-Second Quick Overview: 5 Guided Workflow Snapshots</h2>
         <p class="section-lead">
-          Rendered with <code>/ak:remotion</code> in React—click any chapter on the right to seek the video directly to that workflow step.
+          A 15-second visual preview of the 5 studio workflow steps — click any 3-second snapshot on the right to jump straight to that moment or read the full transcript below.
         </p>
 
         <div class="grid-2">
@@ -522,6 +528,16 @@
       <div class="section-inner">
         <span class="eyebrow-pill">5 Subject Workbenches + Cross-Subject Charts Verifier</span>
         <h2 class="section-title">Every Core Chemical Engineering Subject — Interactive &amp; Citation-Backed</h2>
+
+        <div class="stage-pill" data-testid="course-sequence-map" style="margin: 0 0 1rem; padding: 0.8rem 1rem; border-left: 3px solid var(--maize); font-size: 0.82rem; line-height: 1.55;">
+          <strong>Suggested Undergraduate Course Order (Year 2 → Year 4):</strong><br/>
+          <strong>1. Year 2 · Thermodynamics &amp; Phase Equilibria</strong> (Prereq: Material &amp; Energy Balances → Outcome: predict boiling points, vapor pressure &amp; VLE phase splits) →
+          <strong>2. Year 2/3 · Fluid Mechanics &amp; Piping Hydraulics</strong> (Prereq: Thermo I → Outcome: size pipes, distinguish Fanning vs. Darcy friction &amp; prevent pump cavitation) →
+          <strong>3. Year 3 · Separation Processes</strong> (Prereq: Phase Equilibria → Outcome: step off McCabe-Thiele stages &amp; check Fair column flooding) →
+          <strong>4. Year 3/4 · Reaction Engineering &amp; Kinetics</strong> (Prereq: Thermo &amp; Transport → Outcome: size CSTR/PFR reactors &amp; prevent Semenov thermal runaway) →
+          <strong>5. Year 4 · Process Design, Economics &amp; Safety Atlas</strong> (Prereq: Core ChE Sequence → Outcome: run multi-section preliminary equipment &amp; relief checks).<br/>
+          <span style="color:var(--ink-muted);"><strong>Textbook Access &amp; Copyright Policy:</strong> ai4UCheE is an independent bibliographic section/page index and deterministic equation solver designed for use alongside your own course textbooks — no copyrighted textbook PDFs or EPUB files are hosted or distributed.</span>
+        </div>
 
         <div class="grid-3">
           <div class="card">
@@ -681,8 +697,8 @@
           <div class="card">
             <span class="mono-badge">Stage 3 · Evaluated Result &amp; Citation</span>
             <h3 style="margin-top:0.4rem;">Deterministic Verdict Badge</h3>
-            <div class="stage-pill" style="color:var(--status-pass); font-weight:600;">NPSH_A = 21.82 m ≥ NPSH_R (3.0 m) → SAFE [Perry's 9e p. 10-28]</div>
-            <p style="font-size:0.82rem; margin:0.4rem 0 0;">Click <code>Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.</p>
+            <div class="stage-pill" style="color:var(--status-pass); font-weight:600;">NPSH_A = 21.82 m ≥ NPSH_R (3.0 m) → Preliminary Screening Pass (Steady-State Textbook Basis · Not PE Sign-Off) [Perry's 9e p. 10-28]</div>
+            <p style="font-size:0.82rem; margin:0.4rem 0 0;">Click <code>Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof and its model assumptions straight into the AI Co-Pilot.</p>
           </div>
         </div>
 
@@ -1782,7 +1798,9 @@
         </div>
 
         <div class="stage-pill" data-testid="showcase-engineering-boundary" style="margin-top: 1rem; padding: 0.75rem 1rem; border-left: 3px solid var(--status-warn); font-size: 0.82rem; line-height: 1.55;">
-          <strong>Educational &amp; Preliminary Engineering Boundary:</strong> Calculations use deterministic textbook correlations (DIPPR, Churchill, McCabe-Thiele, Fogler) for undergraduate instruction and preliminary screening — not a substitute for licensed PE sign-off, API 520/521 relief certification, or HAZOP/SIL audits. Practice points (<code>+35 pts DIY / +12 pts Assisted</code>) live only in your local browser (<code>localStorage</code>); exported calculation sheets persist anonymously in local SQLite (<code>saved_calculations</code>). Curated 6-book index &amp; problem bank map to published section coordinates; plant failure narratives are educational composites.
+          <strong>Educational &amp; Preliminary Engineering Boundary &amp; Data Privacy:</strong> Calculations use steady-state textbook correlations (DIPPR, Churchill, McCabe-Thiele, Fogler) for undergraduate instruction and preliminary screening — never use them for licensed PE sign-off, API 520/521 relief certification, or HAZOP/SIL safety audits.<br/>
+          <strong>Practice Points &amp; Data Deletion:</strong> Solving a plant case by scrubbing sliders yourself awards <code>+35 pts</code> (DIY); using Auto-Fix awards <code>+12 pts</code> (Assisted); mastery % is the average across 6 ChE concept domains stored only in your browser's <code>localStorage</code> (reset anytime via <code>↺ Reset Scorecard</code> in the app). Compiled calculation sheets persist anonymously in local SQLite (<code>saved_calculations</code>) and can be deleted anytime in 1 click via <code>🗑️ Delete Saved SQLite Sheets</code> inside the Calc Sheet modal.<br/>
+          <strong>Owner &amp; Support Contact:</strong> Maintained by the <strong>AI4U.now Engineering Education Team</strong> · Support, privacy &amp; corrections: <a href="mailto:support@ai4u.now">support@ai4u.now</a> · <a href="https://github.com/ai4U23/ai4UCheE/issues" target="_blank" rel="noreferrer">github.com/ai4U23/ai4UCheE/issues</a>.
         </div>
       </div>
     </section>
@@ -1842,24 +1860,24 @@
         nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · EPC Calc Sheet'],
         launch: 'Launch Workbench',
         eyebrows: [
-          'Chemical Engineering Workbench · 1 Bar · 1 Canvas · 1 Agent',
-          'Remotion Video Guide · 1920×1080 · 30 FPS',
+          'Undergraduate Chemical Engineering Studio · Year 2 to Year 4 Progression',
+          '15-Second Quick Overview · 1920×1080 · 30 FPS · EN/VI Captions',
           '5 Subject Workbenches + Cross-Subject Charts Verifier',
           '24 Real-Life Plant Problems · Fogler & LeBlanc 6-Stage Flow',
           'White-Box Proofs · Error-Signature Detector · System Topology',
           'Senior EPC QA/QC Calculation Sheets · AX / GEO Ready'
         ],
         titles: [
-          'Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio',
-          'Master the Workbench in 5 Guided Video Chapters',
+          'Understand the Core Subjects Behind Real Plant Problems',
+          '15-Second Quick Overview: 5 Guided Workflow Snapshots',
           'Every Core Chemical Engineering Subject — Interactive & Citation-Backed',
           'Start from a Real Plant Upset — Not a Disconnected Textbook Formula',
           '3-Stage White-Box Proofs & Validated Agent-Native System Architecture',
           'From Classroom Intuition to Print-Ready EPC Deliverables'
         ],
         leads: [
-          "<strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.",
-          'Rendered with <code>/ak:remotion</code> in React—click any chapter on the right to seek the video directly to that workflow step.'
+          '<strong>ai4UCheE</strong> helps chemical engineering students see why pump cavitation, column flooding, and reactor runaway happen by connecting <strong>real plant symptoms</strong> directly to <strong>governing textbook equations</strong>, <strong>interactive SVG diagrams</strong>, and <strong>step-by-step unit checks</strong>.',
+          'A 15-second visual preview of the 5 studio workflow steps — click any 3-second snapshot on the right to jump straight to that moment or read the full transcript below.'
         ],
         monoBadges: [
           '3-Zone Studio Architecture',
@@ -1973,24 +1991,24 @@
         nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính EPC'],
         launch: 'Mở Phòng Thí Nghiệm',
         eyebrows: [
-          'Bàn làm việc Kỹ thuật Hóa học · 1 Thanh · 1 Đồ thị · 1 Trợ lý AI',
-          'Video Hướng dẫn Remotion · 1920×1080 · 30 FPS',
+          'Phòng Thí Nghiệm Kỹ Thuật Hóa Học Đại Học · Lộ Trình Năm 2 đến Năm 4',
+          'Tổng Quan Nhanh 15 Giây · 1920×1080 · 30 FPS · Phụ đề EN/VI',
           '5 Phòng Lab Chuyên ngành + Trình kiểm tra Giản đồ Hiệu chuẩn',
           '24 Sự cố Nhà máy Thực tế · Quy trình 6 Bước Fogler & LeBlanc',
           'Chứng minh White-Box · Phát hiện Bẫy Đơn vị · Kiến trúc Hệ thống',
           'Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC) · Chuẩn AX / GEO'
         ],
         titles: [
-          'Kết hợp 6 Giáo trình Kỹ thuật Hóa học Kinh điển với Phòng Thí nghiệm Tương tác AI',
-          'Làm chủ Bàn làm việc qua 5 Chương Video Hướng dẫn',
+          'Hiểu Rõ Các Học Phần Cốt Lõi Đằng Sau Sự Cố Nhà Máy Thực Tế',
+          'Tổng Quan Nhanh 15 Giây: 5 Bước Thao Tác Trực Quan',
           'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản',
           'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc',
           'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native',
           'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC)'
         ],
         leads: [
-          '<strong>ai4UCheE</strong> kết hợp <em>Perry 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em> và <em>Crowl &amp; Louvar</em> với <strong>hơn 55 giản đồ SVG tương tác hai chiều</strong>, <strong>chứng minh KaTeX 3 bước</strong> và <strong>24 sự cố nhà máy thực tế</strong>.',
-          'Được kết xuất bằng <code>/ak:remotion</code> trong React — bấm vào bất kỳ chương nào bên phải để tua video tới đúng bước thao tác.'
+          '<strong>ai4UCheE</strong> giúp sinh viên Kỹ thuật Hóa học hiểu rõ nguyên nhân xâm thực bơm, ngập lụt tháp chưng cất và thoát nhiệt lò phản ứng bằng cách kết nối <strong>triệu chứng nhà máy thực tế</strong> với <strong>phương trình giáo trình</strong>, <strong>giản đồ SVG tương tác</strong> và <strong>kiểm tra đơn vị từng bước</strong>.',
+          'Video tóm tắt trực quan dài 15 giây về 5 bước thao tác — bấm vào bất kỳ phân đoạn 3 giây nào bên phải để xem ngay hoặc đọc toàn bộ phụ đề bên dưới.'
         ],
         monoBadges: [
           'Kiến trúc Studio AI-Native 3 Vùng',
@@ -2099,11 +2117,26 @@
         diagSearch: 'Tìm kiếm sơ đồ (/)'
       }
     };
-    function setShowcaseLocale(loc) {
+    function setShowcaseLocale(loc, persistStorage) {
       var l = loc === 'vi' ? 'vi' : 'en';
       document.documentElement.setAttribute('lang', l);
       document.documentElement.setAttribute('data-locale', l);
-      try { localStorage.setItem('ai4uchee_locale', l); } catch (e) {}
+      if (persistStorage !== false) {
+        try { localStorage.setItem('ai4uchee_locale', l); } catch (e) {}
+      }
+      document.title = l === 'vi'
+        ? 'ai4UCheE — Hiểu Rõ Các Học Phần Cốt Lõi Đằng Sau Sự Cố Nhà Máy Thực Tế | Bàn Làm Việc Kỹ Thuật Hóa Học'
+        : 'ai4UCheE — Understand the Core Subjects Behind Real Plant Problems | Undergraduate ChE Workbench';
+      var descMeta = document.querySelector('meta[name="description"]');
+      if (descMeta) {
+        descMeta.setAttribute('content', l === 'vi'
+          ? 'Thực hành Kỹ thuật Hóa học đại học (Nhiệt động học Năm 2, Cơ học Lưu chất, Quá trình Tách, Kỹ thuật Phản ứng và Thiết kế Quá trình) bằng cách kết nối sự cố nhà máy thực tế với phương trình giáo trình và giản đồ tương tác.'
+          : 'Practice undergraduate chemical engineering (Year 2 Thermodynamics, Fluid Mechanics, Separations, Reaction Engineering, and Process Design) by connecting real plant problems to governing equations and interactive diagrams.');
+      }
+      var ogLocaleMeta = document.querySelector('meta[property="og:locale"]');
+      if (ogLocaleMeta) {
+        ogLocaleMeta.setAttribute('content', l === 'vi' ? 'vi_VN' : 'en_US');
+      }
       var enBtn = document.getElementById('locale-en');
       var viBtn = document.getElementById('locale-vi');
       if (enBtn) enBtn.classList.toggle('active', l === 'en');
@@ -2219,11 +2252,17 @@
     }
     (function initShowcaseLocale() {
       var q = new URLSearchParams(window.location.search);
-      var ql = q.get('lang') || q.get('locale');
-      var saved = null;
-      try { saved = localStorage.getItem('ai4uchee_locale'); } catch (e) {}
-      if ((ql && ql.toLowerCase().indexOf('vi') === 0) || saved === 'vi') {
-        setShowcaseLocale('vi');
+      var ql = (q.get('lang') || q.get('locale') || '').toLowerCase();
+      if (ql.indexOf('en') === 0) {
+        setShowcaseLocale('en', true);
+        return;
+      }
+      if (ql.indexOf('vi') === 0) {
+        setShowcaseLocale('vi', true);
+        return;
+      }
+      if (document.documentElement.getAttribute('lang') === 'vi') {
+        setShowcaseLocale('vi', false);
       }
     })();
   </script>

@@ -17,6 +17,11 @@ export const TRUST_BOUNDARY_COPY: Record<
     localDemoProfileTooltip: string;
     corpusProvenanceNotice: string;
     calcSheetPersistenceNote: string;
+    screeningQualifierBadge: string;
+    wbAssumptions: Record<'wb2' | 'wb3' | 'wb4' | 'wb5' | 'wb6', string>;
+    supportPrivacyNote: string;
+    deleteSavedSheetsLabel: string;
+    deletedSavedSheetsToast: string;
   }
 > = {
   en: {
@@ -27,9 +32,21 @@ export const TRUST_BOUNDARY_COPY: Record<
     localDemoProfileTooltip:
       'Practice points (+35 pts DIY / +12 pts Assisted) and student profile live only in this browser (localStorage). Exported calculation sheets persist anonymously in local SQLite (saved_calculations).',
     corpusProvenanceNotice:
-      'Curated 6-book index & pedagogical problem bank mapped to published chapter/section coordinates; industrial failure narratives are educational composites.',
+      'Curated 6-book index & pedagogical problem bank mapped to published chapter/section coordinates; industrial failure narratives are educational composites. No copyrighted textbook PDFs/EPUBs are hosted or distributed.',
     calcSheetPersistenceNote:
       'Saved calculation sheets are stored anonymously in the local SQLite database (saved_calculations) with SHA-256 input-to-output provenance.',
+    screeningQualifierBadge: 'Preliminary Educational Screening Only · Not PE / API / HAZOP Sign-Off',
+    wbAssumptions: {
+      wb2: 'Assumptions: Pure-component DIPPR Eq. 101/105 & ideal/activity-coefficient VLE; preliminary educational screening only.',
+      wb3: 'Assumptions: Steady incompressible liquid, commercial steel Sch 40/80, Churchill Darcy f_D = 4·f_F; preliminary screening only (not PE sign-off).',
+      wb4: 'Assumptions: Constant molar overflow (CMO), constant α McCabe-Thiele stages & Fair Souders-Brown correlation; preliminary screening only.',
+      wb5: 'Assumptions: Textbook correlation & single-mode API 520/Bowman screening; not for final relief-valve or pressure-vessel certification.',
+      wb6: 'Assumptions: Ideal CSTR/PFR flow, 1st-order Thiele slab & lumped Semenov heat balance; preliminary educational screening only (not HAZOP/SIL sign-off).',
+    },
+    supportPrivacyNote:
+      'Maintained by AI4U.now Engineering Education Team · Support & privacy: support@ai4u.now · github.com/ai4U23/ai4UCheE/issues',
+    deleteSavedSheetsLabel: '🗑️ Delete Saved SQLite Sheets',
+    deletedSavedSheetsToast: 'Cleared all saved calculation sheets from local SQLite (saved_calculations).',
   },
   vi: {
     engineeringBoundaryTitle: 'Ranh giới Giáo dục & Kỹ thuật Sơ bộ',
@@ -39,8 +56,20 @@ export const TRUST_BOUNDARY_COPY: Record<
     localDemoProfileTooltip:
       'Điểm luyện tập (+35 đ Tự giải / +12 đ Có gợi ý) và hồ sơ sinh viên chỉ lưu trên trình duyệt này (localStorage). Phiếu tính toán xuất ra được lưu ẩn danh trong SQLite cục bộ (saved_calculations).',
     corpusProvenanceNotice:
-      'Chỉ mục 6 giáo trình & ngân hàng bài tập sư phạm được ánh xạ tới tọa độ chương/mục xuất bản; các tình huống sự cố nhà máy là kịch bản tổng hợp phục vụ đào tạo.',
+      'Chỉ mục 6 giáo trình & ngân hàng bài tập sư phạm được ánh xạ tới tọa độ chương/mục xuất bản; các tình huống sự cố nhà máy là kịch bản tổng hợp phục vụ đào tạo. Không lưu trữ hay phân phối tệp PDF/EPUB có bản quyền.',
     calcSheetPersistenceNote:
       'Phiếu tính toán lưu trữ ẩn danh trong cơ sở dữ liệu SQLite cục bộ (saved_calculations) kèm mã băm xuất xứ SHA-256.',
+    screeningQualifierBadge: 'Chỉ Sàng lọc Giáo dục Sơ bộ · Không thay thế phê duyệt PE / API / HAZOP',
+    wbAssumptions: {
+      wb2: 'Giả thiết: Phương trình DIPPR 101/105 cấu tử tinh khiết & VLE lý tưởng/hoạt độ; chỉ dùng sàng lọc giáo dục sơ bộ.',
+      wb3: 'Giả thiết: Lưu chất không nén được ổn định, ống thép Sch 40/80, Churchill Darcy f_D = 4·f_F; chỉ sàng lọc sơ bộ (không thay thế PE).',
+      wb4: 'Giả thiết: Lưu lượng mol không đổi (CMO), độ bay hơi α hằng số McCabe-Thiele & ngập lụt Fair; chỉ sàng lọc sơ bộ.',
+      wb5: 'Giả thiết: Tương quan giáo trình & sàng lọc sơ bộ API 520/Bowman; không dùng phê duyệt van an toàn hay thiết bị chịu áp.',
+      wb6: 'Giả thiết: Dòng lý tưởng CSTR/PFR, Thiele bậc 1 & cân bằng nhiệt gộp Semenov; chỉ sàng lọc giáo dục sơ bộ (không thay thế HAZOP/SIL).',
+    },
+    supportPrivacyNote:
+      'Vận hành bởi Nhóm Giáo dục Kỹ thuật AI4U.now · Hỗ trợ & quyền riêng tư: support@ai4u.now · github.com/ai4U23/ai4UCheE/issues',
+    deleteSavedSheetsLabel: '🗑️ Xóa Phiếu tính SQLite đã lưu',
+    deletedSavedSheetsToast: 'Đã xóa toàn bộ phiếu tính toán lưu trong SQLite cục bộ (saved_calculations).',
   },
 };

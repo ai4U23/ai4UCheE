@@ -5,6 +5,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { ALL_25_PERRY_SECTIONS, PERRY_CLUSTERS, getPerrySectionByNumber } from '../../lib/perry-sections/perry-atlas-registry';
 import type { PerryClusterId } from '../../lib/perry-sections/perry-section-types';
 import { TEXTBOOK_CORPUS_CATALOG } from '../../lib/textbook-corpus-registry';
@@ -105,6 +106,7 @@ export const HandbookAtlasWorkbench: React.FC = () => {
                 {t.wb5OpenDedicatedBtn(solved.deepDiveWorkbench.toUpperCase().slice(0, 3))}
               </button>
             )}
+            <span className="wb-chip mono" data-testid="screening-assumptions-badge" style={{ display: 'block', marginTop: 4, fontSize: 11 }}>{TRUST_BOUNDARY_COPY[locale].wbAssumptions.wb5}</span>
           </div>
         </div>
 

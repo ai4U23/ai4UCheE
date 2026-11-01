@@ -39,6 +39,7 @@
 }
 
 * { box-sizing: border-box; }
+html, body { overflow-x: hidden; max-width: 100vw; }
 
 body {
   margin: 0;
@@ -137,13 +138,18 @@ code, pre, .mono {
   }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1240px) {
   .shell-workspace,
   .wb-split {
     grid-template-columns: minmax(0, 1fr);
   }
   .studio-floating-mission-wrap {
     right: 16px;
+  }
+  .chat-drawer {
+    position: static;
+    height: auto;
+    max-height: none;
   }
 }
 

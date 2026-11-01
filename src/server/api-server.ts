@@ -107,6 +107,11 @@ export function createApiServer(dbPath?: string): Express {
     res.json({ calculations: rows });
   });
 
+  app.delete('/api/saved-calculations', (_req: Request, res: Response): void => {
+    const info = getConn().prepare('DELETE FROM saved_calculations').run();
+    res.json({ ok: true, deleted: info.changes });
+  });
+
   app.post('/api/actions/:actionName', async (req: Request, res: Response): Promise<void> => {
     const name = String(req.params.actionName);
     const action = ActionRegistry.get(name);

@@ -5,6 +5,7 @@ import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { syncWorkbenchPayload } from '../../actions/view-screen';
 import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { PipingPumpSvgSketch } from '../sketches/piping-pump-svg-sketch';
 import { KaTeXBlock } from '../ui/katex-block';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
@@ -78,6 +79,7 @@ export const HydraulicsWorkbench: React.FC = () => {
           <span className={`wb-verdict ${isCavitating ? 'fail' : 'pass'}`} style={{ margin: 0, padding: '0.2rem 0.6rem', fontSize: '0.76rem' }}>
             {t.wb3Verdict(isCavitating, npshAvailableM.toFixed(1), npshrM.toFixed(1))}
           </span>
+          <span className="wb-chip mono" data-testid="screening-assumptions-badge" style={{ fontSize: '0.68rem', padding: '0.18rem 0.45rem' }}>{TRUST_BOUNDARY_COPY[locale].wbAssumptions.wb3}</span>
           <label>
             {t.wb3NpsLabel}
             <select aria-label="Nominal pipe size" value={npsInch} onChange={(e) => setNpsInch(Number(e.target.value))}>

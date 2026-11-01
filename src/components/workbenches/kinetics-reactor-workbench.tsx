@@ -7,6 +7,7 @@ import { usePersonaTheme } from '../../context/persona-theme-context';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { useWorkbenchMutations } from '../../hooks/use-workbench-mutations';
 import { getWorkbenchCopy } from '../../lib/i18n/vi-workbenches-dictionary';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { SUBJECT_WORKBENCH_BLENDS } from '../../lib/textbook-corpus-registry';
 import { LevenspielReactorSvgCanvas } from '../sketches/levenspiel-reactor-svg-canvas';
 import { LearnModeCallout } from '../ui/learn-mode-callout';
@@ -128,6 +129,7 @@ export const KineticsReactorWorkbench: React.FC = () => {
           <div className="wb-panel" data-testid="wb6-status-banner">
             <strong>{t.wb6GuardrailPrefix(solved.isRunaway || solved.isDiffusionLimited)}</strong>
             <span className="mono">{statusBanner}</span>
+            <span className="wb-chip mono" data-testid="screening-assumptions-badge" style={{ display: 'block', marginTop: 4, fontSize: 11 }}>{TRUST_BOUNDARY_COPY[locale].wbAssumptions.wb6}</span>
           </div>
         </div>
 
