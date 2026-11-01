@@ -127,7 +127,7 @@ export const PageAxShareMenu: React.FC = () => {
             rel="noopener noreferrer"
             data-testid="ax-open-chatgpt-link"
           >
-            <span>💬 Open in ChatGPT</span>
+            <span>Open in ChatGPT</span>
             <span>↗</span>
           </a>
           <a
@@ -137,7 +137,7 @@ export const PageAxShareMenu: React.FC = () => {
             rel="noopener noreferrer"
             data-testid="ax-open-claude-link"
           >
-            <span>🧠 Open in Claude</span>
+            <span>Open in Claude</span>
             <span>↗</span>
           </a>
           <a
@@ -147,7 +147,7 @@ export const PageAxShareMenu: React.FC = () => {
             rel="noopener noreferrer"
             data-testid="ax-open-perplexity-link"
           >
-            <span>🔎 Open in Perplexity</span>
+            <span>Open in Perplexity</span>
             <span>↗</span>
           </a>
         </div>

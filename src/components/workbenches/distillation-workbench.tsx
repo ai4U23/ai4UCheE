@@ -134,8 +134,8 @@ export const DistillationWorkbench: React.FC = () => {
       <aside className={showProofs ? 'wb-tutor-card' : 'wb-tutor-card studio-drawer-collapsed'} {...fenskeSelect.selectableProps}>
         <h3>
           {personaMode === 'learn'
-            ? '🎓 Tier 1 — Fenske-Underwood-Gilliland & Stage Stepping'
-            : '🏭 Tier 2 — Sec 14 Fair Flooding & Eckert GPDC Rating'}
+            ? 'Tier 1 — Fenske-Underwood-Gilliland & Stage Stepping'
+            : 'Tier 2 — Sec 14 Fair Flooding & Eckert GPDC Rating'}
         </h3>
         <WhiteBoxEquationCard equation={solved.equations[0]} personaMode={personaMode} katexTestIds={{ symbolic: 'katex-fenske' }} />
         <WhiteBoxEquationCard equation={solved.equations[1]} personaMode={personaMode} />

@@ -135,7 +135,7 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
       </span>
 
       <span className="mission-pill" data-testid="rail-detective-stamp" title={buildFoglerDetectiveStamp(activeWorkbench, profile).tierLabel}>
-        🕵️ {buildFoglerDetectiveStamp(activeWorkbench, profile).code}
+        {buildFoglerDetectiveStamp(activeWorkbench, profile).code}
       </span>
 
       <label className="mono" style={{ fontSize: '0.76rem' }}>

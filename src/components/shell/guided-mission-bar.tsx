@@ -86,7 +86,7 @@ export const GuidedMissionBar: React.FC = () => {
   const handleSocraticHint = (mission: GuidedMissionScenario) => {
     agentNative.ui.output({
       type: 'equation-proof-card',
-      title: `💡 Socratic Clue — ${mission.buttonLabel}`,
+      title: `Socratic Clue — ${mission.buttonLabel}`,
       data: {
         symbolic_latex: String(mission.proofCard.data.symbolic_latex ?? ''),
         substituted_latex: '\\text{Clue: inspect the governing physical term before changing sliders}',
@@ -134,8 +134,8 @@ export const GuidedMissionBar: React.FC = () => {
                   {solved ? '✓ ' : ''}
                   {locale === 'vi' ? (MISSION_BUTTON_LABELS_VI[mission.id] ?? mission.buttonLabel) : mission.buttonLabel}
                   {isRecommendedNext && (
-                    <span data-testid="recommended-mission-badge" style={{ marginLeft: '0.3rem' }}>
-                      ⭐
+                    <span data-testid="recommended-mission-badge" className="mono" style={{ marginLeft: '4px', fontSize: '11px' }}>
+                      [Next]
                     </span>
                   )}
                 </button>

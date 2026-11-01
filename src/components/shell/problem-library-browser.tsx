@@ -126,21 +126,20 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
         {filtered.map((p) => {
           const isSolved = solvedProblemIds.includes(p.problemId);
           const isSelected = activeProblemId === p.problemId;
-          const eqMeta = EQUIPMENT_CATEGORY_META[p.equipmentCategory];
           return (
             <div
               key={p.problemId} data-testid={`problem-card-${p.problemId}`} className="wb-panel"
               style={{ padding: '0.55rem 0.65rem', border: isSelected ? '2px solid var(--accent-primary)' : undefined }}
             >
-              <div className="mono" style={{ fontSize: '0.72rem', display: 'flex', justifyContent: 'space-between', gap: '0.35rem' }}>
+              <div className="mono" style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between', gap: '6px' }}>
                 <span><strong>#{p.number}</strong> · {tr(p.tierBadge)}</span>
-                <span>{eqMeta.icon} <code>{p.equipmentTag}</code></span>
+                <span><code>{p.equipmentTag}</code></span>
               </div>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, margin: '0.2rem 0' }}>
+              <div style={{ fontSize: '13px', fontWeight: 600, margin: '4px 0' }}>
                 {isSolved ? '✓ ' : ''}{tr(p.title)}
               </div>
-              <div className="mono" style={{ fontSize: '0.72rem', opacity: 0.9, marginBottom: '0.25rem' }}>
-                {p.timeHorizonBadge} · <em>{tr(p.subjectLabel)}</em>
+              <div className="mono" style={{ fontSize: '11px', opacity: 0.9, marginBottom: '4px' }}>
+                {p.timeHorizonBadge} · <span>{tr(p.subjectLabel)}</span>
               </div>
               <div style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>{tr(p.observationSummary)}</div>
               <div className="wb-actions-row" style={{ justifyContent: 'space-between' }}>

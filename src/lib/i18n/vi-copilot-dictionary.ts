@@ -39,12 +39,12 @@ export const STARTER_PROMPTS_VI: Record<WorkbenchId, readonly string[]> = {
 };
 
 export const QUICK_ACTIONS_VI: Record<WorkbenchId, readonly string[]> = {
-  'wb1-visual-verifier': ['⚡ Sửa giá trị đọc đồ thị về chuẩn Perry (0.0045)'],
-  'wb2-thermo-dippr': ['⚡ Đổi sang Ethanol @ 351.5 K'],
-  'wb3-hydraulics': ['⚡ Sửa xâm thực bơm (ống 6 in, 15 psig)'],
-  'wb4-distillation': ['⚡ Chống ngập tháp chưng cất (R = 1.3 × Rmin, D = 0.85 m)'],
-  'wb6-kinetics-reactors': ['⚡ Cứu lò phản ứng thoát nhiệt (X = 0.80, φ = 1.1, ψ = 0.24)'],
-  'wb5-handbook-atlas': ['⚡ Kiểm tra Mục 23 van an toàn tại 150 psig'],
+  'wb1-visual-verifier': ['Sửa giá trị đọc đồ thị về chuẩn Perry (0.0045)'],
+  'wb2-thermo-dippr': ['Đổi sang Ethanol @ 351.5 K'],
+  'wb3-hydraulics': ['Sửa xâm thực bơm (ống 6 in, 15 psig)'],
+  'wb4-distillation': ['Chống ngập tháp chưng cất (R = 1.3 × Rmin, D = 0.85 m)'],
+  'wb6-kinetics-reactors': ['Cứu lò phản ứng thoát nhiệt (X = 0.80, φ = 1.1, ψ = 0.24)'],
+  'wb5-handbook-atlas': ['Kiểm tra Mục 23 van an toàn tại 150 psig'],
 };
 
 export const SOCRATIC_HINTS_VI: Record<WorkbenchId, string> = {
@@ -126,10 +126,10 @@ export function formatCopilotReplyBody(args: {
   const base =
     personaMode === 'learn'
       ? locale === 'vi'
-        ? `🎓 Trực giác Sinh viên (${scaffoldingLevel.toUpperCase()}):\n${coachingBlock}\n\n${learnText}`
-        : `🎓 Student Intuition (${scaffoldingLevel.toUpperCase()}):\n${coachingBlock}\n\n${learnText}`
+        ? `Trực giác Sinh viên (${scaffoldingLevel.toUpperCase()}):\n${coachingBlock}\n\n${learnText}`
+        : `Student Intuition (${scaffoldingLevel.toUpperCase()}):\n${coachingBlock}\n\n${learnText}`
       : locale === 'vi'
-        ? `🏭 Kiểm định Kỹ sư EPC:\n${plantText}\n${coachingBlock}\nSynced with <current-screen workbench="${activeWorkbench}" personaMode="${personaMode}" locale="vi">`
-        : `🏭 EPC Verification:\n${plantText}\n${coachingBlock}\nSynced with <current-screen workbench="${activeWorkbench}" personaMode="${personaMode}">`;
+        ? `Kiểm định Kỹ sư EPC:\n${plantText}\n${coachingBlock}\nSynced with <current-screen workbench="${activeWorkbench}" personaMode="${personaMode}" locale="vi">`
+        : `EPC Verification:\n${plantText}\n${coachingBlock}\nSynced with <current-screen workbench="${activeWorkbench}" personaMode="${personaMode}">`;
   return liveReply ? `${liveReply}\n\n${base}\n\n${tail}` : `${base}\n\n${tail}`;
 }

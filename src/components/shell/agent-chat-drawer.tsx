@@ -90,7 +90,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
         <strong>{t.copilotHeader}</strong>
         <div className="wb-actions-row">
           <span className="dof-badge studio-drawer-collapsed" data-testid="copilot-model-badge">
-            <SwarmPulseDot tone="gold" />⚡ gemini-4-argon-low
+            <SwarmPulseDot tone="gold" />gemini-4-argon-low
           </span>
           <span className="mono screen-sync-pill" data-testid="current-screen-badge" title={currentScreenXml}>
             <SwarmPulseDot tone="emerald" />{personaMode === 'learn' ? t.socraticBadge : t.plantBadge} · {activeWorkbench.slice(0, 3).toUpperCase()}
@@ -107,7 +107,7 @@ export const AgentChatDrawer: React.FC<AgentChatDrawerProps> = ({ renderInlineEx
       <div className="chat-messages">
         {messages.length === 0 && (
           <div className="chat-msg chat-agent">
-            <strong>🤖 Agent:</strong> {t.agentReadyLead} <strong title={activeWorkbench.toUpperCase()}>{wbFriendly}</strong>. {t.agentReadyTail}
+            <strong>Agent:</strong> {t.agentReadyLead} <strong title={activeWorkbench.toUpperCase()}>{wbFriendly}</strong>. {t.agentReadyTail}
           </div>
         )}
         {messages.map((m) => (

@@ -90,9 +90,9 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
       aria-label="Fogler and LeBlanc 6-Stage Creative Problem-Solving Studio"
       style={{ marginTop: '0.45rem', padding: '0.65rem 0.85rem' }}
     >
-      <div className="wb-toolbar" style={{ marginBottom: expanded ? '0.45rem' : 0 }}>
+      <div className="wb-toolbar" style={{ marginBottom: expanded ? '8px' : 0 }}>
         <div>
-          <strong data-testid="why-learn-subject-banner">🎯 {spec.whyLearnSubject}</strong>
+          <strong data-testid="why-learn-subject-banner">{spec.whyLearnSubject}</strong>
           <div className="wb-subtitle">
             <span>{ts.boardRealPlantPrefix} <strong>{spec.plantIncidentTitle}</strong></span> · <code>{spec.foglerBookCitation}</code> ·{' '}
             <span data-testid="fogler-detective-stamp">{stamp.tierLabel}</span>
@@ -118,15 +118,15 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
             <div className="mono" style={{ fontSize: '0.78rem', marginBottom: '0.35rem' }}>
               <strong>{ts.boardStage1Title}</strong> {spec.observationSummary}
             </div>
-            <div className="mono" data-testid="temporal-fault-clue-badge" style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>
-              <strong>{temporalClue.timeHorizonBadge}:</strong> {temporalClue.rateOfChangeClue} <em>({temporalClue.falsifiesReason})</em>
+            <div className="mono" data-testid="temporal-fault-clue-badge" style={{ fontSize: '12px', marginBottom: '6px' }}>
+              <strong>{temporalClue.timeHorizonBadge}:</strong> {temporalClue.rateOfChangeClue} ({temporalClue.falsifiesReason})
             </div>
             {errorSignature && (
-              <div className="wb-verdict fail mono" data-testid="why-number-wrong-detector" style={{ fontSize: '0.75rem', marginBottom: '0.4rem' }}>
+              <div className="wb-verdict fail mono" data-testid="why-number-wrong-detector" style={{ fontSize: '12px', marginBottom: '8px' }}>
                 <strong>{errorSignature.badgeTitle}:</strong> {errorSignature.plainExplanation} (<code>{errorSignature.mathSignature}</code> · {errorSignature.citation})
               </div>
             )}
-            <table className="mono" style={{ width: '100%', fontSize: '0.76rem', marginBottom: '0.45rem' }}>
+            <table className="mono" style={{ width: '100%', fontSize: '12px', marginBottom: '8px' }}>
               <thead><tr><th>{ts.boardColTelemetry}</th><th>{ts.boardColNormal}</th><th>{ts.boardColFaulty}</th><th>{ts.boardColDelta}</th></tr></thead>
               <tbody>
                 {spec.telemetryRows.map((r) => (
@@ -135,19 +135,19 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
               </tbody>
             </table>
 
-            <div className="mono" style={{ fontSize: '0.76rem', marginBottom: '0.45rem' }} data-testid="kt-problem-definition-box">
+            <div className="mono" style={{ fontSize: '12px', marginBottom: '8px' }} data-testid="kt-problem-definition-box">
               <strong>{ts.boardStage2Title}</strong>
-              <div>• <em>{ts.boardPerceivedLabel}</em> &ldquo;{spec.ktDefinition.perceivedProblem}&rdquo;</div>
-              <div>• <em>{ts.boardRealDefLabel}</em> <strong>{spec.ktDefinition.realProblemDefined}</strong></div>
-              <div>• <em>K-T IS:</em> {spec.ktDefinition.whatIs} | <em>IS NOT:</em> {spec.ktDefinition.whatIsNot}</div>
+              <div>• {ts.boardPerceivedLabel} &ldquo;{spec.ktDefinition.perceivedProblem}&rdquo;</div>
+              <div>• {ts.boardRealDefLabel} <strong>{spec.ktDefinition.realProblemDefined}</strong></div>
+              <div>• K-T IS: {spec.ktDefinition.whatIs} | IS NOT: {spec.ktDefinition.whatIsNot}</div>
             </div>
 
-            <div className="mono" style={{ fontSize: '0.76rem' }} data-testid="theory-handbook-bridge-box">
+            <div className="mono" style={{ fontSize: '12px' }} data-testid="theory-handbook-bridge-box">
               <strong>{ts.boardStage34Title}</strong>
               <KaTeXBlock latex={spec.fundamentalTheory.symbolicLatex} />
-              <div>• <em>{ts.boardGoverningLabel}</em> {spec.fundamentalTheory.governingTermsNote}</div>
-              <div>• <em>{ts.boardHandbookLabel}</em> <code>{spec.applicableHandbook.primaryCitation}</code> ({spec.applicableHandbook.chartOrTableRef})</div>
-              <button type="button" data-testid="stage-review-theory-btn" onClick={handleInspectTheoryAndHandbook} style={{ marginTop: '0.3rem' }}>
+              <div>• {ts.boardGoverningLabel} {spec.fundamentalTheory.governingTermsNote}</div>
+              <div>• {ts.boardHandbookLabel} <code>{spec.applicableHandbook.primaryCitation}</code> ({spec.applicableHandbook.chartOrTableRef})</div>
+              <button type="button" data-testid="stage-review-theory-btn" onClick={handleInspectTheoryAndHandbook} style={{ marginTop: '6px' }}>
                 {ts.boardConfirmTheoryBtn(stageStatus.stage3TheoryDone)}
               </button>
             </div>

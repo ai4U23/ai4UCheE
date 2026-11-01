@@ -101,7 +101,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             onClick={() => setShowLabs(!showLabs)}
             title="Switch Engineering Subject Lab (5 Subject Labs + Charts Verifier)"
           >
-            🔧 {activeSubjectLabel} · {t.labsSuffix} {showLabs ? '▴' : '▾'}
+            {activeSubjectLabel} · {t.labsSuffix} {showLabs ? '▴' : '▾'}
           </button>
           <span
             className="dof-badge studio-drawer-collapsed"

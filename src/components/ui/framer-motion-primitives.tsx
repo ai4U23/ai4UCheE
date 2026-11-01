@@ -46,13 +46,10 @@ export const SwarmPulseDot: React.FC<SwarmPulseDotProps> = ({
   tone = 'emerald',
   testId = 'swarm-pulse-dot',
 }) => (
-  <motion.span
+  <span
     className={`swarm-pulse-dot swarm-pulse-${tone}`}
     data-testid={testId}
     aria-hidden="true"
-    initial={{ opacity: 0.4, scale: 1 }}
-    animate={{ opacity: [0.35, 1], scale: [1, 1.25] }}
-    transition={FRAMER_SWARM_PULSE_TRANSITION}
   />
 );
 
@@ -78,8 +75,7 @@ export const MotionPillButton: React.FC<MotionPillButtonProps> = ({
     data-testid={testId}
     className={`framer-pill-btn ${className} ${isActive ? 'active' : ''}`.trim()}
     style={{ position: 'relative', overflow: 'hidden', ...style }}
-    whileHover={{ y: -1.5 }}
-    whileTap={{ scale: 0.97 }}
+    whileTap={{ scale: 0.98 }}
     transition={FRAMER_BOUNCE_SPRING}
     {...(rest as React.ComponentProps<typeof motion.button>)}
   >

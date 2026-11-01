@@ -92,9 +92,9 @@ export const WhiteBoxEquationCard: React.FC<WhiteBoxEquationCardProps> = ({ equa
         </motion.div>
       </div>
       {personaMode === 'learn' && equation.plainExplanation && (
-        <p className="white-box-plain-note">💡 {equation.plainExplanation}</p>
+        <p className="white-box-plain-note">{equation.plainExplanation}</p>
       )}
-      {equation.warningText && <p className="white-box-warning-note">⚠️ {equation.warningText}</p>}
+      {equation.warningText && <p className="white-box-warning-note">Note: {equation.warningText}</p>}
     </motion.div>
   );
 };

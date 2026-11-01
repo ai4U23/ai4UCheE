@@ -127,13 +127,13 @@ export const HydraulicsWorkbench: React.FC = () => {
       </div>
 
       <div className={showProofs ? '' : 'studio-drawer-collapsed'}>
-        <aside className="wb-tutor-card" style={{ marginBottom: '0.6rem' }}>
+        <aside className="wb-tutor-card" style={{ marginBottom: '8px' }}>
           <h3>
             {personaMode === 'learn'
-              ? '🎓 Tier 1 — Shortcut Sizing & Fig. 6-9 Crosshair'
-              : '🏭 Tier 2 — 3-Case (70%/100%/120%) EPC Datasheet Matrix'}
+              ? 'Tier 1 — Shortcut Sizing & Fig. 6-9 Crosshair'
+              : 'Tier 2 — 3-Case (70%/100%/120%) EPC Datasheet Matrix'}
           </h3>
-          <table className="mono" style={{ width: '100%', fontSize: '0.82rem' }} data-testid="hydraulics-3case-table">
+          <table className="mono" style={{ width: '100%', fontSize: '12px' }} data-testid="hydraulics-3case-table">
             <thead>
               <tr><th>Case</th><th>Flow (gpm)</th><th>v (m/s)</th><th>Re</th><th>f_F / f_D</th><th>ΔP_tot (kPa)</th></tr>
             </thead>
@@ -157,9 +157,9 @@ export const HydraulicsWorkbench: React.FC = () => {
         </aside>
 
         <div className="wb-panel" {...eqGuardrailSelect.selectableProps} data-testid="darcy-fanning-banner">
-          <strong>🛡️ Darcy vs. Fanning Friction Guardrail:</strong> Perry&apos;s <code>Fig. 6-9 (p. 6-10)</code> plots{' '}
-          <em>Fanning</em> <code>f_F = {caseNorm.fFanning.toFixed(5)}</code>, while Darcy-Weisbach head loss uses{' '}
-          <em>Darcy</em> <code>f_D = 4·f_F = {caseNorm.fDarcy.toFixed(5)}</code>{' '}
+          <strong>Darcy vs. Fanning Friction Guardrail:</strong> Perry&apos;s <code>Fig. 6-9 (p. 6-10)</code> plots{' '}
+          <span className="mono">Fanning</span> <code>f_F = {caseNorm.fFanning.toFixed(5)}</code>, while Darcy-Weisbach head loss uses{' '}
+          <span className="mono">Darcy</span> <code>f_D = 4·f_F = {caseNorm.fDarcy.toFixed(5)}</code>{' '}
           <code>[Perry&apos;s 9th Ed., Eqs. 6-37..6-39, p. 6-11]</code>.
           <KaTeXBlock latex={'f_D = 4 f_F, \\quad h_f = f_D \\frac{L}{D} \\frac{v^2}{2g}'} testId="katex-darcy-fanning" />
         </div>

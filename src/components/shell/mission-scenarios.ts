@@ -23,7 +23,7 @@ export const GUIDED_MISSIONS: ReadonlyArray<GuidedMissionScenario> = [
   {
     id: 'mission-fanning-trap',
     workbench: 'wb1-visual-verifier',
-    buttonLabel: '🔍 Catch the 4× Friction Trap',
+    buttonLabel: 'Catch the 4× Friction Trap',
     chip: { kind: 'figure', id: 'perry-crop', label: "Perry's 6-10 visual crop", payload: { secPage: '6-10', exactValue: 0.0045 } },
     proofCard: {
       type: 'equation-proof-card',
@@ -46,7 +46,7 @@ export const GUIDED_MISSIONS: ReadonlyArray<GuidedMissionScenario> = [
   {
     id: 'mission-boil-water',
     workbench: 'wb2-thermo-dippr',
-    buttonLabel: '💧 Boil Water at 100°C (psig vs psia)',
+    buttonLabel: 'Boil Water at 100°C (psig vs psia)',
     chip: { kind: 'equation', id: 'dippr-eq-101', label: 'DIPPR Eq. 101 Vapor Pressure (Water (H₂O))', payload: { compound: 'water', tempK: 373.15 } },
     proofCard: {
       type: 'equation-proof-card',
@@ -65,7 +65,7 @@ export const GUIDED_MISSIONS: ReadonlyArray<GuidedMissionScenario> = [
   {
     id: 'mission-pump-npsha',
     workbench: 'wb3-hydraulics',
-    buttonLabel: '⚙️ Check Pump Cavitation (NPSHa)',
+    buttonLabel: 'Check Pump Cavitation (NPSHa)',
     chip: { kind: 'equipment', id: 'pump-P101', label: 'Centrifugal Pump P-101 (NPSHa vs NPSHr)', payload: { tag: 'P-101' } },
     proofCard: {
       type: 'equation-proof-card',
@@ -85,7 +85,7 @@ export const GUIDED_MISSIONS: ReadonlyArray<GuidedMissionScenario> = [
   {
     id: 'mission-distillation',
     workbench: 'wb4-distillation',
-    buttonLabel: '🗼 Stage a Binary Distillation Column',
+    buttonLabel: 'Stage a Binary Distillation Column',
     chip: { kind: 'equation', id: 'eq-13-fenske', label: 'Fenske N_min & Underwood R_min (Perry Sec 13, p. 13-36)', payload: { alpha: 2.45 } },
     proofCard: {
       type: 'equation-proof-card',
@@ -104,7 +104,7 @@ export const GUIDED_MISSIONS: ReadonlyArray<GuidedMissionScenario> = [
   {
     id: 'mission-kinetics-runaway',
     workbench: 'wb6-kinetics-reactors',
-    buttonLabel: '🧪 Rescue Reactor Runaway & Pore Diffusion (Fogler)',
+    buttonLabel: 'Rescue Reactor Runaway & Pore Diffusion (Fogler)',
     chip: {
       kind: 'equation',
       id: 'fogler-cre-reactor-sizing',

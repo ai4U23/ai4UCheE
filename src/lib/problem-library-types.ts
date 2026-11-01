@@ -53,42 +53,42 @@ export interface ProblemCaseEntry {
 
 export const PROGRESSION_TIER_META: Readonly<Record<EngineeringProgressionTier, { label: string; shortBadge: string; description: string }>> = {
   L1: {
-    label: '🌱 L1 · Unit & Concept Trap',
-    shortBadge: '🌱 L1 Trap',
+    label: 'L1 · Unit & Concept Trap',
+    shortBadge: 'L1 Trap',
     description: 'Single equation + classic unit/datum trap (psig vs psia, Fanning f_F vs Darcy f_D = 4·f_F, °C vs K).',
   },
   L2: {
-    label: '🔧 L2 · Equipment Bottleneck',
-    shortBadge: '🔧 L2 Bottleneck',
+    label: 'L2 · Equipment Bottleneck',
+    shortBadge: 'L2 Bottleneck',
     description: 'Single unit operation where two physical phenomena trade off (choked valve, HX temperature cross, azeotrope/LLE).',
   },
   L3: {
-    label: '🕵️ L3 · Multi-Hypothesis Upset',
-    shortBadge: '🕵️ L3 Troubleshooting',
+    label: 'L3 · Multi-Hypothesis Upset',
+    shortBadge: 'L3 Troubleshooting',
     description: 'Real plant fault with Δt time clue and 2–3 plausible decoy causes that must be falsified (Rule #12).',
   },
   L4: {
-    label: '🚨 L4 · Coupled Safety & Design',
-    shortBadge: '🚨 L4 Safety/Design',
+    label: 'L4 · Coupled Safety & Design',
+    shortBadge: 'L4 Safety/Design',
     description: 'High-consequence runaway, CSB disaster analysis, or open-ended multi-constraint process design.',
   },
 };
 
 export const EQUIPMENT_CATEGORY_META: Readonly<Record<EquipmentCategoryId, { label: string; icon: string }>> = {
-  'pumps-piping': { label: 'Pumps & Piping (P-101 / L-101)', icon: '🔄' },
-  'valves-reliefs': { label: 'Valves & Reliefs (FCV / PSV)', icon: '🎛️' },
-  'exchangers-boilers': { label: 'Exchangers & Boilers (E-101)', icon: '🔥' },
-  'vessels-tanks': { label: 'Flash Drums & Tanks (V-101 / TK)', icon: '💧' },
-  'columns-towers': { label: 'Distillation & Absorbers (T-201)', icon: '🗼' },
-  'reactors-catalysts': { label: 'Reactors & Catalysts (R-301 / PBR)', icon: '⚗️' },
-  'dryers-membranes': { label: 'Cooling Towers & Membranes (CT / M)', icon: '🌬️' },
-  'special-systems': { label: 'Electrolyzers, Fab & Chem-E-Car', icon: '⚡' },
+  'pumps-piping': { label: 'Pumps & Piping (P-101 / L-101)', icon: '' },
+  'valves-reliefs': { label: 'Valves & Reliefs (FCV / PSV)', icon: '' },
+  'exchangers-boilers': { label: 'Exchangers & Boilers (E-101)', icon: '' },
+  'vessels-tanks': { label: 'Flash Drums & Tanks (V-101 / TK)', icon: '' },
+  'columns-towers': { label: 'Distillation & Absorbers (T-201)', icon: '' },
+  'reactors-catalysts': { label: 'Reactors & Catalysts (R-301 / PBR)', icon: '' },
+  'dryers-membranes': { label: 'Cooling Towers & Membranes (CT / M)', icon: '' },
+  'special-systems': { label: 'Electrolyzers, Fab & Chem-E-Car', icon: '' },
 };
 
 export const SYMPTOM_CATEGORY_META: Readonly<Record<SymptomCategoryId, { label: string }>> = {
-  'design-unit-trap': { label: '📐 Design / Audit Mismatch' },
-  'cavitation-choking-flooding': { label: '🔊 Cavitation / Choking / Flooding' },
-  'thermal-runaway-cold': { label: '🌡️ Thermal Anomaly / Runaway' },
-  'offspec-yield-purity': { label: '📉 Off-Spec Purity / Low Yield' },
-  'safety-containment-breach': { label: '☣️ Safety / Containment Breach' },
+  'design-unit-trap': { label: 'Design / Audit Mismatch' },
+  'cavitation-choking-flooding': { label: 'Cavitation / Choking / Flooding' },
+  'thermal-runaway-cold': { label: 'Thermal Anomaly / Runaway' },
+  'offspec-yield-purity': { label: 'Off-Spec Purity / Low Yield' },
+  'safety-containment-breach': { label: 'Safety / Containment Breach' },
 };

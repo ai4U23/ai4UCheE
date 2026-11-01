@@ -48,13 +48,13 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
 
   return (
     <FramerEntranceStage className="learn-callout" testId={`learn-callout-${workbenchId}`}>
-      <div className="wb-toolbar" style={{ marginBottom: '0.15rem' }}>
-        <strong>🎓 {title}</strong>
+      <div className="wb-toolbar" style={{ marginBottom: '4px' }}>
+        <strong>{title}</strong>
         <div className="wb-actions-row">
           <button
             type="button"
             onClick={() => setExpanded(!expanded)}
-            style={{ fontSize: '0.72rem', padding: '0.15rem 0.45rem' }}
+            style={{ fontSize: '12px', padding: '4px 8px' }}
           >
             {ui.calloutFieldNotesBtn(expanded)}
           </button>
@@ -70,8 +70,8 @@ export const LearnModeCallout: React.FC<LearnModeCalloutProps> = ({
           </button>
         </div>
       </div>
-      <p data-testid={`why-learn-callout-${workbenchId}`} style={{ fontSize: '0.78rem' }}>
-        <strong>🎯 {spec.whyLearnSubject}</strong> · 🚨 <strong>{spec.plantIncidentTitle}:</strong> {spec.ktDefinition.realProblemDefined}
+      <p data-testid={`why-learn-callout-${workbenchId}`} style={{ fontSize: '12px' }}>
+        <strong>{spec.whyLearnSubject}</strong> · <strong>{spec.plantIncidentTitle}:</strong> {spec.ktDefinition.realProblemDefined}
       </p>
       <div className={expanded ? '' : 'studio-drawer-collapsed'}>
         <p>{plainEnglish}</p>

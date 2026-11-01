@@ -72,9 +72,9 @@ export const HandbookAtlasWorkbench: React.FC = () => {
     <section className="wb-panel" data-testid="wb5-handbook-atlas">
       <header className="wb-toolbar">
         <div>
-          <h2>📘 Sec {solved.secNum} · {solved.secTitle}</h2>
+          <h2>Sec {solved.secNum} · {solved.secTitle}</h2>
           <p className="wb-subtitle studio-drawer-collapsed" data-testid="wb5-blended-sources-badge">
-            📚 6 Blended Textbooks ({TEXTBOOK_CORPUS_CATALOG.map((b) => b.shortTitle).join(' · ')}) · All 25 Perry Sections
+            6 Blended Textbooks ({TEXTBOOK_CORPUS_CATALOG.map((b) => b.shortTitle).join(' · ')}) · All 25 Perry Sections
           </p>
         </div>
         <div className="wb-actions-row">

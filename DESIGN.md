@@ -4,11 +4,11 @@
 **Modern scholarly chemical engineering handbook meets tactile AI-native studio** — blending 6 canonical ChE textbooks (*Perry's 9th Ed.*, *Fogler*, *Bird-Stewart-Lightfoot*, *Smith-Van Ness-Abbott*, *Seader*, *Crowl & Louvar*) with live interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and bi-directional AI Co-Pilot slider control.
 
 ## Art Direction & Register
-- **Register:** Product + Reference Atlas (`🎓 Learn Mode` for ChE students · `🏭 Plant Mode` for EPC/process engineers).
-- **Surface Identity:** Single Institutional Ivory (`#FBF6EC` / `data-theme="paper"`) canvas paired with a Sovereign Deep Navy (`#071A33`) studio masthead and Maize Gold (`#E8C547`) interactive accents.
+- **Register:** Product + Reference Atlas (`Learn Mode` for ChE students · `Plant Mode` for EPC/process engineers).
+- **Character & World:** Scholarly, exact, tactile — printed chemical engineering handbooks, calibrated log-log nomographs, and control-room P&ID calculation sheets on warm archival paper (`#FBF6EC` / `#F5F0E0`) with deep navy ink (`#071A33`) and brass/maize calibration accents (`#E8C547`).
 - **3-Zone AI-Native Studio ("1 Bar · 1 Canvas · 1 Agent"):**
-  - **Zone 1 (Top Studio Bar):** Compact dark masthead (`#071A33`) with `ai4UCheE` brand + 5-second value-prop eyebrow (`6-Book ChE Solver · 55+ Charts · 24 Plant Problems`), `🔧 <Active Subject> · 5 Labs ▾` switcher, `🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4 · 📚 Browse All 24 Problems ▾` launcher, `🎓 Learn` / `🏭 Plant` persona switcher, `📐 Charts` (`WB1`), `📄 Calc Sheet`, and `🔗 Share / AI` (`<PageAxShareMenu />`).
-  - **Zone 2 (Interactive Engineering Canvas):** Primary interactive SVG diagram/nomograph + single-line `34px` `<ScrubbableNumberInput />` dials above the fold; progressive-disclosure drawers (`📐 Show Math Proofs`, `📊 More Diagrams`, `🕵️ 6-Stage Investigation`) below.
+  - **Zone 1 (Top Studio Bar):** Compact dark masthead (`#071A33`) with `ai4UCheE` brand + 5-second value-prop eyebrow (`6-Book ChE Solver · 55+ Charts · 24 Plant Problems`), `<Active Subject> · 5 Labs ▾` switcher, `L1 · L2 · L3 · L4 · Browse All 24 Problems ▾` launcher, `Learn` / `Plant` persona switcher, `Charts` (`WB1`), `Calc Sheet`, and `Share / AI` (`<PageAxShareMenu />`).
+  - **Zone 2 (Interactive Engineering Canvas):** Primary interactive SVG diagram/nomograph + single-line `34px` `<ScrubbableNumberInput />` dials above the fold; progressive-disclosure drawers (`Show Math Proofs`, `More Diagrams`, `6-Stage Investigation`) below.
   - **Zone 3 (Sticky AI Co-Pilot Inspector):** Live `<current-screen>` sync pill, inline `genui-stream` proof cards, Point-and-Ask chip tray (`+ Ask`), 1-tap What-If quick actions, and natural-language slider mutation composer.
 
 ## Tokens (`src/styles/theme-tokens.css`)
@@ -30,19 +30,20 @@
 | `--status-danger` | `#b91c1c` | Cavitation, flooding, or Semenov runaway hazard |
 
 ### Typography
-- **Display & Headings (`--font-display`):** `'Cormorant Garamond', ui-serif, Georgia, serif` (weights 500, 600, 700; `letter-spacing: -0.015em`).
-- **UI & Narrative Body (`--font-sans`):** `'Karla', -apple-system, BlinkMacSystemFont, sans-serif` (weights 400, 500, 600, 700; `line-height: 1.48`).
-- **Calculations, Units & Citations (`--font-mono`):** `'JetBrains Mono', monospace` with `font-variant-numeric: tabular-nums` and `<KaTeXBlock />` for symbolic/substituted equations.
+- **Display & Headings (`--font-display`):** `'Cormorant Garamond', ui-serif, Georgia, serif` (weight `600`, never `700`/`800`; `letter-spacing: -0.02em`, `text-wrap: balance`, no trailing periods on headings).
+- **UI & Narrative Body (`--font-sans`):** `'Karla', -apple-system, BlinkMacSystemFont, sans-serif` (weights 400, 500, 600; `line-height: 1.5`).
+- **Calculations, Units & Citations (`--font-mono`):** `'JetBrains Mono', monospace` with `font-variant-numeric: tabular-nums` and `<KaTeXBlock />` for symbolic/substituted equations. Mono badges and stage labels use `11px`–`12px`, `font-weight: 500`, `letter-spacing: 0.01em`, and sentence/title case (never wide-tracked all-caps).
 
-### Spacing, Radius & Elevation
-- **Radius:** `10px` on top-level `.wb-panel` / `.chat-drawer`; `7px–8px` on buttons, inputs, and inner cards; `999px` on pills/chips.
-- **Shadow (`--shadow-lift`):** `0 1px 2px rgb(7 26 51 / 0.06), 0 10px 28px -10px rgb(7 26 51 / 0.14)` on top-level panels; nested `.wb-panel .wb-panel` stays flat (`box-shadow: none`).
+### Spacing, Nested Radii & Elevation
+- **4px Spacing Grid:** `--space-1` (`4px`), `--space-2` (`8px`), `--space-3` (`12px`), `--space-4` (`16px`), `--header-height` (`52px`).
+- **Nested Radius (`outer = inner + padding`):** `12px` on top-level `.wb-panel` / `.chat-drawer` (`16px` padding) -> `10px` on inner sub-cards (`12px` padding) -> `8px` on buttons/inputs -> `6px` on quiet mono tags/badges. All borders use solid `1px solid var(--border-grid)` hairlines (no dashed borders).
+- **Shadow (`--shadow-lift`):** `0 1px 2px rgb(7 26 51 / 0.06), 0 4px 12px rgb(7 26 51 / 0.06)` on top-level panels; nested `.wb-panel .wb-panel` stays flat (`box-shadow: none`). No colored glow shadows or purple/gold radial background washes.
 
 ## Motion Principles (`src/lib/framer-motion-tokens.ts` & `src/styles/framer-motion-surfaces.css`)
 - **Entrance (`FramerEntranceStage`):** `opacity: 1` initial state (never `opacity: 0`, preventing blank crawler/WAAPI traps), subtle translate/transition (`cubic-bezier(0.22, 1, 0.36, 1)`).
 - **Shared-Layout Pill Spring (`FRAMER_LAYOUT_SPRING`):** `{ type: 'spring', stiffness: 500, damping: 60, mass: 1 }`.
-- **Swarm Pulse Dot (`SwarmPulseDot`):** `8px` status beacon with `1.4s` halo keyframe loop.
-- **SVG Scrub Guard:** Never apply `scale()` or `translateY()` hover transforms to `.wb-crop-stage` or `<svg>` elements so `getBoundingClientRect()` inside `clientPointToViewBox` remains pixel-exact.
+- **Quiet Status Dot (`SwarmPulseDot`):** Static `8px` solid status indicator (no infinite pulsing halo animation). Buttons use `whileTap={{ scale: 0.98 }}` without vertical hover-lift (`translateY`).
+- **SVG Scrub Guard:** Never apply `scale()` or `translateY()` hover transforms or neon `drop-shadow` filters to `.wb-crop-stage` or `<svg>` elements so `getBoundingClientRect()` inside `clientPointToViewBox` remains pixel-exact.
 - **Reduced Motion:** `@media (prefers-reduced-motion: reduce)` collapses all animation and transition durations to `0.01ms`.
 
 ## Responsive Breakpoints

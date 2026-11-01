@@ -87,7 +87,7 @@ export const CarlsonAdvisorCard: React.FC<CarlsonAdvisorCardProps> = ({
       </p>
       {hasLle && (
         <p className="wb-coaching" data-testid="carlson-lle-warning">
-          ⚠️ <strong>LLE Trap:</strong> {ui.carlsonLleWarn}
+          <strong>LLE Trap:</strong> {ui.carlsonLleWarn}
         </p>
       )}
       <div className="wb-crop-placeholder">

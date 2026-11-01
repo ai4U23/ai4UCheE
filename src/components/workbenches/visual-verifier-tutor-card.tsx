@@ -91,7 +91,7 @@ export const VisualVerifierTutorCard: React.FC<VisualVerifierTutorCardProps> = (
           )}
           {fanning4xDetected && (
             <p className="wb-coaching" data-testid="fanning-4x-coaching">
-              ⚠️ <strong>Fanning vs. Darcy 4×:</strong> {ui.tutorFanningCoaching(numReading)}
+              <strong>Fanning vs. Darcy 4×:</strong> {ui.tutorFanningCoaching(numReading)}
             </p>
           )}
           {!pass && signatureMatch && (

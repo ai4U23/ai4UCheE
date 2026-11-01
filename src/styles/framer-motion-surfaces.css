@@ -1,64 +1,63 @@
-/* Framer "Luxurious Three" (bPWSkk20pwfxzXmKGtRh) ambient surfaces, spotlights,
- * Swarm Pulse beacons, shared-layout pill halos, and SVG handle radar rings (< 200 LOC).
- * Strictly preserves SVG Scrub Guard: never applies scale/translateY to .wb-crop-stage or <svg>. */
+/* Quiet Studio Surfaces & Tactile SVG Handle Discipline (< 200 LOC).
+ * Unslop Pass 2, 7 & 9:
+ * - Zero purple/gold radial color washes or neon drop-shadows on chrome.
+ * - Depth comes from Institutional Ivory surface steps (#fbf6ec -> #f5f0e0 -> #ffffff) and hairlines.
+ * - Strictly preserves SVG Scrub Guard: never applies scale/translateY to .wb-crop-stage or <svg>. */
 
 .app-shell {
-  background-image:
-    radial-gradient(60% 42% at 15% 0%, rgba(250, 204, 21, 0.14) 0%, rgba(251, 246, 236, 0) 70%),
-    radial-gradient(50% 45% at 88% 12%, rgba(99, 73, 180, 0.08) 0%, rgba(251, 246, 236, 0) 72%);
+  background-color: var(--bg-canvas);
+  background-image: none;
 }
 
 .shell-header {
-  background-image:
-    radial-gradient(48% 95% at 16% 0%, rgba(250, 204, 21, 0.22) 0%, rgba(7, 26, 51, 0) 74%),
-    radial-gradient(52% 90% at 84% 100%, rgba(99, 73, 180, 0.28) 0%, rgba(7, 26, 51, 0) 72%);
-  border-bottom: 1px solid rgba(250, 204, 21, 0.45);
-  box-shadow: 0 14px 36px -12px rgba(7, 26, 51, 0.45), 0 0 28px -8px rgba(250, 204, 21, 0.25);
+  background-color: var(--navy-deep);
+  background-image: none;
+  border-bottom: 1px solid rgba(251, 246, 236, 0.12);
+  box-shadow: 0 1px 2px rgba(7, 26, 51, 0.14);
 }
 
-/* Override static active button backgrounds so the sliding .motion-pill is 100% visible! */
+/* Override static active button backgrounds so the sliding .motion-pill is cleanly visible without neon glow */
 .shell-header .persona-btn.active {
-  background: rgba(15, 27, 61, 0.72) !important;
+  background: var(--navy) !important;
   color: var(--ivory) !important;
   border-color: var(--maize) !important;
-  box-shadow: 0 0 22px -4px rgba(250, 204, 21, 0.48);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .wb-tab {
-  transition: border-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1),
-              background 180ms ease;
+  transition: border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .wb-tab:hover {
   border-color: var(--maize);
-  box-shadow: 0 6px 16px -8px rgba(7, 26, 51, 0.2);
 }
 
 .wb-tab.active {
   background: var(--navy-deep);
   border-color: var(--maize);
-  box-shadow: 0 0 0 1px var(--maize), 0 8px 20px -10px rgba(7, 26, 51, 0.35);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
-/* Shared-layout motion pill glow (Framer Layout Spring 500/60/1 companion) */
+/* Shared-layout motion pill surface step (solid tonal step + hairline, zero hue-to-hue gradient or glow) */
 .framer-pill-glow {
-  background: linear-gradient(135deg, rgba(250, 204, 21, 0.32) 0%, rgba(232, 197, 71, 0.18) 100%);
-  border: 1px solid rgba(184, 134, 11, 0.62);
-  box-shadow: 0 0 14px 1px rgba(232, 197, 71, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  background-color: rgba(232, 197, 71, 0.22);
+  border: 1px solid var(--maize);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .shell-header .framer-pill-glow,
 .wb-tab .framer-pill-glow {
-  background: linear-gradient(135deg, rgba(250, 204, 21, 0.34) 0%, rgba(232, 197, 71, 0.2) 55%, rgba(99, 73, 180, 0.18) 100%);
-  border: 1px solid rgba(250, 204, 21, 0.72);
-  box-shadow: 0 0 18px 1px rgba(250, 204, 21, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  background-color: rgba(232, 197, 71, 0.22);
+  border: 1px solid var(--maize);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .framer-pill-btn.active,
 .wb-chip.active {
   border-color: var(--maize) !important;
-  font-weight: 700;
+  background-color: rgba(232, 197, 71, 0.16);
+  font-weight: 600;
 }
 
 /* Clean Studio Elevation: top-level panels get subtle paper elevation; nested panels stay flat & quiet */
@@ -66,15 +65,16 @@
 .wb-tutor-card,
 .chat-drawer {
   border-color: var(--border-grid);
-  transition: border-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .wb-panel .wb-panel {
   background: var(--bg-elevated);
   background-image: none;
   box-shadow: none;
-  padding: 0.65rem 0.8rem;
+  border-radius: 8px;
+  padding: 12px;
 }
 
 /* Collapsible studio drawers: keep DOM nodes mounted & accessible while taking 0px space in both axes when closed */
@@ -98,57 +98,50 @@
   flex: 0 0 0px !important;
 }
 
-/* Framer Swarm Pulse (NgQ5bLGaW -> TSGDAqBQ2) live status beacon + outer halo ring */
-@keyframes swarmHaloRing {
-  0%, 100% { box-shadow: 0 0 8px 1px currentColor, 0 0 0 0 rgba(250, 204, 21, 0.45); }
-  50% { box-shadow: 0 0 14px 2px currentColor, 0 0 0 5px rgba(250, 204, 21, 0); }
-}
-
+/* Signature live status dot (quiet solid indicator with 1px ring — zero infinite glowing halo) */
 .swarm-pulse-dot {
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  margin-right: 0.45rem;
+  margin-right: 6px;
   vertical-align: middle;
   flex-shrink: 0;
-  animation: swarmHaloRing 1.4s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+  box-shadow: 0 0 0 1px rgba(7, 26, 51, 0.18);
 }
 
-.swarm-pulse-emerald { background: #10b981; color: #10b981; }
-.swarm-pulse-gold { background: #facc15; color: #facc15; }
-.swarm-pulse-danger { background: #f87171; color: #f87171; }
+.swarm-pulse-emerald { background: var(--status-pass); color: var(--status-pass); }
+.swarm-pulse-gold { background: var(--maize); color: var(--maize); }
+.swarm-pulse-danger { background: var(--status-danger); color: var(--status-danger); }
 
-/* White-Box Equation Card & Scrubbable Input luxury hover */
+/* White-Box Equation Card & Scrubbable Input quiet hairline hover */
 .white-box-eq-card,
 .scrubbable-input {
-  transition: border-color 220ms cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .white-box-eq-card:hover,
 .scrubbable-input:hover {
-  border-color: rgba(250, 204, 21, 0.68);
-  box-shadow: 0 12px 28px -12px rgba(250, 204, 21, 0.28);
+  border-color: var(--maize);
 }
 
 .white-box-stage-pill:last-child {
-  border-color: rgba(232, 197, 71, 0.55);
-  background-image: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, transparent 100%);
+  border-color: var(--accent-secondary);
+  background-color: var(--bg-elevated);
 }
 
-/* Interactive SVG drag handles & crosshairs — halo only, zero geometry distortion on SVG root */
+/* Interactive SVG drag handles & crosshairs — crisp stroke emphasis, zero geometry distortion on SVG root */
 svg circle[style*="cursor: grab"],
 svg circle[style*="cursor: ew-resize"],
 svg circle[style*="cursor: ns-resize"],
 svg [data-testid="genui-sparkline-handle"] {
-  transition: filter 180ms ease, stroke-width 180ms ease;
-  filter: drop-shadow(0 0 7px rgba(250, 204, 21, 0.65));
+  transition: stroke-width 150ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 svg circle[style*="cursor: grab"]:hover,
 svg [data-testid="genui-sparkline-handle"]:hover {
-  filter: drop-shadow(0 0 13px rgba(250, 204, 21, 0.95));
+  stroke-width: 2.5px;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -114,7 +114,7 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
     const substituted = String(data.substituted_latex ?? '');
     return (
       <div className="wb-panel" data-testid="genui-equation-proof-card">
-        <strong>📐 {title ?? '3-Stage White-Box Equation Proof'}</strong>
+        <strong>{title ?? '3-Stage White-Box Equation Proof'}</strong>
         <KaTeXBlock latex={String(data.symbolic_latex ?? 'Re = \\frac{\\rho \\cdot v \\cdot D}{\\mu}')} />
         {substituted && <KaTeXBlock latex={substituted} />}
         <div className="mono">
@@ -132,7 +132,7 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
   if (type === 'hydraulics-summary-card') {
     return (
       <div className="wb-panel" data-testid="genui-hydraulics-summary-card">
-        <strong>🔧 {title ?? '3-Case Hydraulics & NPSHa Summary'}</strong>
+        <strong>{title ?? '3-Case Hydraulics & NPSHa Summary'}</strong>
         <p className="mono">
           70% / 100% / 120% Flow · NPSHa Status:{' '}
           <strong>{String(data.cavitation_status ?? 'SAFE')}</strong> · Valve:{' '}
@@ -145,7 +145,7 @@ export const RenderInlineExtension: React.FC<RenderInlineExtensionProps> = ({
 
   return (
     <div className="wb-panel" data-testid="genui-calc-sheet-card">
-      <strong>📋 {title ?? 'Senior-Engineer QA/QC Calculation Sheet'}</strong>
+      <strong>{title ?? 'Senior-Engineer QA/QC Calculation Sheet'}</strong>
       <p className="mono">
         Tag: <strong>{String(data.equipmentTag ?? 'P-101A/B')}</strong> · Rev:{' '}
         <code>{String(data.revision ?? 'Rev 0 — Issued for Review')}</code>

@@ -69,7 +69,7 @@
       --status-pass: #146c32;
       --status-warn: #92400e;
       --status-danger: #991b1b;
-      --shadow-lift: 0 1px 2px rgba(7,26,51,0.06), 0 12px 32px -10px rgba(7,26,51,0.14);
+      --shadow-lift: 0 1px 2px rgba(7,26,51,0.06), 0 4px 12px rgba(7,26,51,0.06);
       --font-display: 'Cormorant Garamond', 'Georgia', 'Times New Roman', ui-serif, serif;
       --font-sans: 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
@@ -84,7 +84,7 @@
       --status-pass: #4ade80;
       --status-warn: #fbbf24;
       --status-danger: #f87171;
-      --shadow-lift: 0 14px 36px rgba(0,0,0,0.45);
+      --shadow-lift: 0 1px 2px rgba(0,0,0,0.24), 0 6px 16px rgba(0,0,0,0.32);
     }
     @media (prefers-color-scheme: dark) {
       [data-theme="system"] {
@@ -130,17 +130,16 @@
     .brand-cluster { display: flex; align-items: center; gap: 0.65rem; }
     .brand-logo {
       height: 30px; width: auto;
-      filter: drop-shadow(0 0 10px rgba(232, 197, 71, 0.35));
     }
     .brand-badge {
       width: 34px; height: 34px; border-radius: 8px;
       background: var(--maize); color: var(--navy-deep);
-      font-family: var(--font-mono); font-weight: 800; font-size: 0.9rem;
+      font-family: var(--font-mono); font-weight: 600; font-size: 0.9rem;
       display: inline-flex; align-items: center; justify-content: center;
     }
     .brand-cluster h1 {
       font-family: var(--font-display);
-      font-size: 1.25rem; margin: 0; color: var(--ivory);
+      font-size: 1.25rem; font-weight: 600; margin: 0; color: var(--ivory);
     }
     .brand-cluster small {
       display: block; font-size: 0.68rem; color: var(--maize-soft); font-family: var(--font-mono);
@@ -148,14 +147,14 @@
     .nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
     .nav-links a, .ctrl-btn {
       font-family: var(--font-sans);
-      font-size: 0.78rem; font-weight: 700;
+      font-size: 0.78rem; font-weight: 600;
       color: var(--ivory); background: var(--navy);
       border: 1px solid rgba(232, 197, 71, 0.35);
-      border-radius: 999px; padding: 0.45rem 0.85rem;
+      border-radius: 8px; padding: 0.45rem 0.85rem;
       text-decoration: none; cursor: pointer;
       min-height: 44px; min-width: 44px;
       display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem;
-      transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+      transition: background 150ms cubic-bezier(0.22, 1, 0.36, 1), color 150ms cubic-bezier(0.22, 1, 0.36, 1), border-color 150ms cubic-bezier(0.22, 1, 0.36, 1);
     }
     .nav-links a:hover, .ctrl-btn:hover, .ctrl-btn.active {
       background: var(--maize); color: var(--navy-deep); border-color: var(--maize);
@@ -192,36 +191,38 @@
     }
     .eyebrow-pill {
       display: inline-flex; align-items: center; gap: 0.4rem;
-      font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700;
-      padding: 0.25rem 0.75rem; border-radius: 999px;
-      background: rgba(232, 197, 71, 0.22);
-      border: 1px solid var(--maize);
+      font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+      padding: 0.25rem 0.65rem; border-radius: 6px;
+      background: rgba(232, 197, 71, 0.14);
+      border: 1px solid var(--border-grid);
       color: var(--ink-primary);
       margin-bottom: 0.65rem;
+      letter-spacing: 0.01em;
     }
     .section-title {
       font-family: var(--font-display);
       font-size: clamp(1.85rem, 3.4vw, 3.1rem);
+      font-weight: 600;
       line-height: 1.12;
       margin: 0 0 0.45rem;
-      letter-spacing: -0.015em;
+      letter-spacing: -0.02em;
     }
     .section-lead {
       font-size: clamp(0.95rem, 1.25vw, 1.12rem);
-      max-width: 880px;
+      max-width: 65ch;
       margin: 0 0 1.25rem;
       color: var(--ink-muted);
     }
 
     /* Grids & Cards */
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.15rem; align-items: stretch; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: stretch; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: stretch; }
-    .grid-6 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.85rem; }
+    .grid-6 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
     .card {
       background: var(--bg-card);
       border: 1px solid var(--border-grid);
       border-radius: 12px;
-      padding: 1.1rem 1.25rem;
+      padding: 1rem 1.25rem;
       box-shadow: var(--shadow-lift);
       display: flex;
       flex-direction: column;
@@ -231,36 +232,38 @@
     .card-navy {
       background: var(--navy-deep);
       color: var(--ivory);
-      border: 1.5px solid var(--maize);
+      border: 1px solid var(--maize);
     }
     .card h3 {
       font-family: var(--font-display);
       font-size: 1.32rem;
+      font-weight: 600;
       margin: 0 0 0.35rem;
     }
     .mono-badge {
       font-family: var(--font-mono);
       font-size: 0.72rem;
-      font-weight: 700;
-      padding: 0.2rem 0.55rem;
-      border-radius: 999px;
+      font-weight: 500;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
       background: var(--bg-panel);
       border: 1px solid var(--border-grid);
       color: var(--ink-primary);
       display: inline-block;
+      letter-spacing: 0.01em;
     }
     .card-navy .mono-badge {
-      background: rgba(232, 197, 71, 0.18);
-      border-color: var(--maize);
+      background: rgba(232, 197, 71, 0.14);
+      border-color: rgba(232, 197, 71, 0.45);
       color: var(--maize-soft);
     }
     .cta-row { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1rem; }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 0.45rem;
-      font-weight: 800; font-size: 0.9rem;
-      padding: 0.6rem 1.15rem; border-radius: 9px;
+      font-weight: 600; font-size: 0.9rem;
+      padding: 0.6rem 1.15rem; border-radius: 8px;
       text-decoration: none; cursor: pointer;
-      border: 1.5px solid var(--maize);
+      border: 1px solid var(--maize);
       background: var(--maize); color: var(--navy-deep);
       min-height: 44px;
     }
@@ -271,15 +274,15 @@
     /* Video Player Frame */
     .video-stage {
       background: var(--navy-deep);
-      border: 2px solid var(--maize);
-      border-radius: 14px;
+      border: 1px solid var(--maize);
+      border-radius: 12px;
       padding: 0.75rem;
       box-shadow: var(--shadow-lift);
     }
     .video-stage video {
       width: 100%;
       max-height: 460px;
-      border-radius: 9px;
+      border-radius: 8px;
       display: block;
       background: #071a33;
     }
@@ -287,24 +290,24 @@
       text-align: left;
       width: 100%;
       padding: 0.65rem 0.85rem;
-      border-radius: 9px;
+      border-radius: 8px;
       background: var(--bg-card);
       color: var(--ink-primary);
       border: 1px solid var(--border-grid);
       cursor: pointer;
       font-family: var(--font-sans);
-      transition: border-color 150ms ease, background 150ms ease;
+      transition: border-color 150ms cubic-bezier(0.22, 1, 0.36, 1), background 150ms cubic-bezier(0.22, 1, 0.36, 1);
     }
     .chapter-btn:hover, .chapter-btn.active {
       border-color: var(--maize);
-      background: rgba(232, 197, 71, 0.16);
+      background: rgba(232, 197, 71, 0.14);
     }
 
     /* White-Box 3-Stage Demo */
     .stage-pill {
       background: var(--bg-panel);
-      border: 1px dashed var(--maize);
-      border-radius: 9px;
+      border: 1px solid var(--border-grid);
+      border-radius: 8px;
       padding: 0.65rem 0.8rem;
       margin-top: 0.5rem;
       font-family: var(--font-mono);
@@ -364,8 +367,8 @@
         <button type="button" class="ctrl-btn active" id="locale-en" data-testid="locale-en" onclick="setShowcaseLocale('en')" title="English">EN</button>
         <button type="button" class="ctrl-btn" id="locale-vi" data-testid="locale-vi" onclick="setShowcaseLocale('vi')" title="Tiếng Việt">VI</button>
       </span>
-      <button type="button" class="ctrl-btn" id="theme-toggle-btn" onclick="cycleTheme()">☀️ Theme: Light</button>
-      <a class="ctrl-btn active" id="launch-wb-masthead-btn" href="/app">🚀 Launch Workbench</a>
+      <button type="button" class="ctrl-btn" id="theme-toggle-btn" onclick="cycleTheme()">Theme: Light</button>
+      <a class="ctrl-btn active" id="launch-wb-masthead-btn" href="/app">Launch Workbench</a>
     </div>
   </header>
 
@@ -373,8 +376,8 @@
     <!-- SECTION 1: HERO -->
     <section id="hero" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">✨ SOVEREIGN CHEMICAL ENGINEERING WORKBENCH · 1 BAR · 1 CANVAS · 1 AGENT</span>
-        <h2 class="section-title">Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio.</h2>
+        <span class="eyebrow-pill">Chemical Engineering Workbench · 1 Bar · 1 Canvas · 1 Agent</span>
+        <h2 class="section-title">Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio</h2>
         <p class="section-lead">
           <strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.
         </p>
@@ -382,23 +385,23 @@
         <div class="grid-2">
           <div class="card card-navy">
             <div>
-              <span class="mono-badge">3-ZONE AI-NATIVE STUDIO ARCHITECTURE</span>
+              <span class="mono-badge">3-Zone Studio Architecture</span>
               <h3 style="margin-top:0.55rem; color: var(--maize);">1 Top Studio Bar · 1 Interactive SVG Canvas · 1 Sticky AI Co-Pilot</h3>
               <ul style="padding-left: 1.2rem; margin: 0.5rem 0; font-size: 0.92rem;">
-                <li><strong>Zone 1 (Top Bar):</strong> Switch 5 Subject Labs, launch 24 L1–L4 Plant Problems, toggle <code>🎓 Learn</code> ↔ <code>🏭 Plant</code>, or open <code>📐 Charts</code> &amp; <code>📄 Calc Sheet</code>.</li>
+                <li><strong>Zone 1 (Top Bar):</strong> Switch 5 Subject Labs, launch 24 L1–L4 Plant Problems, toggle <code>Learn</code> ↔ <code>Plant</code>, or open <code>Charts</code> &amp; <code>Calc Sheet</code>.</li>
                 <li><strong>Zone 2 (Engineering Canvas):</strong> Drag duty points on SVG curves and scrub 34px number dials with zero-latency client solvers.</li>
                 <li><strong>Zone 3 (AI Co-Pilot):</strong> Live <code>&lt;current-screen&gt;</code> sync, <code>+ Ask</code> chips, and natural-language slider mutations.</li>
               </ul>
             </div>
             <div class="cta-row">
-              <a class="cta-btn" href="/app">🚀 Launch Live Workbench (/app)</a>
-              <a class="cta-btn secondary" href="#video-guide">🎬 Watch 5-Step Video Guide</a>
+              <a class="cta-btn" href="/app">Launch Live Workbench (/app)</a>
+              <a class="cta-btn secondary" href="#video-guide">Watch 5-Step Video Guide</a>
             </div>
           </div>
 
           <div class="card">
             <div>
-              <span class="mono-badge">6 CANONICAL REFERENCE TEXTBOOKS INDEXED</span>
+              <span class="mono-badge">6 Canonical Reference Textbooks Indexed</span>
               <h3 style="margin-top:0.55rem;">Every Equation &amp; Chart Grounded in Verbatim Page Citations</h3>
               <div class="grid-6" style="margin-top: 0.65rem;">
                 <div class="stage-pill"><strong>1. Perry's 9th Ed.</strong><br/>25 Sections · 2,274 pp. PDF<br/><code>[Sec 1–25 + S-P Index]</code></div>
@@ -409,7 +412,7 @@
                 <div class="stage-pill"><strong>6. Crowl &amp; Louvar 4e</strong><br/>Process Safety<br/><code>[Semenov · LOC · Reliefs]</code></div>
               </div>
             </div>
-            <div style="margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--status-pass); font-weight: 700;">
+            <div style="margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.78rem; color: var(--status-pass); font-weight: 600;">
               ✓ DoF = 0 Verified · Explicit psig ↔ psia · Explicit Fanning f_F vs. Darcy f_D = 4·f_F
             </div>
           </div>
@@ -420,8 +423,8 @@
     <!-- SECTION 2: REMOTION VIDEO GUIDE -->
     <section id="video-guide" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">🎬 PROGRAMMATIC REMOTION VIDEO GUIDE · 1920×1080 · 30 FPS</span>
-        <h2 class="section-title">Master the Workbench in 5 Guided Video Chapters.</h2>
+        <span class="eyebrow-pill">Remotion Video Guide · 1920×1080 · 30 FPS</span>
+        <h2 class="section-title">Master the Workbench in 5 Guided Video Chapters</h2>
         <p class="section-lead">
           Rendered with <code>/ak:remotion</code> in React—click any chapter on the right to seek the video directly to that workflow step.
         </p>
@@ -441,7 +444,7 @@
               <div style="font-size:0.82rem; margin-top:0.2rem; color:var(--ink-muted);">Overview of the Top Studio Masthead, Interactive SVG Canvas, and Sticky Co-Pilot Inspector.</div>
             </button>
             <button type="button" class="chapter-btn" onclick="seekGuideVideo(3, 'Chapter 02 · Dual Persona & 5 Subject Labs (00:03)', this)">
-              <strong>02 · 00:03 — Dual Persona (🎓 Learn ↔ 🏭 Plant) &amp; 5 Subject Labs</strong>
+              <strong>02 · 00:03 — Dual Persona (Learn ↔ Plant) &amp; 5 Subject Labs</strong>
               <div style="font-size:0.82rem; margin-top:0.2rem; color:var(--ink-muted);">Switch between Socratic student coaching and 3-case EPC plant engineering across WB2–WB6.</div>
             </button>
             <button type="button" class="chapter-btn" onclick="seekGuideVideo(6, 'Chapter 03 · 24 Plant Problems & Fogler 6-Stage Flow (00:06)', this)">
@@ -464,13 +467,13 @@
     <!-- SECTION 3: 5 SUBJECT WORKBENCHES + 25-SECTION PERRY ATLAS -->
     <section id="six-books-labs" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">🔧 5 SUBJECT WORKBENCHES + CROSS-SUBJECT CHARTS VERIFIER</span>
-        <h2 class="section-title">Every Core Chemical Engineering Subject—Interactive &amp; Citation-Backed.</h2>
+        <span class="eyebrow-pill">5 Subject Workbenches + Cross-Subject Charts Verifier</span>
+        <h2 class="section-title">Every Core Chemical Engineering Subject — Interactive &amp; Citation-Backed</h2>
 
         <div class="grid-3">
           <div class="card">
             <div>
-              <span class="mono-badge">SUBJECT 1 · WB2</span>
+              <span class="mono-badge">Subject 1 · WB2</span>
               <h3>Thermodynamics, Phase Equilibria &amp; DIPPR</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Exact DIPPR Eq. 101/106 correlations, Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, Peng-Robinson EOS <em>Z(P_r, T_r)</em> dome, and Rankine/Van 't Hoff cycles.</p>
             </div>
@@ -482,7 +485,7 @@
 
           <div class="card">
             <div>
-              <span class="mono-badge">SUBJECT 2 · WB3</span>
+              <span class="mono-badge">Subject 2 · WB3</span>
               <h3>Fluid Mechanics, Transport &amp; Piping Hydraulics</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail, 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em>, BSL Non-Newtonian velocity profiles, ISA-75.01 valves, and Bowman <em>F_T</em> heat exchangers.</p>
             </div>
@@ -494,7 +497,7 @@
 
           <div class="card">
             <div>
-              <span class="mono-badge">SUBJECT 3 · WB4</span>
+              <span class="mono-badge">Subject 3 · WB4</span>
               <h3>Separations, McCabe-Thiele &amp; Column Hydraulics</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Bi-directional 5-handle McCabe-Thiele canvas, Fenske-Underwood-Gilliland shortcuts, Fair's Souders-Brown flooding, Eckert GPDC, Kremser <em>N_OG</em> absorption, and Ternary LLE.</p>
             </div>
@@ -506,7 +509,7 @@
 
           <div class="card">
             <div>
-              <span class="mono-badge">SUBJECT 4 · WB6</span>
+              <span class="mono-badge">Subject 4 · WB6</span>
               <h3>Kinetics, Catalysis &amp; Chemical Reactor Design</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Interactive Levenspiel CSTR rectangle vs. PFR integral plot, Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; effectiveness <em>η</em>, Semenov thermal runaway S-curve, LHHW &amp; Butler-Volmer.</p>
             </div>
@@ -518,7 +521,7 @@
 
           <div class="card">
             <div>
-              <span class="mono-badge">SUBJECT 5 · WB5</span>
+              <span class="mono-badge">Subject 5 · WB5</span>
               <h3>25-Section Perry Atlas &amp; 6-Book Search</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Unit Conversions &amp; Economics to API 520 Relief Sizing &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274).</p>
             </div>
@@ -530,8 +533,8 @@
 
           <div class="card card-navy">
             <div>
-              <span class="mono-badge">UTILITY TOOL · WB1</span>
-              <h3 style="color:var(--maize);">📐 10 Calibrated Nomographs &amp; High-DPI Verifier</h3>
+              <span class="mono-badge">Utility Tool · WB1</span>
+              <h3 style="color:var(--maize);">10 Calibrated Nomographs &amp; High-DPI Verifier</h3>
               <p style="font-size:0.86rem; margin:0.35rem 0;">Cross-subject header utility auto-syncing the active lab's chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).</p>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
@@ -546,29 +549,29 @@
     <!-- SECTION 4: PROBLEM-FIRST 6-STAGE FOGLER & LEBLANC FLOW -->
     <section id="problem-solving" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">🕵️ 24 REAL-LIFE PLANT PROBLEMS · FOGLER &amp; LEBLANC 6-STAGE FLOW</span>
-        <h2 class="section-title">Start from a Real Plant Upset—Not a Disconnected Textbook Formula.</h2>
+        <span class="eyebrow-pill">24 Real-Life Plant Problems · Fogler &amp; LeBlanc 6-Stage Flow</span>
+        <h2 class="section-title">Start from a Real Plant Upset — Not a Disconnected Textbook Formula</h2>
 
         <div class="grid-2">
           <div class="card">
             <div>
-              <span class="mono-badge">4 ENGINEERING PROGRESSION TIERS (24 PROBLEMS)</span>
+              <span class="mono-badge">4 Engineering Progression Tiers (24 Problems)</span>
               <h3 style="margin-top:0.5rem;">From Unit-Conversion Traps to Coupled Runaway Hazards</h3>
               <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem; margin-top:0.65rem;">
                 <div class="stage-pill">
-                  <strong>🌱 Tier L1 · Unit/Concept Trap</strong><br/>
+                  <strong>Tier L1 · Unit/Concept Trap</strong><br/>
                   Catch 4× Fanning/Darcy &amp; psig/psia datum traps before sizing equipment.
                 </div>
                 <div class="stage-pill">
-                  <strong>🔧 Tier L2 · Equipment Bottleneck</strong><br/>
+                  <strong>Tier L2 · Equipment Bottleneck</strong><br/>
                   Resolve Pump P-101 suction cavitation &amp; sieve-tray flooding bottlenecks.
                 </div>
                 <div class="stage-pill">
-                  <strong>🕵️ Tier L3 · Multi-Hypothesis Upset</strong><br/>
-                  Diagnose Fogler Ch. 10 Boiler Feedwater Heater drop (70°C → 42°C) with ⏱️ Δt clues.
+                  <strong>Tier L3 · Multi-Hypothesis Upset</strong><br/>
+                  Diagnose Fogler Ch. 10 Boiler Feedwater Heater drop (70°C → 42°C) with Δt clues.
                 </div>
                 <div class="stage-pill">
-                  <strong>🚨 Tier L4 · Coupled Safety/Design</strong><br/>
+                  <strong>Tier L4 · Coupled Safety/Design</strong><br/>
                   Stabilize Semenov reactor runaway (ψ &gt; 1/e) &amp; API 520 relief sizing.
                 </div>
               </div>
@@ -580,18 +583,18 @@
 
           <div class="card card-navy">
             <div>
-              <span class="mono-badge">FOGLER RULE #12 · HYPOTHESIS FALSIFICATION STUDIO</span>
+              <span class="mono-badge">Fogler Rule #12 · Hypothesis Falsification Studio</span>
               <h3 style="margin-top:0.5rem; color:var(--maize);">The 6-Stage Creative Problem-Solving Checklist</h3>
               <ol style="padding-left:1.25rem; margin:0.5rem 0; font-size:0.88rem; line-height:1.55;">
-                <li><strong>Stage 1 · Problem Observation:</strong> Inspect Normal vs. Faulty plant telemetry &amp; <code>⏱️ Δt</code> temporal clues.</li>
+                <li><strong>Stage 1 · Problem Observation:</strong> Inspect Normal vs. Faulty plant telemetry &amp; <code>Δt</code> temporal clues.</li>
                 <li><strong>Stage 2 · Problem Definition:</strong> Kepner-Tregoe <code>IS / IS NOT</code> matrix &amp; Real Root Problem statement.</li>
                 <li><strong>Stage 3 · Fundamental Theory:</strong> Cite governing transport, thermodynamic, or kinetic equations.</li>
                 <li><strong>Stage 4 · Applicable Handbook:</strong> Verify empirical parameters against <em>Perry's 9th Ed.</em> page crops.</li>
-                <li><strong>Stage 5 · Hypotheses (Prove ✅ / Disprove ❌):</strong> Enforce Rule #12 (<em>"seek to reject as well as to accept"</em>).</li>
+                <li><strong>Stage 5 · Hypotheses (Prove ✅ / Disprove ❌):</strong> Enforce Rule #12 ("seek to reject as well as to accept").</li>
                 <li><strong>Stage 6 · Actual Solution Verified:</strong> Restore safe plant margins &amp; earn a <code>FOG-WB*-DIY-XXXXXX</code> stamp.</li>
               </ol>
             </div>
-            <div class="stage-pill">✓ DIY Solve (+35% Mastery) · 💡 Socratic Hint · 🔧 Auto-Fix Rescue (+12% Mastery)</div>
+            <div class="stage-pill">✓ DIY Solve (+35% Mastery) · Socratic Hint · Auto-Fix Rescue (+12% Mastery)</div>
           </div>
         </div>
       </div>
@@ -600,27 +603,27 @@
     <!-- SECTION 5: WHITE-BOX RIGOR, ERROR GUARDRAILS & SYSTEM ARCHITECTURE DIAGRAM -->
     <section id="whitebox-copilot" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">📐 WHITE-BOX PROOFS · ERROR-SIGNATURE DETECTOR · SYSTEM TOPOLOGY</span>
-        <h2 class="section-title">3-Stage White-Box Proofs &amp; Validated Agent-Native System Architecture.</h2>
+        <span class="eyebrow-pill">White-Box Proofs · Error-Signature Detector · System Topology</span>
+        <h2 class="section-title">3-Stage White-Box Proofs &amp; Validated Agent-Native System Architecture</h2>
 
         <div class="grid-3" style="margin-bottom: 1rem;">
           <div class="card">
-            <span class="mono-badge">STAGE 1 · SYMBOLIC EQUATION</span>
+            <span class="mono-badge">Stage 1 · Symbolic Equation</span>
             <h3 style="margin-top:0.4rem;">Exact First-Principles Form</h3>
             <div class="stage-pill">f_D = 4 · f_F &nbsp;|&nbsp; NPSH_A = (P_suc,abs - P_vp)/(ρg) + z_s - h_f,s</div>
             <p style="font-size:0.82rem; margin:0.4rem 0 0;">Every equation states its symbol basis and textbook equation number before any numbers are plugged in.</p>
           </div>
           <div class="card">
-            <span class="mono-badge">STAGE 2 · SUBSTITUTED WITH UNITS</span>
+            <span class="mono-badge">Stage 2 · Substituted with Units</span>
             <h3 style="margin-top:0.4rem;">Explicit Unit &amp; Datum Guardrails</h3>
             <div class="stage-pill">P_suc,abs = 15.0 psig + 14.696 psi = 29.70 psia · T = 373.15 K</div>
             <p style="font-size:0.82rem; margin:0.4rem 0 0;">Automatic ChE Error-Signature Detector flags <code>4×</code> Fanning/Darcy, <code>±14.7 psi</code> gauge/abs, <code>±273.15</code> K/°C, and <code>2.303×</code> ln/log10 mistakes.</p>
           </div>
           <div class="card">
-            <span class="mono-badge">STAGE 3 · EVALUATED RESULT &amp; CITATION</span>
+            <span class="mono-badge">Stage 3 · Evaluated Result &amp; Citation</span>
             <h3 style="margin-top:0.4rem;">Deterministic Verdict Badge</h3>
-            <div class="stage-pill" style="color:var(--status-pass); font-weight:700;">NPSH_A = 21.82 m ≥ NPSH_R (3.0 m) → SAFE [Perry's 9e p. 10-28]</div>
-            <p style="font-size:0.82rem; margin:0.4rem 0 0;">Click <code>📖 Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.</p>
+            <div class="stage-pill" style="color:var(--status-pass); font-weight:600;">NPSH_A = 21.82 m ≥ NPSH_R (3.0 m) → SAFE [Perry's 9e p. 10-28]</div>
+            <p style="font-size:0.82rem; margin:0.4rem 0 0;">Click <code>Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.</p>
           </div>
         </div>
 
@@ -1687,15 +1690,15 @@
     <!-- SECTION 6: SENIOR EPC QA/QC CALC SHEET & LAUNCH CTA -->
     <section id="calc-sheet-cta" class="showcase-section">
       <div class="section-inner">
-        <span class="eyebrow-pill">📄 SENIOR EPC QA/QC CALCULATION SHEETS · AX / GEO READY</span>
-        <h2 class="section-title">From Classroom Intuition to Print-Ready EPC Deliverables.</h2>
+        <span class="eyebrow-pill">Senior EPC QA/QC Calculation Sheets · AX / GEO Ready</span>
+        <h2 class="section-title">From Classroom Intuition to Print-Ready EPC Deliverables</h2>
 
         <div class="grid-2">
           <div class="card">
             <div>
-              <span class="mono-badge">REV 0 — ISSUED FOR REVIEW · SQLITE PERSISTED</span>
+              <span class="mono-badge">Rev 0 — Issued for Review · SQLite Persisted</span>
               <h3 style="margin-top:0.5rem;">One-Click Senior Engineer Calculation Sheet Compiler</h3>
-              <p style="font-size:0.9rem;">Click <code>📄 Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:</p>
+              <p style="font-size:0.9rem;">Click <code>Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:</p>
               <ul style="padding-left:1.2rem; font-size:0.88rem; line-height:1.55;">
                 <li><strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Revision <code>Rev 0</code>, and Basis of Design.</li>
                 <li><strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief cases.</li>
@@ -1707,14 +1710,14 @@
 
           <div class="card card-navy">
             <div>
-              <span class="mono-badge">READY TO SOLVE? · START IN 1 CLICK</span>
+              <span class="mono-badge">Ready to Solve · Start in 1 Click</span>
               <h3 style="margin-top:0.5rem; color:var(--maize);">Explore ai4UCheE Live or Share with Any AI Agent</h3>
-              <p style="font-size:0.9rem;">Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>🔗 Share / AI</code> menu for ChatGPT, Claude, and Perplexity.</p>
+              <p style="font-size:0.9rem;">Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>Share / AI</code> menu for ChatGPT, Claude, and Perplexity.</p>
             </div>
             <div class="cta-row">
-              <a class="cta-btn" href="/app">🚀 Open Interactive Workbench (/app)</a>
-              <a class="cta-btn secondary" href="/index.md">📄 View Markdown Twin (/index.md)</a>
-              <a class="cta-btn secondary" href="/llms-full.txt">🤖 Read /llms-full.txt</a>
+              <a class="cta-btn" href="/app">Open Interactive Workbench (/app)</a>
+              <a class="cta-btn secondary" href="/index.md">View Markdown Twin (/index.md)</a>
+              <a class="cta-btn secondary" href="/llms-full.txt">Read /llms-full.txt</a>
             </div>
           </div>
         </div>
@@ -1744,8 +1747,8 @@
       var next = themes[themeIdx];
       var l = getActiveShowcaseLocale();
       var icons = l === 'vi'
-        ? { light: '☀️ Giao diện: Sáng', dark: '🌙 Giao diện: Tối', system: '💻 Giao diện: Hệ thống' }
-        : { light: '☀️ Theme: Light', dark: '🌙 Theme: Dark', system: '💻 Theme: System' };
+        ? { light: 'Giao diện: Sáng', dark: 'Giao diện: Tối', system: 'Giao diện: Hệ thống' }
+        : { light: 'Theme: Light', dark: 'Theme: Dark', system: 'Theme: System' };
       var btn = document.getElementById('theme-toggle-btn');
       if (btn) btn.textContent = icons[next];
     }
@@ -1774,46 +1777,46 @@
         h1: "ai4UCheE — ChemEng's Intelligent Workbench",
         sub: '6 Canonical Textbooks · 55+ Interactive SVG Charts · 24 Plant Problems',
         nav: ['01 · Studio', '02 · Video Guide', '03 · 5 Labs & 6 Books', '04 · 24 Plant Problems', '05 · White-Box & AI', '06 · EPC Calc Sheet'],
-        launch: '🚀 Launch Workbench',
+        launch: 'Launch Workbench',
         eyebrows: [
-          '✨ SOVEREIGN CHEMICAL ENGINEERING WORKBENCH · 1 BAR · 1 CANVAS · 1 AGENT',
-          '🎬 PROGRAMMATIC REMOTION VIDEO GUIDE · 1920×1080 · 30 FPS',
-          '🔧 5 SUBJECT WORKBENCHES + CROSS-SUBJECT CHARTS VERIFIER',
-          '🕵️ 24 REAL-LIFE PLANT PROBLEMS · FOGLER & LEBLANC 6-STAGE FLOW',
-          '📐 WHITE-BOX PROOFS · ERROR-SIGNATURE DETECTOR · SYSTEM TOPOLOGY',
-          '📄 SENIOR EPC QA/QC CALCULATION SHEETS · AX / GEO READY'
+          'Chemical Engineering Workbench · 1 Bar · 1 Canvas · 1 Agent',
+          'Remotion Video Guide · 1920×1080 · 30 FPS',
+          '5 Subject Workbenches + Cross-Subject Charts Verifier',
+          '24 Real-Life Plant Problems · Fogler & LeBlanc 6-Stage Flow',
+          'White-Box Proofs · Error-Signature Detector · System Topology',
+          'Senior EPC QA/QC Calculation Sheets · AX / GEO Ready'
         ],
         titles: [
-          'Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio.',
-          'Master the Workbench in 5 Guided Video Chapters.',
-          'Every Core Chemical Engineering Subject—Interactive & Citation-Backed.',
-          'Start from a Real Plant Upset—Not a Disconnected Textbook Formula.',
-          '3-Stage White-Box Proofs & Validated Agent-Native System Architecture.',
-          'From Classroom Intuition to Print-Ready EPC Deliverables.'
+          'Where 6 Canonical Chemical Engineering Textbooks Meet an Agent-Native Interactive Studio',
+          'Master the Workbench in 5 Guided Video Chapters',
+          'Every Core Chemical Engineering Subject — Interactive & Citation-Backed',
+          'Start from a Real Plant Upset — Not a Disconnected Textbook Formula',
+          '3-Stage White-Box Proofs & Validated Agent-Native System Architecture',
+          'From Classroom Intuition to Print-Ready EPC Deliverables'
         ],
         leads: [
           "<strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.",
           'Rendered with <code>/ak:remotion</code> in React—click any chapter on the right to seek the video directly to that workflow step.'
         ],
         monoBadges: [
-          '3-ZONE AI-NATIVE STUDIO ARCHITECTURE',
-          '6 CANONICAL REFERENCE TEXTBOOKS INDEXED',
-          'SUBJECT 1 · WB2',
-          'SUBJECT 2 · WB3',
-          'SUBJECT 3 · WB4',
-          'SUBJECT 4 · WB6',
-          'SUBJECT 5 · WB5',
-          'UTILITY TOOL · WB1',
-          '4 ENGINEERING PROGRESSION TIERS (24 PROBLEMS)',
-          'FOGLER RULE #12 · HYPOTHESIS FALSIFICATION STUDIO',
-          'STAGE 1 · SYMBOLIC EQUATION',
-          'STAGE 2 · SUBSTITUTED WITH UNITS',
-          'STAGE 3 · EVALUATED RESULT & CITATION',
-          'REV 0 — ISSUED FOR REVIEW · SQLITE PERSISTED',
-          'READY TO SOLVE? · START IN 1 CLICK'
+          '3-Zone Studio Architecture',
+          '6 Canonical Reference Textbooks Indexed',
+          'Subject 1 · WB2',
+          'Subject 2 · WB3',
+          'Subject 3 · WB4',
+          'Subject 4 · WB6',
+          'Subject 5 · WB5',
+          'Utility Tool · WB1',
+          '4 Engineering Progression Tiers (24 Problems)',
+          'Fogler Rule #12 · Hypothesis Falsification Studio',
+          'Stage 1 · Symbolic Equation',
+          'Stage 2 · Substituted with Units',
+          'Stage 3 · Evaluated Result & Citation',
+          'Rev 0 — Issued for Review · SQLite Persisted',
+          'Ready to Solve · Start in 1 Click'
         ],
         heroZones: [
-          '<strong>Zone 1 (Top Bar):</strong> Switch 5 Subject Labs, launch 24 L1–L4 Plant Problems, toggle <code>🎓 Learn</code> ↔ <code>🏭 Plant</code>, or open <code>📐 Charts</code> &amp; <code>📄 Calc Sheet</code>.',
+          '<strong>Zone 1 (Top Bar):</strong> Switch 5 Subject Labs, launch 24 L1–L4 Plant Problems, toggle <code>Learn</code> ↔ <code>Plant</code>, or open <code>Charts</code> &amp; <code>Calc Sheet</code>.',
           '<strong>Zone 2 (Engineering Canvas):</strong> Drag duty points on SVG curves and scrub 34px number dials with zero-latency client solvers.',
           '<strong>Zone 3 (AI Co-Pilot):</strong> Live <code>&lt;current-screen&gt;</code> sync, <code>+ Ask</code> chips, and natural-language slider mutations.'
         ],
@@ -1827,8 +1830,8 @@
         ],
         heroDofLine: '✓ DoF = 0 Verified · Explicit psig ↔ psia · Explicit Fanning f_F vs. Darcy f_D = 4·f_F',
         videoDefaultLabel: '▶ Chapter 01 · 3-Zone AI-Native Studio (00:00)',
-        heroCta: '🚀 Launch Live Workbench (/app)',
-        videoCta: '🎬 Watch 5-Step Video Guide',
+        heroCta: 'Launch Live Workbench (/app)',
+        videoCta: 'Watch 5-Step Video Guide',
         cardH3: [
           '1 Top Studio Bar · 1 Interactive SVG Canvas · 1 Sticky AI Co-Pilot',
           'Every Equation & Chart Grounded in Verbatim Page Citations',
@@ -1837,7 +1840,7 @@
           'Separations, McCabe-Thiele & Column Hydraulics',
           'Kinetics, Catalysis & Chemical Reactor Design',
           '25-Section Perry Atlas & 6-Book Search',
-          '📐 10 Calibrated Nomographs & High-DPI Verifier',
+          '10 Calibrated Nomographs & High-DPI Verifier',
           'From Unit-Conversion Traps to Coupled Runaway Hazards',
           'The 6-Stage Creative Problem-Solving Checklist',
           'Exact First-Principles Form',
@@ -1848,7 +1851,7 @@
         ],
         chapters: [
           ['01 · 00:00 — 3-Zone AI-Native Studio ("1 Bar · 1 Canvas · 1 Agent")', 'Overview of the Top Studio Masthead, Interactive SVG Canvas, and Sticky Co-Pilot Inspector.'],
-          ['02 · 00:03 — Dual Persona (🎓 Learn ↔ 🏭 Plant) & 5 Subject Labs', 'Switch between Socratic student coaching and 3-case EPC plant engineering across WB2–WB6.'],
+          ['02 · 00:03 — Dual Persona (Learn ↔ Plant) & 5 Subject Labs', 'Switch between Socratic student coaching and 3-case EPC plant engineering across WB2–WB6.'],
           ['03 · 00:06 — 24 Real-Life Plant Problems & Fogler 6-Stage Detective Board', 'Walk through Observation, K-T IS/IS NOT, Theory, Handbook, and Rule #12 Hypothesis Falsification.'],
           ['04 · 00:09 — Interactive SVG Handle Scrubbing & 3-Stage White-Box Proofs', 'Drag Pump P-101 out of cavitation while inspecting Symbolic → Substituted → Result KaTeX cards.'],
           ['05 · 00:12 — Point-and-Ask (+ Ask), What-If Mutations & EPC QA/QC Export', 'Attach context chips, mutate sliders in plain English, and export a Rev 0 QA/QC Calculation Sheet.']
@@ -1864,87 +1867,87 @@
         openLabBtn: 'Open Lab →',
         openChartsBtn: 'Open Charts →',
         tiers: [
-          '<strong>🌱 Tier L1 · Unit/Concept Trap</strong><br/>Catch 4× Fanning/Darcy &amp; psig/psia datum traps before sizing equipment.',
-          '<strong>🔧 Tier L2 · Equipment Bottleneck</strong><br/>Resolve Pump P-101 suction cavitation &amp; sieve-tray flooding bottlenecks.',
-          '<strong>🕵️ Tier L3 · Multi-Hypothesis Upset</strong><br/>Diagnose Fogler Ch. 10 Boiler Feedwater Heater drop (70°C → 42°C) with ⏱️ Δt clues.',
-          '<strong>🚨 Tier L4 · Coupled Safety/Design</strong><br/>Stabilize Semenov reactor runaway (ψ &gt; 1/e) &amp; API 520 relief sizing.'
+          '<strong>Tier L1 · Unit/Concept Trap</strong><br/>Catch 4× Fanning/Darcy &amp; psig/psia datum traps before sizing equipment.',
+          '<strong>Tier L2 · Equipment Bottleneck</strong><br/>Resolve Pump P-101 suction cavitation &amp; sieve-tray flooding bottlenecks.',
+          '<strong>Tier L3 · Multi-Hypothesis Upset</strong><br/>Diagnose Fogler Ch. 10 Boiler Feedwater Heater drop (70°C → 42°C) with Δt clues.',
+          '<strong>Tier L4 · Coupled Safety/Design</strong><br/>Stabilize Semenov reactor runaway (ψ &gt; 1/e) &amp; API 520 relief sizing.'
         ],
         problemCard1Footer: '8 Equipment Categories · 5 Symptom Archetypes · Multi-Student Adaptive Scorecard',
         foglerList: [
-          '<strong>Stage 1 · Problem Observation:</strong> Inspect Normal vs. Faulty plant telemetry &amp; <code>⏱️ Δt</code> temporal clues.',
+          '<strong>Stage 1 · Problem Observation:</strong> Inspect Normal vs. Faulty plant telemetry &amp; <code>Δt</code> temporal clues.',
           '<strong>Stage 2 · Problem Definition:</strong> Kepner-Tregoe <code>IS / IS NOT</code> matrix &amp; Real Root Problem statement.',
           '<strong>Stage 3 · Fundamental Theory:</strong> Cite governing transport, thermodynamic, or kinetic equations.',
           '<strong>Stage 4 · Applicable Handbook:</strong> Verify empirical parameters against <em>Perry\'s 9th Ed.</em> page crops.',
-          '<strong>Stage 5 · Hypotheses (Prove ✅ / Disprove ❌):</strong> Enforce Rule #12 (<em>"seek to reject as well as to accept"</em>).',
+          '<strong>Stage 5 · Hypotheses (Prove ✅ / Disprove ❌):</strong> Enforce Rule #12 ("seek to reject as well as to accept").',
           '<strong>Stage 6 · Actual Solution Verified:</strong> Restore safe plant margins &amp; earn a <code>FOG-WB*-DIY-XXXXXX</code> stamp.'
         ],
-        foglerFooterPill: '✓ DIY Solve (+35% Mastery) · 💡 Socratic Hint · 🔧 Auto-Fix Rescue (+12% Mastery)',
+        foglerFooterPill: '✓ DIY Solve (+35% Mastery) · Socratic Hint · Auto-Fix Rescue (+12% Mastery)',
         whiteboxDescs: [
           'Every equation states its symbol basis and textbook equation number before any numbers are plugged in.',
           'Automatic ChE Error-Signature Detector flags <code>4×</code> Fanning/Darcy, <code>±14.7 psi</code> gauge/abs, <code>±273.15</code> K/°C, and <code>2.303×</code> ln/log10 mistakes.',
-          'Click <code>📖 Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.'
+          'Click <code>Cite Stage 3 Theory</code> or <code>+ Ask</code> on any card to send the live proof straight into the AI Co-Pilot.'
         ],
-        calcIntro: 'Click <code>📄 Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:',
+        calcIntro: 'Click <code>Calc Sheet</code> in the studio header to compile a complete QA/QC package containing:',
         calcBullets: [
           '<strong>Document Control Header:</strong> Equipment Tag (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Revision <code>Rev 0</code>, and Basis of Design.',
           '<strong>3-Case Operating Matrix:</strong> 70% Turndown, 100% Normal, and 120% Design/Relief cases.',
           '<strong>3-Stage White-Box Derivations &amp; 6-Stage Root-Cause Audit:</strong> Complete with Fogler Detective Stamp &amp; Markdown download.'
         ],
         calcPill: '✓ Persisted to SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable',
-        axLead: 'Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>🔗 Share / AI</code> menu for ChatGPT, Claude, and Perplexity.',
+        axLead: 'Built with full AI-Experience (AX) discovery surfaces (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) and a header <code>Share / AI</code> menu for ChatGPT, Claude, and Perplexity.',
         ctaButtons: [
-          '🚀 Open Interactive Workbench (/app)',
-          '📄 View Markdown Twin (/index.md)',
-          '🤖 Read /llms-full.txt'
+          'Open Interactive Workbench (/app)',
+          'View Markdown Twin (/index.md)',
+          'Read /llms-full.txt'
         ],
         footerStrong: 'References & Canonical Textbook Citations (ai4UCheE · https://chemeng.ai4u.now)',
-        diagTitle: '<span>📊</span> ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture<span class="ak-diagram-subtitle"> - 6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional &lt;current-screen&gt; Co-Pilot</span>',
-        diagSearch: 'Search (/) ...'
+        diagTitle: 'ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture<span class="ak-diagram-subtitle"> - 6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional &lt;current-screen&gt; Co-Pilot</span>',
+        diagSearch: 'Search (/)'
       },
       vi: {
         h1: 'ai4UCheE — Bàn làm việc Kỹ thuật Hóa học Thông minh',
         sub: '6 Giáo trình Chuẩn ChE · 55+ Giản đồ SVG Tương tác · 24 Sự cố Nhà máy Thực tế',
         nav: ['01 · Studio', '02 · Video Hướng dẫn', '03 · 5 Phòng Lab & 6 Sách', '04 · 24 Sự cố Nhà máy', '05 · White-Box & AI', '06 · Bản tính EPC'],
-        launch: '🚀 Mở Phòng Thí Nghiệm',
+        launch: 'Mở Phòng Thí Nghiệm',
         eyebrows: [
-          '✨ BÀN LÀM VIỆC KỸ THUẬT HÓA HỌC THÔNG MINH · 1 THANH · 1 ĐỒ THỊ · 1 TRỢ LÝ AI',
-          '🎬 VIDEO HƯỚNG DẪN REMOTION · 1920×1080 · 30 FPS',
-          '🔧 5 PHÒNG LAB CHUYÊN NGÀNH + TRÌNH KIỂM TRA GIẢN ĐỒ HIỆU CHUẨN',
-          '🕵️ 24 SỰ CỐ NHÀ MÁY THỰC TẾ · QUY TRÌNH 6 BƯỚC FOGLER & LEBLANC',
-          '📐 CHỨNG MINH WHITE-BOX · PHÁT HIỆN BẪY ĐƠN VỊ · KIẾN TRÚC HỆ THỐNG',
-          '📄 BẢN TÍNH KIỂM ĐỊNH QA/QC KỸ SƯ TRƯỞNG (EPC) · CHUẨN AX / GEO'
+          'Bàn làm việc Kỹ thuật Hóa học · 1 Thanh · 1 Đồ thị · 1 Trợ lý AI',
+          'Video Hướng dẫn Remotion · 1920×1080 · 30 FPS',
+          '5 Phòng Lab Chuyên ngành + Trình kiểm tra Giản đồ Hiệu chuẩn',
+          '24 Sự cố Nhà máy Thực tế · Quy trình 6 Bước Fogler & LeBlanc',
+          'Chứng minh White-Box · Phát hiện Bẫy Đơn vị · Kiến trúc Hệ thống',
+          'Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC) · Chuẩn AX / GEO'
         ],
         titles: [
-          'Kết hợp 6 Giáo trình Kỹ thuật Hóa học Kinh điển với Phòng Thí nghiệm Tương tác AI.',
-          'Làm chủ Bàn làm việc qua 5 Chương Video Hướng dẫn.',
-          'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản.',
-          'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc.',
-          'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native.',
-          'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC).'
+          'Kết hợp 6 Giáo trình Kỹ thuật Hóa học Kinh điển với Phòng Thí nghiệm Tương tác AI',
+          'Làm chủ Bàn làm việc qua 5 Chương Video Hướng dẫn',
+          'Mọi Học phần Cốt lõi Kỹ thuật Hóa học — Tương tác & Trích dẫn Nguyên bản',
+          'Bắt đầu từ Sự cố Nhà máy Thực tế — Không chỉ là Công thức Rời rạc',
+          'Chứng minh Phương trình White-Box 3 Bước & Kiến trúc Hệ thống Agent-Native',
+          'Từ Trực giác Sinh viên đến Bản tính Kiểm định QA/QC Kỹ sư Trưởng (EPC)'
         ],
         leads: [
           '<strong>ai4UCheE</strong> kết hợp <em>Perry 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em> và <em>Crowl &amp; Louvar</em> với <strong>hơn 55 giản đồ SVG tương tác hai chiều</strong>, <strong>chứng minh KaTeX 3 bước</strong> và <strong>24 sự cố nhà máy thực tế</strong>.',
           'Được kết xuất bằng <code>/ak:remotion</code> trong React — bấm vào bất kỳ chương nào bên phải để tua video tới đúng bước thao tác.'
         ],
         monoBadges: [
-          'KIẾN TRÚC STUDIO AI-NATIVE 3 VÙNG',
-          '6 GIÁO TRÌNH KỸ THUẬT HÓA HỌC CHUẨN ĐƯỢC LẬP CHỈ MỤC',
-          'HỌC PHẦN 1 · WB2',
-          'HỌC PHẦN 2 · WB3',
-          'HỌC PHẦN 3 · WB4',
-          'HỌC PHẦN 4 · WB6',
-          'HỌC PHẦN 5 · WB5',
-          'CÔNG CỤ TIỆN ÍCH · WB1',
-          '4 CẤP ĐỘ SỰ CỐ KỸ THUẬT (24 BÀI TOÁN NHÀ MÁY)',
-          'QUY TẮC FOGLER #12 · PHÒNG THÍ NGHIỆM BÁC BỎ GIẢ THUYẾT',
-          'BƯỚC 1 · PHƯƠNG TRÌNH KÝ HIỆU',
-          'BƯỚC 2 · THAY SỐ KÈM ĐƠN VỊ',
-          'BƯỚC 3 · KẾT QUẢ ĐÁNH GIÁ & TRÍCH DẪN',
-          'REV 0 — BAN HÀNH KIỂM ĐỊNH · LƯU TRỮ SQLITE',
-          'SẴN SÀNG GIẢI QUYẾT? · BẮT ĐẦU VỚI 1 CÚ NHẤP'
+          'Kiến trúc Studio AI-Native 3 Vùng',
+          '6 Giáo trình Kỹ thuật Hóa học Chuẩn Được Lập Chỉ mục',
+          'Học phần 1 · WB2',
+          'Học phần 2 · WB3',
+          'Học phần 3 · WB4',
+          'Học phần 4 · WB6',
+          'Học phần 5 · WB5',
+          'Công cụ Tiện ích · WB1',
+          '4 Cấp độ Sự cố Kỹ thuật (24 Bài toán Nhà máy)',
+          'Quy tắc Fogler #12 · Phòng thí nghiệm Bác bỏ Giả thuyết',
+          'Bước 1 · Phương trình Ký hiệu',
+          'Bước 2 · Thay số kèm Đơn vị',
+          'Bước 3 · Kết quả Đánh giá & Trích dẫn',
+          'Rev 0 — Ban hành Kiểm định · Lưu trữ SQLite',
+          'Sẵn sàng Giải quyết · Bắt đầu với 1 Cú Nhấp'
         ],
         heroZones: [
-          '<strong>Vùng 1 (Thanh Điều khiển Trên cùng):</strong> Chuyển đổi 5 Phòng Lab chuyên ngành, mở 24 Sự cố Nhà máy L1–L4, bật <code>🎓 Học tập</code> ↔ <code>🏭 Nhà máy</code>, hoặc mở <code>📐 Giản đồ</code> &amp; <code>📄 Bản tính</code>.',
+          '<strong>Vùng 1 (Thanh Điều khiển Trên cùng):</strong> Chuyển đổi 5 Phòng Lab chuyên ngành, mở 24 Sự cố Nhà máy L1–L4, bật <code>Học tập</code> ↔ <code>Nhà máy</code>, hoặc mở <code>Giản đồ</code> &amp; <code>Bản tính</code>.',
           '<strong>Vùng 2 (Không gian Đồ thị Kỹ thuật):</strong> Kéo điểm làm việc trực tiếp trên đường cong SVG và xoay núm số 34px với bộ giải phản hồi tức thì.',
           '<strong>Vùng 3 (Trợ lý AI Co-Pilot):</strong> Đồng bộ <code>&lt;current-screen&gt;</code> thời gian thực, gắn thẻ ngữ cảnh <code>+ Hỏi</code> và điều chỉnh thanh trượt bằng ngôn ngữ tự nhiên.'
         ],
@@ -1958,8 +1961,8 @@
         ],
         heroDofLine: '✓ Bậc tự do DoF = 0 Đã kiểm chứng · Chuyển đổi tường minh psig ↔ psia · Phân biệt tường minh Fanning f_F vs. Darcy f_D = 4·f_F',
         videoDefaultLabel: '▶ Chương 01 · Kiến trúc Studio AI-Native 3 Vùng (00:00)',
-        heroCta: '🚀 Mở Phòng Thí Nghiệm Trực Tiếp (/app?lang=vi)',
-        videoCta: '🎬 Xem Video Hướng Dẫn 5 Bước',
+        heroCta: 'Mở Phòng Thí Nghiệm Trực Tiếp (/app?lang=vi)',
+        videoCta: 'Xem Video Hướng Dẫn 5 Bước',
         cardH3: [
           '1 Thanh Điều Khiển · 1 Không Gian Đồ Thị SVG · 1 Trợ Lý AI Co-Pilot',
           'Mọi Phương Trình & Đồ Thị Đều Có Trích Dẫn Trang Sách Chính Xác',
@@ -1968,7 +1971,7 @@
           'Quá trình Tách, McCabe-Thiele & Thủy lực Tháp',
           'Động học, Xúc tác & Thiết kế Lò phản ứng',
           'Atlas 25 Chương Perry & Tra cứu 6 Giáo trình',
-          '📐 10 Giản đồ Hiệu chuẩn & Kiểm tra Đọc Đồ thị',
+          '10 Giản đồ Hiệu chuẩn & Kiểm tra Đọc Đồ thị',
           'Từ Bẫy Quy đổi Đơn vị đến Nguy cơ Thoát nhiệt Lò phản ứng',
           'Danh mục Kiểm tra Giải quyết Vấn đề Sáng tạo 6 Bước',
           'Dạng Phương trình Nguyên lý Cơ bản Chính xác',
@@ -1979,7 +1982,7 @@
         ],
         chapters: [
           ['01 · 00:00 — Kiến trúc Studio 3 Vùng ("1 Thanh · 1 Đồ thị · 1 Trợ lý AI")', 'Tổng quan Thanh điều khiển trên cùng, Không gian Đồ thị SVG tương tác và Ngăn Trợ lý AI Co-Pilot.'],
-          ['02 · 00:03 — Chế độ Kép (🎓 Học tập ↔ 🏭 Nhà máy) & 5 Phòng Lab', 'Chuyển đổi giữa chế độ gia sư Socratic cho sinh viên và bảng thiết kế EPC 3 chế độ qua WB2–WB6.'],
+          ['02 · 00:03 — Chế độ Kép (Học tập ↔ Nhà máy) & 5 Phòng Lab', 'Chuyển đổi giữa chế độ gia sư Socratic cho sinh viên và bảng thiết kế EPC 3 chế độ qua WB2–WB6.'],
           ['03 · 00:06 — 24 Sự cố Nhà máy Thực tế & Bảng Điều tra 6 Bước Fogler', 'Thực hành Quan sát, Phân tích K-T IS/IS NOT, Lý thuyết, Sổ tay và Kiểm định Giả thuyết (Quy tắc #12).'],
           ['04 · 00:09 — Kéo Điểm Nút Đồ thị SVG & Chứng minh White-Box 3 Bước', 'Kéo bơm P-101 thoát khỏi vùng xâm thực đồng thời kiểm tra thẻ phương trình Ký hiệu → Thay số → Kết quả.'],
           ['05 · 00:12 — Thẻ + Hỏi, Giả lập What-If & Xuất Bản tính QA/QC EPC', 'Gắn thẻ ngữ cảnh, ra lệnh chỉnh thanh trượt bằng tiếng Việt/Anh và xuất Bản tính Kiểm định QA/QC Rev 0.']
@@ -1995,42 +1998,42 @@
         openLabBtn: 'Mở Phòng Lab →',
         openChartsBtn: 'Mở Giản đồ →',
         tiers: [
-          '<strong>🌱 Cấp L1 · Bẫy Đơn vị / Khái niệm</strong><br/>Phát hiện bẫy hệ số 4× Fanning/Darcy &amp; chuẩn áp suất psig/psia trước khi tính chọn thiết bị.',
-          '<strong>🔧 Cấp L2 · Điểm Nghẽn Thiết bị</strong><br/>Khắc phục xâm thực cửa hút bơm P-101 &amp; ngập lụt đĩa lỗ tháp chưng luyện.',
-          '<strong>🕵️ Cấp L3 · Sự cố Đa Giả thuyết</strong><br/>Chẩn đoán sụt nhiệt độ gia nhiệt nước cấp lò hơi Fogler Ch. 10 (70°C → 42°C) với manh mối thời gian ⏱️ Δt.',
-          '<strong>🚨 Cấp L4 · Nguy cơ An toàn / Thiết kế Ghép nối</strong><br/>Ổn định thoát nhiệt lò phản ứng Semenov (ψ &gt; 1/e) &amp; tính chọn van xả áp API 520.'
+          '<strong>Cấp L1 · Bẫy Đơn vị / Khái niệm</strong><br/>Phát hiện bẫy hệ số 4× Fanning/Darcy &amp; chuẩn áp suất psig/psia trước khi tính chọn thiết bị.',
+          '<strong>Cấp L2 · Điểm Nghẽn Thiết bị</strong><br/>Khắc phục xâm thực cửa hút bơm P-101 &amp; ngập lụt đĩa lỗ tháp chưng luyện.',
+          '<strong>Cấp L3 · Sự cố Đa Giả thuyết</strong><br/>Chẩn đoán sụt nhiệt độ gia nhiệt nước cấp lò hơi Fogler Ch. 10 (70°C → 42°C) với manh mối thời gian Δt.',
+          '<strong>Cấp L4 · Nguy cơ An toàn / Thiết kế Ghép nối</strong><br/>Ổn định thoát nhiệt lò phản ứng Semenov (ψ &gt; 1/e) &amp; tính chọn van xả áp API 520.'
         ],
         problemCard1Footer: '8 Nhóm Thiết bị · 5 Mẫu Triệu chứng · Bảng Điểm Thích ứng Đa Sinh viên',
         foglerList: [
-          '<strong>Bước 1 · Quan sát Sự cố:</strong> Đối chiếu thông số vận hành Bình thường vs. Sự cố &amp; manh mối thời gian <code>⏱️ Δt</code>.',
+          '<strong>Bước 1 · Quan sát Sự cố:</strong> Đối chiếu thông số vận hành Bình thường vs. Sự cố &amp; manh mối thời gian <code>Δt</code>.',
           '<strong>Bước 2 · Xác định Vấn đề:</strong> Lập ma trận Kepner-Tregoe <code>LÀ / KHÔNG LÀ</code> &amp; phát biểu đúng nguyên nhân gốc.',
           '<strong>Bước 3 · Lý thuyết Cơ sở:</strong> Trích dẫn phương trình truyền vận, nhiệt động học hoặc động học chi phối.',
           '<strong>Bước 4 · Sổ tay Tra cứu:</strong> Kiểm chứng thông số thực nghiệm đối chiếu bản cắt trang sách <em>Perry\'s 9th Ed.</em>',
-          '<strong>Bước 5 · Giả thuyết (Chứng minh ✅ / Bác bỏ ❌):</strong> Áp dụng Quy tắc #12 (<em>"tìm bằng chứng bác bỏ cũng như chấp nhận"</em>).',
+          '<strong>Bước 5 · Giả thuyết (Chứng minh ✅ / Bác bỏ ❌):</strong> Áp dụng Quy tắc #12 ("tìm bằng chứng bác bỏ cũng như chấp nhận").',
           '<strong>Bước 6 · Nghiệm thu Giải pháp Thực tế:</strong> Khôi phục biên độ vận hành an toàn &amp; nhận dấu kiểm định <code>FOG-WB*-DIY-XXXXXX</code>.'
         ],
-        foglerFooterPill: '✓ Tự Giải DIY (+35% Thành thạo) · 💡 Gợi ý Socratic · 🔧 Tự động Khắc phục (+12% Thành thạo)',
+        foglerFooterPill: '✓ Tự Giải DIY (+35% Thành thạo) · Gợi ý Socratic · Tự động Khắc phục (+12% Thành thạo)',
         whiteboxDescs: [
           'Mọi phương trình đều nêu rõ ký hiệu cơ sở và số hiệu phương trình giáo trình trước khi thay bất kỳ con số nào.',
           'Bộ phát hiện bẫy sai số ChE tự động cảnh báo nhầm lẫn <code>4×</code> Fanning/Darcy, <code>±14,7 psi</code> áp suất dư/tuyệt đối, <code>±273,15</code> K/°C và <code>2,303×</code> ln/log10.',
-          'Bấm <code>📖 Trích dẫn Lý thuyết Bước 3</code> hoặc <code>+ Hỏi</code> trên bất kỳ thẻ nào để gửi toàn bộ chứng minh sang Trợ lý AI Co-Pilot.'
+          'Bấm <code>Trích dẫn Lý thuyết Bước 3</code> hoặc <code>+ Hỏi</code> trên bất kỳ thẻ nào để gửi toàn bộ chứng minh sang Trợ lý AI Co-Pilot.'
         ],
-        calcIntro: 'Bấm <code>📄 Bản tính</code> trên thanh tiêu đề để biên dịch hồ sơ kiểm định QA/QC hoàn chỉnh gồm:',
+        calcIntro: 'Bấm <code>Bản tính</code> trên thanh tiêu đề để biên dịch hồ sơ kiểm định QA/QC hoàn chỉnh gồm:',
         calcBullets: [
           '<strong>Tiêu đề Kiểm soát Tài liệu:</strong> Mã thiết bị (<code>P-101A/B</code>, <code>T-201-DIST</code>, <code>R-401-PBR</code>), Phiên bản <code>Rev 0</code> và Cơ sở Thiết kế.',
           '<strong>Ma trận Vận hành 3 Chế độ:</strong> 70% Giảm tải (Turndown), 100% Bình thường và 120% Thiết kế / Xả áp.',
           '<strong>Chứng minh White-Box 3 Bước &amp; Kiểm toán Nguyên nhân Gốc 6 Bước:</strong> Đầy đủ dấu chứng nhận Điều tra viên Fogler &amp; xuất tệp Markdown.'
         ],
         calcPill: '✓ Lưu trữ bền vững vào SQLite <code>saved_calculations</code> · Sẵn sàng In ấn &amp; Xuất Markdown',
-        axLead: 'Tích hợp đầy đủ bề mặt khám phá AI-Experience (AX) (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) và menu <code>🔗 Chia sẻ / AI</code> cho ChatGPT, Claude và Perplexity.',
+        axLead: 'Tích hợp đầy đủ bề mặt khám phá AI-Experience (AX) (<code>/index.md</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>) và menu <code>Chia sẻ / AI</code> cho ChatGPT, Claude và Perplexity.',
         ctaButtons: [
-          '🚀 Mở Phòng Thí Nghiệm Tương Tác (/app?lang=vi)',
-          '📄 Xem Bản Sao Markdown (/index.md)',
-          '🤖 Đọc /llms-full.txt'
+          'Mở Phòng Thí Nghiệm Tương Tác (/app?lang=vi)',
+          'Xem Bản Sao Markdown (/index.md)',
+          'Đọc /llms-full.txt'
         ],
         footerStrong: 'Tài liệu Tham khảo & Giáo trình Chuẩn Kỹ thuật Hóa học (ai4UCheE · https://chemeng.ai4u.now)',
-        diagTitle: '<span>📊</span> ai4UCheE — Kiến trúc Studio Kỹ thuật Hóa học AI-Native 3 Vùng<span class="ak-diagram-subtitle"> - 6 Giáo trình Chuẩn · Bộ giải Tất định Python/TS · Đồng bộ Hai chiều &lt;current-screen&gt;</span>',
-        diagSearch: 'Tìm kiếm sơ đồ (/) ...'
+        diagTitle: 'ai4UCheE — Kiến trúc Studio Kỹ thuật Hóa học AI-Native 3 Vùng<span class="ak-diagram-subtitle"> - 6 Giáo trình Chuẩn · Bộ giải Tất định Python/TS · Đồng bộ Hai chiều &lt;current-screen&gt;</span>',
+        diagSearch: 'Tìm kiếm sơ đồ (/)'
       }
     };
     function setShowcaseLocale(loc) {
