@@ -7,7 +7,7 @@ import { getClientAppState, writeClientAppState } from '../actions/view-screen';
 
 describe('Phase 10 — All 12 Interactive Charts, Graphs & Diagrams Suite', () => {
   it('Charts 1–4 (WB1): scrubs all 4 Perry preset curves (6-10, 14-37, 14-57, 2-53) and 2D crosshair', () => {
-    render(<App />);
+    render(<App initialWorkbench="wb1-visual-verifier" initialPersona="plant" />);
     const svgSurface = screen.getByTestId('perry-svg-interactive-surface');
     // Chart 1: 6-10 Moody Fanning f_F & Darcy f_D=4*f_F
     fireEvent.pointerDown(svgSurface, { clientX: 268, clientY: 124 });

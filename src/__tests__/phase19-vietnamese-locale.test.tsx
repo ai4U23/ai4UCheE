@@ -11,6 +11,7 @@ import { App } from '../App';
 import { runCopilotResponder } from '../actions/copilot-responder';
 import { getClientAppState, serializeCurrentScreenTag } from '../actions/view-screen';
 import { getActiveLocale, resetLocaleForTests, resolveInitialLocale } from '../lib/i18n/locale-types';
+import { transformHtmlForRequest } from '../server/html-locale-responder';
 
 describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', () => {
   beforeEach(() => {
@@ -166,5 +167,27 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
       }
     }
     expect(offenders).toEqual([]);
+  });
+
+  it('Test 5 (Phase 20 UX/AX & Curriculum Progression Governance): verifies Year 2–4 curriculum badges, trust boundary disclosures, and server-side ?lang=vi HTML attribute injection', () => {
+    const sampleHtml = '<!doctype html><html lang="en" data-theme="dark"><head><meta property="og:locale" content="en_US" /></head></html>';
+    const viHtml = transformHtmlForRequest(sampleHtml, '/app?lang=vi');
+    expect(viHtml).toContain('<html lang="vi" data-locale="vi"');
+    expect(viHtml).toContain('property="og:locale" content="vi_VN"');
+
+    // Bare /app defaults to Learn mode on Subject 1 (Year 2 Thermodynamics)
+    render(<App />);
+    expect(screen.getByTestId('wb2-thermo-dippr')).toBeTruthy();
+    expect(screen.getByTestId('curriculum-stage-badge').textContent).toContain('Year 2 · Core Foundation 1');
+    expect(screen.getByTestId('causal-story-chain-wb2').textContent).toContain('DIPPR Eq. 101');
+    expect(screen.getByTestId('local-demo-profile-badge').textContent).toContain('Local Browser Demo · localStorage only');
+
+    // Problem Library corpus provenance disclosure
+    fireEvent.click(screen.getByTestId('toggle-problem-library-btn'));
+    expect(screen.getByTestId('corpus-provenance-notice').textContent).toContain('Curated 6-book index & pedagogical problem bank');
+
+    // Engineering Boundary Notice in QA/QC Calc Sheet Modal
+    fireEvent.click(screen.getByTestId('export-calc-sheet-btn'));
+    expect(screen.getByTestId('engineering-boundary-notice').textContent).toContain('Educational & Preliminary Engineering Boundary');
   });
 });

@@ -43,8 +43,12 @@ describe('Phase 7 — End-to-End Workbench Integration, GenUI & SQLite Calc Shee
   it('switches across WB1, WB2, WB3, and WB4 and syncs <current-screen>', () => {
     render(<App />);
 
+    expect(screen.getByTestId('wb2-thermo-dippr')).toBeTruthy();
+    expect(getClientAppState().activeWorkbench).toBe('wb2-thermo-dippr');
+
+    fireEvent.click(screen.getByTestId('tab-wb1-visual-verifier'));
     expect(screen.getByTestId('wb1-visual-verifier')).toBeTruthy();
-    expect(getClientAppState().activeWorkbench).toBe('wb1-visual-verifier');
+    expect(serializeCurrentScreenTag()).toContain('workbench="wb1-visual-verifier"');
 
     fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
     expect(screen.getByTestId('wb2-thermo-dippr')).toBeTruthy();
@@ -113,6 +117,7 @@ describe('Phase 7 — End-to-End Workbench Integration, GenUI & SQLite Calc Shee
 
   it('converts WB2 temperature units (degC -> K) and pressure units (psig vs psia) and exposes WB1 crop trigger', async () => {
     render(<App />);
+    fireEvent.click(screen.getByTestId('tab-wb1-visual-verifier'));
     expect(screen.getByTestId('load-pdf-crop-btn')).toBeTruthy();
 
     fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));

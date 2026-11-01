@@ -45,9 +45,9 @@ describe('Phase 8 — Sovereign Academic-Tactile UX & Two-Tier gemini-4-argon-lo
   });
 
   it('guided mission clicks switch to 🎓 Learn Mode, attach mission chips, and emit inline GenUI proof cards', async () => {
-    render(<App />);
+    render(<App initialPersona="plant" />);
 
-    expect(screen.queryByTestId('learn-callout-wb1')).toBeNull(); // 🏭 Plant Mode default: callouts hidden
+    expect(screen.queryByTestId('learn-callout-wb2')).toBeNull(); // 🏭 Plant Mode: callouts hidden
 
     await act(async () => {
       fireEvent.click(screen.getByTestId('mission-fanning-trap'));

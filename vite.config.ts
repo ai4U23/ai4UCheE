@@ -3,14 +3,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
+import { transformHtmlForRequest } from './src/server/html-locale-responder';
 
 function discoveryHeadersPlugin(): Plugin {
   const publicDir = path.resolve(__dirname, 'public');
   return {
     name: 'ax-discovery-headers',
+    transformIndexHtml(html, ctx) {
+      return transformHtmlForRequest(html, ctx.originalUrl ?? ctx.path ?? '/app');
+    },
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        const urlPath = (req.url ?? '/').split('?')[0];
+        const rawUrl = req.url ?? '/';
+        const urlPath = rawUrl.split('?')[0];
         if (urlPath === '/' || urlPath === '/showcase.html') {
           res.setHeader('Vary', 'Accept');
           if (String(req.headers.accept ?? '').includes('text/markdown')) {
@@ -20,7 +25,8 @@ function discoveryHeadersPlugin(): Plugin {
             return;
           }
           res.setHeader('Content-Type', 'text/html; charset=utf-8');
-          res.end(fs.readFileSync(path.join(publicDir, 'showcase.html'), 'utf8'));
+          const rawHtml = fs.readFileSync(path.join(publicDir, 'showcase.html'), 'utf8');
+          res.end(transformHtmlForRequest(rawHtml, rawUrl, String(req.headers['accept-language'] ?? '')));
           return;
         } else if (urlPath === '/app' || urlPath === '/workbench' || urlPath === '/index.html') {
           res.setHeader('Vary', 'Accept');

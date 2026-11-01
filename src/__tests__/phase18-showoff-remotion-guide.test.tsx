@@ -37,6 +37,8 @@ describe('Phase 18 — Showcase Homepage (/ak:show-off) & Remotion Video Guide (
 
     const videoEl = screen.getByTestId('remotion-guide-video') as HTMLVideoElement;
     expect(videoEl.getAttribute('src')).toBe('/ai4uchee-guide.mp4');
+    expect(videoEl.getAttribute('poster')).toBe('/ai4uchee-guide-poster.svg');
+    expect(screen.getByTestId('video-transcript-disclosure')).toBeTruthy();
 
     // Click chapter 3
     fireEvent.click(screen.getByTestId('guide-chapter-3'));
@@ -70,6 +72,10 @@ describe('Phase 18 — Showcase Homepage (/ak:show-off) & Remotion Video Guide (
     expect(html).toContain('href="/app"');
     expect(html).toContain('href="/app?wb=wb2-thermo-dippr"');
     expect(html).toContain('ak-diagram-root');
+    expect(html).toContain('data-testid="five-step-story-bridge"');
+    expect(html).toContain('data-testid="showcase-engineering-boundary"');
+    expect(html).toContain('poster="/ai4uchee-guide-poster.svg"');
+    expect(html).not.toContain('umich.edu');
     expect(html).not.toContain('lang-vi-btn');
   });
 });

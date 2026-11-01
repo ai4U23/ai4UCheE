@@ -83,13 +83,11 @@ export const VisualVerifierWorkbench: React.FC = () => {
     try {
       const res = (await cropPerryPageAction.run({ sec_page: citedSecPage, dpi: 150 })) as { image_base64?: string; composite_image_base64?: string };
       setCropDataUri(res.image_base64 ?? res.composite_image_base64 ?? null);
-    } catch {
-      setCropDataUri(null);
-    }
+    } catch { setCropDataUri(null); }
   };
 
   const [showPresetsDrawer, setShowPresetsDrawer] = useState<boolean>(false);
-  const [showInvestigationDrawer, setShowInvestigationDrawer] = useState<boolean>(false);
+  const [showInvestigationDrawer, setShowInvestigationDrawer] = useState<boolean>(true);
 
   return (
     <section className="wb-panel" data-testid="wb1-visual-verifier">
@@ -123,7 +121,12 @@ export const VisualVerifierWorkbench: React.FC = () => {
       </header>
 
       <div className="wb-split">
-        <div className="wb-crop-stage" {...figSelectable.selectableProps} data-agent-select="figure:perry-crop">
+        <div
+          className="wb-crop-stage"
+          {...figSelectable.selectableProps}
+          data-agent-select="figure:perry-crop"
+          aria-label={`Select Perry's ${citedSecPage} visual figure crop`}
+        >
           {cropDataUri ? (
             <img src={cropDataUri} alt={`Perry's ${citedSecPage} crop`} className="wb-crop-img" />
           ) : (
@@ -138,6 +141,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
           {showCrosshair && (
             <svg
               className="wb-crosshair-svg" viewBox="0 0 100 100" preserveAspectRatio="none"
+              role="img" aria-label={`Calibrated 2D crosshair overlay for Perry page ${citedSecPage}`}
               data-testid="calibrated-crosshair"
               style={{ pointerEvents: cropDataUri ? 'auto' : 'none', cursor: 'crosshair' }}
               onPointerDown={(e) => {
@@ -185,12 +189,7 @@ export const VisualVerifierWorkbench: React.FC = () => {
       </div>
 
       <div className={showInvestigationDrawer ? '' : 'studio-drawer-collapsed'}>
-        <LearnModeCallout
-          workbenchId="wb1" title={t.wb1CalloutTitle}
-          plainEnglish={t.wb1CalloutPlain}
-          commonTrap={t.wb1CalloutTrap}
-          perryAnchor="[Perry's 9th Ed., Fig. 6-9, p. 6-10]"
-        />
+        <LearnModeCallout workbenchId="wb1" title={t.wb1CalloutTitle} plainEnglish={t.wb1CalloutPlain} commonTrap={t.wb1CalloutTrap} perryAnchor="[Perry's 9th Ed., Fig. 6-9, p. 6-10]" />
       </div>
     </section>
   );

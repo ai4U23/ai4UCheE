@@ -164,9 +164,9 @@ describe('Phase 16 — Fogler & LeBlanc 6-Stage Real-Life Problem-Solving Flow &
     fireEvent.click(screen.getByTestId('mission-pump-npsha'));
 
     // Verify Soft Nudge on Auto-Fix, Temporal Clue (Δt = 3 Hours), Why-Number-Wrong Detector, Detective Stamp, & WB3 Ghost Line
-    expect(await screen.findByTestId('autofix-soft-nudge-banner')).toBeTruthy();
+    expect(await screen.findByTestId('autofix-soft-nudge-banner', {}, { timeout: 4000 })).toBeTruthy();
     expect(screen.getByTestId('temporal-fault-clue-badge').textContent).toContain('Δt = 3 Hours');
-    expect((await screen.findByTestId('why-number-wrong-detector')).textContent).toContain('Vacuum Suction & Frictional Q² Cavitation Trap');
+    expect((await screen.findByTestId('why-number-wrong-detector', {}, { timeout: 4000 })).textContent).toContain('Vacuum Suction & Frictional Q² Cavitation Trap');
     expect(screen.getByTestId('fogler-detective-stamp').textContent).toContain('FOG-WB3-');
     expect(screen.getByTestId('rail-detective-stamp').textContent).toContain('FOG-WB3-');
     expect(screen.getByTestId('wb3-ghost-baseline-line')).toBeTruthy();

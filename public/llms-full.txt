@@ -1,8 +1,9 @@
 # ai4UCheE — Full Chemical Engineering Reference & Solver Guide (llms-full.txt)
 
 Canonical URL: https://chemeng.ai4u.now/
+Workbench URL: https://chemeng.ai4u.now/app
 Markdown Twin: https://chemeng.ai4u.now/index.md
-Last Updated: 2026-10-31
+Last Updated: 2026-11-01
 
 ## 1. Mission & Engineering Rigor Invariants
 `ai4UCheE` (ChemEng's Intelligent Workbench) is the Chemical Engineering AI vertical within the `ai4u` ecosystem (`ai4U23`), built for both students (`🎓 Learn Mode`) and EPC/plant engineers (`🏭 Plant Mode`). Every calculation enforces three non-negotiable physical guardrails:
@@ -46,3 +47,9 @@ Last Updated: 2026-10-31
 
 ### WB5 — 6-Book Corpus & 25-Section Perry's Atlas
 - Covers all 25 sections of *Perry's 9th Edition* (`Sec 1` Conversion Factors through `Sec 25` Materials of Construction) with interactive 2-parameter SVG curves and Back-of-Book Index lookup (`pp. 2244–2274`).
+
+## 3. Curriculum Progression, Persistence & Engineering Boundary
+- **Default Landing (`/app`):** Opens on **Subject 1: Year 2 Thermodynamics (`wb2-thermo-dippr`)** in `🎓 Learn Mode` (`?wb=` and `?mission=` / `?problem=` deep-links supported).
+- **5-Step Causal Chain:** `1. Plant Symptom -> 2. ChE Subject (Year 2–4) -> 3. Governing Equation -> 4. Interactive SVG Lab -> 5. Verified Result`.
+- **Educational & Preliminary Engineering Boundary:** Calculations use deterministic textbook correlations for undergraduate instruction and preliminary screening — not a substitute for licensed PE sign-off, relief-device sizing (API 520/521), or HAZOP/SIL certification.
+- **Persistence Boundary:** Student practice points (`+35 pts DIY / +12 pts Assisted`) persist in browser `localStorage` only (`Local Browser Demo`). Exported QA/QC calculation sheets persist anonymously in local SQLite (`saved_calculations`).

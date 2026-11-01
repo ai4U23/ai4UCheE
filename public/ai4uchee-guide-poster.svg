@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" role="img" aria-label="ai4UCheE 5-Chapter Guided Video Walkthrough Poster">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071a33" />
+      <stop offset="60%" stop-color="#0b2342" />
+      <stop offset="100%" stop-color="#102e54" />
+    </linearGradient>
+    <pattern id="eng-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="rgba(232,197,71,0.08)" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg-grad)" />
+  <rect width="1920" height="1080" fill="url(#eng-grid)" />
+
+  <!-- Top Sovereign Ribbon -->
+  <rect x="96" y="76" width="1728" height="72" rx="12" fill="rgba(251,246,236,0.06)" stroke="rgba(232,197,71,0.35)" stroke-width="1.5" />
+  <circle cx="136" cy="112" r="10" fill="#e8c547" />
+  <text x="164" y="119" fill="#e8c547" font-family="JetBrains Mono, monospace" font-size="21" font-weight="700" letter-spacing="2">
+    AI4U.NOW · CHEMENG INTELLIGENT WORKBENCH · 5-CHAPTER REMOTION GUIDE (15s · 60 FPS)
+  </text>
+
+  <!-- Main Title Block -->
+  <text x="96" y="264" fill="#fbf6ec" font-family="Fraunces, Georgia, serif" font-size="68" font-weight="700">
+    From Plant Symptom to Verified ChE Equation
+  </text>
+  <text x="96" y="330" fill="#cbd5e1" font-family="Plus Jakarta Sans, sans-serif" font-size="28" font-weight="500">
+    Year 2–4 Chemical Engineering Curriculum · 6 Core Textbooks · 28 Interactive SVG Solvers · White-Box Provenance
+  </text>
+
+  <!-- 5-Step Causal Chain Cards -->
+  <g transform="translate(96, 400)">
+    <rect x="0" y="0" width="320" height="230" rx="14" fill="rgba(15,38,68,0.9)" stroke="#e8c547" stroke-width="2" />
+    <text x="24" y="44" fill="#e8c547" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700">01 · PLANT SYMPTOM</text>
+    <text x="24" y="92" fill="#fbf6ec" font-family="Fraunces, Georgia, serif" font-size="26" font-weight="700">Cavitation &amp; Pinch</text>
+    <text x="24" y="136" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">Pump gravel noise, 4× ΔP</text>
+    <text x="24" y="164" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">error, or CSTR volume penalty</text>
+
+    <rect x="352" y="0" width="320" height="230" rx="14" fill="rgba(15,38,68,0.9)" stroke="rgba(232,197,71,0.45)" stroke-width="1.5" />
+    <text x="376" y="44" fill="#e8c547" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700">02 · ChE SUBJECT</text>
+    <text x="376" y="92" fill="#fbf6ec" font-family="Fraunces, Georgia, serif" font-size="26" font-weight="700">Year 2–4 Sequence</text>
+    <text x="376" y="136" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">Thermo → Fluids → Sep</text>
+    <text x="376" y="164" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">→ Kinetics → Design Atlas</text>
+
+    <rect x="704" y="0" width="320" height="230" rx="14" fill="rgba(15,38,68,0.9)" stroke="rgba(232,197,71,0.45)" stroke-width="1.5" />
+    <text x="728" y="44" fill="#e8c547" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700">03 · GOVERNING EQ.</text>
+    <text x="728" y="92" fill="#fbf6ec" font-family="Fraunces, Georgia, serif" font-size="26" font-weight="700">White-Box Formulas</text>
+    <text x="728" y="136" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="17">DIPPR 101 · f_D = 4·f_F</text>
+    <text x="728" y="164" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="17">McCabe-Thiele · Fogler 5-Step</text>
+
+    <rect x="1056" y="0" width="320" height="230" rx="14" fill="rgba(15,38,68,0.9)" stroke="rgba(232,197,71,0.45)" stroke-width="1.5" />
+    <text x="1080" y="44" fill="#e8c547" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700">04 · INTERACTIVE LAB</text>
+    <text x="1080" y="92" fill="#fbf6ec" font-family="Fraunces, Georgia, serif" font-size="26" font-weight="700">28 Calibrated Charts</text>
+    <text x="1080" y="136" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">Scrub T, P, Re, R/R_min,</text>
+    <text x="1080" y="164" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">and X with live guardrails</text>
+
+    <rect x="1408" y="0" width="320" height="230" rx="14" fill="rgba(15,38,68,0.9)" stroke="#38bdf8" stroke-width="2" />
+    <text x="1432" y="44" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="18" font-weight="700">05 · VERIFIED RESULT</text>
+    <text x="1432" y="92" fill="#fbf6ec" font-family="Fraunces, Georgia, serif" font-size="26" font-weight="700">SHA-256 Calc Sheet</text>
+    <text x="1432" y="136" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">Exact textbook citation</text>
+    <text x="1432" y="164" fill="#94a3b8" font-family="Plus Jakarta Sans, sans-serif" font-size="18">&amp; engineering audit trail</text>
+  </g>
+
+  <!-- Play Pill Badge -->
+  <g transform="translate(96, 720)">
+    <rect x="0" y="0" width="660" height="96" rx="48" fill="#e8c547" />
+    <polygon points="56,28 56,68 92,48" fill="#071a33" />
+    <text x="118" y="57" fill="#071a33" font-family="Plus Jakarta Sans, sans-serif" font-size="26" font-weight="800">
+      Play 5-Chapter Guided Video Walkthrough (0:15)
+    </text>
+  </g>
+
+  <!-- Bottom Provenance Bar -->
+  <text x="96" y="980" fill="#94a3b8" font-family="JetBrains Mono, monospace" font-size="20">
+    Perry's 9th Ed. · Smith/Van Ness · Bird/Stewart/Lightfoot · Treybal · Fogler · McCabe/Smith/Harriott
+  </text>
+</svg>

@@ -6,6 +6,7 @@ import { getClientAppState } from '../../actions/view-screen';
 import { generateCalcSheetAction } from '../../actions/generate-calc-sheet';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { getShellCopy } from '../../lib/i18n/vi-shell-dictionary';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import {
   buildCalcSheetActionInput,
   buildLiveCalcSheet,
@@ -104,6 +105,11 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
         <div className={`wb-verdict ${sheet.safetyStatus === 'PASS' ? 'pass' : 'fail'}`} data-testid="calc-sheet-safety-badge">
           <SwarmPulseDot tone={sheet.safetyStatus === 'PASS' ? 'emerald' : 'danger'} />
           {sheet.safetyStatus === 'PASS' ? t.safetyPassPrefix : t.safetyFailPrefix} — {sheet.safetyDetail}
+        </div>
+
+        <div className="wb-coaching" data-testid="engineering-boundary-notice" style={{ fontSize: '12px', marginTop: '6px' }}>
+          <strong>{TRUST_BOUNDARY_COPY[locale].engineeringBoundaryTitle}:</strong> {TRUST_BOUNDARY_COPY[locale].engineeringBoundaryBody}{' '}
+          <span className="mono">{TRUST_BOUNDARY_COPY[locale].calcSheetPersistenceNote}</span>
         </div>
 
         <table className="mono" style={{ width: '100%', fontSize: '0.8rem' }} data-testid="calc-sheet-rows">

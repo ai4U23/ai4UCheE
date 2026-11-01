@@ -1,9 +1,10 @@
 # ai4UCheE — ChemEng's Intelligent Workbench
 
 Canonical URL: https://chemeng.ai4u.now/
-Last Updated: 2026-10-31
+Workbench URL: https://chemeng.ai4u.now/app
+Last Updated: 2026-11-01
 
-`ai4UCheE` (`https://chemeng.ai4u.now`) is a bi-directional agent-native chemical engineering workbench organized by **Chemical Engineering Subject**, blending **6 canonical reference textbooks** for both **chemical engineering students (`🎓 Learn Mode`)** and **plant/process engineers (`🏭 Plant Mode`)**.
+`ai4UCheE` (`https://chemeng.ai4u.now`) is a bi-directional agent-native chemical engineering workbench organized by **Year 2–4 Chemical Engineering Curriculum Progression**, blending **6 canonical reference textbooks** for both **chemical engineering students (`🎓 Learn Mode`, default on `/app` via `wb2-thermo-dippr`)** and **plant/process engineers (`🏭 Plant Mode`)**.
 
 ## 6 Canonical Reference Textbooks
 1. *Perry's Chemical Engineers' Handbook, 9th Edition* (Green & Southard, 2019)
@@ -24,6 +25,6 @@ Last Updated: 2026-10-31
 - **Feature Showcase Homepage (`/`) & Remotion Video Guide (`/ai4uchee-guide.mp4`):** Interactive feature showcase homepage at `/` with a 5-step Remotion video guide walking users through the 3-Zone Studio, Dual Persona Switcher, 24 Plant Problems, White-Box Proofs, and EPC QA/QC Calc Sheets, plus one-click launch into `/app` (`?wb=wb2-thermo-dippr`, `?wb=wb3-hydraulics`, `?wb=wb4-distillation`, `?wb=wb6-kinetics-reactors`, `?wb=wb5-handbook-atlas`, `?wb=wb1-visual-verifier`).
 
 ## Agent & API Endpoints
-- `GET /api/screen-state`: Returns current workbench state (`activeWorkbench`, `personaMode`, `selectedChips`, `payload`) and `<current-screen>` XML tag.
-- `POST /api/copilot`: Natural-language ChE Co-Pilot with bi-directional `actionMutations` slider scrubbing.
+- `GET /api/screen-state`: Returns current workbench state (`activeWorkbench`, `personaMode`, `locale`, `selectedChips`, `payload`) and `<current-screen>` XML tag.
+- `POST /api/copilot`: Natural-language ChE Co-Pilot (bilingual English `en` & Vietnamese `vi`) with bi-directional `actionMutations` slider scrubbing.
 - `POST /api/actions/:actionName`: Invokes registered deterministic ChE actions (`generate_calc_sheet`, `crop_perry_page`, `search_perry_pdf`).

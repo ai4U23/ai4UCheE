@@ -74,16 +74,28 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
           <video
             ref={videoRef}
             src="/ai4uchee-guide.mp4"
+            poster="/ai4uchee-guide-poster.svg"
             controls
             playsInline
             preload="metadata"
             data-testid="remotion-guide-video"
             style={{ width: '100%', borderRadius: 8, display: 'block', background: '#071a33' }}
-          />
+          >
+            <track kind="captions" src="/ai4uchee-guide-en.vtt" srcLang="en" label="English" default />
+            <track kind="captions" src="/ai4uchee-guide-vi.vtt" srcLang="vi" label="Tiếng Việt" />
+          </video>
           <div style={{ color: 'var(--ivory)', padding: '0.45rem 0.35rem 0.15rem', fontSize: '0.82rem' }}>
             <strong style={{ color: 'var(--maize)' }}>{active.step}:</strong> {active.title} —{' '}
             <span style={{ color: 'var(--maize-soft)' }}>{active.desc}</span>
           </div>
+          <details data-testid="video-transcript-disclosure" style={{ color: 'var(--ivory)', fontSize: '0.75rem', padding: '0.2rem 0.35rem' }}>
+            <summary style={{ cursor: 'pointer', color: 'var(--maize-soft)' }}>Transcript / Phụ đề (0:00–0:15)</summary>
+            <ol style={{ margin: '0.3rem 0 0 1.1rem', padding: 0 }}>
+              {chapters.map((ch) => (
+                <li key={ch.step}><strong>{ch.step} ({ch.timeSec}s) — {ch.title}:</strong> {ch.desc}</li>
+              ))}
+            </ol>
+          </details>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>

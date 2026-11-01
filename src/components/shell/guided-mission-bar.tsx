@@ -49,7 +49,7 @@ export const GuidedMissionBar: React.FC = () => {
   const applyMutations = (mission: GuidedMissionScenario, params: Record<string, number | string>) => {
     const dispatch = () => dispatchWorkbenchMutation({ targetWorkbench: mission.workbench, params, reason: mission.id });
     if (typeof window === 'undefined') dispatch();
-    else window.setTimeout(dispatch, 80);
+    else window.setTimeout(dispatch, 20);
   };
 
   const runMission = (mission: GuidedMissionScenario, params: Record<string, number | string>) => {
@@ -65,6 +65,21 @@ export const GuidedMissionBar: React.FC = () => {
     applyMutations(mission, params);
   };
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const sp = new URLSearchParams(window.location.search);
+    const missionParam = sp.get('mission');
+    const problemParam = sp.get('problem');
+    if (missionParam) {
+      const m = getMissionById(missionParam);
+      if (m) runMission(m, m.initialMutations);
+    } else if (problemParam) {
+      const p = ALL_24_REAL_LIFE_PROBLEMS.find((x) => x.problemId === problemParam || String(x.number) === problemParam);
+      if (p) { setActiveProblemForWorkbench(p); const m = problemEntryToMissionScenario(p); runMission(m, m.initialMutations); }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleAutoFix = (mission: GuidedMissionScenario) => {
     usedAutoFixRef.current = true;
     solvedRecordedRef.current = mission.id;
@@ -73,10 +88,10 @@ export const GuidedMissionBar: React.FC = () => {
     applyMutations(mission, mission.rescueMutations);
     agentNative.ui.output({
       type: 'equation-proof-card',
-      title: `Auto-Fix Applied (+12% Assisted Mastery) — ${mission.buttonLabel}`,
+      title: `Auto-Fix Applied (+12 pts Assisted Practice Score) — ${mission.buttonLabel}`,
       data: {
         symbolic_latex: Object.entries(mission.rescueMutations).map(([k, v]) => `${k} = ${v}`).join(',\\; '),
-        substituted_latex: '\\text{Rescue applied — retry scrubbing sliders yourself for full +35\\% mastery}',
+        substituted_latex: '\\text{Rescue applied — retry scrubbing sliders yourself for full +35 pts practice score}',
         result_latex: '\\text{Ask the Co-Pilot why this operating point is safe}',
         citation: "[Perry's 9th Ed., Sec. 10, pp. 10-24..25]",
       },
@@ -103,10 +118,7 @@ export const GuidedMissionBar: React.FC = () => {
     runMission(mission, mission.initialMutations);
   };
 
-  const bundle = buildAdaptiveRecommendations(profile, {
-    activeWorkbench,
-    payload: getClientAppState().payload,
-  });
+  const bundle = buildAdaptiveRecommendations(profile, { activeWorkbench, payload: getClientAppState().payload });
 
   return (
     <>
@@ -115,9 +127,7 @@ export const GuidedMissionBar: React.FC = () => {
           <>
             <span className="studio-drawer-collapsed">{t.missionLeadText}</span>
             <button
-              type="button"
-              data-testid="toggle-problem-library-btn"
-              onClick={() => setLibraryOpen(!libraryOpen)}
+              type="button" data-testid="toggle-problem-library-btn" onClick={() => setLibraryOpen(!libraryOpen)}
               title="Browse all 24 Real-Life Plant Problems across 🌱 L1 · 🔧 L2 · 🕵️ L3 · 🚨 L4"
             >
               {t.browseProblemsBtn(ALL_24_REAL_LIFE_PROBLEMS.length)}
@@ -125,37 +135,25 @@ export const GuidedMissionBar: React.FC = () => {
             <div className={showScorecardDrawer ? 'studio-quick-missions-popover' : 'studio-drawer-collapsed'}>
               {bundle.rankedMissions.map(({ mission, solved, isRecommendedNext, reasonBadge }) => (
                 <button
-                  key={mission.id}
-                  type="button"
-                  data-testid={mission.id}
-                  title={reasonBadge}
+                  key={mission.id} type="button" data-testid={mission.id} title={reasonBadge}
                   onClick={() => { resetActiveProblems(); setShowScorecardDrawer(false); runMission(mission, mission.initialMutations); }}
                 >
                   {solved ? '✓ ' : ''}
                   {locale === 'vi' ? (MISSION_BUTTON_LABELS_VI[mission.id] ?? mission.buttonLabel) : mission.buttonLabel}
                   {isRecommendedNext && (
-                    <span data-testid="recommended-mission-badge" className="mono" style={{ marginLeft: '4px', fontSize: '11px' }}>
-                      [Next]
-                    </span>
+                    <span data-testid="recommended-mission-badge" className="mono" style={{ marginLeft: '4px', fontSize: '11px' }}>[Next]</span>
                   )}
                 </button>
               ))}
             </div>
-            <button
-              type="button"
-              onClick={() => setShowScorecardDrawer(!showScorecardDrawer)}
-              title="Toggle Quick Missions & Student Progress Drawer"
-            >
+            <button type="button" onClick={() => setShowScorecardDrawer(!showScorecardDrawer)} title="Toggle Quick Missions & Student Progress Drawer">
               {t.coachBtn(showScorecardDrawer)}
             </button>
           </>
         )}
         <button
-          type="button"
-          className="studio-drawer-collapsed"
-          data-testid="toggle-mission-bar"
-          aria-label={collapsed ? 'Show guided mission bar' : 'Hide guided mission bar'}
-          onClick={() => setCollapsed(!collapsed)}
+          type="button" className="studio-drawer-collapsed" data-testid="toggle-mission-bar"
+          aria-label={collapsed ? 'Show guided mission bar' : 'Hide guided mission bar'} onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? '▸ Show Missions' : '▾ Hide'}
         </button>

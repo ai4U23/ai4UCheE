@@ -1,9 +1,10 @@
 # ai4UCheE — ChemEng's Intelligent Workbench
 
 Canonical URL: https://chemeng.ai4u.now/
-Last Updated: 2026-10-31
+Workbench URL: https://chemeng.ai4u.now/app
+Last Updated: 2026-11-01
 
-`ai4UCheE` (`https://chemeng.ai4u.now`) is a bi-directional agent-native chemical engineering workbench organized by **Chemical Engineering Subject**, blending **6 canonical reference textbooks** for both **chemical engineering students (`🎓 Learn Mode`)** and **plant/process engineers (`🏭 Plant Mode`)**.
+`ai4UCheE` (`https://chemeng.ai4u.now`) is a bi-directional agent-native chemical engineering workbench organized by **Year 2–4 Chemical Engineering Curriculum Progression**, blending **6 canonical reference textbooks** for both **chemical engineering students (`🎓 Learn Mode`, default on `/app` via `wb2-thermo-dippr`)** and **plant/process engineers (`🏭 Plant Mode`)**.
 
 ## 6 Canonical Reference Textbooks
 1. *Perry's Chemical Engineers' Handbook, 9th Edition* (Green & Southard, 2019)

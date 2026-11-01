@@ -65,7 +65,7 @@ export const DistillationWorkbench: React.FC = () => {
 
   const [showProofs, setShowProofs] = useState<boolean>(false);
   const [showMoreDiagrams, setShowMoreDiagrams] = useState<boolean>(false);
-  const [showInvestigation, setShowInvestigation] = useState<boolean>(false);
+  const [showInvestigation, setShowInvestigation] = useState<boolean>(true);
 
   return (
     <section className="wb-panel" data-testid="wb4-distillation">

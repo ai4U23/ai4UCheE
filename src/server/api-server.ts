@@ -1,6 +1,7 @@
 // Express host API & production static server (port 3000):
 // Serves dist/ bundle, /api/screen-state, /api/saved-calculations, /api/actions/:actionName,
 // wires SQLite persistence for screen_states & saved_calculations, and proxies /api/v1/* & /api/perry/* to :8001.
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { type Express, type Request, type Response } from 'express';
@@ -13,6 +14,7 @@ import {
 } from '../actions/view-screen';
 import { getConn, initDb } from '../db/client';
 import { registerCopilotRoute } from './copilot-route';
+import { transformHtmlForRequest } from './html-locale-responder';
 
 const SIDECAR_BASE = process.env.PERRY_SIDECAR_URL ?? 'http://127.0.0.1:8001';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -29,8 +31,16 @@ async function proxyToSidecar(req: Request, res: Response, targetPath: string): 
     });
     const contentType = upstream.headers.get('content-type') ?? 'application/json';
     const buf = Buffer.from(await upstream.arrayBuffer());
+    if (upstream.status === 404 && (targetPath.includes('search-index') || targetPath.includes('textbooks/search'))) {
+      res.status(200).json({ results: [], fallback: 'offline' });
+      return;
+    }
     res.status(upstream.status).type(contentType).send(buf);
   } catch (err) {
+    if (targetPath.includes('search-index') || targetPath.includes('textbooks/search')) {
+      res.status(200).json({ results: [], fallback: 'offline' });
+      return;
+    }
     res.status(502).json({ error: `Sidecar unreachable: ${(err as Error).message}` });
   }
 }
@@ -131,7 +141,8 @@ export function createApiServer(dbPath?: string): Express {
       res.type('text/markdown; charset=utf-8').sendFile(path.join(DIST_DIR, 'index.md'));
       return;
     }
-    res.sendFile(path.join(DIST_DIR, 'showcase.html'));
+    const rawHtml = fs.readFileSync(path.join(DIST_DIR, 'showcase.html'), 'utf8');
+    res.type('text/html; charset=utf-8').send(transformHtmlForRequest(rawHtml, req.originalUrl || req.url, String(req.headers['accept-language'] ?? '')));
   });
 
   app.get(['/app', '/workbench', '/index.html'], (req: Request, res: Response): void => {
@@ -142,7 +153,8 @@ export function createApiServer(dbPath?: string): Express {
       res.type('text/markdown; charset=utf-8').sendFile(path.join(DIST_DIR, 'index.md'));
       return;
     }
-    res.sendFile(path.join(DIST_DIR, 'index.html'));
+    const rawHtml = fs.readFileSync(path.join(DIST_DIR, 'index.html'), 'utf8');
+    res.type('text/html; charset=utf-8').send(transformHtmlForRequest(rawHtml, req.originalUrl || req.url, String(req.headers['accept-language'] ?? '')));
   });
 
   app.use(

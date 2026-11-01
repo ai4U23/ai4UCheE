@@ -15,10 +15,12 @@
   <meta property="og:image" content="https://chemeng.ai4u.now/og-card.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="ai4UCheE — ChemEng's Intelligent Workbench in Institutional Ivory and Sovereign Deep Navy" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ai4UCheE — ChemEng's Intelligent Workbench" />
   <meta name="twitter:description" content="6-book chemical engineering solver &amp; AI Co-Pilot with 55+ interactive SVG nomographs, 3-stage White-Box KaTeX proofs, and 24 plant problems." />
   <meta name="twitter:image" content="https://chemeng.ai4u.now/og-card.png" />
+  <meta name="twitter:image:alt" content="ai4UCheE — ChemEng's Intelligent Workbench in Institutional Ivory and Sovereign Deep Navy" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23E8C547'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='monospace' font-weight='800' font-size='26' fill='%23071A33'%3EChE%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
@@ -411,6 +413,15 @@
           <strong>ai4UCheE</strong> pairs <em>Perry's 9th Ed.</em>, <em>Fogler 7th Ed.</em>, <em>Bird-Stewart-Lightfoot</em>, <em>Smith-Van Ness-Abbott</em>, <em>Seader</em>, and <em>Crowl &amp; Louvar</em> with <strong>55+ bi-directional SVG nomographs</strong>, <strong>3-Stage White-Box KaTeX proofs</strong>, and <strong>24 real-life plant problems</strong>.
         </p>
 
+        <div class="stage-pill" data-testid="five-step-story-bridge" style="margin: 0 0 1rem; padding: 0.75rem 1rem; border-left: 3px solid var(--maize); font-size: 0.84rem; line-height: 1.55;">
+          <strong>5-Step Causal Engineering Story:</strong>
+          <code>1. Plant Symptom</code> (cavitation, 4× ΔP, flood, runaway) →
+          <code>2. ChE Subject (Year 2–4)</code> (Thermo → Fluids → Sep → Kinetics → Design) →
+          <code>3. Governing Equation</code> (DIPPR 101, Churchill, McCabe-Thiele, Fogler) →
+          <code>4. Interactive SVG Lab</code> (scrub T, P, Re, R/R_min, X) →
+          <code>5. Verified Result</code> (14-field SHA-256 Calc Sheet)
+        </div>
+
         <div class="grid-2">
           <div class="card card-navy">
             <div>
@@ -460,11 +471,24 @@
 
         <div class="grid-2">
           <div class="video-stage">
-            <video id="guide-video-el" src="/ai4uchee-guide.mp4" controls playsinline preload="metadata"></video>
+            <video id="guide-video-el" src="/ai4uchee-guide.mp4" poster="/ai4uchee-guide-poster.svg" controls playsinline preload="metadata">
+              <track kind="captions" src="/ai4uchee-guide-en.vtt" srclang="en" label="English" default />
+              <track kind="captions" src="/ai4uchee-guide-vi.vtt" srclang="vi" label="Tiếng Việt" />
+            </video>
             <div style="display:flex; justify-content:space-between; align-items:center; color:var(--ivory); padding: 0.5rem 0.35rem 0.1rem; font-family:var(--font-mono); font-size:0.78rem;">
               <span id="video-status-label">▶ Chapter 01 · 3-Zone AI-Native Studio (00:00)</span>
               <span>1920×1080 H.264 · Remotion 4</span>
             </div>
+            <details data-testid="showcase-video-transcript" style="color:var(--ivory); font-size:0.78rem; padding:0.35rem 0.35rem 0.15rem;">
+              <summary style="cursor:pointer; color:var(--maize-soft); font-family:var(--font-mono);">Transcript / Phụ đề (00:00–00:15 · EN/VI)</summary>
+              <ol style="margin:0.35rem 0 0 1.2rem; padding:0; line-height:1.5;">
+                <li><strong>00:00–00:03 · Ch. 1:</strong> Connect real plant symptoms to 6 undergraduate ChE textbooks and 28 calibrated solvers.</li>
+                <li><strong>00:03–00:06 · Ch. 2:</strong> Progress from Year 2 Thermodynamics (DIPPR 101/105) and Fluid Hydraulics (f_D = 4·f_F, NPSHa) to Separations, Kinetics, and the Atlas.</li>
+                <li><strong>00:06–00:09 · Ch. 3:</strong> Diagnose failure modes via the Fogler 6-stage flow (+35 pts DIY / +12 pts Assisted in your local browser practice meter).</li>
+                <li><strong>00:09–00:12 · Ch. 4:</strong> Scrub interactive SVG handles and inspect 3-stage Symbolic → Substituted → Result KaTeX proofs.</li>
+                <li><strong>00:12–00:15 · Ch. 5:</strong> Export 14-field calculation sheets with explicit psig/psia conversion and switch EN/VI instantaneously.</li>
+              </ol>
+            </details>
           </div>
 
           <div style="display:flex; flex-direction:column; gap:0.55rem; justify-content:space-between;">
@@ -502,73 +526,79 @@
         <div class="grid-3">
           <div class="card">
             <div>
-              <span class="mono-badge">Subject 1 · WB2</span>
+              <span class="mono-badge">Subject 1 · WB2 · Year 2 Foundation</span>
               <h3>Thermodynamics, Phase Equilibria &amp; DIPPR</h3>
-              <p style="font-size:0.86rem; margin:0.35rem 0;">Exact DIPPR Eq. 101/106 correlations, Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, Peng-Robinson EOS <em>Z(P_r, T_r)</em> dome, and Rankine/Van 't Hoff cycles.</p>
+              <p style="font-size:0.86rem; margin:0.35rem 0;">Exact DIPPR Eq. 101/106 correlations (5-parameter pure-component vapor pressure &amp; ΔH_vap), Carlson property decision tree, Binary VLE <em>T-x-y</em> Azeotrope Explorer, and Peng-Robinson EOS dome. <strong>Prereq:</strong> Material &amp; Energy Balances.</p>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.4rem; margin-top:0.5rem;">
               <div class="stage-pill" style="margin-top:0; flex:1;">[Perry's 9e Table 2-8, p. 2-53 · SVNA 9e]</div>
               <a class="ctrl-btn" href="/app?wb=wb2-thermo-dippr">Open Lab →</a>
+              <a class="ctrl-btn" href="/app?wb=wb2-thermo-dippr&amp;mission=mission-boil-water" title="Representative Plant Problem: Subcooled Vessel Boil Check">Plant Case →</a>
             </div>
           </div>
 
           <div class="card">
             <div>
-              <span class="mono-badge">Subject 2 · WB3</span>
+              <span class="mono-badge">Subject 2 · WB3 · Year 2/3 Transport</span>
               <h3>Fluid Mechanics, Transport &amp; Piping Hydraulics</h3>
-              <p style="font-size:0.86rem; margin:0.35rem 0;">Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail, 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em>, BSL Non-Newtonian velocity profiles, ISA-75.01 valves, and Bowman <em>F_T</em> heat exchangers.</p>
+              <p style="font-size:0.86rem; margin:0.35rem 0;">Commercial Sch 40/80 pipe sizing, explicit <em>f_D = 4·f_F</em> guardrail (Darcy piping factor = 4× Fanning transport factor), 3-case pump <em>NPSH_A</em> vs. <em>NPSH_R</em> (suction head margin above boiling), and ISA-75.01 valves. <strong>Prereq:</strong> Thermo I.</p>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.4rem; margin-top:0.5rem;">
               <div class="stage-pill" style="margin-top:0; flex:1;">[Perry's 9e Fig. 6-9, p. 6-10 · BSL Ch. 2]</div>
               <a class="ctrl-btn" href="/app?wb=wb3-hydraulics">Open Lab →</a>
+              <a class="ctrl-btn" href="/app?wb=wb3-hydraulics&amp;mission=mission-pump-npsha" title="Representative Plant Problem: Pump P-101 Cavitation Rescue">Plant Case →</a>
             </div>
           </div>
 
           <div class="card">
             <div>
-              <span class="mono-badge">Subject 3 · WB4</span>
+              <span class="mono-badge">Subject 3 · WB4 · Year 3 Separations</span>
               <h3>Separations, McCabe-Thiele &amp; Column Hydraulics</h3>
-              <p style="font-size:0.86rem; margin:0.35rem 0;">Bi-directional 5-handle McCabe-Thiele canvas, Fenske-Underwood-Gilliland shortcuts, Fair's Souders-Brown flooding, Eckert GPDC, Kremser <em>N_OG</em> absorption, and Ternary LLE.</p>
+              <p style="font-size:0.86rem; margin:0.35rem 0;">Bi-directional 5-handle McCabe-Thiele stage-stepping canvas, Fenske-Underwood-Gilliland shortcuts (minimum stages &amp; pinch reflux <em>R_min</em>), Fair's Souders-Brown flooding, Eckert GPDC, and Kremser <em>N_OG</em> absorption. <strong>Prereq:</strong> Phase Equilibria.</p>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.4rem; margin-top:0.5rem;">
               <div class="stage-pill" style="margin-top:0; flex:1;">[Seader 4e Ch. 6–8 · Perry's 9e p. 14-37]</div>
               <a class="ctrl-btn" href="/app?wb=wb4-distillation">Open Lab →</a>
+              <a class="ctrl-btn" href="/app?wb=wb4-distillation&amp;mission=mission-distillation" title="Representative Plant Problem: Column T-201 Flooding &amp; Pinch">Plant Case →</a>
             </div>
           </div>
 
           <div class="card">
             <div>
-              <span class="mono-badge">Subject 4 · WB6</span>
+              <span class="mono-badge">Subject 4 · WB6 · Year 3/4 Kinetics</span>
               <h3>Kinetics, Catalysis &amp; Chemical Reactor Design</h3>
-              <p style="font-size:0.86rem; margin:0.35rem 0;">Interactive Levenspiel CSTR rectangle vs. PFR integral plot, Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; effectiveness <em>η</em>, Semenov thermal runaway S-curve, LHHW &amp; Butler-Volmer.</p>
+              <p style="font-size:0.86rem; margin:0.35rem 0;">Interactive Levenspiel plot (<em>-r_A⁻¹</em> vs. <em>X</em> where CSTR is a rectangle and PFR is the integral area), Ergun PBR pressure drop, Thiele modulus <em>φ</em> &amp; catalyst effectiveness <em>η</em>, and Semenov thermal runaway S-curve. <strong>Prereq:</strong> Thermo &amp; Transport.</p>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.4rem; margin-top:0.5rem;">
               <div class="stage-pill" style="margin-top:0; flex:1;">[Fogler 7e Ch. 2, 5, 12, 15 · Crowl 4e]</div>
               <a class="ctrl-btn" href="/app?wb=wb6-kinetics-reactors">Open Lab →</a>
+              <a class="ctrl-btn" href="/app?wb=wb6-kinetics-reactors&amp;mission=mission-kinetics-runaway" title="Representative Plant Problem: Reactor R-301 Runaway &amp; Pore Diffusion">Plant Case →</a>
             </div>
           </div>
 
           <div class="card">
             <div>
-              <span class="mono-badge">Subject 5 · WB5</span>
+              <span class="mono-badge">Subject 5 · WB5 · Year 4 Capstone &amp; Safety</span>
               <h3>25-Section Perry Atlas &amp; 6-Book Search</h3>
-              <p style="font-size:0.86rem; margin:0.35rem 0;">Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Unit Conversions &amp; Economics to API 520 Relief Sizing &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274).</p>
+              <p style="font-size:0.86rem; margin:0.35rem 0;">Dedicated interactive SVG solvers for all 25 sections of <em>Perry's 9th Ed.</em> (from Economics Lang factor &amp; Pinch ΔT_min to API 520 Relief Sizing, LOPA safety audits &amp; Corrosion PREN) plus Back-of-Book Index (pp. 2244–2274). <strong>Prereq:</strong> Core ChE Sequence.</p>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.4rem; margin-top:0.5rem;">
               <div class="stage-pill" style="margin-top:0; flex:1;">[Perry's 9e Sec 1–25 · pp. 2244–2274]</div>
               <a class="ctrl-btn" href="/app?wb=wb5-handbook-atlas">Open Lab →</a>
+              <a class="ctrl-btn" href="/app?wb=wb5-handbook-atlas&amp;problem=prob-11-bowman-ft" title="Representative Plant Problem: Exchanger F_T &amp; Relief Audit">Plant Case →</a>
             </div>
           </div>
 
           <div class="card card-navy">
             <div>
-              <span class="mono-badge">Utility Tool · WB1</span>
+              <span class="mono-badge">Utility Tool · WB1 · All Years</span>
               <h3 style="color:var(--maize);">10 Calibrated Nomographs &amp; High-DPI Verifier</h3>
-              <p style="font-size:0.86rem; margin:0.35rem 0;">Cross-subject header utility auto-syncing the active lab's chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov).</p>
+              <p style="font-size:0.86rem; margin:0.35rem 0;">Cross-subject header utility auto-syncing the active lab's chart (<code>6-10</code> Moody, <code>14-37</code> Fair, <code>14-57</code> Eckert, <code>2-53</code> DIPPR, <code>19-6</code> Levenspiel, <code>6-52</code> Sphere Drag, <code>4-18</code> Lee-Kesler, <code>15-10</code> Thiele, <code>14-15</code> Kremser, <code>23-42</code> Semenov) with white-box analytical telemetry.</p>
             </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-top:0.5rem;">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:0.4rem; margin-top:0.5rem;">
               <div class="stage-pill" style="margin-top:0; flex:1;">✓ DeepTutor Chart Verifier</div>
               <a class="ctrl-btn active" href="/app?wb=wb1-visual-verifier">Open Charts →</a>
+              <a class="ctrl-btn" href="/app?wb=wb1-visual-verifier&amp;mission=mission-fanning-trap" title="Representative Plant Problem: 4× Fanning vs. Darcy Trap">Plant Case →</a>
             </div>
           </div>
         </div>
@@ -623,7 +653,7 @@
                 <li><strong>Stage 6 · Actual Solution Verified:</strong> Restore safe plant margins &amp; earn a <code>FOG-WB*-DIY-XXXXXX</code> stamp.</li>
               </ol>
             </div>
-            <div class="stage-pill">✓ DIY Solve (+35% Mastery) · Socratic Hint · Auto-Fix Rescue (+12% Mastery)</div>
+            <div class="stage-pill">✓ DIY Solve (+35 pts Practice Score) · Socratic Hint · Auto-Fix Rescue (+12 pts Assisted · Local Browser Demo)</div>
           </div>
         </div>
       </div>
@@ -1117,19 +1147,19 @@
       <h4 class="ak-diagram-title"><span>&#128202;</span> ai4UCheE — 3-Zone AI-Native Chemical Engineering Studio Architecture<span class="ak-diagram-subtitle"> - 6 Canonical Textbooks · Deterministic Python/TS Solvers · Bi-Directional &lt;current-screen&gt; Co-Pilot</span></h4>
       <div class="ak-diagram-controls">
         <input type="text" class="ak-diagram-search-input" placeholder="Search (/) ..." aria-label="Search diagram nodes and descriptions" />
-        <button type="button" class="ak-diagram-btn ak-btn-reach-down" title="Downstream Reach">&#8595; Reach</button>
-        <button type="button" class="ak-diagram-btn ak-btn-reach-up" title="Upstream Reach">&#8593; Reach</button>
-        <button type="button" class="ak-diagram-btn ak-btn-route" title="Route Inspection (R)">&#128205; Route</button>
-        <button type="button" class="ak-diagram-btn ak-btn-lens" title="Role Lens (L)">&#128269; Lens</button>
+        <button type="button" class="ak-diagram-btn ak-btn-reach-down" title="Downstream Reach" aria-label="Trace Downstream Reach">&#8595; Reach</button>
+        <button type="button" class="ak-diagram-btn ak-btn-reach-up" title="Upstream Reach" aria-label="Trace Upstream Reach">&#8593; Reach</button>
+        <button type="button" class="ak-diagram-btn ak-btn-route" title="Route Inspection (R)" aria-label="Inspect Route (R)">&#128205; Route</button>
+        <button type="button" class="ak-diagram-btn ak-btn-lens" title="Role Lens (L)" aria-label="Cycle Role Lens (L)">&#128269; Lens</button>
         <div class="ak-chapter-controls">
-    <button type="button" class="ak-diagram-btn ak-btn-prev-chapter" title="Previous Chapter ([)">&#8249;</button>
+    <button type="button" class="ak-diagram-btn ak-btn-prev-chapter" title="Previous Chapter ([)" aria-label="Previous Diagram Chapter">&#8249;</button>
     <span class="ak-chapter-label">1/3</span>
-    <button type="button" class="ak-diagram-btn ak-btn-next-chapter" title="Next Chapter (])">&#8250;</button>
+    <button type="button" class="ak-diagram-btn ak-btn-next-chapter" title="Next Chapter (])" aria-label="Next Diagram Chapter">&#8250;</button>
   </div>
-        <button type="button" class="ak-diagram-btn ak-btn-motion" title="Replay motion (M)">&#9654; Replay</button>
-        <button type="button" class="ak-diagram-btn ak-btn-theme" title="Toggle Light/Dark">&#127769;</button>
-        <button type="button" class="ak-diagram-btn ak-btn-present" title="Presentation Stage (F)">&#9974;</button>
-        <button type="button" class="ak-diagram-btn ak-btn-share" title="Export 1200x630 Share Card">&#128228; Card</button>
+        <button type="button" class="ak-diagram-btn ak-btn-motion" title="Replay motion (M)" aria-label="Replay Diagram Motion (M)">&#9654; Replay</button>
+        <button type="button" class="ak-diagram-btn ak-btn-theme" title="Toggle Light/Dark" aria-label="Toggle Diagram Light or Dark Theme">&#127769;</button>
+        <button type="button" class="ak-diagram-btn ak-btn-present" title="Presentation Stage (F)" aria-label="Toggle Fullscreen Presentation Stage (F)">&#9974;</button>
+        <button type="button" class="ak-diagram-btn ak-btn-share" title="Export 1200x630 Share Card" aria-label="Export 1200x630 Diagram Share Card">&#128228; Card</button>
       </div>
     </div>
     <div class="ak-diagram-viewport">
@@ -1734,7 +1764,7 @@
                 <li><strong>3-Stage White-Box Derivations &amp; 6-Stage Root-Cause Audit:</strong> Complete with Fogler Detective Stamp &amp; Markdown download.</li>
               </ul>
             </div>
-            <div class="stage-pill">✓ Persisted to SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable</div>
+            <div class="stage-pill">✓ Persisted anonymously to local SQLite <code>saved_calculations</code> · Printable &amp; Markdown Exportable</div>
           </div>
 
           <div class="card card-navy">
@@ -1750,6 +1780,10 @@
             </div>
           </div>
         </div>
+
+        <div class="stage-pill" data-testid="showcase-engineering-boundary" style="margin-top: 1rem; padding: 0.75rem 1rem; border-left: 3px solid var(--status-warn); font-size: 0.82rem; line-height: 1.55;">
+          <strong>Educational &amp; Preliminary Engineering Boundary:</strong> Calculations use deterministic textbook correlations (DIPPR, Churchill, McCabe-Thiele, Fogler) for undergraduate instruction and preliminary screening — not a substitute for licensed PE sign-off, API 520/521 relief certification, or HAZOP/SIL audits. Practice points (<code>+35 pts DIY / +12 pts Assisted</code>) live only in your local browser (<code>localStorage</code>); exported calculation sheets persist anonymously in local SQLite (<code>saved_calculations</code>). Curated 6-book index &amp; problem bank map to published section coordinates; plant failure narratives are educational composites.
+        </div>
       </div>
     </section>
   </main>
@@ -1759,7 +1793,7 @@
     <ol>
       <li>Green, D. W., &amp; Southard, M. Z. (2019). <em>Perry's Chemical Engineers' Handbook</em> (9th ed.). McGraw-Hill. <a href="https://www.accessengineeringlibrary.com/content/book/9780071834087" target="_blank" rel="noreferrer">AccessEngineering</a></li>
       <li>Fogler, H. S., Goldsmith, B. R., Nikolla, E., &amp; Singh, N. (2025). <em>Elements of Chemical Reaction Engineering</em> (7th ed.). Pearson. <a href="https://www.pearson.com/en-us/subject-catalog/p/elements-of-chemical-reaction-engineering/P200000010287" target="_blank" rel="noreferrer">Pearson Catalog</a></li>
-      <li>Fogler, H. S., &amp; LeBlanc, S. E. (2008). <em>Strategies for Creative Problem Solving</em> (2nd ed.). Prentice Hall. <a href="https://umich.edu/~scps/" target="_blank" rel="noreferrer">UMich SCPS</a></li>
+      <li>Fogler, H. S., &amp; LeBlanc, S. E. (2008). <em>Strategies for Creative Problem Solving</em> (2nd ed.). Prentice Hall / Pearson.</li>
       <li>Bird, R. B., Stewart, W. E., &amp; Lightfoot, E. N. (2006). <em>Transport Phenomena</em> (Revised 2nd ed.). Wiley. <a href="https://www.wiley.com/en-us/Transport+Phenomena%2C+Revised+2nd+Edition-p-9780470115398" target="_blank" rel="noreferrer">Wiley</a></li>
       <li>Smith, J. M., Van Ness, H. C., Abbott, M. M., &amp; Swihart, M. T. (2021). <em>Introduction to Chemical Engineering Thermodynamics</em> (9th ed.). McGraw-Hill.</li>
       <li>Seader, J. D., Henley, E. J., &amp; Roper, D. K. (2016). <em>Separation Process Principles</em> (4th ed.). Wiley. · Crowl, D. A., &amp; Louvar, J. F. (2019). <em>Chemical Process Safety</em> (4th ed.). Pearson.</li>
@@ -1910,7 +1944,7 @@
           '<strong>Stage 5 · Hypotheses (Prove ✅ / Disprove ❌):</strong> Enforce Rule #12 ("seek to reject as well as to accept").',
           '<strong>Stage 6 · Actual Solution Verified:</strong> Restore safe plant margins &amp; earn a <code>FOG-WB*-DIY-XXXXXX</code> stamp.'
         ],
-        foglerFooterPill: '✓ DIY Solve (+35% Mastery) · Socratic Hint · Auto-Fix Rescue (+12% Mastery)',
+        foglerFooterPill: '✓ DIY Solve (+35 pts Practice Score) · Socratic Hint · Auto-Fix Rescue (+12 pts Assisted · Local Browser Demo)',
         whiteboxDescs: [
           'Every equation states its symbol basis and textbook equation number before any numbers are plugged in.',
           'Automatic ChE Error-Signature Detector flags <code>4×</code> Fanning/Darcy, <code>±14.7 psi</code> gauge/abs, <code>±273.15</code> K/°C, and <code>2.303×</code> ln/log10 mistakes.',
@@ -2041,7 +2075,7 @@
           '<strong>Bước 5 · Giả thuyết (Chứng minh ✅ / Bác bỏ ❌):</strong> Áp dụng Quy tắc #12 ("tìm bằng chứng bác bỏ cũng như chấp nhận").',
           '<strong>Bước 6 · Nghiệm thu Giải pháp Thực tế:</strong> Khôi phục biên độ vận hành an toàn &amp; nhận dấu kiểm định <code>FOG-WB*-DIY-XXXXXX</code>.'
         ],
-        foglerFooterPill: '✓ Tự Giải DIY (+35% Thành thạo) · Gợi ý Socratic · Tự động Khắc phục (+12% Thành thạo)',
+        foglerFooterPill: '✓ Tự Giải DIY (+35 điểm Luyện tập) · Gợi ý Socratic · Tự động Khắc phục (+12 điểm Gợi ý · Trình duyệt Cục bộ)',
         whiteboxDescs: [
           'Mọi phương trình đều nêu rõ ký hiệu cơ sở và số hiệu phương trình giáo trình trước khi thay bất kỳ con số nào.',
           'Bộ phát hiện bẫy sai số ChE tự động cảnh báo nhầm lẫn <code>4×</code> Fanning/Darcy, <code>±14,7 psi</code> áp suất dư/tuyệt đối, <code>±273,15</code> K/°C và <code>2,303×</code> ln/log10.',
@@ -2115,8 +2149,10 @@
       });
       var labPs = document.querySelectorAll('#six-books-labs .card p');
       c.labDescs.forEach(function(html, i) { if (labPs[i]) labPs[i].innerHTML = html; });
-      var labAs = document.querySelectorAll('#six-books-labs .card a.ctrl-btn');
+      var labAs = document.querySelectorAll('#six-books-labs .card a.ctrl-btn:not([href*="mission="]):not([href*="problem="])');
       labAs.forEach(function(a, i) { a.textContent = i === 5 ? c.openChartsBtn : c.openLabBtn; });
+      var caseAs = document.querySelectorAll('#six-books-labs .card a.ctrl-btn[href*="mission="], #six-books-labs .card a.ctrl-btn[href*="problem="]');
+      caseAs.forEach(function(a) { a.textContent = l === 'vi' ? 'Ca Nhà máy →' : 'Plant Case →'; });
       var tierPills = document.querySelectorAll('#problem-solving .card:not(.card-navy) .stage-pill');
       c.tiers.forEach(function(html, i) { if (tierPills[i]) tierPills[i].innerHTML = html; });
       var probCard1 = document.querySelector('#problem-solving .card:not(.card-navy)');

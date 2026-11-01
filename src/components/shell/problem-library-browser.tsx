@@ -4,6 +4,8 @@
 import React, { useState } from 'react';
 import type { WorkbenchId } from '../../actions/view-screen';
 import { getActiveLocale } from '../../lib/i18n/locale-types';
+import { CURRICULUM_PROGRESSION_MAP } from '../../lib/curriculum-progression-map';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { VI_PROBLEMS_AND_FOGLER_MAP } from '../../lib/i18n/vi-problems-and-fogler-phrases';
 import { getTroubleshootingCopy } from '../../lib/i18n/vi-troubleshooting-copy';
 import { ALL_24_REAL_LIFE_PROBLEMS, filterProblemLibrary } from '../../lib/problem-library-registry';
@@ -53,6 +55,9 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
         <div>
           <strong>{ts.libHeader}</strong>
           <div className="wb-subtitle">{ts.libSubtitle}</div>
+          <div className="mono" style={{ fontSize: '11px', opacity: 0.85 }} data-testid="corpus-provenance-notice">
+            {TRUST_BOUNDARY_COPY[isVi ? 'vi' : 'en'].corpusProvenanceNotice}
+          </div>
         </div>
         {onClose && (
           <button type="button" data-testid="close-problem-library-btn" onClick={onClose}>{ts.libCloseBtn}</button>
@@ -139,7 +144,7 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
                 {isSolved ? '✓ ' : ''}{tr(p.title)}
               </div>
               <div className="mono" style={{ fontSize: '11px', opacity: 0.9, marginBottom: '4px' }}>
-                {p.timeHorizonBadge} · <span>{tr(p.subjectLabel)}</span>
+                {CURRICULUM_PROGRESSION_MAP[p.targetWorkbench]?.yearBadge[isVi ? 'vi' : 'en']} · {p.timeHorizonBadge} · <span>{tr(p.subjectLabel)}</span>
               </div>
               <div style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>{tr(p.observationSummary)}</div>
               <div className="wb-actions-row" style={{ justifyContent: 'space-between' }}>

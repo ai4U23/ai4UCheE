@@ -63,7 +63,7 @@ export const HydraulicsWorkbench: React.FC = () => {
 
   const [showProofs, setShowProofs] = useState<boolean>(false);
   const [showMoreDiagrams, setShowMoreDiagrams] = useState<boolean>(false);
-  const [showInvestigation, setShowInvestigation] = useState<boolean>(false);
+  const [showInvestigation, setShowInvestigation] = useState<boolean>(true);
 
   return (
     <section className="wb-panel" data-testid="wb3-hydraulics">

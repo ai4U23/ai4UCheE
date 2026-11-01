@@ -3,11 +3,11 @@
 > Bi-directional agent-native chemical engineering workbench blending 6 canonical textbooks (Perry's 9th Ed., Fogler 7th Ed., Bird-Stewart-Lightfoot 2nd Ed., Smith-Van Ness-Abbott 9th Ed., Seader 4th Ed., Crowl & Louvar 4th Ed.) with 55+ interactive SVG nomographs/solvers, 3-stage White-Box KaTeX equation proofs, and 24 real-life plant problems across Learn Mode and Plant Mode.
 
 Canonical URL: https://chemeng.ai4u.now/
-Last Updated: 2026-10-31
+Last Updated: 2026-11-01
 
 ## Documentation & Machine-Readable Twins
 
-- [Workbench Overview & Subject Catalog (Markdown Twin)](https://chemeng.ai4u.now/index.md): Complete summary of all 5 Chemical Engineering Subject Labs (WB2–WB6), the WB1 Calibrated Nomograph Verifier, the 24-problem library, and bi-directional Co-Pilot API endpoints.
-- [Full Reference Corpus & Solver Guide (llms-full.txt)](https://chemeng.ai4u.now/llms-full.txt): Single-file technical reference covering equations, unit guardrails (`psig` vs `psia`, Fanning `f_F` vs Darcy `f_D = 4*f_F`), all 25 Perry's sections, and all 24 plant troubleshooting scenarios.
-- [Feature Showcase Homepage & Remotion Video Guide](https://chemeng.ai4u.now/): Interactive feature showcase homepage with embedded Remotion user-guide video (`/ai4uchee-guide.mp4`) and interactive system architecture reader.
-- [Interactive Chemical Engineering Workbench](https://chemeng.ai4u.now/app): Live 3-Zone AI-Native Studio (`/app`, bilingual English `en` & Vietnamese `vi` via `?lang=vi`) with 5 Subject Labs, 55+ interactive SVG nomographs, and 24 plant problems.
+- [Workbench Overview & Subject Catalog (Markdown Twin)](https://chemeng.ai4u.now/index.md): Complete summary of all 5 Chemical Engineering Subject Labs (Year 2–4 curriculum progression across WB2–WB6), the WB1 Calibrated Nomograph Verifier, the 24-problem library, and bi-directional Co-Pilot API endpoints.
+- [Full Reference Corpus & Solver Guide (llms-full.txt)](https://chemeng.ai4u.now/llms-full.txt): Single-file technical reference covering equations, unit guardrails (`psig` vs `psia`, Fanning `f_F` vs Darcy `f_D = 4*f_F`), all 25 Perry's sections, all 24 plant troubleshooting scenarios, and educational/preliminary engineering scope boundaries.
+- [Feature Showcase Homepage & Remotion Video Guide](https://chemeng.ai4u.now/): Interactive feature showcase homepage with embedded Remotion user-guide video (`/ai4uchee-guide.mp4`, poster `/ai4uchee-guide-poster.svg`, captions `/ai4uchee-guide-en.vtt` & `/ai4uchee-guide-vi.vtt`), 5-step causal story bridge, and interactive system architecture reader.
+- [Interactive Chemical Engineering Workbench](https://chemeng.ai4u.now/app): Live 3-Zone AI-Native Studio (`/app`, defaulting to Year 2 Thermodynamics `wb2-thermo-dippr` in Learn Mode; bilingual English `en` & Vietnamese `vi` via `?lang=vi`) with 5 Subject Labs, 55+ interactive SVG nomographs, and 24 plant problems.

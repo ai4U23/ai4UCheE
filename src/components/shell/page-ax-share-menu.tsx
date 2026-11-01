@@ -6,8 +6,16 @@ import { getClientAppState } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { getShellCopy } from '../../lib/i18n/vi-shell-dictionary';
 
-const CANONICAL_URL = 'https://chemeng.ai4u.now/';
+const ROOT_CANONICAL_URL = 'https://chemeng.ai4u.now/';
+const APP_CANONICAL_URL = 'https://chemeng.ai4u.now/app';
 const MARKDOWN_TWIN_URL = 'https://chemeng.ai4u.now/index.md';
+
+function resolveCurrentCanonicalUrl(): string {
+  if (typeof window !== 'undefined' && (window.location.pathname.startsWith('/app') || window.location.pathname.startsWith('/workbench'))) {
+    return APP_CANONICAL_URL;
+  }
+  return ROOT_CANONICAL_URL;
+}
 
 export const PageAxShareMenu: React.FC = () => {
   const { activeWorkbench, personaMode, locale } = usePersonaTheme();
@@ -26,9 +34,10 @@ export const PageAxShareMenu: React.FC = () => {
     const state = getClientAppState();
     const summary = String(state.payload?.summary ?? `${activeWorkbench} (${personaMode} mode)`);
     const status = String(state.payload?.statusBanner ?? 'Ready');
+    const canonicalUrl = resolveCurrentCanonicalUrl();
     return [
       `# ai4UCheE — ChemEng's Intelligent Workbench`,
-      `Canonical URL: ${CANONICAL_URL}`,
+      `Canonical URL: ${canonicalUrl}`,
       `Markdown Twin: ${MARKDOWN_TWIN_URL}`,
       `Active Workbench: ${activeWorkbench} (${personaMode === 'learn' ? 'Learn Mode' : 'Plant Mode'})`,
       `Summary: ${summary}`,
@@ -65,16 +74,17 @@ export const PageAxShareMenu: React.FC = () => {
   };
 
   const handleCopyUrl = () => {
+    const canonicalUrl = resolveCurrentCanonicalUrl();
     try {
       if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
         void navigator.share({
           title: "ai4UCheE — ChemEng's Intelligent Workbench",
           text: '6-Book Chemical Engineering Solver & AI Co-Pilot',
-          url: CANONICAL_URL,
+          url: canonicalUrl,
         }).catch(() => {});
       }
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        void navigator.clipboard.writeText(CANONICAL_URL).catch(() => {});
+        void navigator.clipboard.writeText(canonicalUrl).catch(() => {});
       }
     } catch {
       // ignore in headless/non-secure contexts

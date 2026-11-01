@@ -682,7 +682,7 @@ const buildHtml = (videoSrc) => `<!doctype html>
     <ol>
       <li>Green, D. W., &amp; Southard, M. Z. (2019). <em>Perry's Chemical Engineers' Handbook</em> (9th ed.). McGraw-Hill. <a href="https://www.accessengineeringlibrary.com/content/book/9780071834087" target="_blank" rel="noreferrer">AccessEngineering</a></li>
       <li>Fogler, H. S., Goldsmith, B. R., Nikolla, E., &amp; Singh, N. (2025). <em>Elements of Chemical Reaction Engineering</em> (7th ed.). Pearson. <a href="https://www.pearson.com/en-us/subject-catalog/p/elements-of-chemical-reaction-engineering/P200000010287" target="_blank" rel="noreferrer">Pearson Catalog</a></li>
-      <li>Fogler, H. S., &amp; LeBlanc, S. E. (2008). <em>Strategies for Creative Problem Solving</em> (2nd ed.). Prentice Hall. <a href="https://umich.edu/~scps/" target="_blank" rel="noreferrer">UMich SCPS</a></li>
+      <li>Fogler, H. S., &amp; LeBlanc, S. E. (2008). <em>Strategies for Creative Problem Solving</em> (2nd ed.). Prentice Hall / Pearson.</li>
       <li>Bird, R. B., Stewart, W. E., &amp; Lightfoot, E. N. (2006). <em>Transport Phenomena</em> (Revised 2nd ed.). Wiley. <a href="https://www.wiley.com/en-us/Transport+Phenomena%2C+Revised+2nd+Edition-p-9780470115398" target="_blank" rel="noreferrer">Wiley</a></li>
       <li>Smith, J. M., Van Ness, H. C., Abbott, M. M., &amp; Swihart, M. T. (2021). <em>Introduction to Chemical Engineering Thermodynamics</em> (9th ed.). McGraw-Hill.</li>
       <li>Seader, J. D., Henley, E. J., &amp; Roper, D. K. (2016). <em>Separation Process Principles</em> (4th ed.). Wiley. · Crowl, D. A., &amp; Louvar, J. F. (2019). <em>Chemical Process Safety</em> (4th ed.). Pearson.</li>

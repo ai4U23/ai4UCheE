@@ -66,7 +66,7 @@ export const HandbookAtlasWorkbench: React.FC = () => {
   const visibleSections = ALL_25_PERRY_SECTIONS.filter((s) => clusterFilter === 'all' || s.clusterId === clusterFilter);
   const [showSectionBrowser, setShowSectionBrowser] = useState<boolean>(false);
   const [showProofsAndIndex, setShowProofsAndIndex] = useState<boolean>(false);
-  const [showInvestigation, setShowInvestigation] = useState<boolean>(false);
+  const [showInvestigation, setShowInvestigation] = useState<boolean>(true);
 
   return (
     <section className="wb-panel" data-testid="wb5-handbook-atlas">

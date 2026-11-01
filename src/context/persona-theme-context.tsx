@@ -51,11 +51,19 @@ export const PersonaThemeProvider: React.FC<{
   initialWorkbench?: WorkbenchId;
 }> = ({
   children,
-  initialPersona = 'plant',
+  initialPersona,
   initialTheme = 'paper',
   initialLocale,
   initialWorkbench,
 }) => {
+  const resolvedInitialPersona = React.useMemo<PersonaMode>(() => {
+    if (initialPersona) return initialPersona;
+    if (typeof window !== 'undefined') {
+      const pParam = new URLSearchParams(window.location.search).get('persona');
+      if (pParam === 'plant' || pParam === 'learn') return pParam;
+    }
+    return 'learn';
+  }, [initialPersona]);
   const resolvedInitialWb = React.useMemo<WorkbenchId>(() => {
     if (initialWorkbench) return initialWorkbench;
     if (typeof window !== 'undefined') {
@@ -71,9 +79,9 @@ export const PersonaThemeProvider: React.FC<{
         return wbParam;
       }
     }
-    return 'wb1-visual-verifier';
+    return 'wb2-thermo-dippr';
   }, [initialWorkbench]);
-  const [personaMode, setPersonaMode] = useState<PersonaMode>(initialPersona);
+  const [personaMode, setPersonaMode] = useState<PersonaMode>(resolvedInitialPersona);
   const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme);
   const [locale, setLocaleState] = useState<LocaleCode>(() => {
     const resolved = resolveInitialLocale(initialLocale);

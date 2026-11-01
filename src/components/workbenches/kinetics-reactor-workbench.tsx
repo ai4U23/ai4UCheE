@@ -86,7 +86,7 @@ export const KineticsReactorWorkbench: React.FC = () => {
   const blend = SUBJECT_WORKBENCH_BLENDS['wb6-kinetics-reactors'];
   const [showProofs, setShowProofs] = useState<boolean>(false);
   const [showMoreDiagrams, setShowMoreDiagrams] = useState<boolean>(false);
-  const [showInvestigation, setShowInvestigation] = useState<boolean>(false);
+  const [showInvestigation, setShowInvestigation] = useState<boolean>(true);
 
   return (
     <section className="wb-panel" data-testid="wb6-kinetics-reactors">

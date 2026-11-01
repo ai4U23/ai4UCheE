@@ -53,16 +53,23 @@ describe('Phase 15 — Framer "Luxurious Three" Motion & Surface Choreography', 
   it('Test 2 (Swarm Pulse Telemetry & Stage Entrances): renders SwarmPulseDot beacons and enter-only FramerEntranceStage with synchronous unmounts', () => {
     render(<App />);
 
-    // Default workbench is wb1-visual-verifier wrapped in FramerEntranceStage with solid opacity: 1 (zero WAAPI opacity: 0 lag)
-    const wb1Stage = screen.getByTestId('stage-wb1-visual-verifier');
-    expect(wb1Stage).toBeTruthy();
-    expect(wb1Stage.style.opacity).not.toBe('0');
+    // Default workbench is wb2-thermo-dippr wrapped in FramerEntranceStage with solid opacity: 1 (zero WAAPI opacity: 0 lag)
+    const wb2InitialStage = screen.getByTestId('stage-wb2-thermo-dippr');
+    expect(wb2InitialStage).toBeTruthy();
+    expect(wb2InitialStage.style.opacity).not.toBe('0');
 
     // SwarmPulseDot rendered in header dof-badge and Co-Pilot drawer badges
     const pulseDots = screen.getAllByTestId('swarm-pulse-dot');
     expect(pulseDots.length).toBeGreaterThanOrEqual(3);
 
-    // Switch to WB2 Thermo: stage-wb1-visual-verifier unmounts synchronously (0ms exit hold) and stage-wb2-thermo-dippr mounts
+    // Switch to WB1 Visual Verifier: stage-wb2-thermo-dippr unmounts synchronously and stage-wb1-visual-verifier mounts
+    fireEvent.click(screen.getByTestId('tab-wb1-visual-verifier'));
+    expect(screen.queryByTestId('stage-wb2-thermo-dippr')).toBeNull();
+    const wb1Stage = screen.getByTestId('stage-wb1-visual-verifier');
+    expect(wb1Stage).toBeTruthy();
+    expect(wb1Stage.style.opacity).not.toBe('0');
+
+    // Switch back to WB2 Thermo: stage-wb1-visual-verifier unmounts synchronously (0ms exit hold) and stage-wb2-thermo-dippr mounts
     fireEvent.click(screen.getByTestId('tab-wb2-thermo-dippr'));
     expect(screen.queryByTestId('stage-wb1-visual-verifier')).toBeNull();
     const wb2Stage = screen.getByTestId('stage-wb2-thermo-dippr');
@@ -78,9 +85,11 @@ describe('Phase 15 — Framer "Luxurious Three" Motion & Surface Choreography', 
   it('Test 3 (Ubiquitous MotionPillButton & FramerModalShell): renders shared-layout pills across WB1 presets, WB5 clusters/sections, and animates CalcSheetPreviewModal', () => {
     render(<App />);
 
-    // Default WB1 Visual Verifier utility is active on initial mount
+    // Default WB2 Thermo is active on initial mount; switch to WB1 Visual Verifier utility to inspect preset pills
+    expect(screen.getByTestId('stage-wb2-thermo-dippr')).toBeTruthy();
+    fireEvent.click(screen.getByTestId('tab-wb1-visual-verifier'));
     expect(screen.getByTestId('stage-wb1-visual-verifier')).toBeTruthy();
-    const presetBtn = screen.getByTestId('wb1-preset-6-10');
+    const presetBtn = screen.getByTestId('wb1-preset-2-53');
     expect(presetBtn.className).toContain('active');
     expect(presetBtn.querySelector('.framer-pill-glow')).toBeTruthy();
 

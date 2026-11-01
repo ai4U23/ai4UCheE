@@ -29,7 +29,7 @@
   --accent-primary: var(--navy);
   --accent-secondary: #9a6e08;
   --accent-maize: var(--maize);
-  --status-pass: #15803d;
+  --status-pass: #146c32;
   --status-warn: #b45309;
   --status-danger: #b91c1c;
   --shadow-lift: 0 1px 2px rgb(7 26 51 / 0.05), 0 8px 24px -8px rgb(7 26 51 / 0.08);
@@ -112,7 +112,14 @@ code, pre, .mono {
 .app-shell > * { min-width: 0; }
 .app-shell > :not(.shell-header), .shell-workspace > *, .wb-split > * { min-width: 0; max-width: 100%; }
 
-/* Stack the outer workspace grid and inner splits on narrow viewports. */
+/* Stack inner workbench 2-column splits at 1320px so 1170px desktop viewports have zero horizontal overflow. */
+@media (max-width: 1320px) {
+  .wb-split:not(.shell-workspace) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Stack the outer workspace grid and header on narrow viewports. */
 @media (max-width: 1200px) {
   .shell-header {
     grid-template-columns: minmax(0, 1fr);

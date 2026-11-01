@@ -74,7 +74,8 @@ describe('Phase 3 — Agent-Native Shell, Dual-Lens & Point-and-Ask', () => {
     expect(screen.getByTestId('chip-agent-select:input:flow-gpm')).toBeTruthy();
     expect(serializeCurrentScreenTag()).toContain('agent-select:input:flow-gpm');
 
-    // Also click the WB1 figure stage to attach figure:perry-crop
+    // Also switch to WB1 and click the WB1 figure stage to attach figure:perry-crop
+    fireEvent.click(screen.getByTestId('tab-wb1-visual-verifier'));
     const figStage = document.querySelector('[data-agent-select="figure:perry-crop"]')!;
     fireEvent.click(figStage);
     expect(serializeCurrentScreenTag()).toContain('agent-select:figure:perry-crop');

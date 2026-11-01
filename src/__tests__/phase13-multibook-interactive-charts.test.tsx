@@ -40,7 +40,7 @@ describe('Phase 13 — Multi-Book Interactive Charts & Diagrams Expansion Suite'
       '23-42',
     ]);
 
-    render(<App />);
+    render(<App initialWorkbench="wb1-visual-verifier" />);
     for (const preset of PRESET_ANCHORS) {
       const btn = screen.getByTestId(`wb1-preset-${preset.secPage}`);
       fireEvent.click(btn);

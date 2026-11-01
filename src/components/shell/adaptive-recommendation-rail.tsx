@@ -20,6 +20,7 @@ import {
   subscribeProblemSolvingStore,
 } from '../../lib/hypothesis-verification-engine';
 import { getTroubleshootingCopy } from '../../lib/i18n/vi-troubleshooting-copy';
+import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import {
   getAverageMastery,
   getStudentProfile,
@@ -128,6 +129,14 @@ export const AdaptiveRecommendationRail: React.FC<AdaptiveRecommendationRailProp
 
       <span className="mission-pill" data-testid="student-mastery-badge">
         {ts.railMasteryBadge(avgPct, profile.solvedMissionIds.length)}
+      </span>
+
+      <span
+        className="mission-pill"
+        data-testid="local-demo-profile-badge"
+        title={TRUST_BOUNDARY_COPY[locale].localDemoProfileTooltip}
+      >
+        {TRUST_BOUNDARY_COPY[locale].localDemoProfileBadge}
       </span>
 
       <span className="mission-pill" data-testid="hypothesis-verified-badge" title="Fogler & LeBlanc Rule #12 Hypotheses Proved/Disproved">

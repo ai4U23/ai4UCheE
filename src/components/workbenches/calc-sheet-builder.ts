@@ -164,6 +164,8 @@ export function buildLiveCalcSheet(state: ClientScreenState): LiveCalcSheetDocum
     '',
     buildFoglerTroubleshootingMarkdownSection(wb as WorkbenchId, safetyStatus === 'PASS'),
     '',
+    '> **Educational & Preliminary Engineering Boundary**: Calculations use deterministic textbook correlations for undergraduate instruction and preliminary screening. Not a substitute for licensed PE sign-off, relief-device sizing (API 520/521), or HAZOP/SIL certification. Saved calculation sheets persist anonymously in local SQLite (`saved_calculations`).',
+    '',
     '---',
     'Prepared by: ____________  |  Checked by: ____________  |  Date: ____________',
   ].join('\n');
