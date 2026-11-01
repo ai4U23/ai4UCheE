@@ -84,9 +84,10 @@ export function subscribeLocale(fn: LocaleListener): () => void {
 }
 
 /** Deterministic reset for Vitest suites so no test leaks `vi` state to subsequent tests. */
-export function resetLocaleForTests(): void {
-  activeLocale = 'en';
-  syncDomLocaleAttributes('en');
+export function resetLocaleForTests(next: LocaleCode = 'en'): void {
+  const valid: LocaleCode = isValidLocale(next) ? next : 'en';
+  activeLocale = valid;
+  syncDomLocaleAttributes(valid);
   if (typeof window !== 'undefined') {
     try {
       window.localStorage?.removeItem(LOCALE_STORAGE_KEY);
@@ -94,5 +95,5 @@ export function resetLocaleForTests(): void {
       /* ignore */
     }
   }
-  listeners.forEach((fn) => fn('en'));
+  listeners.forEach((fn) => fn(valid));
 }

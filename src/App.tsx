@@ -75,11 +75,16 @@ const WorkbenchSurface: React.FC = () => {
   );
 };
 
-export const App: React.FC<{ initialPersona?: PersonaMode; initialLocale?: LocaleCode }> = ({
-  initialPersona,
-  initialLocale,
-}) => (
-  <PersonaThemeProvider initialPersona={initialPersona} initialLocale={initialLocale}>
+export const App: React.FC<{
+  initialPersona?: PersonaMode;
+  initialLocale?: LocaleCode;
+  initialWorkbench?: WorkbenchId;
+}> = ({ initialPersona, initialLocale, initialWorkbench }) => (
+  <PersonaThemeProvider
+    initialPersona={initialPersona}
+    initialLocale={initialLocale}
+    initialWorkbench={initialWorkbench}
+  >
     <WorkbenchSurface />
   </PersonaThemeProvider>
 );

@@ -5,11 +5,11 @@ import { z } from 'zod';
 import { agentNative, defineAction } from './define-action';
 
 const SIDECAR =
-  typeof window !== 'undefined' &&
-  window.location.hostname !== 'localhost' &&
-  window.location.hostname !== '127.0.0.1'
+  typeof window !== 'undefined' && Boolean(window.location?.port)
     ? ''
-    : 'http://127.0.0.1:8001';
+    : typeof process !== 'undefined' && process.env?.PERRY_SIDECAR_URL
+      ? process.env.PERRY_SIDECAR_URL
+      : 'http://127.0.0.1:8001';
 
 export interface SavedCalculationRecord {
   id: string;
