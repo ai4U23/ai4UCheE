@@ -222,4 +222,16 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
     expect(screen.getByTestId('support-privacy-notice').textContent).toContain('support@ai4u.now');
     expect(screen.getByTestId('delete-saved-calc-sheets-btn')).toBeTruthy();
   });
+
+  it('Test 6 (vi-dom-translator liveness insurance): a catch-all-only string renders Vietnamese', () => {
+    // Coverage audit 2026-11-04: 56 of 78 REGEX_REPLACEMENTS anchors are translated ONLY by the
+    // live vi-dom-translator layer (wired at app-shell.tsx via useVietnameseDomTranslator) — the
+    // entire ⏱️ Δt timeline family, WB4/WB6 verdict banners, and the adaptive-rail strings have no
+    // dictionary entry. 'Recommended Mission: …' (adaptive-recommendation-engine.ts:150 →
+    // 'Nhiệm vụ Đề xuất: …') is rendered on the default workbench and has no dictionary copy, so if
+    // the translator layer is ever unwired/deleted this assertion fails loudly instead of the 56
+    // strings regressing silently.
+    render(<App initialLocale="vi" initialPersona="learn" initialWorkbench="wb2-thermo-dippr" />);
+    expect(document.body.textContent).toContain('Nhiệm vụ Đề xuất: ');
+  });
 });
