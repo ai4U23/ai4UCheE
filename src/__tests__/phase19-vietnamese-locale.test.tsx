@@ -71,6 +71,10 @@ describe('Phase 19 — Bilingual Vietnamese (vi) & English (en) Locale Suite', (
     expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Cố vấn Chọn Mô hình Nhiệt động Carlson');
     expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('PHƯƠNG TRÌNH KÝ HIỆU');
     expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Chế độ Đồ thị:');
+    // Regression (ak-fix 2026-11-04): result-card prefix must localize in VI (was hardcoded EN
+    // "Result at T = " while the full-sentence DOM-translator rule cannot match the 3-node JSX split)
+    expect(screen.getByTestId('dippr-vp-result').textContent).toContain('Kết quả tại T = 373.15 K');
+    expect(screen.getByTestId('wb2-thermo-dippr').textContent).toContain('Dime hóa pha hơi Axit Carboxylic');
 
     // WB3
     fireEvent.click(screen.getByTestId('tab-wb3-hydraulics'));

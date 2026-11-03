@@ -2380,6 +2380,16 @@
         setShowcaseLocale('vi', true);
         return;
       }
+      // Honor the locale persisted by this page (setShowcaseLocale) and /app (ai4uchee_locale),
+      // mirroring the app's precedence: URL ?lang= > localStorage > en. Validated + persist=false
+      // so the read-back never re-persists.
+      try {
+        var savedLocale = (localStorage.getItem('ai4uchee_locale') || '').toLowerCase();
+        if (savedLocale === 'en' || savedLocale === 'vi') {
+          setShowcaseLocale(savedLocale, false);
+          return;
+        }
+      } catch (e) { /* ignore storage errors */ }
       if (document.documentElement.getAttribute('lang') === 'vi') {
         setShowcaseLocale('vi', false);
       }

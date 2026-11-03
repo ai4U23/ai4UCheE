@@ -152,9 +152,9 @@ export const GuidedMissionBar: React.FC = () => {
         )}
         <button
           type="button" className="studio-drawer-collapsed" data-testid="toggle-mission-bar"
-          aria-label={collapsed ? 'Show guided mission bar' : 'Hide guided mission bar'} onClick={() => setCollapsed(!collapsed)}
+          aria-label={t.missionsToggleAria(collapsed)} onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? '▸ Show Missions' : '▾ Hide'}
+          {t.missionsToggleBtn(collapsed)}
         </button>
       </div>
       {!collapsed && (

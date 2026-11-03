@@ -128,7 +128,7 @@ export const ThermoDipprWorkbench: React.FC = () => {
             max={tempUnit === 'degR' ? 1200 : 640} step={1} onChange={setTempK}
           />
           <div className="wb-panel" data-testid="dippr-vp-result">
-            Result at T = {tKelvin.toFixed(2)} K: <strong>{Math.round(pSatPa).toLocaleString()} Pa</strong> ({vpDisplay}) · 1 atm = 101,325 Pa ·{' '}
+            {t.wb2VpResultPrefix}{tKelvin.toFixed(2)} K: <strong>{Math.round(pSatPa).toLocaleString()} Pa</strong> ({vpDisplay}) · 1 atm = 101,325 Pa ·{' '}
             <code>[Perry&apos;s 9th Ed., Table 2-8 (DIPPR Eq. 101), p. 2-53]</code>
           </div>
           <div className="wb-panel mono">

@@ -86,6 +86,11 @@ export const MissionChecklistBanner: React.FC<MissionChecklistBannerProps> = ({
             ? 'Ca mẫu đã nạp (Bước 1) · Tự giải thanh trượt: +35 đ · Auto-Fix: +12 đ (localStorage)'
             : 'Worked Case Loaded (Stage 1 Observed) · DIY slider solve: +35 pts · Auto-Fix: +12 pts (localStorage)'}
         </span>
+        <span className="mission-pill mono" data-testid="mission-trap-note" style={{ fontSize: '0.7rem' }}>
+          {locale === 'vi'
+            ? '⚠️ Ca mẫu có thể bị cố tình đặt lệch thông số — quan sát & kiểm chứng trước khi giải (Quy tắc #12 Fogler)'
+            : '⚠️ The loaded preset may be deliberately off-spec — observe & verify before solving (Fogler Rule #12)'}
+        </span>
         <button
           type="button"
           data-testid="reset-mission-clean-btn"

@@ -82,6 +82,8 @@ export interface ShellCopy {
   missionLeadText: string;
   browseProblemsBtn: (count: number) => string;
   coachBtn: (open: boolean) => string;
+  missionsToggleBtn: (collapsed: boolean) => string;
+  missionsToggleAria: (collapsed: boolean) => string;
   copilotHeader: string;
   socraticBadge: string;
   plantBadge: string;
@@ -121,6 +123,8 @@ const SHELL_EN: ShellCopy = {
   missionLeadText: 'Start from a Real-Life Plant Problem (Fogler & LeBlanc 6-Stage Flow) · Realistic Composite Cases',
   browseProblemsBtn: (n) => `L1 · L2 · L3 · L4 · Browse All ${n} Problems ▾`,
   coachBtn: (open) => (open ? '▾ Less' : 'Coach ▾'),
+  missionsToggleBtn: (collapsed) => (collapsed ? '▸ Show Missions' : '▾ Hide'),
+  missionsToggleAria: (collapsed) => (collapsed ? 'Show guided mission bar' : 'Hide guided mission bar'),
   copilotHeader: 'AI Co-Pilot',
   socraticBadge: 'Socratic',
   plantBadge: 'Plant',
@@ -160,6 +164,8 @@ const SHELL_VI: ShellCopy = {
   missionLeadText: 'Bắt đầu từ Sự cố Nhà máy Thực tế (Quy trình 6 bước Fogler & LeBlanc) · Kịch bản Tổng hợp Đào tạo',
   browseProblemsBtn: (n) => `L1 · L2 · L3 · L4 · Duyệt ${n} Sự cố Nhà máy ▾`,
   coachBtn: (open) => (open ? '▾ Thu gọn' : 'Gia sư ▾'),
+  missionsToggleBtn: (collapsed) => (collapsed ? '▸ Hiện Nhiệm vụ' : '▾ Ẩn'),
+  missionsToggleAria: (collapsed) => (collapsed ? 'Hiện thanh nhiệm vụ' : 'Ẩn thanh nhiệm vụ'),
   copilotHeader: 'Trợ lý AI Co-Pilot',
   socraticBadge: 'Socratic',
   plantBadge: 'Nhà máy',

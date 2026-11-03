@@ -96,7 +96,7 @@ const UI_SUB_VI: UiSubcomponentCopy = {
   tutorFanningCoaching: (r) => `Hình 6-9 của Perry (tr. 6-10) vẽ hệ số ma sát Fanning f_F. Giá trị bạn nhập (${r}) gấp ~4 lần f_F — tức là hệ số Moody Darcy f_D = 4·f_F. Hãy chia cho 4 khi đọc Hình 6-9, hoặc dùng f_D = 4·f_F trong phương trình Darcy-Weisbach.`,
   carlsonTitle: 'Cố vấn Chọn Mô hình Nhiệt động Carlson (1996) / Perry Chương 4',
   carlsonPolarityLabel: 'Độ phân cực:', carlsonNonpolarOpt: 'Không phân cực / Hydrocarbon', carlsonPolarOpt: 'Phân cực (Không điện ly)',
-  carlsonLleLabel: 'Hai pha lỏng (Tách pha LLE)', carlsonAssocLabel: 'Đime hóa pha hơi Axit Carboxylic',
+  carlsonLleLabel: 'Hai pha lỏng (Tách pha LLE)', carlsonAssocLabel: 'Dime hóa pha hơi Axit Carboxylic',
   carlsonRecPrefix: 'Gói Mô hình Khuyên dùng:',
   carlsonLleWarn: 'Không dùng phương trình Wilson cho cân bằng lỏng-lỏng (LLE) — Wilson không thể dự đoán tách hai pha lỏng.',
   carlsonNodeNonpolar: 'Lưu chất Không phân cực', carlsonNodePolar: 'Hỗn hợp Phân cực', carlsonNode2Liquid: '2 Pha Lỏng (LLE)', carlsonNode1Liquid: '1 Pha Lỏng', carlsonNodeSelected: 'Mô hình Đã chọn',

@@ -5,7 +5,7 @@ import type { LocaleCode } from './locale-types';
 export interface WorkbenchCommonCopy {
   investigationBtn: (open: boolean) => string;
   wb1Title: string; wb1AllChartsBtn: (open: boolean, n: number) => string; wb1CalloutTitle: string; wb1CalloutPlain: string; wb1CalloutTrap: string;
-  wb2Title: string; wb2TempLabel: string; wb2ProofsBtn: (open: boolean) => string; wb2MoreDiagramsBtn: (open: boolean) => string; wb2CalloutTitle: string; wb2CalloutPlain: string; wb2CalloutTrap: string;
+  wb2Title: string; wb2TempLabel: string; wb2VpResultPrefix: string; wb2ProofsBtn: (open: boolean) => string; wb2MoreDiagramsBtn: (open: boolean) => string; wb2CalloutTitle: string; wb2CalloutPlain: string; wb2CalloutTrap: string;
   wb3Title: string; wb3FlowLabel: string; wb3LengthLabel: string; wb3PsucLabel: string; wb3HeadLabel: string; wb3NpshrLabel: string; wb3ValveDpLabel: string; wb3ProofsBtn: (open: boolean, n: number) => string; wb3MoreDiagramsBtn: (open: boolean) => string; wb3CalloutTitle: string; wb3CalloutPlain: string; wb3CalloutTrap: string;
   wb4Title: string; wb4AlphaLabel: string; wb4XfLabel: string; wb4XdLabel: string; wb4XbLabel: string; wb4QLabel: string; wb4RmultLabel: string; wb4DiamLabel: string; wb4ProofsBtn: (open: boolean, n: number) => string; wb4MoreDiagramsBtn: (open: boolean) => string; wb4CalloutTitle: string; wb4CalloutPlain: string; wb4CalloutTrap: string;
   wb6Title: string; wb6ConvLabel: string; wb6TempLabel: string; wb6PinLabel: string; wb6EpsLabel: string; wb6AlphaLabel: string; wb6ThieleLabel: string; wb6SemenovLabel: string; wb6ProofsBtn: (open: boolean, n: number) => string; wb6MoreDiagramsBtn: (open: boolean) => string; wb6CalloutTitle: string; wb6CalloutPlain: string; wb6CalloutTrap: string;
@@ -27,6 +27,7 @@ const WB_COPY_EN: WorkbenchCommonCopy = {
   wb1CalloutTrap: "Perry's Fig. 6-9 plots Fanning f_F, which is 4× smaller than the Moody Darcy friction factor f_D = 4·f_F.",
   wb2Title: 'Thermodynamics, Phase Equilibria & DIPPR Engine',
   wb2TempLabel: 'Temperature',
+  wb2VpResultPrefix: 'Result at T = ',
   wb2ProofsBtn: (o) => `${o ? '▾' : '▸'} Show Math Proofs & Model Advisor (2)`,
   wb2MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} More Diagrams (Binary VLE, Peng-Robinson, Rankine)`,
   wb2CalloutTitle: 'Vapor Pressure, Binary VLE Azeotropes, Cubic EOS, Rankine Cycles & Reaction Equilibrium',
@@ -78,6 +79,7 @@ const WB_COPY_VI: WorkbenchCommonCopy = {
   wb1CalloutTrap: "Hình 6-9 của Perry vẽ hệ số ma sát Fanning f_F, nhỏ hơn đúng 4 lần so với hệ số ma sát Moody Darcy f_D = 4·f_F.",
   wb2Title: 'Nhiệt động học, Cân bằng Pha & Động cơ DIPPR',
   wb2TempLabel: 'Nhiệt độ (Temperature)',
+  wb2VpResultPrefix: 'Kết quả tại T = ',
   wb2ProofsBtn: (o) => `${o ? '▾' : '▸'} Xem Chứng minh Toán & Cố vấn Mô hình (2)`,
   wb2MoreDiagramsBtn: (o) => `${o ? '▾' : '▸'} Thêm Đồ thị (VLE 2 cấu tử, Peng-Robinson, Chu trình Rankine)`,
   wb2CalloutTitle: 'Áp suất hơi bão hòa, Đẳng phí VLE, Phương trình trạng thái bậc 3, Chu trình Rankine & Cân bằng Phản ứng',
