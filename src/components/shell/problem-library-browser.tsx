@@ -144,7 +144,7 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
                 {isSolved ? '✓ ' : ''}{tr(p.title)}
               </div>
               <div className="mono" style={{ fontSize: '11px', opacity: 0.9, marginBottom: '4px' }}>
-                {CURRICULUM_PROGRESSION_MAP[p.targetWorkbench]?.yearBadge[isVi ? 'vi' : 'en']} · {p.timeHorizonBadge} · <span>{tr(p.subjectLabel)}</span>
+                {CURRICULUM_PROGRESSION_MAP[p.workbenchId]?.yearBadge[isVi ? 'vi' : 'en']} · {p.timeHorizonBadge} · <span>{tr(p.subjectLabel)}</span>
               </div>
               <div style={{ fontSize: '0.75rem', marginBottom: '0.35rem' }}>{tr(p.observationSummary)}</div>
               <div className="wb-actions-row" style={{ justifyContent: 'space-between' }}>
