@@ -33,18 +33,32 @@ ChemEng's Intelligent Workbench (`ai4UCheE`) is deployed on the **`chemeng`** AW
 
 ### Redeploy / Reboot / Snapshot Commands
 ```bash
-# Deploy latest main branch to chemeng (Lightsail; Tailscale SSH as admin):
-ssh chemeng "sudo git -C /data/home/ai4UCheE pull origin main && sudo chown -R user:user /data/home/ai4UCheE && cd /data/home/ai4UCheE && sudo -u user npm install --no-audit --no-fund && sudo -u user npm run build && sudo systemctl restart perry-engine perry-workbench perry-workbench-http"
+# Deploy changed files to chemeng (Lightsail; Tailscale SSH as admin).
+# NOTE: the box has NO git binary (the migration rsynced the tree, path parity) and
+# Tailscale SSH may demand an interactive re-auth check (visit the printed login URL once,
+# from a TTY session) — piped/non-TTY ssh sessions block silently on that check.
+# Working file-sync flow (proven 2026-11-04): push to GitHub locally, then sync only
+# the changed files and rebuild on-box (package-lock unchanged → npm install is skippable):
+scp -o ControlPath=none <changed-files> chemeng:/tmp/
+ssh -o ControlPath=none chemeng 'set -e
+  R=/data/home/ai4UCheE
+  sudo cp /tmp/<each-changed-file> $R/<same-relative-path>   # repeat per file
+  sudo chown -R user:user $R
+  cd $R && sudo -u user npm run build
+  sudo systemctl restart perry-engine perry-workbench perry-workbench-http'
 
-# Verify health over public HTTPS & tailnet:
+# Verify health + that the served bundle is the new build:
 curl -sS https://chemeng.ai4u.now/health
-curl -sS http://100.84.137.43/health
+curl -sS https://chemeng.ai4u.now/ | grep -c <marker-of-new-build>
 
 # Reboot the instance (snapshots survive; public IP may change — durable access is Tailscale + tunnel):
 aws lightsail reboot-instance --instance-name chemeng --region ap-southeast-1
 
 # Restore point taken at migration time:
 aws lightsail get-instance-snapshots --region ap-southeast-1 --query "instanceSnapshots[?name=='chemeng-post-migration-261103'].state" --output text
+
+# Long-term alternative (NOT provisioned): install git on the box + GitHub auth, then a plain
+# `git pull` flow works; today the file-sync flow above is the only proven path.
 ```
 
 ### Always-On Notes
