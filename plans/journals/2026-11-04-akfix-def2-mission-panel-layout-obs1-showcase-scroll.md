@@ -25,8 +25,8 @@ ak-fix all on the R4 GUI-round findings (deploy HEAD 4b6c26f, report `plans/repo
 - Housekeeping: killed a stale pre-fix vite (PID 57269) squatting on 5173 from the R4 session; stopped this round's dev server after verification.
 
 ## Next steps
-- **Not committed / not deployed** (awaiting authorization): 3 modified files + phase20 test + R4 artifacts (`plans/reports/browser-qa-r4/`). Suggested split: fix commit (css+html+test) vs docs/plans artifacts.
-- After deploy: re-verify mission-active layout on prod (bundle hash check → `index-BUJYMsRm.js`), and sweep mission-active @4 viewports in a fresh IAB session.
+- ~~Not committed / not deployed~~ → **DONE same session (2026-11-04):** commits `ea7e858` (fix: css + 2×html + phase20 test) and `8132c24` (docs: R4 artifacts + journal), pushed to `ai4U23/ai4UCheE` main, deployed via the proven file-sync flow (scp 3 files → on-box `npm run build` → restart `perry-workbench perry-workbench-http`). On-box build hash `index-BUJYMsRm.js` == local byte-for-byte; prod CSS `index-DisOKVB4.css` carries all 4 fix markers; `/health` ok (2274 pages).
+- **Prod verification complete:** headless-Chromium re-run against https://chemeng.ai4u.now — identical green matrix (title 304×63 @1440, pill right 730/730/342/287, overflowX 0 @4 viewports; anchor scrollY 810, `behavior: auto`). Prod screenshots: `fix-def2-prod-mission-active-{1440,375}.png`.
 - OBS-2 stays monitor-only; copilot NL what-if + WB1 scrub + WB5 PDF crop remain the untested backlog from R4.
 
 > Historical work record — not durable authority. Prefer docs/specs/ADRs for current decisions.
