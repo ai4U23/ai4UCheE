@@ -31,6 +31,16 @@ ChemEng's Intelligent Workbench (`ai4UCheE`) is deployed on the **`chemeng`** AW
   - `perry-workbench-http.service` — Express + Vite production bundle server on `0.0.0.0:80` (`CAP_NET_BIND_SERVICE`)
   - `cloudflared-chemeng.service` — Cloudflare Tunnel connector (`--protocol http2`, `Restart=always`, `RestartSec=5s`) routing `chemeng.ai4u.now` (and legacy `chemie.ai4u.now`) -> `http://127.0.0.1:3000`
 
+### Pre-Deploy Gate (local, mandatory since 2026-11-04)
+```bash
+npm test && npm run test:e2e   # 72 Vitest + 20 Playwright E2E (auto-starts vite :5179)
+# Optional — same suite against the live box AFTER deploy:
+E2E_BASE_URL=https://chemeng.ai4u.now npm run test:e2e
+```
+The E2E suite (`tests/e2e/`) codifies the R1–R4 browser-QA rounds (mission solve,
+DEF-2 layout regression at 4 viewports, EN↔VI locale, showcase anchor nav, all 6
+workbench mounts). No CI — this gate runs on the laptop before every file-sync.
+
 ### Redeploy / Reboot / Snapshot Commands
 ```bash
 # Deploy changed files to chemeng (Lightsail; Tailscale SSH as admin).
