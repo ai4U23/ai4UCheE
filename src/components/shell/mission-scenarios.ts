@@ -1,7 +1,7 @@
 // Guided mission scenarios: 4 existing mission ids (load-bearing in phase8 tests) extended with
 // dramatic trap presets + rescue mutations + a live `checkSolved` probe on the payload bus.
 // Trap/rescue values are verified against the shipped solver formulas (see Validation Session 1):
-// - wb3: pSuctionPsig -10 psig & NPSHr 8 m → NPSH_A ≈ 4.18 m < 8 m (cavitating); rescue 15 psig/3 m → ≈ 21.8 m.
+// - wb3: pSuctionPsig -10 psig & NPSHr 8 m → NPSH_A ≈ 2.68 m < 8 m (cavitating); rescue 15 psig/3 m → ≈ 21.7 m.
 // - wb4: rMult 1.9 & D 0.55 m → ≈ 200% of Fair flood; rescue 1.3 & 0.85 m → ≈ 64%.
 // - wb2: ethanol @ 298 K → P_sat ≈ 7.9 kPa; rescue water @ 373.15 K → ≈ 101.3 kPa (1 atm).
 import type { GenUiPayload } from '../../actions/define-action';

@@ -77,8 +77,8 @@ export const FOGLER_PROBLEM_CASES: Readonly<Record<WorkbenchId, FoglerProblemSol
     plantIncidentTitle: 'Pump P-101 Rattling Like Gravel (Plus Boiler Feedwater Heater 70°C → 42°C Drop)',
     whyLearnSubject: 'Why learn Fluid Mechanics & Transport (Subject 2)? Without Bernoulli/NPSHa head balances, pipe friction, and HX Q = UAΔT_lm, pumps shatter from cavitation and heat exchangers starve boilers!',
     subjectName: 'Subject 2 · Fluid Mechanics, Transport & Piping Hydraulics (WB3)',
-    observationSummary: 'Pump P-101 vibrates violently at 450 gpm with -10 psig suction (NPSHa = 4.18 m < NPSHr = 8.0 m), alongside Fogler Ch. 10 Boiler Feedwater exit drop (70°C → 42°C).',
-    telemetryRows: [{ metric: 'P-101 Suction & Flow', normalVal: '+15 psig @ 260 gpm', faultyVal: '-10 psig @ 450 gpm', deltaNote: 'Vacuum suction + 3× line friction h_f' }, { metric: 'Suction Head Margin', normalVal: 'NPSHa 21.8 m ≥ NPSHr 3.0 m', faultyVal: 'NPSHa 4.18 m < NPSHr 8.0 m', deltaNote: 'Deficit -3.82 m (Active Cavitation!)' }],
+    observationSummary: 'Pump P-101 vibrates violently at 450 gpm with -10 psig suction (NPSHa = 2.68 m < NPSHr = 8.0 m), alongside Fogler Ch. 10 Boiler Feedwater exit drop (70°C → 42°C).',
+    telemetryRows: [{ metric: 'P-101 Suction & Flow', normalVal: '+15 psig @ 260 gpm', faultyVal: '-10 psig @ 450 gpm', deltaNote: 'Vacuum suction + 3× line friction h_f' }, { metric: 'Suction Head Margin', normalVal: 'NPSHa 21.7 m ≥ NPSHr 3.0 m', faultyVal: 'NPSHa 2.68 m < NPSHr 8.0 m', deltaNote: 'Deficit -5.32 m (Active Cavitation!)' }],
     ktDefinition: {
       perceivedProblem: 'Pump P-101 bearings or impeller blades are mechanically defective from the factory.',
       realProblemDefined: 'Eliminate liquid flashing at the pump eye by restoring NPSHa ≥ NPSHr + 1.0 m [Perry p. 10-28].',
@@ -94,10 +94,10 @@ export const FOGLER_PROBLEM_CASES: Readonly<Record<WorkbenchId, FoglerProblemSol
       chartOrTableRef: "Perry's Table 10-22 (ASME B36.10M Pipe) & Fig. 6-9", },
     hypotheses: [
       { id: 'wb3-h1', claim: 'H1: Downstream control valve ΔP is choked, starving the upstream pump eye.', isRootCause: false, fitsObservation: 'NO', mathVerification: 'DISPROVED ❌ — K-T Where: Throttling downstream reduces Q and h_f,s, which INCREASES NPSHa.', agentPrompt: 'Test H1 with AI Agent: Does a choked downstream control valve lower or raise upstream NPSHa?' },
-      { id: 'wb3-h2', claim: 'H2: Vacuum suction (-10 psig = 4.70 psia) + high flow (450 gpm) drops NPSHa (4.18 m) below NPSHr (8.0 m).', isRootCause: true, fitsObservation: 'YES', mathVerification: 'PROVED ✅ — Raising P_suc to +15 psig and moderating Q to 260 gpm restores NPSHa = 21.8 m >> NPSHr.', agentPrompt: 'Verify H2 with AI Agent: Walk through the exact NPSHa math at -10 psig vs +15 psig.' },
+      { id: 'wb3-h2', claim: 'H2: Vacuum suction (-10 psig = 4.70 psia) + high flow (450 gpm) drops NPSHa (2.68 m) below NPSHr (8.0 m).', isRootCause: true, fitsObservation: 'YES', mathVerification: 'PROVED ✅ — Raising P_suc to +15 psig and moderating Q to 260 gpm restores NPSHa = 21.7 m >> NPSHr.', agentPrompt: 'Verify H2 with AI Agent: Walk through the exact NPSHa math at -10 psig vs +15 psig.' },
       { id: 'wb3-h3', claim: 'H3: In the Boiler Feedwater HX (70°C→42°C in 3 hrs), hard mineral scale fouled the tubes.', isRootCause: false, fitsObservation: 'NO', mathVerification: 'DISPROVED ❌ — Fogler Ch. 10 p. 228: Scale takes weeks; a 3-hr drop is noncondensable gas blanketing or flooded steam trap.', agentPrompt: 'Test H3 with AI Agent: Why does Fogler & LeBlanc Ch. 10 (p. 228) reject tube fouling for a 3-hour temperature drop?' },
     ],
-    actualSolutionSummary: 'Scrub P_suc to +15 psig, flow Q to 260 gpm, and NPSHr to 3 m so NPSHa = 21.8 m ≥ 5.0 m (Cavitation cleared!).',
+    actualSolutionSummary: 'Scrub P_suc to +15 psig, flow Q to 260 gpm, and NPSHr to 3 m so NPSHa = 21.7 m ≥ 5.0 m (Cavitation cleared!).',
     foglerBookCitation: '[Fogler & LeBlanc 2nd Ed., Ch. 10 Woods Worksheet & K-T Analysis, pp. 215–228]',
   },
   'wb4-distillation': {

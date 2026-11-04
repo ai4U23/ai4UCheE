@@ -48,7 +48,11 @@ export interface HydraulicsMetrics {
 const PSIA_PER_PSIG = 14.6959;
 const PA_PER_PSIA = 6894.757;
 const P_VAP_WATER_PA = 3169.0; // water vapor pressure at ~25 °C suction datum (shipped constant)
-const HF_SUCTION_M = 0.8; // shipped fixed suction-line friction loss
+// Suction-line friction loss h_f,s, calibrated to 0.8 m at the 250 gpm duty point and scaled
+// ∝ (Q/250)^1.8 — the same convention as npshaAtQ in hydraulics-curve-svg-math.ts, so the NPSHa
+// card, the duty label, and the NPSHa(Q) pump chart stay consistent as flow scrubs.
+const HF_SUCTION_AT_DUTY_M = 0.8;
+const DUTY_FLOW_GPM = 250;
 const RHO_G = 998.2 * 9.80665;
 
 export function solveHydraulics(
@@ -71,7 +75,8 @@ export function solveHydraulics(
   const caseNorm = computeCase(1.0);
   const caseRated = computeCase(1.2);
   const pAbsPa = (inputs.pSuctionPsig + PSIA_PER_PSIG) * PA_PER_PSIA;
-  const npshAvailableM = (pAbsPa - P_VAP_WATER_PA) / RHO_G + inputs.zSuctionM - HF_SUCTION_M;
+  const hfSuctionM = HF_SUCTION_AT_DUTY_M * Math.pow(inputs.flowGpm / DUTY_FLOW_GPM, 1.8);
+  const npshAvailableM = (pAbsPa - P_VAP_WATER_PA) / RHO_G + inputs.zSuctionM - hfSuctionM;
   const isCavitating = npshAvailableM < inputs.npshrM;
   const ff = 0.96 - 0.28 * Math.sqrt(P_VAP_WATER_PA / 22064000.0);
   const dpMaxPsi = 0.81 * (65 + PSIA_PER_PSIG - ff * 0.46);
@@ -101,9 +106,9 @@ export function solveHydraulics(
       title: 'Available NPSH vs. Required NPSHr',
       citation: "[Perry's 9th Ed., Sec. 10, pp. 10-24..25 (unnumbered NPSH equations)]",
       symbolicLatex: '\\mathrm{NPSH}_A = \\frac{P_{\\mathrm{abs}} - P_{\\mathrm{vap}}}{\\rho g} + z_s - h_{f,s} \\ge \\mathrm{NPSH}_r',
-      substitutedLatex: `\\frac{${(pAbsPa / 1000).toFixed(1)} - 3.17\\ \\mathrm{kPa}}{9.79\\ \\mathrm{kN/m^3}} + ${inputs.zSuctionM.toFixed(1)} - ${HF_SUCTION_M.toFixed(1)}\\ \\mathrm{m}`,
+      substitutedLatex: `\\frac{${(pAbsPa / 1000).toFixed(1)} - 3.17\\ \\mathrm{kPa}}{9.79\\ \\mathrm{kN/m^3}} + ${inputs.zSuctionM.toFixed(1)} - ${hfSuctionM.toFixed(1)}\\ \\mathrm{m}`,
       resultLatex: `\\mathrm{NPSH}_A = ${npshAvailableM.toFixed(2)}\\ \\mathrm{m} \\;${isCavitating ? '<' : '\\ge'}\\; \\mathrm{NPSH}_r = ${inputs.npshrM.toFixed(1)}\\ \\mathrm{m}`,
-      plainExplanation: 'If available NPSH drops below the pump requirement, liquid flashes to vapor at the impeller eye and collapses violently — cavitation.',
+      plainExplanation: 'If available NPSH drops below the pump requirement, liquid flashes to vapor at the impeller eye and collapses violently — cavitation. Suction friction h_f,s grows with flow (∝ Q^1.8, calibrated 0.8 m at the 250 gpm duty point), so scrubbing Flow Q downward raises NPSH_A.',
       warningText: isCavitating
         ? `CAVITATION: NPSH_A ${npshAvailableM.toFixed(2)} m < NPSH_r ${inputs.npshrM.toFixed(1)} m — raise suction pressure, lower flow, or increase static head.`
         : undefined,

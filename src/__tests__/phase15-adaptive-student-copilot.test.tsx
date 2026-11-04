@@ -91,7 +91,7 @@ describe('Phase 15 — Adaptive Student Scorecard, 3-Tier Socratic Co-Pilot & Re
   it('adapts Tier-1 and Tier-2 Co-Pilot replies across Guided, Socratic, and Challenge modes with live anomaly diagnosis', async () => {
     const cavitatingPayload = {
       inputs: { flowGpm: 450, pSuctionPsig: -10, npshrM: 8 },
-      metrics: { isCavitating: true, npshAvailableM: 4.18 },
+      metrics: { isCavitating: true, npshAvailableM: 2.68 },
     };
 
     const guidedRes = runCopilotResponder(
