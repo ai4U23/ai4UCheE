@@ -72,7 +72,7 @@ nav.wb-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))
 .studio-disclosure-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-grid); }
 .studio-disclosure-bar button { font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 8px; background: var(--bg-elevated); }
 .studio-floating-mission-wrap { position: fixed; bottom: 16px; left: 16px; right: 388px; z-index: 65; max-height: 56vh; overflow-y: auto; color: var(--ink-primary); }
-.mission-pill { font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-grid); background: var(--bg-elevated); color: var(--ink-primary); white-space: nowrap; }
+.mission-pill { font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-grid); background: var(--bg-elevated); color: var(--ink-primary); white-space: normal; overflow-wrap: break-word; max-width: 100%; }
 .mission-bar button { font-size: 12px; padding: 4px 10px; white-space: nowrap; border-radius: 6px; }
 [data-testid="problem-library-browser"], [data-testid="adaptive-recommendation-rail"] { position: fixed; top: 56px; left: 16px; right: 16px; max-width: 1140px; margin: 0 auto !important; z-index: 80; background: var(--bg-elevated); color: var(--ink-primary); box-shadow: 0 16px 40px rgba(7, 26, 51, 0.22); max-height: calc(100vh - 80px); overflow-y: auto; flex-wrap: wrap; border-radius: 12px; }
 .studio-quick-missions-popover { position: fixed; top: 56px; left: 50%; transform: translateX(-50%); z-index: 82; display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px; background: var(--navy-deep); color: var(--ivory); border: 1px solid rgba(251, 246, 236, 0.18); border-radius: 10px; box-shadow: 0 16px 36px rgba(7, 26, 51, 0.36); max-width: 94vw; }
@@ -140,7 +140,8 @@ span.katex-block { display: inline-block; margin: 2px 0; padding: 2px 6px; max-w
 
 /* Mission checklist banner (Observe Trap → Scrub Control → Verify Proof). */
 .mission-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; padding: 12px 16px; background: var(--bg-elevated); color: var(--ink-primary); border: 1px solid var(--border-grid); border-radius: 10px; box-shadow: var(--shadow-lift); }
-.mission-banner-head { display: flex; align-items: center; gap: 8px; flex: 1 1 100%; }
+.mission-banner-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex: 1 1 100%; }
+.mission-banner-head strong { flex: 1 1 240px; min-width: 240px; }
 .mission-banner-head button { margin-left: auto; padding: 2px 8px; }
 .mission-steps { display: flex; flex-wrap: wrap; gap: 6px 16px; list-style: none; margin: 0; padding: 0; font-size: 12px; font-weight: 500; }
 .mission-step { color: var(--ink-muted); }
