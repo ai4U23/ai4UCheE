@@ -1,8 +1,14 @@
 // Tactile scrubbable number input: pointer-drag scrubbing + keyboard entry + Point-and-Ask chip.
-import React, { useRef } from 'react';
+// Locale discipline (R5 OBS-1): native <input type="number"> renders digits in the *browser*
+// locale (e.g. "373,15" on a vi browser under the EN UI), which clashed with dot-decimal result
+// cards. We now render a locale-controlled text field (app locale via getActiveLocale), accept
+// both "." and "," on entry, and keep the explicit spinbutton ARIA role so screen readers and
+// role-based locators see the same semantics as before.
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import { useAgentSelectable } from '../../hooks/use-agent-selectable';
 import { FRAMER_BOUNCE_SPRING } from '../../lib/framer-motion-tokens';
+import { getActiveLocale, subscribeLocale } from '../../lib/i18n/locale-types';
 import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 
 export interface ScrubbableNumberInputProps {
@@ -16,6 +22,16 @@ export interface ScrubbableNumberInputProps {
   onChange: (next: number) => void;
 }
 
+const decimalSeparatorFor = (locale: string): string => (locale === 'vi' ? ',' : '.');
+const formatForLocale = (v: number, locale: string): string => String(v).replace('.', decimalSeparatorFor(locale));
+const parseLooseDecimal = (raw: string): number | null => {
+  const normalized = raw.trim().replace(/,/g, '.');
+  if (normalized === '' || normalized === '.' || normalized === '-.') return null;
+  if (!/^-?\d*\.?\d*$/.test(normalized)) return null;
+  const parsed = parseFloat(normalized);
+  return Number.isNaN(parsed) ? null : parsed;
+};
+
 export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
   paramId,
   label,
@@ -27,6 +43,9 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
   onChange,
 }) => {
   const dragStartRef = useRef<{ x: number; startValue: number } | null>(null);
+  const [draft, setDraft] = useState<string | null>(null);
+  const [, bumpLocaleTick] = useReducer((c: number) => c + 1, 0);
+  useEffect(() => subscribeLocale(() => bumpLocaleTick()), []);
   const selectable = useAgentSelectable('input', paramId, `${label} (${unit})`, {
     paramId,
     value,
@@ -58,6 +77,10 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
   const onPointerUp = () => {
     dragStartRef.current = null;
   };
+
+  const locale = getActiveLocale();
+  const displayValue = draft ?? formatForLocale(value, locale);
+  const valuetext = `${formatForLocale(value, locale)} ${unit}`;
 
   return (
     <motion.div
@@ -108,15 +131,22 @@ export const ScrubbableNumberInput: React.FC<ScrubbableNumberInputProps> = ({
         )}
         <input
           aria-label={label}
-          type="number"
-          step={step}
-          min={min}
-          max={max}
-          value={value}
+          type="text"
+          inputMode="decimal"
+          role="spinbutton"
+          aria-valuenow={value}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuetext={valuetext}
+          value={displayValue}
+          onFocus={(e) => setDraft(e.currentTarget.value)}
           onChange={(e) => {
-            const parsed = parseFloat(e.target.value);
-            if (!Number.isNaN(parsed)) onChange(clamp(parsed));
+            const raw = e.currentTarget.value;
+            setDraft(raw);
+            const parsed = parseLooseDecimal(raw);
+            if (parsed !== null) onChange(clamp(parsed));
           }}
+          onBlur={() => setDraft(null)}
         />
         <span className="scrubbable-unit mono">{unit}</span>
       </div>
