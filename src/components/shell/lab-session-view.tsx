@@ -29,7 +29,7 @@ export const LabSessionView: React.FC<LabSessionViewProps> = ({ solvedProblemIds
         return (
           <section key={topic} className="wb-panel" data-testid={`session-block-${topic}`} style={{ padding: '0.5rem 0.65rem', marginBottom: '0.5rem' }}>
             <div className="mono" style={{ fontSize: '11px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-              <strong>BUỔI {idx + 1} · {meta.yearBadge[locale]} · {meta.label[locale]}</strong>
+              <strong>{ts.sessionOrdinal(idx + 1)} · {meta.yearBadge[locale]} · {meta.label[locale]}</strong>
             </div>
             <div className="mono" style={{ fontSize: '10.5px', opacity: 0.9, margin: '2px 0' }}>
               {ts.sessionPrereqLabel} {meta.prerequisites[locale]} · {ts.sessionOutcomeLabel} {meta.learningOutcome[locale]}

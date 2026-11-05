@@ -84,7 +84,10 @@ code, pre, .mono {
   color: var(--ivory);
   border-bottom: 1px solid rgba(251, 246, 236, 0.12);
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  /* minmax(0,·) middle track: the mission bar must never force its track wider
+   * than the free space (R6 DEF-1 — centered fit-content bar spilled ±150px
+   * over both auto side clusters once they summed past the viewport). */
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
 }
@@ -120,8 +123,11 @@ code, pre, .mono {
   }
 }
 
-/* Stack the outer workspace grid and header on narrow viewports. */
-@media (max-width: 1200px) {
+/* Stack the outer workspace grid and header on narrow viewports.
+ * 1560px (was 1200px, R6 DEF-1): the 1-row header needs brand (~664px) +
+ * mission bar (~338px) + actions cluster (~523px) ≈ 1549px intrinsic — below
+ * that the centered bar overlapped the EN/VI chips at 1280 AND 1440. */
+@media (max-width: 1560px) {
   .shell-header {
     grid-template-columns: minmax(0, 1fr);
     justify-items: stretch;

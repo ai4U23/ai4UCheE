@@ -67,7 +67,7 @@ nav.wb-toolbar { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr))
 
 /* Problem-First Studio launcher strip & compact Learn Mode callout. */
 .mission-bar { display: flex; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 6px; padding: 4px 8px; background: var(--bg-panel); color: var(--ink-primary); border: 1px solid var(--border-grid); border-radius: 8px; overflow-x: auto; }
-.shell-header > .mission-bar { background: var(--navy); color: var(--ivory); border-color: rgba(251, 246, 236, 0.14); padding: 4px 8px; margin: 0 auto; max-width: fit-content; }
+.shell-header > .mission-bar { background: var(--navy); color: var(--ivory); border-color: rgba(251, 246, 236, 0.14); padding: 4px 8px; margin: 0 auto; max-width: fit-content; min-width: 0; }
 .lab-switcher-pill { font-weight: 600; color: var(--maize-soft) !important; background: var(--navy) !important; white-space: nowrap; }
 .studio-disclosure-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-grid); }
 .studio-disclosure-bar button { font-size: 12px; font-weight: 500; padding: 6px 12px; border-radius: 8px; background: var(--bg-elevated); }

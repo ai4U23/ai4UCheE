@@ -45,55 +45,60 @@ export const PhaseDomainMatrix: React.FC<PhaseDomainMatrixProps> = ({ solvedProb
           {ts.matrixTeacherWarning}
         </div>
       )}
-      <table className="mono" style={{ width: '100%', fontSize: '11px', tableLayout: 'fixed', wordBreak: 'break-word' }}>
-        <thead>
-          <tr>
-            <th style={{ width: '16%' }} />
-            {DOMAINS.map((d) => <th key={d}>{CAUSE_DOMAIN_META[d].label[locale]}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {PHASES.map((phase) => (
-            <tr key={phase}>
-              <th style={{ textAlign: 'left' }}>{LIFECYCLE_PHASE_META[phase].label[locale]}</th>
-              {DOMAINS.map((domain) => {
-                const cell = cellFor(phase, domain);
-                const ids = cell?.problemIds ?? [];
-                const visible = ids.filter((id) => teacherMode || solvedProblemIds.includes(id));
-                const lockedCount = ids.length - visible.length;
-                return (
-                  <td key={domain} data-testid={`matrix-cell-${phase}-${domain}`} style={{ verticalAlign: 'top', padding: '3px' }}>
-                    <span data-testid={`matrix-cell-count-${phase}-${domain}`} style={{ fontWeight: 600 }}>
-                      {ids.length === 0 ? '—' : ids.length}
-                    </span>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px', marginTop: '2px' }}>
-                      {visible.map((id) => {
-                        const p = getProblemById(id);
-                        const star = getProblemTaxonomy(id)?.caseStudy ? ' ★' : '';
-                        return (
-                          <button
-                            key={id} type="button" data-testid={`matrix-chip-${id}`}
-                            onClick={() => onLaunchProblem?.(id)}
-                            style={{ fontSize: '10px', padding: '0 4px' }}
-                            title={p ? `#${p.number} ${p.title}` : id}
-                          >
-                            #{p?.number ?? '?'}{star}
-                          </button>
-                        );
-                      })}
-                      {lockedCount > 0 && (
-                        <span data-testid={`matrix-cell-locked-${phase}-${domain}`} style={{ fontSize: '10px', opacity: 0.8 }}>
-                          🔒 {ts.matrixLockedChips(lockedCount)}
-                        </span>
-                      )}
-                    </div>
-                  </td>
-                );
-              })}
+      {/* R6 DEF-2: 7 fixed columns cram to ~35px below ~700px, spilling chips past
+          the .wb-panel overflow-x:hidden clip. Scroll wrapper + 620px floor keeps
+          every cell reachable (page-level overflow stays 0). */}
+      <div style={{ overflowX: 'auto' }}>
+        <table className="mono" style={{ width: '100%', minWidth: '620px', fontSize: '11px', tableLayout: 'fixed', wordBreak: 'break-word' }}>
+          <thead>
+            <tr>
+              <th style={{ width: '16%' }} />
+              {DOMAINS.map((d) => <th key={d}>{CAUSE_DOMAIN_META[d].label[locale]}</th>)}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {PHASES.map((phase) => (
+              <tr key={phase}>
+                <th style={{ textAlign: 'left' }}>{LIFECYCLE_PHASE_META[phase].label[locale]}</th>
+                {DOMAINS.map((domain) => {
+                  const cell = cellFor(phase, domain);
+                  const ids = cell?.problemIds ?? [];
+                  const visible = ids.filter((id) => teacherMode || solvedProblemIds.includes(id));
+                  const lockedCount = ids.length - visible.length;
+                  return (
+                    <td key={domain} data-testid={`matrix-cell-${phase}-${domain}`} style={{ verticalAlign: 'top', padding: '3px' }}>
+                      <span data-testid={`matrix-cell-count-${phase}-${domain}`} style={{ fontWeight: 600 }}>
+                        {ids.length === 0 ? '—' : ids.length}
+                      </span>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px', marginTop: '2px' }}>
+                        {visible.map((id) => {
+                          const p = getProblemById(id);
+                          const star = getProblemTaxonomy(id)?.caseStudy ? ' ★' : '';
+                          return (
+                            <button
+                              key={id} type="button" data-testid={`matrix-chip-${id}`}
+                              onClick={() => onLaunchProblem?.(id)}
+                              style={{ fontSize: '10px', padding: '0 4px' }}
+                              title={p ? `#${p.number} ${p.title}` : id}
+                            >
+                              #{p?.number ?? '?'}{star}
+                            </button>
+                          );
+                        })}
+                        {lockedCount > 0 && (
+                          <span data-testid={`matrix-cell-locked-${phase}-${domain}`} style={{ fontSize: '10px', opacity: 0.8, wordBreak: 'break-word' }}>
+                            🔒 {ts.matrixLockedChips(lockedCount)}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {controlTotal < 3 && (
         <div className="mono" data-testid="matrix-roadmap-note" style={{ fontSize: '11px', opacity: 0.85, marginTop: '0.35rem' }}>
           🗺️ {ts.matrixRoadmapNote}

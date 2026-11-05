@@ -1,12 +1,16 @@
 // Bilingual copy for the Lương curriculum redesign (tier rubric, causal tree,
 // phase×domain matrix, lab sessions). Authored 2026-11-05 — single source, no other copy file touched.
+// R6 ak-fix (2026-11-05): rubricAxisValues localized (OBS-3) + sessionOrdinal (OBS-2);
+// PROGRESSION_TIER_META itself stays verbatim EN per the locked plan decision.
 import type { LocaleCode } from '../../context/persona-theme-context';
+import type { EngineeringProgressionTier } from '../problem-library-types';
 
 export interface CurriculumCopy {
   // Tier rubric panel
   rubricTitle: string; rubricSubtitle: string;
   rubricAxisPhenomena: string; rubricAxisFalsify: string; rubricAxisDt: string; rubricAxisConsequence: string;
   rubricExpandBtn: string;
+  rubricAxisValues: Readonly<Record<EngineeringProgressionTier, readonly [string, string, string, string]>>;
   // Causal tree
   treeRootSymptomLabel: string; treeConsequenceLabel: string; treeMiniMapPending: string;
   treeMiniMapRoot: string; treeMiniMapSolved: string; treePrunedLabel: string;
@@ -16,6 +20,7 @@ export interface CurriculumCopy {
   // Lab sessions
   sessionViewToggleLibrary: string; sessionViewToggleSessions: string;
   sessionPrereqLabel: string; sessionOutcomeLabel: string; sessionOrderHint: string;
+  sessionOrdinal: (n: number) => string;
 }
 
 const EN: CurriculumCopy = {
@@ -24,6 +29,12 @@ const EN: CurriculumCopy = {
   rubricAxisPhenomena: 'Competing phenomena', rubricAxisFalsify: 'Hypotheses to falsify (Rule #12)',
   rubricAxisDt: 'Δt time clue', rubricAxisConsequence: 'Consequence / constraints',
   rubricExpandBtn: 'Why these levels?',
+  rubricAxisValues: {
+    L1: ['1 (single equation)', '—', '—', 'convention trap (psig/psia, f_D = 4·f_F)'],
+    L2: ['2 (trade-off)', '~1', 'limited', 'single unit'],
+    L3: ['2–3 + decoys', '≥ 2', '✔ defining clue', 'whole unit'],
+    L4: ['many, coupled', 'many', '✔', 'runaway / CSB / multi-constraint open design'],
+  },
   treeRootSymptomLabel: 'SYMPTOM', treeConsequenceLabel: 'If correct, we would observe:',
   treeMiniMapPending: '?', treeMiniMapRoot: '🎯 root', treeMiniMapSolved: '✅ solved',
   treePrunedLabel: 'pruned',
@@ -35,6 +46,7 @@ const EN: CurriculumCopy = {
   sessionViewToggleLibrary: 'Library', sessionViewToggleSessions: 'Lab Sessions',
   sessionPrereqLabel: 'Prerequisites:', sessionOutcomeLabel: 'Outcome:',
   sessionOrderHint: 'Recommended order (not locked):',
+  sessionOrdinal: (n) => `SESSION ${n}`,
 };
 
 const VI: CurriculumCopy = {
@@ -43,6 +55,12 @@ const VI: CurriculumCopy = {
   rubricAxisPhenomena: 'Hiện tượng cạnh tranh', rubricAxisFalsify: 'Giả thuyết phải bác bỏ (Quy tắc #12)',
   rubricAxisDt: 'Manh mối thời gian Δt', rubricAxisConsequence: 'Hậu quả / ràng buộc',
   rubricExpandBtn: 'Vì sao chia mức này?',
+  rubricAxisValues: {
+    L1: ['1 (một phương trình)', '—', '—', 'bẫy quy ước (psig/psia, f_D = 4·f_F)'],
+    L2: ['2 (đánh đổi)', '~1', 'bị giới hạn', 'một thiết bị đơn lẻ'],
+    L3: ['2–3 + mồi nhử', '≥ 2', '✔ manh mối phân định', 'cả một cụm thiết bị'],
+    L4: ['nhiều, tương hỗ', 'nhiều', '✔', 'runaway / CSB / thiết kế mở đa ràng buộc'],
+  },
   treeRootSymptomLabel: 'TRIỆU CHỨNG', treeConsequenceLabel: 'Nếu đúng, ta sẽ quan sát thấy:',
   treeMiniMapPending: '?', treeMiniMapRoot: '🎯 gốc', treeMiniMapSolved: '✅ đã giải',
   treePrunedLabel: 'đã tỉa',
@@ -54,6 +72,7 @@ const VI: CurriculumCopy = {
   sessionViewToggleLibrary: 'Thư viện', sessionViewToggleSessions: 'Buổi thực hành',
   sessionPrereqLabel: 'Tiên quyết:', sessionOutcomeLabel: 'Mục tiêu:',
   sessionOrderHint: 'Thứ tự đề xuất (không khóa):',
+  sessionOrdinal: (n) => `BUỔI ${n}`,
 };
 
 const COPY: Record<LocaleCode, CurriculumCopy> = { en: EN, vi: VI };
