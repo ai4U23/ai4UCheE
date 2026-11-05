@@ -47,6 +47,12 @@ workbench mounts). No CI — this gate runs on the laptop before every file-sync
 # NOTE: the box has NO git binary (the migration rsynced the tree, path parity) and
 # Tailscale SSH may demand an interactive re-auth check (visit the printed login URL once,
 # from a TTY session) — piped/non-TTY ssh sessions block silently on that check.
+# Unblocking without a TTY (proven 2026-11-06): run ONE probe under a PTY to surface the
+# login URL, `open` it for the user, and DO NOT probe again until they confirm — every new
+# SSH attempt mints a fresh auth URL and invalidates the one being completed:
+#   python3 - <<'PY'   # pty.fork + ssh -o ControlPath=none chemeng 'echo SSH_OK' + 30s read
+#   import os, pty ... # (see plans/journals/2026-11-06-r7-*.md for the full probe script)
+#   PY
 # Working file-sync flow (proven 2026-11-04): push to GitHub locally, then sync only
 # the changed files and rebuild on-box (package-lock unchanged → npm install is skippable):
 scp -o ControlPath=none <changed-files> chemeng:/tmp/
