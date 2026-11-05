@@ -8,12 +8,15 @@ import { CURRICULUM_PROGRESSION_MAP } from '../../lib/curriculum-progression-map
 import { TRUST_BOUNDARY_COPY } from '../../lib/trust-boundary-copy';
 import { VI_PROBLEMS_AND_FOGLER_MAP } from '../../lib/i18n/vi-problems-and-fogler-phrases';
 import { getTroubleshootingCopy } from '../../lib/i18n/vi-troubleshooting-copy';
-import { ALL_24_REAL_LIFE_PROBLEMS, filterProblemLibrary } from '../../lib/problem-library-registry';
+import { ALL_24_REAL_LIFE_PROBLEMS, filterProblemLibrary, getProblemById } from '../../lib/problem-library-registry';
 import {
   EQUIPMENT_CATEGORY_META, SYMPTOM_CATEGORY_META,
   type EngineeringProgressionTier, type EquipmentCategoryId, type ProblemCaseEntry, type SymptomCategoryId,
 } from '../../lib/problem-library-types';
 import { MotionPillButton } from '../ui/framer-motion-primitives';
+import { TierRubricPanel } from './tier-rubric-panel';
+import { PhaseDomainMatrix } from './phase-domain-matrix';
+import { LabSessionView } from './lab-session-view';
 
 export interface ProblemLibraryBrowserProps {
   activeProblemId?: string;
@@ -34,6 +37,7 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
   const [equipFilter, setEquipFilter] = useState<EquipmentCategoryId | 'all'>('all');
   const [symptomFilter, setSymptomFilter] = useState<SymptomCategoryId | 'all'>('all');
   const [wbFilter, setWbFilter] = useState<WorkbenchId | 'all'>('all');
+  const [viewMode, setViewMode] = useState<'library' | 'sessions'>('library');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const ts = getTroubleshootingCopy();
   const isVi = getActiveLocale() === 'vi';
@@ -43,6 +47,10 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
     tier: tierFilter, equipment: equipFilter, symptom: symptomFilter, workbench: wbFilter, searchQuery,
   });
   const tierCount = (t: EngineeringProgressionTier) => ALL_24_REAL_LIFE_PROBLEMS.filter((p) => p.tier === t).length;
+  const sessionLocale = (isVi ? 'vi' : 'en') as 'vi' | 'en';
+  const libViewLabels = isVi
+    ? { library: 'Thư viện', sessions: 'Buổi thực hành' }
+    : { library: 'Library', sessions: 'Lab Sessions' };
 
   return (
     <section
@@ -76,8 +84,12 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
         ))}
       </div>
 
-      {/* Secondary Facets: Equipment, Symptom, Subject Workbench, & Search */}
+      {/* Tier rubric panel: explicit L1..L4 division principle (Lương ask 3a, plan 261105-1411) */}
+      <TierRubricPanel />
+
+      {/* Secondary Facets: Equipment, Symptom, Subject Workbench, & Search (library view only) */}
       <div className="wb-actions-row" style={{ flexWrap: 'wrap', marginBottom: '0.55rem', fontSize: '0.76rem' }}>
+        {viewMode === 'library' && (<>
         <label className="mono">
           {ts.libEquipLabel}
           <select aria-label="Filter by Equipment Category" data-testid="filter-equipment-select" value={equipFilter} onChange={(e) => setEquipFilter(e.target.value as EquipmentCategoryId | 'all')}>
@@ -118,12 +130,21 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
           style={{ padding: '0.22rem 0.5rem', fontSize: '0.76rem', minWidth: '185px' }}
         />
 
+        </>)}
         <span className="mono" data-testid="problem-library-count-badge">
           {ts.libCountBadge(filtered.length, ALL_24_REAL_LIFE_PROBLEMS.length)}
         </span>
+
+        <MotionPillButton layoutId="view-toggle-pill" isActive={viewMode === 'library'} testId="view-toggle-library" onClick={() => setViewMode('library')}>
+          {libViewLabels.library}
+        </MotionPillButton>
+        <MotionPillButton layoutId="view-toggle-pill" isActive={viewMode === 'sessions'} testId="view-toggle-sessions" onClick={() => setViewMode('sessions')}>
+          {libViewLabels.sessions}
+        </MotionPillButton>
       </div>
 
-      {/* Problem Cards Grid */}
+      {/* Problem Cards Grid OR Lab Sessions (additive second view — decision I) */}
+      {viewMode === 'library' && (
       <div
         data-testid="problem-library-grid"
         style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))', gap: '0.55rem', maxHeight: '340px', overflowY: 'auto' }}
@@ -157,6 +178,11 @@ export const ProblemLibraryBrowser: React.FC<ProblemLibraryBrowserProps> = ({
           );
         })}
       </div>
+      )}
+      {viewMode === 'sessions' && (
+        <LabSessionView solvedProblemIds={solvedProblemIds} onSelectProblem={onSelectProblem} locale={sessionLocale} />
+      )}
+      <PhaseDomainMatrix solvedProblemIds={solvedProblemIds} locale={sessionLocale} onLaunchProblem={(id) => { const e = getProblemById(id); if (e) onSelectProblem(e); }} />
     </section>
   );
 };

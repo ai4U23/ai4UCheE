@@ -6,9 +6,11 @@ import { askPerryCopilot } from '../../actions/copilot-responder';
 import { getClientAppState, subscribeClientAppState, type WorkbenchId, type WorkbenchLivePayload } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { buildFoglerDetectiveStamp, detectLiveWorkbenchErrorSignature, TEMPORAL_FAULT_CLUES } from '../../lib/che-error-signature-detector';
+import { CausalHypothesisTree } from './causal-hypothesis-tree';
+import { CausalMiniMap } from './causal-mini-map';
 import { getFoglerCaseForWorkbench } from '../../lib/fogler-problem-solving-catalog';
 import {
-  evaluateHypothesisItem, evaluateSixStageProgress, markHandbookReviewed,
+  evaluateSixStageProgress, markHandbookReviewed,
   markProblemDefinitionReviewed, markTheoryReviewed, recordHypothesisVerdict,
   subscribeProblemSolvingStore, type HypothesisUserVerdict,
 } from '../../lib/hypothesis-verification-engine';
@@ -112,6 +114,8 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
         </div>
       </div>
 
+      <CausalMiniMap spec={spec} workbenchId={workbenchId} locale={locale} />
+
       {expanded && (
         <div className="wb-split" style={{ gap: '0.75rem' }}>
           <div data-testid="kt-fault-telemetry-card">
@@ -157,28 +161,13 @@ export const HypothesisTroubleshootingBoard: React.FC<HypothesisTroubleshootingB
             <div className="mono" style={{ fontSize: '0.78rem', marginBottom: '0.35rem' }}>
               <strong>{ts.boardStage5Title}</strong>
             </div>
-            {spec.hypotheses.map((h) => {
-              const evalState = evaluateHypothesisItem(workbenchId, h.id);
-              return (
-                <div key={h.id} data-testid={`hypothesis-card-${h.id}`} className="wb-panel" style={{ padding: '0.45rem 0.6rem', marginBottom: '0.35rem' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{h.claim}</div>
-                  <div className="wb-actions-row" style={{ marginTop: '0.25rem' }}>
-                    <button type="button" data-testid={`hyp-prove-${h.id}`} onClick={() => handleVerdictClick(h.id, 'proved')}>
-                      {evalState.userVerdict === 'proved' ? '● ' : ''}{ts.boardProveBtn}
-                    </button>
-                    <button type="button" data-testid={`hyp-disprove-${h.id}`} onClick={() => handleVerdictClick(h.id, 'disproved')}>
-                      {evalState.userVerdict === 'disproved' ? '● ' : ''}{ts.boardDisproveBtn}
-                    </button>
-                    <button type="button" data-testid={`hyp-ask-agent-${h.id}`} onClick={() => void handleCollaborateWithAgent(h.agentPrompt)}>
-                      {ts.boardAskAgentBtn}
-                    </button>
-                  </div>
-                  <div className="mono" data-testid={`hyp-verdict-${h.id}`} style={{ fontSize: '0.74rem', marginTop: '0.25rem' }}>
-                    {evalState.feedbackText}
-                  </div>
-                </div>
-              );
-            })}
+            <CausalHypothesisTree
+              spec={spec}
+              workbenchId={workbenchId}
+              locale={locale}
+              onVerdict={handleVerdictClick}
+              onAskAgent={(p) => void handleCollaborateWithAgent(p)}
+            />
             <div className="mono" style={{ fontSize: '0.75rem' }} data-testid="stage6-solution-prescription">
               <strong>{ts.boardStage6Title}</strong> {spec.actualSolutionSummary}
             </div>
