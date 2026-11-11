@@ -1,0 +1,45 @@
+# ChemEng PVU edition — container pair (plan 261111 phase 05).
+# Network: joins the EXTERNAL ai4upvu_default so perry-workbench reaches publish-mcp for the
+# revocation feed (CHE_EMBED_REVOCATION_URL=http://publish-mcp:3020/internal/revoked-jtis/che-workbench).
+# Corpus law: the six copyrighted books live at /opt/chemeng-pvu/corpus/ on the VPS (rsync +
+# sha256); Perry's — the only one the engine reads — bind-mounts as an individual FILE at
+# /app (the path main.py's three-dirname walk resolves). Never in an image, never on SharePoint.
+services:
+  perry-engine:
+    build:
+      context: ..
+      dockerfile: Dockerfile.sidecar
+    environment:
+      PERRY_ENGINE_HOST: 0.0.0.0
+      PERRY_ENGINE_PORT: "8001"
+    volumes:
+      - "/opt/chemeng-pvu/corpus/Perry's Chemical Engineers' Handbook, 9th Edition.pdf:/app/Perry's Chemical Engineers' Handbook, 9th Edition.pdf:ro"
+    restart: unless-stopped
+
+  perry-workbench:
+    build:
+      context: ..
+      args:
+        VITE_BRAND: pvu
+    depends_on:
+      perry-engine:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      PERRY_SIDECAR_URL: http://perry-engine:8001
+      DB_PATH: /data/perry_workbench.sqlite
+    env_file:
+      - /etc/ai4upvu/chemeng.env
+    volumes:
+      - sqlite-data:/data
+    networks:
+      - ai4upvu_default
+    restart: unless-stopped
+
+volumes:
+  sqlite-data:
+
+networks:
+  ai4upvu_default:
+    external: true

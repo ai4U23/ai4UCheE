@@ -119,4 +119,6 @@ def equations_render(req: EquationRenderRequest) -> dict:
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8001)
+    # Container overrides (plan 261111 phase 05): the compose pair needs 0.0.0.0; defaults stay
+    # 127.0.0.1:8001 so the AWS deployment path is byte-identical.
+    uvicorn.run(app, host=os.environ.get("PERRY_ENGINE_HOST", "127.0.0.1"), port=int(os.environ.get("PERRY_ENGINE_PORT", "8001")))

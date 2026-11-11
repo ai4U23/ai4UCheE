@@ -1,0 +1,18 @@
+# PerryEngine FastAPI sidecar — PVU edition container (plan 261111 phase 05).
+# WORKDIR mirrors the repo layout (services/perry-engine/main.py) so main.py's hardcoded
+# three-dirname PDF_PATH walk resolves to /app — the corpus bind-mounts at
+# /app/<exact filename>:ro, zero code change on the AWS path (PERRY_ENGINE_HOST default
+# stays 127.0.0.1). pip install . pulls the dependency pins from pyproject (no drift).
+FROM python:3.12-slim
+WORKDIR /app/services/perry-engine
+
+COPY services/perry-engine/ ./
+RUN pip install --no-cache-dir .
+
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8001
+# The healthcheck asserts the corpus mount (pdf_exists) — a pure-function smoke can
+# false-pass a broken mount (kongming 261111).
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=20s \
+  CMD python -c "import urllib.request, json; r = json.load(urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=5)); assert r['pdf_exists'], 'corpus not mounted'"
+CMD ["python", "main.py"]

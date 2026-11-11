@@ -1,0 +1,20 @@
+# LAW (plan 261111 phase 05): the copyrighted textbook corpus NEVER enters a build context —
+# these two patterns are FIRST on purpose. The corpus mounts read-only at runtime, and only
+# into the sidecar container.
+*.pdf
+*.epub
+# Heavy / non-build artifacts:
+node_modules
+dist
+perry_workbench.sqlite*
+.git
+plans
+docs
+tests
+test-results
+test-results/**
+gui-test-screenshots
+video-guide
+playwright-report
+__pycache__
+*.pyc

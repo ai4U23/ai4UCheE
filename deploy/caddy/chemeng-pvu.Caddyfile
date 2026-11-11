@@ -1,0 +1,28 @@
+# ChemEng PVU edition — plan 261111 phase 05. Append to /etc/caddy/Caddyfile on the PVU VPS
+# (dated backup first: cp /etc/caddy/Caddyfile /etc/caddy/Caddyfile.bak.<date>-chemeng-pvu).
+# TLS: same Cloudflare DNS-01 token pvu.ai4u.now uses (behind the orange cloud HTTP-01/
+# TLS-ALPN cannot reach this origin). The CLOUDFLARE_API_TOKEN env comes from caddy's
+# systemd unit (already issuing pvu.ai4u.now certs in this zone).
+chemeng-pvu.ai4u.now {
+	tls {
+		dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+	}
+
+	# TRUE client IPs behind Cloudflare → the Express per-IP rate limiter buckets per student;
+	# without this it sees edge IPs and the whole cohort shares one 60/min bucket (kongming 261111).
+	trusted_proxies static 173.245.48.0/20 103.21.244.0/22 103.22.200.0/22 103.31.4.0/22 141.101.64.0/18 108.162.192.0/18 162.158.0.0/15 172.64.0.0/13 131.0.72.0/22
+	client_ip_headers CF-Connecting-IP
+
+	# Human front doors only get basic auth (credentials copied root-side at deploy from the
+	# existing bod block — same account, no new secret family). /app, /assets/*, /api/*, /health
+	# and public assets stay OPEN at caddy: the Express Bearer gate is the real enforcement and
+	# iframe fetches must never hit a basic-auth prompt (kongming inverted the plan's earlier
+	# path-exception shape). The #t= fragment means tokens never appear in caddy logs either.
+	@frontdoor path / /workbench /index.html
+	basic_auth @frontdoor {
+		# <deploy: paste the existing bod basic_auth account + bcrypt hash here, root-side>
+	}
+
+	log
+	reverse_proxy 127.0.0.1:3000
+}

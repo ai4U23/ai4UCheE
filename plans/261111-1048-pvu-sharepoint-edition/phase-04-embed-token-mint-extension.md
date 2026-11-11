@@ -82,10 +82,10 @@ Emergency: revoke_token(jti) or revoke_all_tokens(slug) → embed dark ≤ 60 s
 **Verify:** the docker exec output itself (substring `len 3`/`len 4`… ≥ 32 and `False`); record output in phase summary.
 
 ## Todo
-- [ ] 4.1 Discovery: VPS runtime + internal auth surface
-- [ ] 4.2 Mint module + CLI + slug registration
-- [ ] 4.3 Internal revoked-JTI endpoint
-- [ ] 4.4 Day-one real-secret check + first mint
+- [x] 4.1 Discovery: VPS runtime + internal auth surface
+- [x] 4.2 Mint module + CLI + slug registration
+- [x] 4.3 Internal revoked-JTI endpoint
+- [x] 4.4 Day-one real-secret check + first mint
 
 ## Success Criteria
 - One command mints a 30d token that passes the Phase 2 verifier end-to-end (cross-repo proof in Task 4.2's Verify).
@@ -118,3 +118,13 @@ failure evidence to the user. Never continue by self-reasoning.
 ## Next Steps
 - Hands Phase 5 the mint command + internal URL + service token.
 - Phase 6 consumes the first production token URL; Phase 10 owns the 30-day ritual built on Task 4.2's script.
+
+## Amendments (execution 261111)
+
+1. The tree already held high-quality drafts matching this phase exactly (a planning-wave candidate wrote files despite read-only instructions — same class as ai4UCheE's stray placement probe). Review verdict: KEEP + COMPLETE — the drafts were INCOMPLETE (routes.py registered `/internal/revoked-jtis/{slug}` but never defined the handler; no test file existed). Completed: feed helpers in che_embed.py (`revoked_jtis_payload(conn, slug)` pure + `revoked_jtis_for_slug` via `metadata._conn()` pooled wrapper) + the `get_internal_revoked_jtis` handler in api/routes.py (_internal_auth_ok Bearer gate, 503 on DB error so the CheE gate fail-opens) + tests/test_che_embed_token.py (6 tests).
+2. Task 4.1 discovery (VPS reachable via `ssh pvu`): publish-mcp container @ 127.0.0.1:3020 loopback; VPS layout /opt/{ai4UPVU,ai4upvu,litellm-gateway,...}; /etc/ai4upvu/{.env, publish-mcp.env, monitoring.env}; caddy = systemd, /etc/caddy/Caddyfile contains pvu.ai4u.now.
+3. Task 4.4 day-one real-secret check PASSED on the live container: secret_len=64, is_dev_constant=False, dev_optin not set (value never printed — length/boolean only). The kongming standing requirement is discharged.
+4. register_standing_slug uses metadata.upsert_artifact (the engine's canonical upsert — empty-file row, honest defaults, cross-owner 409 protection); executed at deploy time (needs the DB) via `mint_che_embed_token.py --register-slug`.
+5. Tests: 6/6 green in a scratch venv (psycopg2-binary, --noconftest — the engine's full suite needs a DB env). Cross-repo golden round-trip PROVEN: an engine-minted embed token (fresh secret, real create_signed_token) ACCEPTED by the ai4UCheE phase-2 verifier with exact pinned claims; a share-purpose token REJECTED token_wrong_purpose.
+6. GATE G1 STATUS CHANGE: SP_SPFX_COMPONENT_ID + SP_API_BASE_URL are SET in the live publish-mcp container (the parallel BOD-parity cook completed the App Catalog activation 261111) — the external gate for phases 7 and 9 is OPEN (was "in flight" at plan time).
+7. Committed atomically in ai4UPVU: 72fd8d3.
