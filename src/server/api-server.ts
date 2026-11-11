@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express, { type Express, type Request, type Response } from 'express';
 import { ActionRegistry } from '../actions';
-import { setCalcSheetPersister } from '../actions/generate-calc-sheet';
+import { registerSavedCalculationsRoutes, setActionClientId } from './saved-calculations-route';
 import {
   getClientAppState,
   serializeCurrentScreenTag,
@@ -23,25 +23,6 @@ const DIST_DIR = path.resolve(__dirname, '../../dist');
 
 export function createApiServer(dbPath?: string): Express {
   initDb(dbPath);
-  setCalcSheetPersister((rec) => {
-    getConn()
-      .prepare(
-        `INSERT OR REPLACE INTO saved_calculations
-         (id, project_code, equipment_tag, workbench_type, revision, inputs_json, outputs_json, equations_json, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      )
-      .run(
-        rec.id,
-        rec.projectCode,
-        rec.equipmentTag,
-        rec.workbenchType,
-        rec.revision,
-        rec.inputsJson,
-        rec.outputsJson,
-        rec.equationsJson,
-        rec.createdAt,
-      );
-  });
 
   const app = express();
   app.disable('x-powered-by');
@@ -50,6 +31,7 @@ export function createApiServer(dbPath?: string): Express {
   // PVU embed auth gate — mounts only when CHE_EMBED_AUTH=1 (flag-off default keeps the chemeng
   // AWS deployment byte-identical). Mount order + policy live in embed-auth-gate.ts.
   mountEmbedAuth(app);
+  registerSavedCalculationsRoutes(app);
 
   app.get('/health', async (req: Request, res: Response): Promise<void> => {
     await proxyToSidecar(req, res, '/health');
@@ -80,18 +62,6 @@ export function createApiServer(dbPath?: string): Express {
     res.json({ state: next, xml: serializeCurrentScreenTag(next) });
   });
 
-  app.get('/api/saved-calculations', (_req: Request, res: Response): void => {
-    const rows = getConn()
-      .prepare('SELECT * FROM saved_calculations ORDER BY created_at DESC LIMIT 50')
-      .all();
-    res.json({ calculations: rows });
-  });
-
-  app.delete('/api/saved-calculations', (_req: Request, res: Response): void => {
-    const info = getConn().prepare('DELETE FROM saved_calculations').run();
-    res.json({ ok: true, deleted: info.changes });
-  });
-
   app.post('/api/actions/:actionName', async (req: Request, res: Response): Promise<void> => {
     const name = String(req.params.actionName);
     const action = ActionRegistry.get(name);
@@ -99,12 +69,15 @@ export function createApiServer(dbPath?: string): Express {
       res.status(404).json({ error: `Unknown action '${name}'` });
       return;
     }
+    setActionClientId(req.headers['x-client-id']);
     try {
       const parsed = action.schema.parse(req.body ?? {});
       const output = await action.handler(parsed);
       res.json({ ok: true, action: name, output });
     } catch (err) {
       res.status(400).json({ ok: false, error: (err as Error).message });
+    } finally {
+      setActionClientId('');
     }
   });
 
@@ -170,7 +143,7 @@ export function createApiServer(dbPath?: string): Express {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const port = Number(process.env.PORT ?? 3000);
   const host = process.env.HOST ?? '0.0.0.0';
-  createApiServer().listen(port, host, () => {
+  createApiServer(process.env.DB_PATH).listen(port, host, () => {
     console.log(`Perry Host API & Workbench UI listening on http://${host}:${port}`);
   });
 }

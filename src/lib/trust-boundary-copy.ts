@@ -30,11 +30,11 @@ export const TRUST_BOUNDARY_COPY: Record<
       'Calculations use deterministic textbook correlations (DIPPR, Churchill, McCabe-Thiele, Fogler) for undergraduate instruction and preliminary screening. Not a substitute for licensed PE sign-off, relief-device sizing (API 520/521), or HAZOP/SIL certification.',
     localDemoProfileBadge: 'Local Browser Demo · localStorage only',
     localDemoProfileTooltip:
-      'Practice points (+35 pts DIY / +12 pts Assisted) and student profile live only in this browser (localStorage). Exported calculation sheets persist anonymously in local SQLite (saved_calculations). AI Co-Pilot prompts send only prompt text + <current-screen> numerical state to gateway.ai4u.now (ephemeral, zero personal identifiers, local fallback if offline).',
+      'Practice points (+35 pts DIY / +12 pts Assisted) and student profile live only in this browser (localStorage). Exported calculation sheets persist privately per browser (pseudonymous client id) in local SQLite (saved_calculations). AI Co-Pilot prompts send only prompt text + <current-screen> numerical state to gateway.ai4u.now (ephemeral, zero personal identifiers, local fallback if offline).',
     corpusProvenanceNotice:
       'Curated 6-book index & pedagogical problem bank mapped to published chapter/section coordinates; the 24 industrial failure narratives are realistic educational composites. No copyrighted textbook PDFs/EPUBs are hosted or distributed.',
     calcSheetPersistenceNote:
-      'Saved calculation sheets are stored anonymously in the local SQLite database (saved_calculations) with SHA-256 input-to-output provenance.',
+      'Saved calculation sheets are stored privately per browser (pseudonymous client id) in the local SQLite database (saved_calculations) with SHA-256 input-to-output provenance.',
     screeningQualifierBadge: 'Preliminary Educational Screening Only · Not PE / API / HAZOP Sign-Off',
     wbAssumptions: {
       wb2: 'Assumptions: Pure-component DIPPR Eq. 101/105 & ideal/activity-coefficient VLE; preliminary educational screening only.',
@@ -46,7 +46,7 @@ export const TRUST_BOUNDARY_COPY: Record<
     supportPrivacyNote:
       'AI Co-Pilot Data Flow: Sliders run 100% locally; Co-Pilot chat sends only prompt text & numerical <current-screen> state to gateway.ai4u.now (ephemeral, zero personal identifiers, local deterministic fallback). Maintained by AI4U.now Engineering Education Team · Support & privacy: support@ai4u.now · github.com/ai4U23/ai4UCheE/issues',
     deleteSavedSheetsLabel: '🗑️ Delete Saved SQLite Sheets',
-    deletedSavedSheetsToast: 'Cleared all saved calculation sheets from local SQLite (saved_calculations).',
+    deletedSavedSheetsToast: "Deleted this browser's saved calculation sheets from local SQLite (saved_calculations) — other browsers keep theirs.",
   },
   vi: {
     engineeringBoundaryTitle: 'Ranh giới Giáo dục & Kỹ thuật Sơ bộ',
@@ -54,11 +54,11 @@ export const TRUST_BOUNDARY_COPY: Record<
       'Các phép tính sử dụng phương trình giáo trình tất định (DIPPR, Churchill, McCabe-Thiele, Fogler) phục vụ giảng dạy đại học và sàng lọc sơ bộ. Không thay thế phê duyệt Kỹ sư Chuyên nghiệp (PE), tính van an toàn (API 520/521) hoặc chứng nhận HAZOP/SIL.',
     localDemoProfileBadge: 'Bản Demo Trình duyệt Cục bộ · chỉ lưu localStorage',
     localDemoProfileTooltip:
-      'Điểm luyện tập (+35 đ Tự giải / +12 đ Có gợi ý) và hồ sơ sinh viên chỉ lưu trên trình duyệt này (localStorage). Phiếu tính toán xuất ra được lưu ẩn danh trong SQLite cục bộ (saved_calculations). Khi hỏi AI Co-Pilot, chỉ câu hỏi và thông số số học <current-screen> được gửi tạm thời tới gateway.ai4u.now (không kèm định danh cá nhân).',
+      'Điểm luyện tập (+35 đ Tự giải / +12 đ Có gợi ý) và hồ sơ sinh viên chỉ lưu trên trình duyệt này (localStorage). Phiếu tính toán xuất ra được lưu riêng tư theo từng trình duyệt (mã định danh ẩn danh) trong SQLite cục bộ (saved_calculations). Khi hỏi AI Co-Pilot, chỉ câu hỏi và thông số số học <current-screen> được gửi tạm thời tới gateway.ai4u.now (không kèm định danh cá nhân).',
     corpusProvenanceNotice:
       'Chỉ mục 6 giáo trình & ngân hàng bài tập sư phạm được ánh xạ tới tọa độ chương/mục xuất bản; 24 tình huống sự cố nhà máy là kịch bản tổng hợp sát thực tế phục vụ đào tạo. Không lưu trữ hay phân phối tệp PDF/EPUB có bản quyền.',
     calcSheetPersistenceNote:
-      'Phiếu tính toán lưu trữ ẩn danh trong cơ sở dữ liệu SQLite cục bộ (saved_calculations) kèm mã băm xuất xứ SHA-256.',
+      'Phiếu tính toán được lưu riêng tư theo từng trình duyệt (mã định danh ẩn danh) trong cơ sở dữ liệu SQLite cục bộ (saved_calculations) kèm mã băm xuất xứ SHA-256.',
     screeningQualifierBadge: 'Chỉ Sàng lọc Giáo dục Sơ bộ · Không thay thế phê duyệt PE / API / HAZOP',
     wbAssumptions: {
       wb2: 'Giả thiết: Phương trình DIPPR 101/105 cấu tử tinh khiết & VLE lý tưởng/hoạt độ; chỉ dùng sàng lọc giáo dục sơ bộ.',
@@ -70,6 +70,6 @@ export const TRUST_BOUNDARY_COPY: Record<
     supportPrivacyNote:
       'Dữ liệu AI Co-Pilot: Thanh trượt chạy 100% cục bộ; chat Co-Pilot chỉ gửi câu hỏi & trạng thái số học <current-screen> tới gateway.ai4u.now (xử lý tạm thời, không lưu định danh cá nhân, có bộ giải dự phòng cục bộ). Vận hành bởi Nhóm Giáo dục Kỹ thuật AI4U.now · Hỗ trợ & quyền riêng tư: support@ai4u.now · github.com/ai4U23/ai4UCheE/issues',
     deleteSavedSheetsLabel: '🗑️ Xóa Phiếu tính SQLite đã lưu',
-    deletedSavedSheetsToast: 'Đã xóa toàn bộ phiếu tính toán lưu trong SQLite cục bộ (saved_calculations).',
+    deletedSavedSheetsToast: 'Đã xóa các phiếu tính toán của trình duyệt này trong SQLite cục bộ (saved_calculations) — trình duyệt khác không bị ảnh hưởng.',
   },
 };

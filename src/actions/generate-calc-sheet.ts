@@ -30,6 +30,17 @@ type CalcSheetPersister = (record: SavedCalculationRecord) => void;
 let persister: CalcSheetPersister | null = null;
 const memoryStore: SavedCalculationRecord[] = [];
 
+function browserPersist(record: SavedCalculationRecord): void {
+  // Browser-only default persister (phase-03): the record crosses to the server, which stamps
+  // client_id from the X-Client-Id HEADER (never the body) — the actual private-saves hop.
+  // Fire-and-forget: a failed save must never break the sheet compile; memoryStore keeps the copy.
+  void authedFetch('/api/saved-calculations', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(record),
+  }).catch(() => {});
+}
+
 export function setCalcSheetPersister(fn: CalcSheetPersister | null): void {
   persister = fn;
 }
@@ -128,6 +139,7 @@ export const generateCalcSheetAction = defineAction({
     };
     memoryStore.push(record);
     persister?.(record);
+    if (typeof window !== 'undefined' && !persister) browserPersist(record);
 
     agentNative.ui.output({
       type: 'calc-sheet-card',

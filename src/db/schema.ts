@@ -13,6 +13,7 @@ export const screenStates = sqliteTable('screen_states', {
 
 export const savedCalculations = sqliteTable('saved_calculations', {
   id: text('id').primaryKey(),
+  clientId: text('client_id').notNull().default(''),
   projectCode: text('project_code').notNull().default(''),
   equipmentTag: text('equipment_tag').notNull().default(''),
   workbenchType: text('workbench_type').notNull().default(''),

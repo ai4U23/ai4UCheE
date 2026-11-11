@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS screen_states (
 );
 CREATE TABLE IF NOT EXISTS saved_calculations (
   id TEXT PRIMARY KEY,
+  client_id TEXT NOT NULL DEFAULT '',
   project_code TEXT NOT NULL DEFAULT '',
   equipment_tag TEXT NOT NULL DEFAULT '',
   workbench_type TEXT NOT NULL DEFAULT '',
@@ -48,6 +49,14 @@ export function initDb(dbPath = 'perry_workbench.sqlite'): PerryDb {
   currentDbPath = dbPath;
   conn.pragma('journal_mode = WAL');
   conn.exec(CREATE_SQL);
+  // phase-03 idempotent migration: old DBs lack client_id. The composite index is created
+  // AFTER the ALTER only — an index inside CREATE_SQL would throw 'no such column' on old DBs
+  // before the ALTER ever runs (kongming 261111).
+  const cols = conn.prepare('PRAGMA table_info(saved_calculations)').all() as Array<{ name: string }>;
+  if (!cols.some((c) => c.name === 'client_id')) {
+    conn.exec("ALTER TABLE saved_calculations ADD COLUMN client_id TEXT NOT NULL DEFAULT ''");
+  }
+  conn.exec('CREATE INDEX IF NOT EXISTS idx_saved_calcs_client_created ON saved_calculations(client_id, created_at)');
   db = drizzle(conn, { schema });
   return db;
 }
