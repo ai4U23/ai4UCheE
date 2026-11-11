@@ -4,14 +4,20 @@
 - Brainstorm: `plans/reports/brainstorm-20261111-pvu-sharepoint-edition.md` · Research: `plans/reports/research-20261111-interactive-html-on-sharepoint.md` (Lane A mechanics: site-collection HTML Field Security allowlist + Embed web part; no App Catalog needed)
 - Related phases: requires Phase 5 live origin + Phase 4 token; superseded by Phase 7 (which reads this phase's supersede step); rotation owned by Phase 10.
 
+## Amendment 261111 (ak-fix, after phase-05 deploy)
+- Hostname settled: `chemeng-pvu.ai4u.now` (first-level → Universal SSL covers it; the second-level form in the original spec was never created).
+- Embed-escape hygiene law (commit 6a453cb): in embed sessions the rendered UI shows ZERO ai4u.now strings and no UI element navigates the student's tab off SharePoint — real-browser-verified 8/8. The share menu group and the showcase frontdoor link are hidden in embed sessions; trust copy carries PVU-relay wording; `main.tsx` now consumes `#t=` at boot (the client auth chain previously dead-ended at token_missing 401s in real browsers — curl smoke couldn't see it).
+- Client copilot limiter keys per-browser (X-Client-Id UUID, IP fallback), not per-IP — classroom NAT no longer pools the whole room into one shared 60/min bucket.
+- **Owner handover artifact (two-link table + paste-ready glue URL): `reports/phase-06-owner-handover.md`.** Token minted 261111 expires **2026-12-11** — the 30-day refresh is Phase 10's rotation cadence (or the Phase 7 managed web part takes it over).
+
 ## Overview
 Priority P1 · Status Pending · Effort 0.25d planner + ~1h owner work.
 Lane A is the manual, work-today lane: the owner allowlists the app domain at site-collection level, creates one page with the out-of-box Embed web part pointing at the token URL, and records a 15-minute tenant smoke test. Kongming's acceptance gates this phase: a student completes a copilot interaction end-to-end inside the embed while the direct pvu surface stays unchanged.
 
 ## Requirements
 Functional:
-- HTML Field Security allowlist entry `https://chemeng.pvu.ai4u.now` at site-collection admin level.
-- Page named exactly `che-workbench-embed.aspx` (unmanaged-page containment law), Embed web part, iframe src = `https://chemeng.pvu.ai4u.now/app#t=<fresh 30d token>`, fixed tall height attribute (1600px), in-frame scrolling.
+- HTML Field Security allowlist entry `https://chemeng-pvu.ai4u.now` at site-collection admin level.
+- Page named exactly `che-workbench-embed.aspx` (unmanaged-page containment law), Embed web part, iframe src = `https://chemeng-pvu.ai4u.now/app#t=<fresh 30d token>`, fixed tall height attribute (1600px), in-frame scrolling.
 - Smoke evidence recorded: iframe sandbox attributes observed in the tenant, console errors if any, copilot round-trip screenshot.
 - Surface-registry entry for the page (slug `che-workbench` artifact row from Phase 4 + page URL noted) with rotation cadence 30d.
 Non-functional: total owner time ≤ 1h; zero App Catalog involvement; page edit is the only tenant mutation besides the allowlist line.
@@ -19,10 +25,10 @@ Non-functional: total owner time ≤ 1h; zero App Catalog involvement; page edit
 ## Architecture
 ```
 pvuedu.sharepoint.com  (site collection)
- └─ HTML Field Security allowlist: https://chemeng.pvu.ai4u.now   (owner, once)
+ └─ HTML Field Security allowlist: https://chemeng-pvu.ai4u.now   (owner, once)
  └─ Page che-workbench-embed.aspx
      └─ Embed web part (OOB iframe, height=1600, scrolling in-frame)
-         └─ src https://chemeng.pvu.ai4u.now/app#t=TOKEN
+         └─ src https://chemeng-pvu.ai4u.now/app#t=TOKEN
              └─ Phase 2 flow: fragment → store → strip → Bearer on /api/*
 ```
 
@@ -41,15 +47,15 @@ pvuedu.sharepoint.com  (site collection)
 **Steps:**
 1. Mint a fresh 30d token on the VPS (Phase 4 Task 4.2 script); record jti + expiry in the surface registry note.
 2. Assemble the runbook (Tasks 6.2–6.4 below, verbatim, with screenshots-links placeholders).
-3. Sanity-check the URL loads and authenticates from the owner's browser profile before the tenant work: open `https://chemeng.pvu.ai4u.now/app#t=<token>` directly, confirm the app renders and a calculation works.
+3. Sanity-check the URL loads and authenticates from the owner's browser profile before the tenant work: open `https://chemeng-pvu.ai4u.now/app#t=<token>` directly, confirm the app renders and a calculation works.
 **Success criteria:** Token URL verified working top-level (basic-auth exempt path) before any SharePoint edit.
-**Verify:** manual browser check + `curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer <token>" https://chemeng.pvu.ai4u.now/api/screen-state` → `200`.
+**Verify:** manual browser check + `curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer <token>" -d '{}' https://chemeng-pvu.ai4u.now/api/copilot` → `200`.
 
 ### Task 6.2 — Owner: allowlist the domain (≈10 min, site-collection admin)
 **Goal:** SharePoint permits iframes of the app origin.
 **Steps (owner, plain English):**
 1. Open the PVU site collection as admin → Settings → Site information → View all site settings → HTML Field Security.
-2. Add `https://chemeng.pvu.ai4u.now` to the allowed domains list; save.
+2. Add `https://chemeng-pvu.ai4u.now` to the allowed domains list; save.
 **Success criteria:** Domain present in the allowlist on re-open.
 **Verify:** owner screenshot of the saved allowlist appended to the smoke evidence file; `no verification needed` beyond that.
 
@@ -57,7 +63,7 @@ pvuedu.sharepoint.com  (site collection)
 **Goal:** `che-workbench-embed.aspx` live with the workbench framed.
 **Steps (owner):**
 1. Site Pages → New → Page; title "CHE Workbench"; after creation, confirm/rename the URL name to `che-workbench-embed.aspx` (distinct-name law).
-2. Add the out-of-box **Embed** web part; paste `https://chemeng.pvu.ai4u.now/app#t=<token from Task 6.1>`; set the iframe height to about 1600 pixels in the web part's property pane (page scrolls inside the frame).
+2. Add the out-of-box **Embed** web part; paste `https://chemeng-pvu.ai4u.now/app#t=<token from Task 6.1>`; set the iframe height to about 1600 pixels in the web part's property pane (page scrolls inside the frame).
 3. Publish the page; copy its URL.
 **Success criteria:** Page loads for a site member showing the PVU-branded workbench in Vietnamese.
 **Verify:** planner opens the page URL in a clean browser session (no prior localStorage) and sees the app render; `curl -s -o /dev/null -w "%{http_code}" "<page URL>`" is not the check — the check is visual plus Task 6.4.
@@ -67,7 +73,7 @@ pvuedu.sharepoint.com  (site collection)
 **Steps:**
 1. On the published page, open browser devtools: record the rendered iframe element's attributes (exact `sandbox="…"` string), any console errors, and the network log showing `/api/copilot` with a Bearer header and status 200 (Tier 1 fallback acceptable; record which tier).
 2. Kongming acceptance walk: as a student (member account or member-mode session), inside the embed: change one workbench input, ask the copilot one Vietnamese question, receive an answer, save one calc sheet, reload the page, confirm the saved sheet reappears (per-browser saves inside the embed partition).
-3. Confirm the direct surface is unchanged: open `https://chemeng.pvu.ai4u.now/` → basic-auth prompt appears (or `/app` shows shell + banner without token use at top level).
+3. Confirm the direct surface is unchanged: open `https://chemeng-pvu.ai4u.now/` → basic-auth prompt appears (or `/app` shows shell + banner without token use at top level).
 4. Write the evidence file (sandbox attrs, tier used, screenshots, page URL, token jti/expiry).
 **Success criteria:** All four steps recorded; no console-fatal errors; acceptance walk fully green.
 **Verify:** evidence file exists at `plans/261111-1048-pvu-sharepoint-edition/reports/lane-a-smoke-261111.md` containing the sandbox attribute string, the string `200` for the copilot call, and the acceptance checklist ticked — `grep -c "sandbox" <file>` → ≥ 1.
