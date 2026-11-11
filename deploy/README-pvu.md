@@ -17,13 +17,21 @@ Hidden origin: **chemeng-pvu.ai4u.now** (first-level → Universal SSL; planner-
    origin && git checkout <deploy-sha>` (push from the Mac first; root for the root-owned
    tree / safe.directory). Record pre-checkout `git status` + `git stash list`.
 4. **publish-mcp rebuild + recreate (live surgery — isolate it):** capture
-   `docker inspect publish-mcp` JSON first; build `ai4upvu-<sha>`; recreate with the same
-   env file (/etc/ai4upvu/publish-mcp.env) + all three networks; diff the new container env
-   against the capture (the 261109 env-drop class); post-gates: /health 200, BOD artifact
-   fetch 200 (slug `pvu-bod-usage-dashboard-vn`), and
+   `docker inspect publish-mcp` JSON first; build `ai4upvu-<sha>`; recreate with
+   `deploy/publish-mcp-recreate.sh ai4upvu-<sha>` — NEVER a hand-typed `docker run`. The
+   script re-asserts ALL FIVE axes (env file /etc/ai4upvu/publish-mcp.env + the THREE bind
+   mounts + the three networks + the 127.0.0.1:3020 port + restart policy) and refuses to
+   start if the live container is already bind-broken. 261111 incident-3: a hand-typed
+   recreate kept the env but dropped the 3 binds → every SharePoint artifact page 404'd
+   (the BOD usage dashboard went down in front of the owner) and the quarantine trap fired —
+   an env-only diff is structurally blind to the bind axis. Post-gates (the script runs
+   them): /health 200, BOD artifact fetch 200 (slug `pvu-bod-usage-dashboard-vn`) with
+   EXACTLY ONE Access-Control-Allow-Origin header (duplicate ACAO = browsers fail while
+   curl stays green), fresh ict_date in the artifact, and
    `GET /internal/revoked-jtis/che-workbench` (service token) →
-   `{"slug":"che-workbench","jtis":[],"epoch":null}`. Rollback anchor: keep the previous image
-   un-pruned. Closes the BOD cutover "image ≠ tree bytes" residual.
+   `{"slug":"che-workbench","jtis":[],"epoch":null}`. If the artifact row is quarantined in
+   the metadata DB, un-quarantine it BEFORE the recreate — booting a mounted container
+   completes a quarantine. Rollback anchor: keep the previous image un-pruned.
 5. **App + corpus:** `git clone`/checkout ai4UCheE at the deploy SHA into
    `/opt/chemeng-pvu/app`; `rsync` the six corpus files (repo root, ~371MB) to
    `/opt/chemeng-pvu/corpus/`; `sha256sum` both sides; `chmod -R a-w` the corpus dir; root-cron
