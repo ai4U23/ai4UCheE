@@ -1,9 +1,11 @@
 # ChemEng PVU edition — container pair (plan 261111 phase 05).
-# Network: joins the EXTERNAL ai4upvu_default so perry-workbench reaches publish-mcp for the
-# revocation feed (CHE_EMBED_REVOCATION_URL=http://publish-mcp:3020/internal/revoked-jtis/che-workbench).
-# Corpus law: the six copyrighted books live at /opt/chemeng-pvu/corpus/ on the VPS (rsync +
-# sha256); Perry's — the only one the engine reads — bind-mounts as an individual FILE at
-# /app (the path main.py's three-dirname walk resolves). Never in an image, never on SharePoint.
+# Networks: chemeng-internal (the pair talks to each other) + ai4upvu_default (external —
+# perry-workbench reaches publish-mcp for the revocation feed).
+# NOTE: the workbench MUST be on BOTH networks — the compose `networks:` key is exclusive;
+# declaring only ai4upvu_default excludes the service from the default network where
+# perry-engine lives, and the sidecar becomes unreachable by DNS (kongming 261111 caught the
+# symptom: "Sidecar unreachable: fetch failed").
+# Port: 3001 on the host (3000 was occupied by ai4upvu-monitoring-grafana).
 services:
   perry-engine:
     build:
@@ -14,6 +16,8 @@ services:
       PERRY_ENGINE_PORT: "8001"
     volumes:
       - "/opt/chemeng-pvu/corpus/Perry's Chemical Engineers' Handbook, 9th Edition.pdf:/app/Perry's Chemical Engineers' Handbook, 9th Edition.pdf:ro"
+    networks:
+      - chemeng-internal
     restart: unless-stopped
 
   perry-workbench:
@@ -25,7 +29,7 @@ services:
       perry-engine:
         condition: service_healthy
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3001:3000"
     environment:
       PERRY_SIDECAR_URL: http://perry-engine:8001
       DB_PATH: /data/perry_workbench.sqlite
@@ -34,6 +38,7 @@ services:
     volumes:
       - sqlite-data:/data
     networks:
+      - chemeng-internal
       - ai4upvu_default
     restart: unless-stopped
 
@@ -41,5 +46,6 @@ volumes:
   sqlite-data:
 
 networks:
+  chemeng-internal:
   ai4upvu_default:
     external: true
