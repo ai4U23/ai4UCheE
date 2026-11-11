@@ -1,6 +1,7 @@
 // Persona ('learn' | 'plant'), Locale ('en' | 'vi'), + Institutional Ivory ('paper' #FBF6EC) context.
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { writeClientAppState } from '../actions/view-screen';
+import { getBrand } from '../lib/brand';
 import {
   resolveInitialLocale,
   setActiveLocale,
@@ -8,7 +9,7 @@ import {
 } from '../lib/i18n/locale-types';
 
 export type PersonaMode = 'learn' | 'plant';
-export type ThemeMode = 'paper';
+export type ThemeMode = 'paper' | 'pvu';
 export type { LocaleCode };
 export type WorkbenchId =
   | 'wb1-visual-verifier'
@@ -52,7 +53,7 @@ export const PersonaThemeProvider: React.FC<{
 }> = ({
   children,
   initialPersona,
-  initialTheme = 'paper',
+  initialTheme,
   initialLocale,
   initialWorkbench,
 }) => {
@@ -82,7 +83,7 @@ export const PersonaThemeProvider: React.FC<{
     return 'wb2-thermo-dippr';
   }, [initialWorkbench]);
   const [personaMode, setPersonaMode] = useState<PersonaMode>(resolvedInitialPersona);
-  const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme);
+  const [themeMode, setThemeMode] = useState<ThemeMode>(initialTheme ?? getBrand().defaultTheme);
   const [locale, setLocaleState] = useState<LocaleCode>(() => {
     const resolved = resolveInitialLocale(initialLocale);
     setActiveLocale(resolved, { persist: false });

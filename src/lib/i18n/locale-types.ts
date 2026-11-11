@@ -1,5 +1,7 @@
 // Core Vietnamese (`vi`) / English (`en`) locale store, URL & localStorage resolver,
 // and DOM `<html lang="..." data-locale="...">` synchronizer (< 200 LOC).
+import { getBrand } from '../brand';
+
 export type LocaleCode = 'en' | 'vi';
 
 export const LOCALE_STORAGE_KEY = 'ai4uchee_locale';
@@ -46,7 +48,7 @@ export function resolveInitialLocale(explicit?: string): LocaleCode {
       /* ignore storage errors */
     }
   }
-  return 'en';
+  return getBrand().defaultLocale;
 }
 
 export function getActiveLocale(): LocaleCode {

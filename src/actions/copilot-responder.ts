@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { getActiveLocale } from '../lib/i18n/locale-types';
 import { formatCopilotReplyBody, TIER1_VI_KNOWLEDGE } from '../lib/i18n/vi-copilot-dictionary';
 import { agentNative, defineAction, type GenUiPayload } from './define-action';
+import { authedFetch } from '../lib/api-fetch';
 import { buildAdaptiveCopilotCoaching, type AdaptiveCopilotMeta } from './copilot-adaptive-tutor';
 import { parseCopilotScenario } from './copilot-scenario-parser';
 import type { WorkbenchMutationCommand } from './view-screen';
@@ -178,7 +179,7 @@ export async function askPerryCopilot(input: unknown): Promise<CopilotResponse> 
   const tier1 = await runCopilotResponder(input, { emitUi: true });
   if (import.meta.env?.MODE === 'test') return tier1;
   try {
-    const res = await fetch('/api/copilot', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
+    const res = await authedFetch('/api/copilot', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(input) });
     if (!res.ok) return tier1;
     const data = (await res.json()) as Partial<CopilotResponse> | null;
     if (!data || typeof data.reply !== 'string' || data.reply.length === 0) return tier1;

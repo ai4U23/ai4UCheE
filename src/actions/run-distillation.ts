@@ -1,10 +1,13 @@
 // Zod-typed shared action for WB4: Sec 13 & 14 McCabe-Thiele + Fair Tray Flooding + Eckert GPDC.
 import { z } from 'zod';
 import { defineAction } from './define-action';
+import { authedFetch } from '../lib/api-fetch';
 
 const SIDECAR =
-  typeof window !== 'undefined' && Boolean(window.location?.port)
-    ? ''
+  typeof window !== 'undefined'
+    ? '' // Browser: same-origin relative — the Express host proxies /api/v1/* to the sidecar.
+    // Bug fix 261111 (phase-02): the previous port-truthy test fell through to the loopback default
+    // on default-port HTTPS origins (chemeng.pvu.ai4u.now, chemeng.ai4u.now) → student's 127.0.0.1:8001.
     : typeof process !== 'undefined' && process.env?.PERRY_SIDECAR_URL
       ? process.env.PERRY_SIDECAR_URL
       : 'http://127.0.0.1:8001';
@@ -26,7 +29,7 @@ export const runDistillationAction = defineAction({
     packing_factor_fp_m_inv: z.number().positive().default(92.0),
   }),
   async handler(input) {
-    const res = await fetch(`${SIDECAR}/api/v1/distillation/evaluate`, {
+    const res = await authedFetch(`${SIDECAR}/api/v1/distillation/evaluate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),

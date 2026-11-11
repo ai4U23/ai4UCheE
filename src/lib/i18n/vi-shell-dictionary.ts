@@ -66,6 +66,7 @@ export const MISSION_BUTTON_LABELS_VI: Record<string, string> = {
 
 export interface ShellCopy {
   brandEyebrow: string;
+  tokenExpiredBanner: string;
   defaultVerifierLabel: string;
   labsSuffix: string;
   learnLabel: string;
@@ -107,6 +108,7 @@ export interface ShellCopy {
 
 const SHELL_EN: ShellCopy = {
   brandEyebrow: '6-Book ChE Solver · 55+ Charts · 24 Plant Problems',
+  tokenExpiredBanner: 'Access token expired — contact the administrator.',
   defaultVerifierLabel: 'Charts & Nomographs',
   labsSuffix: '5 Labs',
   learnLabel: 'Learn',
@@ -148,6 +150,7 @@ const SHELL_EN: ShellCopy = {
 
 const SHELL_VI: ShellCopy = {
   brandEyebrow: 'Bộ giải 6 Giáo trình ChE · 55+ Đồ thị · 24 Sự cố Nhà máy',
+  tokenExpiredBanner: 'Token hết hạn — liên hệ quản trị.',
   defaultVerifierLabel: 'Giản đồ & Tra cứu',
   labsSuffix: '5 Phòng Lab',
   learnLabel: 'Học tập',

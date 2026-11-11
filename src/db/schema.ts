@@ -5,7 +5,7 @@ export const screenStates = sqliteTable('screen_states', {
   id: text('id').primaryKey(),
   activeWorkbench: text('active_workbench').notNull().default('wb1-visual-verifier'),
   personaMode: text('persona_mode').notNull().default('plant'), // 'learn' | 'plant'
-  themeMode: text('theme_mode').notNull().default('paper'), // 'paper' | 'blueprint'
+  themeMode: text('theme_mode').notNull().default('paper'), // 'paper' | 'pvu'
   selectedChipsJson: text('selected_chips_json').notNull().default('[]'),
   payloadJson: text('payload_json').notNull().default('{}'),
   updatedAt: integer('updated_at').notNull(),

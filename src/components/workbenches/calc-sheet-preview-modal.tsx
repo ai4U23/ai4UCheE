@@ -3,6 +3,7 @@
 // and the existing Document Control Header / Print-to-PDF / compile-and-persist flow.
 import React, { useEffect, useState } from 'react';
 import { getClientAppState } from '../../actions/view-screen';
+import { authedFetch } from '../../lib/api-fetch';
 import { generateCalcSheetAction } from '../../actions/generate-calc-sheet';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { getShellCopy } from '../../lib/i18n/vi-shell-dictionary';
@@ -159,7 +160,7 @@ export const CalcSheetPreviewModal: React.FC<CalcSheetPreviewModalProps> = ({
             type="button"
             data-testid="delete-saved-calc-sheets-btn"
             onClick={() => {
-              void fetch('/api/saved-calculations', { method: 'DELETE' }).catch(() => {});
+              void authedFetch('/api/saved-calculations', { method: 'DELETE' }).catch(() => {});
               setCompiledHtml('');
               setCompiledMd('');
               setCopyState(TRUST_BOUNDARY_COPY[locale].deletedSavedSheetsToast);

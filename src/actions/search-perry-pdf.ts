@@ -1,16 +1,19 @@
 // Zod-typed shared actions for WB1: Perry's PDF resolve, search, crop, and chart verification.
 import { z } from 'zod';
 import { defineAction } from './define-action';
+import { authedFetch } from '../lib/api-fetch';
 
 const SIDECAR =
-  typeof window !== 'undefined' && Boolean(window.location?.port)
-    ? ''
+  typeof window !== 'undefined'
+    ? '' // Browser: same-origin relative — the Express host proxies /api/perry/* to the sidecar.
+    // Bug fix 261111 (phase-02): the previous port-truthy test fell through to the loopback default
+    // on default-port HTTPS origins (chemeng.pvu.ai4u.now, chemeng.ai4u.now) → student's 127.0.0.1:8001.
     : typeof process !== 'undefined' && process.env?.PERRY_SIDECAR_URL
       ? process.env.PERRY_SIDECAR_URL
       : 'http://127.0.0.1:8001';
 
 async function postJson<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(`${SIDECAR}${path}`, {
+  const res = await authedFetch(`${SIDECAR}${path}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -20,7 +23,7 @@ async function postJson<T>(path: string, body: unknown): Promise<T> {
 }
 
 async function getJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${SIDECAR}${path}`);
+  const res = await authedFetch(`${SIDECAR}${path}`);
   if (!res.ok) throw new Error(`PerryEngine ${path} failed (${res.status}): ${await res.text()}`);
   return (await res.json()) as T;
 }

@@ -44,7 +44,7 @@ export interface ClientScreenState {
   id?: string;
   activeWorkbench: string;
   personaMode: 'learn' | 'plant';
-  themeMode: 'paper';
+  themeMode: 'paper' | 'pvu';
   locale?: 'en' | 'vi';
   selectedChips: string[];
   payload: Record<string, unknown>;
@@ -166,7 +166,7 @@ export const viewScreenAction = defineAction({
   schema: z.object({
     activeWorkbench: z.string().optional(),
     personaMode: z.enum(['learn', 'plant']).optional(),
-    themeMode: z.literal('paper').optional(),
+    themeMode: z.enum(['paper', 'pvu']).optional(),
     locale: z.enum(['en', 'vi']).optional(),
     selectedChips: z.array(z.string()).optional(),
     payload: z.record(z.unknown()).optional(),

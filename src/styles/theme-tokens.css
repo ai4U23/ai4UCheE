@@ -5,6 +5,7 @@
 @import 'katex/dist/katex.min.css';
 @import './workbench-components.css';
 @import './framer-motion-surfaces.css';
+@import './pvu-edition.css';
 
 :root,
 [data-theme="paper"] {
@@ -174,3 +175,4 @@ code, pre, .mono {
   button, select, input { min-height: 44px; min-width: 44px; }
   .chat-drawer { position: static; max-height: none; }
 }
+

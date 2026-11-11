@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { dispatchWorkbenchMutation } from '../../actions/view-screen';
 import { usePersonaTheme, type PersonaMode, type WorkbenchId } from '../../context/persona-theme-context';
 import { FRAMER_LAYOUT_SPRING } from '../../lib/framer-motion-tokens';
+import { getBrand } from '../../lib/brand';
 import { useVietnameseDomTranslator } from '../../lib/i18n/vi-dom-translator';
 import { getShellCopy, getWorkbenchTabs, SUBJECT_DEFAULT_FIGURE } from '../../lib/i18n/vi-shell-dictionary';
 import { SwarmPulseDot } from '../ui/framer-motion-primitives';
@@ -14,6 +15,7 @@ import { GuidedMissionBar } from './guided-mission-bar';
 import { LocaleSwitcherPill } from './locale-switcher-pill';
 import { PageAxShareMenu } from './page-ax-share-menu';
 import { ShowcaseVideoModal } from './showcase-video-modal';
+import { TokenExpiredBanner } from './token-expired-banner';
 
 export interface AppShellProps {
   renderWorkbench?: (active: WorkbenchId) => React.ReactNode;
@@ -28,6 +30,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   chatDrawer,
   dofStatus = 'DoF = 0 · Fully Specified',
 }) => {
+  const brand = getBrand();
   const { personaMode, setPersonaMode, locale, activeWorkbench, setActiveWorkbench } = usePersonaTheme();
   useVietnameseDomTranslator(locale);
   const [showLabs, setShowLabs] = useState<boolean>(false);
@@ -87,11 +90,12 @@ export const AppShell: React.FC<AppShellProps> = ({
 
   return (
     <div className="app-shell" data-testid="app-shell">
+      <TokenExpiredBanner />
       <header className="shell-header">
         <div className="brand-identity">
-          <img src="/ai4u-logo.png" alt="AI4U.now" className="brand-logo" data-testid="ai4u-logo" />
+          <img src={brand.logoSrc} alt={brand.logoAlt} className="brand-logo" data-testid="ai4u-logo" />
           <div className="brand-title-group">
-            <h1>ai4UCheE</h1>
+            <h1>{brand.displayName}</h1>
             <span className="brand-eyebrow">{t.brandEyebrow}</span>
           </div>
           <button

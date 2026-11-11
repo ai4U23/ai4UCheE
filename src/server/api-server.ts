@@ -14,36 +14,12 @@ import {
 } from '../actions/view-screen';
 import { getConn, initDb } from '../db/client';
 import { registerCopilotRoute } from './copilot-route';
+import { mountEmbedAuth } from './embed-auth-gate';
+import { proxyToSidecar } from './sidecar-proxy';
 import { transformHtmlForRequest } from './html-locale-responder';
 
-const SIDECAR_BASE = process.env.PERRY_SIDECAR_URL ?? 'http://127.0.0.1:8001';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = path.resolve(__dirname, '../../dist');
-
-async function proxyToSidecar(req: Request, res: Response, targetPath: string): Promise<void> {
-  const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-  const url = `${SIDECAR_BASE}${targetPath}${qs}`;
-  try {
-    const upstream = await fetch(url, {
-      method: req.method,
-      headers: { 'Content-Type': 'application/json' },
-      body: req.method === 'GET' || req.method === 'HEAD' ? undefined : JSON.stringify(req.body ?? {}),
-    });
-    const contentType = upstream.headers.get('content-type') ?? 'application/json';
-    const buf = Buffer.from(await upstream.arrayBuffer());
-    if (upstream.status === 404 && (targetPath.includes('search-index') || targetPath.includes('textbooks/search'))) {
-      res.status(200).json({ results: [], fallback: 'offline' });
-      return;
-    }
-    res.status(upstream.status).type(contentType).send(buf);
-  } catch (err) {
-    if (targetPath.includes('search-index') || targetPath.includes('textbooks/search')) {
-      res.status(200).json({ results: [], fallback: 'offline' });
-      return;
-    }
-    res.status(502).json({ error: `Sidecar unreachable: ${(err as Error).message}` });
-  }
-}
 
 export function createApiServer(dbPath?: string): Express {
   initDb(dbPath);
@@ -70,6 +46,10 @@ export function createApiServer(dbPath?: string): Express {
   const app = express();
   app.disable('x-powered-by');
   app.use(express.json({ limit: '10mb' }));
+
+  // PVU embed auth gate — mounts only when CHE_EMBED_AUTH=1 (flag-off default keeps the chemeng
+  // AWS deployment byte-identical). Mount order + policy live in embed-auth-gate.ts.
+  mountEmbedAuth(app);
 
   app.get('/health', async (req: Request, res: Response): Promise<void> => {
     await proxyToSidecar(req, res, '/health');

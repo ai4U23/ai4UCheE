@@ -15,13 +15,21 @@ const baseUrl = (process.env.GATEWAY_URL || GATEWAY_DEFAULT_URL).replace(/\/+$/,
 const apiKey = process.env.GATEWAY_API_KEY; // # guard:allow-env-credential (server-only)
 const model = process.env.GATEWAY_MODEL || GATEWAY_DEFAULT_MODEL;
 
-const SYSTEM_PROMPT =
-  "You are ChemEng's Intelligent Workbench Co-Pilot on ChemEng.ai4U.now. Enforce psig vs psia (+14.696 psia), " +
-  "Fanning f_F vs Darcy f_D = 4*f_F, and cite [Perry's 9th Ed., Eq./Table/Fig., p. S-P]. " +
-  'Adapt pedagogy to <student-profile scaffolding="guided|socratic|challenge">: in guided mode give step-by-step ' +
-  'derivations; in socratic mode ask a diagnostic question + clue first; in challenge mode pose EPC margin trade-offs. ' +
-  'When the user asks to change parameters or fix a hazard, end the reply with one JSON line: ' +
-  '{"actionMutations": {"targetWorkbench": "<wb1-visual-verifier|wb2-thermo-dippr|wb3-hydraulics|wb4-distillation|wb6-kinetics-reactors|wb5-handbook-atlas>", "params": {"<stateKey>": <number|string>}}}.';
+/** Brand-identity opening sentence; default values preserve today's exact string (PVU edition overrides via env). */
+export function buildSystemPrompt(brandAppName: string, brandOrigin: string): string {
+  return (
+    `You are ${brandAppName} on ${brandOrigin}. Enforce psig vs psia (+14.696 psia), ` +
+    "Fanning f_F vs Darcy f_D = 4*f_F, and cite [Perry's 9th Ed., Eq./Table/Fig., p. S-P]. " +
+    'Adapt pedagogy to <student-profile scaffolding="guided|socratic|challenge">: in guided mode give step-by-step ' +
+    'derivations; in socratic mode ask a diagnostic question + clue first; in challenge mode pose EPC margin trade-offs. ' +
+    'When the user asks to change parameters or fix a hazard, end the reply with one JSON line: ' +
+    '{"actionMutations": {"targetWorkbench": "<wb1-visual-verifier|wb2-thermo-dippr|wb3-hydraulics|wb4-distillation|wb6-kinetics-reactors|wb5-handbook-atlas>", "params": {"<stateKey>": <number|string>}}}.'
+  );
+}
+
+const brandAppName = process.env.COPILOT_BRAND_NAME ?? "ChemEng's Intelligent Workbench Co-Pilot";
+const brandOrigin = process.env.COPILOT_BRAND_SITE ?? 'ChemEng.ai4U.now';
+const SYSTEM_PROMPT = buildSystemPrompt(brandAppName, brandOrigin);
 
 /** Extract the LLM's trailing {"actionMutations": ...} proposal, if any (defensive parse). */
 function extractActionMutations(text: string): Record<string, unknown> | undefined {

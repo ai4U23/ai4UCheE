@@ -1,10 +1,13 @@
 // Zod-typed shared action for WB3: Sec 6, 8 & 10 Hydraulics, Pipe Sizing, Pump NPSHa & Valve Cv.
 import { z } from 'zod';
 import { defineAction } from './define-action';
+import { authedFetch } from '../lib/api-fetch';
 
 const SIDECAR =
-  typeof window !== 'undefined' && Boolean(window.location?.port)
-    ? ''
+  typeof window !== 'undefined'
+    ? '' // Browser: same-origin relative — the Express host proxies /api/v1/* to the sidecar.
+    // Bug fix 261111 (phase-02): the previous port-truthy test fell through to the loopback default
+    // on default-port HTTPS origins (chemeng.pvu.ai4u.now, chemeng.ai4u.now) → student's 127.0.0.1:8001.
     : typeof process !== 'undefined' && process.env?.PERRY_SIDECAR_URL
       ? process.env.PERRY_SIDECAR_URL
       : 'http://127.0.0.1:8001';
@@ -37,7 +40,7 @@ export const runHydraulicsAction = defineAction({
     fl_factor: z.number().min(0.3).max(1.0).default(0.9),
   }),
   async handler(input) {
-    const res = await fetch(`${SIDECAR}/api/v1/hydraulics/evaluate`, {
+    const res = await authedFetch(`${SIDECAR}/api/v1/hydraulics/evaluate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(input),
