@@ -3,6 +3,7 @@
 // provides an interactive 5-step walkthrough, and links to the standalone /showcase.html page.
 import React, { useState } from 'react';
 import { usePersonaTheme, type WorkbenchId } from '../../context/persona-theme-context';
+import { isEmbedSession } from '../../lib/embed-token-store';
 import { getUiSubcomponentCopy } from '../../lib/i18n/vi-ui-subcomponents';
 import { FramerModalShell } from '../ui/framer-motion-primitives';
 
@@ -45,25 +46,29 @@ export const ShowcaseVideoModal: React.FC<ShowcaseVideoModalProps> = ({ isOpen, 
           <p className="wb-subtitle">{ui.guideModalSub}</p>
         </div>
         <div className="wb-actions-row">
-          <a
-            href="/"
-            target="_blank"
-            rel="noreferrer"
-            data-testid="open-full-showcase-link"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '0.3rem 0.65rem',
-              borderRadius: 7,
-              background: 'var(--maize)',
-              color: 'var(--navy-deep)',
-              fontWeight: 700,
-              fontSize: '0.8rem',
-              textDecoration: 'none',
-            }}
-          >
-            {ui.guideOpenShowcaseBtn}
-          </a>
+          {/* Embed sessions hide this link: href="/" opens the caddy basic-auth frontdoor in a
+              new tab — an ai4u.now URL plus a login prompt the student cannot pass (ak-fix 261111). */}
+          {!isEmbedSession() && (
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              data-testid="open-full-showcase-link"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.3rem 0.65rem',
+                borderRadius: 7,
+                background: 'var(--maize)',
+                color: 'var(--navy-deep)',
+                fontWeight: 700,
+                fontSize: '0.8rem',
+                textDecoration: 'none',
+              }}
+            >
+              {ui.guideOpenShowcaseBtn}
+            </a>
+          )}
           <button type="button" data-testid="close-showcase-modal-btn" onClick={onClose}>
             {ui.guideCloseBtn}
           </button>

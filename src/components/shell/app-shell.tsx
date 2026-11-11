@@ -6,6 +6,7 @@ import { dispatchWorkbenchMutation } from '../../actions/view-screen';
 import { usePersonaTheme, type PersonaMode, type WorkbenchId } from '../../context/persona-theme-context';
 import { FRAMER_LAYOUT_SPRING } from '../../lib/framer-motion-tokens';
 import { getBrand } from '../../lib/brand';
+import { isEmbedSession } from '../../lib/embed-token-store';
 import { useVietnameseDomTranslator } from '../../lib/i18n/vi-dom-translator';
 import { getShellCopy, getWorkbenchTabs, SUBJECT_DEFAULT_FIGURE } from '../../lib/i18n/vi-shell-dictionary';
 import { SwarmPulseDot } from '../ui/framer-motion-primitives';
@@ -147,7 +148,10 @@ export const AppShell: React.FC<AppShellProps> = ({
           >
             {t.guideBtn}
           </button>
-          <PageAxShareMenu />
+          {/* Embed sessions hide the whole share group: Copy-URL carries a chemeng.ai4u.now
+              canonical, "View as Markdown" + the ChatGPT/Claude/Perplexity links all navigate
+              the student's tab away from SharePoint (plan 261111 ak-fix). */}
+          {!isEmbedSession() && <PageAxShareMenu />}
         </div>
       </header>
       <ShowcaseVideoModal

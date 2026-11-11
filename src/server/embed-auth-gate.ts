@@ -6,7 +6,7 @@
 // "URL set but never synced" is loud at boot). The whole mount is flag-gated: CHE_EMBED_AUTH=1
 // or nothing mounts — flag-off keeps the chemeng AWS deployment byte-identical.
 import type { Express, NextFunction, Request, Response } from 'express';
-import { rateLimit } from 'express-rate-limit';
+import { ipKeyGenerator, rateLimit } from 'express-rate-limit';
 import {
   verifyEmbedToken,
   MIN_SECRET_LEN,
@@ -73,6 +73,22 @@ export function applyFrameAncestorsCsp(res: Response): void {
   res.setHeader('Content-Security-Policy', "frame-ancestors 'self' https://*.sharepoint.com");
 }
 
+const CLIENT_ID_UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Copilot bucket key: per-browser pseudonymous X-Client-Id (when a valid UUID), else per-IP
+ * via ipKeyGenerator (IPv6-subnet-safe; also satisfies ERL's keyGenerator validation).
+ * Classroom NAT pools the whole room behind one address — a per-IP copilot bucket gives 30
+ * students one shared 20-60/min allowance; per-client-id isolates each browser. Client-id
+ * rotation abuse stays capped by the general 300/min per-IP limiter mounted ahead of this
+ * one (ak-fix 261111).
+ */
+export function copilotRateKey(req: Request): string {
+  const cid = String(req.headers['x-client-id'] ?? '').trim();
+  if (CLIENT_ID_UUID_RE.test(cid)) return `cid:${cid}`;
+  return `ip:${ipKeyGenerator(req.ip ?? 'unknown')}`;
+}
+
 export function createEmbedAuthMiddleware() {
   return (req: Request, res: Response, next: NextFunction): void => {
     const header = req.headers.authorization ?? '';
@@ -106,6 +122,7 @@ export function createApiRateLimiters() {
     limit: Number(process.env.CHE_COPILOT_RATE_LIMIT_PER_MIN ?? 20),
     standardHeaders: 'draft-7',
     legacyHeaders: false,
+    keyGenerator: (req, _res) => copilotRateKey(req),
   });
   return { general, copilot };
 }

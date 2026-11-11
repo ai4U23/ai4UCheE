@@ -10,6 +10,7 @@ import type { AddressInfo } from 'node:net';
 import type { Server } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createApiServer } from '../server/api-server';
+import { copilotRateKey } from '../server/embed-auth-gate';
 import { mintEmbedToken } from '../server/embed-token-verify';
 
 const GOLDEN_SECRET = 'che-golden-secret-0123456789abcdef0123456789';
@@ -132,6 +133,54 @@ describe('embed auth gate — flag ON, real server', () => {
       statuses.push(res.status);
     }
     expect(statuses.filter((s) => s === 429).length).toBeGreaterThan(0);
+  });
+
+  it('copilot limiter buckets per X-Client-Id — classroom NAT isolation (real server)', async () => {
+    const saved = process.env.CHE_COPILOT_RATE_LIMIT_PER_MIN;
+    process.env.CHE_COPILOT_RATE_LIMIT_PER_MIN = '2';
+    const app = await bootApp();
+    try {
+      const fire = (headers: Record<string, string>) =>
+        fetch(`${app.url}/api/copilot`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...headers },
+          body: '{}',
+        });
+      const cidA = { 'X-Client-Id': '11111111-1111-4111-8111-111111111111' };
+      const cidB = { 'X-Client-Id': '22222222-2222-4222-8222-222222222222' };
+      // Limiter runs BEFORE auth — 401s still count; no token needed to observe bucketing.
+      expect((await fire(cidA)).status).toBe(401); // bucket A: 1
+      expect((await fire(cidA)).status).toBe(401); // bucket A: 2
+      expect((await fire(cidA)).status).toBe(429); // A exhausted → per-client keying proven
+      expect((await fire(cidB)).status).toBe(401); // B independent of A
+      expect((await fire({ 'X-Client-Id': 'garbage' })).status).toBe(401); // ip bucket: 1
+      expect((await fire({})).status).toBe(401); // ip bucket: 2
+      expect((await fire({})).status).toBe(429); // ip exhausted → fallback keying proven
+    } finally {
+      await app.close();
+      if (saved === undefined) delete process.env.CHE_COPILOT_RATE_LIMIT_PER_MIN;
+      else process.env.CHE_COPILOT_RATE_LIMIT_PER_MIN = saved;
+    }
+  });
+});
+
+describe('copilotRateKey (pure key matrix)', () => {
+  const req = (headers: Record<string, unknown>, ip = '203.0.113.9') =>
+    ({ headers, ip }) as unknown as Parameters<typeof copilotRateKey>[0];
+
+  it('a valid UUID client id keys the browser, not the IP', () => {
+    expect(copilotRateKey(req({ 'x-client-id': '11111111-1111-4111-8111-111111111111' }))).toBe(
+      'cid:11111111-1111-4111-8111-111111111111',
+    );
+  });
+
+  it('garbage / absent client ids fall back to the per-IP bucket', () => {
+    expect(copilotRateKey(req({ 'x-client-id': 'not-a-uuid' }))).toBe('ip:203.0.113.9');
+    expect(copilotRateKey(req({}))).toBe('ip:203.0.113.9');
+  });
+
+  it('a missing ip never produces an empty key', () => {
+    expect(copilotRateKey(req({}, undefined)).length).toBeGreaterThan('ip:'.length);
   });
 });
 

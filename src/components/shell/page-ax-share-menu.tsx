@@ -6,15 +6,22 @@ import { getClientAppState } from '../../actions/view-screen';
 import { usePersonaTheme } from '../../context/persona-theme-context';
 import { getShellCopy } from '../../lib/i18n/vi-shell-dictionary';
 
-const ROOT_CANONICAL_URL = 'https://chemeng.ai4u.now/';
-const APP_CANONICAL_URL = 'https://chemeng.ai4u.now/app';
-const MARKDOWN_TWIN_URL = 'https://chemeng.ai4u.now/index.md';
+// Non-window fallback (tests/headless): the AWS public host.
+const FALLBACK_ORIGIN = 'https://chemeng.ai4u.now';
+
+function originCanonical(): string {
+  return typeof window !== 'undefined' ? window.location.origin : FALLBACK_ORIGIN;
+}
+
+function markdownTwinUrl(): string {
+  return `${originCanonical()}/index.md`;
+}
 
 function resolveCurrentCanonicalUrl(): string {
   if (typeof window !== 'undefined' && (window.location.pathname.startsWith('/app') || window.location.pathname.startsWith('/workbench'))) {
-    return APP_CANONICAL_URL;
+    return `${originCanonical()}/app`;
   }
-  return ROOT_CANONICAL_URL;
+  return `${originCanonical()}/`;
 }
 
 export const PageAxShareMenu: React.FC = () => {
@@ -38,7 +45,7 @@ export const PageAxShareMenu: React.FC = () => {
     return [
       `# ai4UCheE — ChemEng's Intelligent Workbench`,
       `Canonical URL: ${canonicalUrl}`,
-      `Markdown Twin: ${MARKDOWN_TWIN_URL}`,
+      `Markdown Twin: ${markdownTwinUrl()}`,
       `Active Workbench: ${activeWorkbench} (${personaMode === 'learn' ? 'Learn Mode' : 'Plant Mode'})`,
       `Summary: ${summary}`,
       `Verdict: ${status}`,
@@ -93,7 +100,7 @@ export const PageAxShareMenu: React.FC = () => {
   };
 
   const aiPrompt = encodeURIComponent(
-    `Read ${MARKDOWN_TWIN_URL} (ai4UCheE — ChemEng's Intelligent Workbench, active lab: ${activeWorkbench}). Help me analyze this chemical engineering problem with explicit psig/psia and Fanning/Darcy guardrails.`,
+    `Read ${markdownTwinUrl()} (ai4UCheE — ChemEng's Intelligent Workbench, active lab: ${activeWorkbench}). Help me analyze this chemical engineering problem with explicit psig/psia and Fanning/Darcy guardrails.`,
   );
 
   return (

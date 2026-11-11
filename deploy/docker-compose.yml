@@ -25,6 +25,8 @@ services:
       context: ..
       args:
         VITE_BRAND: pvu
+        # index.html canonical/og/JSON-LD host — must match the public origin (ak-fix 261111).
+        VITE_CANONICAL_URL: https://chemeng-pvu.ai4u.now
     depends_on:
       perry-engine:
         condition: service_healthy

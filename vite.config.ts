@@ -54,8 +54,25 @@ function discoveryHeadersPlugin(): Plugin {
   };
 }
 
+/**
+ * Build-time canonical-host rewrite for branded editions (plan 261111 ak-fix): index.html's
+ * canonical/og/JSON-LD ship hardcoded to the AWS host; the PVU container builds with
+ * VITE_CANONICAL_URL=https://chemeng-pvu.ai4u.now so the served head never advertises the
+ * wrong deployment. Default (env unset) = byte-identical AWS output.
+ */
+function brandCanonicalHostPlugin(): Plugin {
+  const canonicalHost = process.env.VITE_CANONICAL_URL ?? '';
+  return {
+    name: 'ax-brand-canonical-host',
+    transformIndexHtml(html) {
+      if (!canonicalHost || canonicalHost === 'https://chemeng.ai4u.now') return html;
+      return html.replaceAll('https://chemeng.ai4u.now', canonicalHost);
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [discoveryHeadersPlugin(), react()],
+  plugins: [discoveryHeadersPlugin(), brandCanonicalHostPlugin(), react()],
   server: { port: 5173, strictPort: false, proxy: { '/api': 'http://127.0.0.1:3000' } },
   build: {
     outDir: 'dist',

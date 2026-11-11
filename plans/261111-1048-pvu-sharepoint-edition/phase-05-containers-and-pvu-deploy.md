@@ -101,11 +101,11 @@ Env file contents (values from Phases 1/2/4): `VITE_BRAND` baked at build (not e
 **Verify:** the commands themselves; keep the transcript in `plans/261111-1048-pvu-sharepoint-edition/reports/deploy-smoke-<date>.md` (execution evidence, not a report file for its own sake).
 
 ## Todo
-- [ ] 5.1 Images build locally; corpus absent proven
-- [ ] 5.2 VPS discovery (paths recorded)
-- [ ] 5.3 Corpus rsync + hash match
-- [ ] 5.4 Compose + caddy + DNS live
-- [ ] 5.5 Eight-step live smoke
+- [x] 5.1 Images build locally; corpus absent proven
+- [x] 5.2 VPS discovery (paths recorded)
+- [x] 5.3 Corpus rsync + hash match
+- [x] 5.4 Compose + caddy + DNS live
+- [x] 5.5 Eight-step live smoke
 
 ## Success Criteria
 - Negative controls live: bare `/api/copilot` 401; revoked token 401; corpus paths 404.

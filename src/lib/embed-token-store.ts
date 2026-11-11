@@ -45,6 +45,25 @@ export function getToken(): string | null {
   return memoryToken;
 }
 
+/**
+ * True when this browser session carries an embed token (the PVU SharePoint framing). Gates
+ * student-visible escapes: share menu, showcase external link, and the ai4u.now hostnames in
+ * trust-boundary copy — students only ever see the SharePoint address bar (plan 261111 ak-fix).
+ */
+export function isEmbedSession(): boolean {
+  return getToken() !== null;
+}
+
+/** Test-only: clear the token from memory + storage so base (non-embed) variants assert cleanly. */
+export function resetEmbedTokenStoreForTests(): void {
+  memoryToken = null;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* no storage (Node) — memory is already cleared */
+  }
+}
+
 /** Surface a 401 (with its code) to the shell so the vi banner can appear. */
 export function onUnauthorized(code: string): void {
   try {
