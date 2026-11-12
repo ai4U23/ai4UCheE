@@ -40,7 +40,7 @@ Standing laws (violating any rejects the plan): copyrighted PDFs never in ShareP
 | 5 | [Container pair + PVU VPS deploy](phase-05-containers-and-pvu-deploy.md) | Pending | 0.75d |
 | 6 | [Lane A SharePoint embed (owner runbook)](phase-06-lane-a-sharepoint-embed.md) | Pending | 0.25d + 1h owner |
 | 7 | [Lane B SPFx managed embed](phase-07-lane-b-spfx-managed-embed.md) | Pending | 1d |
-| 8 | [Quick-Calcs gadget (conditional)](phase-08-quick-calcs-gadget.md) | Pending | 1.5d |
+| 8 | [Quick-Calcs gadget (conditional)](phase-08-quick-calcs-gadget.md) — superseded 261113 by [`plans/261113-0638-quick-calcs-html-pages/`](../261113-0638-quick-calcs-html-pages/plan.md) | Superseded | — |
 | 9 | [SharePoint content publishes (4 items)](phase-09-sharepoint-content-publishes.md) | Pending | 2.5d |
 | 10 | [Ops runbook (rotation, monitoring, kill switches)](phase-10-ops-rotation-runbook.md) | Pending | 0.25d + recurring |
 
@@ -50,7 +50,7 @@ Standing laws (violating any rejects the plan): copyrighted PDFs never in ShareP
 - Phase 5 depends on 1+2+3 (code gate `npm test && npm run test:e2e` green) and 4 (a real minted token for the live smoke).
 - Phase 6 (Lane A) depends on 5 (live origin) + 4 (token URL). External: none.
 - Phase 7 (Lane B) depends on 6 + GATE: App Catalog activation chain (device-code → PVU-IT → env `SP_SPFX_COMPONENT_ID`/`SP_API_BASE_URL` + publish-mcp recreate) + decision record filed first.
-- Phase 8 (gadget) depends on GATE: SharePoint HTML pages GA worldwide (mid-Nov–Dec 2026) + kill gate (battery green + perf acceptable + owner still wants it after seeing Lane A).
+- Phase 8 (gadget) SUPERSEDED 2026-11-13 by `plans/261113-0638-quick-calcs-html-pages/` (n8d.at article added the lib-manifest mechanics + font-inlining trap; owner-desire gate moved build→ship; placement decided by probe). The kill-gate intent survives there as Phase 5's G3.
 - Phase 9 depends on GATE: activation chain env live; item 1 (calc-sheet PDFs) also benefits from Phase 6 (real exports).
 - Phase 10 depends on 5+6; recurs every 30 days.
 

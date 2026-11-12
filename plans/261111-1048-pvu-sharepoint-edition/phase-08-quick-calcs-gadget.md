@@ -1,5 +1,13 @@
 # Phase 8 — Quick-Calcs Gadget for SharePoint HTML Pages (Conditional, Post-GA)
 
+> **SUPERSEDED 2026-11-13** by `plans/261113-0638-quick-calcs-html-pages/` —
+> the 2026-11-13 brainstorm (n8d.at built-in-libraries article + kongming GO)
+> re-scoped this: placement decided by a two-library probe (not Site-Pages
+> assumption), KaTeX fonts must be base64-inlined (`font-src data:/blob:`),
+> the owner-desire gate moved from BUILD to SHIP (decoupled from Lane A's
+> undated 5 clicks), and the park rule is dated (retry 2026-11-27). Read the
+> new plan; this file is kept for history.
+
 ## Context
 - Brainstorm: `plans/reports/brainstorm-20261111-pvu-sharepoint-edition.md` · Research: `plans/reports/research-20261111-interactive-html-on-sharepoint.md` (HTML pages lane: inline JS, MS-managed libs only — Chart.js/React/Fluent/Mermaid/Babylon; NO fetch; NO localStorage; ≤10MB; GA worldwide mid-Nov–Dec 2026)
 - Related phases: kill gate references Phase 6 (owner has seen Lane A embedded); upload path uses the Phase 9 engine rehearsal; independent of Phase 7.
