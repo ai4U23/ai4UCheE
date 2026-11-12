@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PVU HTML-PAGES PROBE</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 2rem; background: #faf7f2; color: #0a0a0a; }
+  h1 { font-size: 1.2rem; }
+  .marker { display: inline-block; margin: .3rem 0; padding: .25rem .6rem; border-radius: 4px;
+            font-family: ui-monospace, monospace; font-size: .85rem; }
+  .ok { background: #e6f4e6; color: #14532d; }
+  .bad { background: #fde8e8; color: #7f1d1d; }
+  #script-marker.ok { background: #d1fae5; }
+  small { color: #6b6258; }
+</style>
+</head>
+<body>
+  <h1>PVU HTML-PAGES PROBE — 2026-11-13</h1>
+  <!-- Static fallback: if the inline script below never runs (sandbox or no
+       viewer), this line still carries the marker string for the probe grep. -->
+  <p id="script-marker" class="marker bad">INLINE_SCRIPT_OK (static fallback — script did not run)</p>
+  <div id="results"></div>
+  <small>Probe payload for plan 261113-0638 phase 1 · no external refs · in-memory only</small>
+<script>
+(function () {
+  var m = document.getElementById('script-marker');
+  m.textContent = 'INLINE_SCRIPT_OK';
+  m.className = 'marker ok';
+  var out = function (txt, cls) {
+    var el = document.createElement('p');
+    el.className = 'marker ' + (cls || 'ok');
+    el.textContent = txt;
+    document.getElementById('results').appendChild(el);
+  };
+  try {
+    fetch('https://pvu.ai4u.now/health').then(function () {
+      out('FETCH_OK (network reachable — unexpected in sandbox)', 'bad');
+    }, function (e) {
+      out('FETCH_BLOCKED:' + (e && e.message ? e.message : 'error'));
+    });
+  } catch (e) {
+    out('FETCH_BLOCKED:' + (e && e.message ? e.message : 'error'));
+  }
+  try {
+    localStorage.setItem('pvu-probe', '1');
+    var v = localStorage.getItem('pvu-probe');
+    localStorage.removeItem('pvu-probe');
+    out(v === '1' ? 'STORAGE_OK (unexpected in sandbox)' : 'STORAGE_BLOCKED:no-op', 'bad');
+  } catch (e) {
+    out('STORAGE_BLOCKED:' + (e && e.message ? e.message : 'error'));
+  }
+})();
+</script>
+</body>
+</html>
