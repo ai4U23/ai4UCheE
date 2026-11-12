@@ -63,7 +63,16 @@ def normalize_pressure_to_pa(
             "'psia' (absolute) per Perry's Sec 6/8 cavitation safety guardrail."
         )
     if u in GAUGE_PRESSURE_UNITS:
-        gauge_psia = value * _PSI_TO_PA if u == "psig" else value / _PSI_TO_PA
+        # Gauge magnitudes are expressed IN psia before adding the datum
+        # (261113 fix: the old line multiplied psig by a psi->Pa magnitude and
+        # divided barg/kpag by it — an ~827x psig error and an erased gauge).
+        gauge_psia = (
+            float(value)
+            if u == "psig"
+            else ureg.Quantity(value, "bar" if u == "barg" else "kPa")
+            .to("psi")
+            .magnitude
+        )
         abs_psia = gauge_psia + patm_psia
         return UnitConversionResult(
             value_pa=abs_psia * _PSI_TO_PA,

@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from main import app
 from pdf.section_map import verify_page_contains
-from solvers.hydraulics_pipe import solve_pipe_hydraulics_3case
+from solvers.hydraulics_pipe import G_STD, solve_pipe_hydraulics_3case
 from solvers.hydraulics_pump_valve import (
     evaluate_control_valve_cv,
     evaluate_pump_npsha,
@@ -59,6 +59,18 @@ def test_pump_npsha_psig_normalization_and_cavitation_trigger() -> None:
     assert safe["is_gauge_converted"] is True
     assert safe["cavitation_status"] == "SAFE"
     assert safe["npsha_m"] > 10.0
+
+    # Exact-value pin (261113): the gauge branch must add the atmospheric datum
+    # IN psia. 2.0 psig -> abs 16.6959 psia. Derives from module constants so a
+    # regression of the psi->Pa-magnitude-as-psia class (~827x error) fails here.
+    from core.unit_registry import _PSI_TO_PA, DEFAULT_PATM_PSIA
+
+    expected_abs_pa = (2.0 + DEFAULT_PATM_PSIA) * _PSI_TO_PA
+    expected_npsha = (
+        (expected_abs_pa - 3169.0) / (998.2 * G_STD) + 2.0 - 0.8
+    )
+    assert abs(safe["p_suction_abs_pa"] - expected_abs_pa) < 1.0, safe["p_suction_abs_pa"]
+    assert abs(safe["npsha_m"] - expected_npsha) < 1e-6, safe["npsha_m"]
 
     # Near-boiling water or negative suction lift triggers CAVITATION_DANGER
     danger = evaluate_pump_npsha(
