@@ -1,5 +1,14 @@
 # Phase 5 — Pilot Publish + Owner Ship/Kill Gate
 
+> **AMENDMENT 2026-11-13 (kongming-counseled, Tasks 5.1/5.4 transport):** the
+> tenant's app registration has NO Graph app roles (Phase 1 finding), so the
+> prescribed Graph content-download Verify is structurally unpassable.
+> Replacement receipts (proven in Phase 1): write-side = SP REST `Files/Add`
+> 200 with the server's own `Length` == local byte count (+ `UniqueId`); the
+> IAB render is the read-side receipt. If SHIP's deletion/rename checks are
+> needed, use the same SP REST methods (403 on file reads is a known grant
+> asymmetry — record, don't fail).
+
 ## Context
 - Parent: `../plan.md` (laws 2, 4, 5, 6, 8). Blocked until: Phase 1 verdict
   `LANE_GREEN` (placement recorded), Phases 3–4 green, and gates G1/G2 open.
@@ -56,14 +65,14 @@ Owner combined session (G2) ──> SHIP: rename to che-quick-calcs.html + regis
      artifact; record the audit output in the pilot report).
   2. Upload via the engine pattern at
      `<proven placement>/che-quick-calcs-pilot.html`; capture webUrl.
-- Success criteria: engine returns a driveItem id; an authenticated in-container
-  Graph CONTENT DOWNLOAD by driveItem id (`GET
-  /drives/{drive_id}/items/{item_id}/content`) returns the exact byte length of
-  the local `gadget/dist/index.html`.
+- Success criteria (per the Amendment above): SP REST `Files/Add` at
+  `/sites/PVIAICowork/SitePages` returns 200 with the server's own
+  `Length` == local byte count of `gadget/dist/index.html`, and a `UniqueId`
+  receipt is captured.
 - Verify: the heredoc script ends by printing
-  `PILOT_OK bytes=<n> local=<n>` where the two numbers are equal (do NOT use
-  the browser webUrl's bare-GET status — its auth shape is unreliable from
-  curl; Graph by id is the mechanical check).
+  `PILOT_OK Length=<server> local=<n>` where the two numbers are equal.
+  (Read-side receipt = the IAB render in Task 5.2; Graph/`$value` downloads
+  are dead on this grant — Phase 1 finding.)
 
 ### Task 5.2 — In-sandbox render receipt
 - Goal: observed proof the artifact works inside the MS sandbox, before the
@@ -114,9 +123,11 @@ Owner combined session (G2) ──> SHIP: rename to che-quick-calcs.html + regis
      asset — note it).
 - Success criteria: decision line exists; tenant clean.
 - Verify: `grep -c "DECISION: SHIP\|DECISION: KILL" phase-05-pilot-and-ship-kill-gate.md`
-  prints ≥ 1; if SHIP, a Graph content download by driveItem id of the final
-  `che-quick-calcs.html` returns the exact local byte length AND the pilot
-  item's Graph GET returns 404; if KILL, the pilot item's Graph GET 404s.
+  prints ≥ 1; if SHIP, a SP REST `Files/Add` receipt exists for the final
+  `che-quick-calcs.html` (UniqueId + Length == local bytes) AND the pilot file
+  is engine-deleted (delete via SP REST `Files` delete; a read-after-delete
+  check is not possible under the read-403 asymmetry — record the 200 delete
+  receipt); if KILL, the pilot delete receipt is recorded.
 
 ## Todo
 - [ ] 5.1 Pilot published + 200 receipt
