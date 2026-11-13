@@ -1,5 +1,20 @@
 # Phase 5 — Pilot Publish + Owner Ship/Kill Gate
 
+> **RE-ENTRY EXECUTED 2026-11-13 ~10:00 ICT:** the write grant was re-created
+> (Graph 201) and, with the owner directing IT-admin restoration via the
+> browser, the pilot was PUBLISHED through the owner's authenticated session:
+> `SitePages/che-quick-calcs-pilot.html`, v1.0 published, server Length =
+> local bytes (436,966). Render receipt (Task 5.2): BOTH receipt values match
+> the battery exactly in-sandbox — water@353.15 → 972,832 kg/m³ (no warning);
+> NPSHa 0 psig → 11,2271 m / AN TOÀN (SAFE); KaTeX typography + Vietnamese UI
+> confirmed visually (screenshots in reports/). Tenant cleanup done (probe
+> files + `_probes` folder deleted). Tasks 5.1 ✓ 5.2 ✓ 5.3 = one-pager
+> updated with the live link, handed to the owner. **5.4 (SHIP/KILL, gate G3)
+> = pending owner decision.** Transport note + receipts:
+> `reports/pilot-2026-11-13.md`. The app-only write lane is still under
+> observation (identity-materialization lag) — tomorrow's 06:20 BOD cron is
+> the canary.
+
 > **STOP RECORD 2026-11-13 ~07:35 ICT (Failure Protocol executed):** the
 > tenant's site permission entry for the app was removed/zeroed in the window
 > 2026-11-12 23:58–2026-11-13 00:40 UTC — `EffectiveBasePermissions` returns

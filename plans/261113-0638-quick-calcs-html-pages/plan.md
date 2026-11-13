@@ -112,7 +112,7 @@ existing lanes; this lane is for self-contained artifacts only.
 | 2 | [Calculators + single-file build](phase-02-calculators-build.md) | Completed 261113 (d6e5b4e) | 0.75d | 0 |
 | 3 | [Golden-value battery (JS vs Python oracle)](phase-03-golden-battery.md) | Completed 261113 — ALL GREEN 377/0 (7b733d6) | 0.25d | 0, 2 |
 | 4 | [Throttled perf gate](phase-04-throttled-perf.md) | Completed 261113 — p95 12-13ms (ec29072) | 0.15d | 2 |
-| 5 | [Pilot publish + owner ship/kill gate](phase-05-pilot-and-ship-kill-gate.md) | **Blocked-external 261113** — tenant write grant removed (see phase file STOP record + reports/phase5-stop-2026-11-13.md) | 0.25d + 30min owner | 1 green, 3, 4, G2 |
+| 5 | [Pilot publish + owner ship/kill gate](phase-05-pilot-and-ship-kill-gate.md) | **Pilot LIVE 261113** (published v1.0; render receipt PASS ×2) — awaiting owner G2 session + G3 ship/kill | 0.25d + 30min owner | 1 green, 3, 4, G2 |
 
 Total: ≈1.65d + 1h engineer + ~30 min owner. Phases 0→2→{3,4} form the build
 track; Phase 1 (probe) runs parallel to it; Phase 5 is strictly last.

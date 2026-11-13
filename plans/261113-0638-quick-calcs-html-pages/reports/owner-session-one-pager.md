@@ -19,11 +19,17 @@ pass length you want: **30 days** (monthly re-paste) or **~90 days / term**
 
 ## Part 2 — the Quick-Calcs gadget pilot (3 checks)
 
-Open the pilot link (pasted below when live), then check:
+Open the pilot (now LIVE):
+**https://pvuedu.sharepoint.com/sites/PVIAICowork/SitePages/che-quick-calcs-pilot.html**
+
 1. Both tabs compute — DIPPR: water at 353.15 K shows **≈ 972.8 kg/m³** (the
-   handbook value); NPSHa: 0 psig default shows **≈ 11.227 m / SAFE**
+   handbook value); NPSHa: 0 psig default shows **≈ 11.227 m / AN TOÀN (SAFE)**
 2. The math looks like proper math (KaTeX), not plain italic text
 3. Everything is in Vietnamese
+
+*(Already verified by engineering in a real browser session — this is your
+acceptance pass; all three checks green at 10:00 ICT today, screenshots in the
+plan's reports folder.)*
 
 ## Decisions to make in this session
 
