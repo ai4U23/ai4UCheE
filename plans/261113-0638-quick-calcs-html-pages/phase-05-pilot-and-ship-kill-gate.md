@@ -181,6 +181,13 @@ Owner combined session (G2) ──> SHIP: rename to che-quick-calcs.html + regis
 - APP-ONLY engine writes; the artifact is inert by construction; deletion via
   the engine (Graph delete on the driveItem) — never leave orphan files.
 
+## Summary
+
+DECISION: SHIP 2026-11-13 (owner "go hybrid" — the gadget is the native Lite
+core; evidence: render receipts PASS ×2, battery 377/0, perf p95 13 ms;
+promote to `che-quick-calcs.html` rides the 261113-1735 plan, Phase 5, on the
+2026-11-14 06:20 canary).
+
 ## Failure Protocol
 If any Verify step does not meet its stated pass condition, STOP this phase.
 Do not improvise a fix, retry blindly, or reason around the failure.

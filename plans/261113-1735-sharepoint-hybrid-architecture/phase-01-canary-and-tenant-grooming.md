@@ -55,6 +55,21 @@ write permission (C writes to Entra, not SharePoint).
     proposal MUST demand the audit answer first (who/what removed the grant —
     a re-grant that keeps getting re-rescoped changes the calculus).
   - `GA_FAILED` = anything else (infra) → Failure Protocol.
+- **Morning additions (kongming evening-1 counsel, 261113):** at the 06:25
+  read —
+  (2a) **Site-permission entry listing** (read-only): compare each entry's
+  `grantedToIdentities[].application.id` against the client appId
+  `5b4c6b66-…` — the restore's request body exists in no repo (only the
+  tenant holds it); a mis-named entry both explains a persistent 403 and
+  means ONE correctly-named owner re-grant (their round-2 command) fixes GA
+  and provides GB's site grant together.
+  (2b) **Mask probe** (the parse-corrected one — read
+  `d.EffectiveBasePermissions.High/Low`): write bits present + writes 403 =
+  a policy layer ABOVE the ACL → the audit answer becomes THE blocker.
+  Also: classify the canary from the QUOTED raw lines (a Python traceback
+  with no `WRITE-LANE PARKED` line = GA_FAILED infra, not a park), and
+  confirm the start line carries `SCRIPT_SHA` `be25e7bd5cac` (the deployed
+  copy ran).
 
 ### Task 1.2 — Spike-page cleanup (GA green only)
 - Goal: the three October test pages are gone.
@@ -109,7 +124,9 @@ write permission (C writes to Entra, not SharePoint).
 - Goal: no token ceremony residue; tenant list clean.
 - Steps: delete all device-flow token/state files (local `/tmp` and any VPS
   copies); re-run the 261113 probe-cleanup listing (zero `pvu-html-probe*`,
-  `write-verify*`, zero `_probes` folder); record both in the canary report.
+  `write-verify*`, zero `_probes` folder, AND — added 261113 — zero
+  `_writeprobe.html`/`_doctorprobe.html` residue from the cron/doctor
+  probes); record both in the canary report.
 - Success criteria: clean listings; zero token files remain.
 - Verify: `ls /tmp/gtok.json /tmp/sptok.json /tmp/devicestate.json 2>&1`
   prints only "No such file"; listings quoted in the report.

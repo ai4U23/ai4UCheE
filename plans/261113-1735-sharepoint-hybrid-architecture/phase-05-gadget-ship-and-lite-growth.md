@@ -26,6 +26,12 @@ at `services/perry-engine/solvers/hydraulics_pipe.py`,
 ## Tasks
 
 ### Task 5.1 — SHIP record + promote
+
+> **DECISION: SHIP 2026-11-13** (owner "go hybrid" — the gadget becomes the
+> native Lite core). Evidence bundle: 261113-0638 pilot receipts (render
+> PASS ×2: water@353.15 → 972,832 kg/m³; NPSHa 0 psig → 11,2271 m / AN TOÀN),
+> battery 377/0, perf p95 12–13 ms. The PROMOTE leg (final-name upload +
+> pilot delete) is GA-gated and parked for the 2026-11-14 06:20 canary.
 - Goal: the decision recorded; the final page live.
 - Steps:
   1. Write into `261113-0638/phase-05-…md` summary:
