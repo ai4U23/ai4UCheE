@@ -1,0 +1,330 @@
+{
+ "dippr": [
+  {
+   "compound": "water",
+   "temp_k": 373.15
+  },
+  {
+   "compound": "water",
+   "temp_k": 355.9
+  },
+  {
+   "compound": "water",
+   "temp_k": 517.68
+  },
+  {
+   "compound": "benzene",
+   "temp_k": 353.25
+  },
+  {
+   "compound": "benzene",
+   "temp_k": 309.13
+  },
+  {
+   "compound": "benzene",
+   "temp_k": 449.64
+  },
+  {
+   "compound": "toluene",
+   "temp_k": 383.75
+  },
+  {
+   "compound": "toluene",
+   "temp_k": 325.46
+  },
+  {
+   "compound": "toluene",
+   "temp_k": 473.4
+  },
+  {
+   "compound": "ethanol",
+   "temp_k": 351.45
+  },
+  {
+   "compound": "ethanol",
+   "temp_k": 282.7
+  },
+  {
+   "compound": "ethanol",
+   "temp_k": 411.2
+  },
+  {
+   "compound": "methanol",
+   "temp_k": 337.85
+  },
+  {
+   "compound": "methanol",
+   "temp_k": 281.88
+  },
+  {
+   "compound": "methanol",
+   "temp_k": 410.0
+  },
+  {
+   "compound": "acetone",
+   "temp_k": 329.25
+  },
+  {
+   "compound": "acetone",
+   "temp_k": 279.51
+  },
+  {
+   "compound": "acetone",
+   "temp_k": 406.56
+  },
+  {
+   "compound": "n-hexane",
+   "temp_k": 341.85
+  },
+  {
+   "compound": "n-hexane",
+   "temp_k": 279.18
+  },
+  {
+   "compound": "n-hexane",
+   "temp_k": 406.08
+  },
+  {
+   "compound": "n-heptane",
+   "temp_k": 371.55
+  },
+  {
+   "compound": "n-heptane",
+   "temp_k": 297.11
+  },
+  {
+   "compound": "n-heptane",
+   "temp_k": 432.16
+  },
+  {
+   "compound": "ammonia",
+   "temp_k": 239.82
+  },
+  {
+   "compound": "ammonia",
+   "temp_k": 222.97
+  },
+  {
+   "compound": "ammonia",
+   "temp_k": 324.32
+  },
+  {
+   "compound": "methane",
+   "temp_k": 111.67
+  },
+  {
+   "compound": "methane",
+   "temp_k": 104.81
+  },
+  {
+   "compound": "methane",
+   "temp_k": 152.45
+  },
+  {
+   "compound": "water",
+   "temp_k": 373.15
+  }
+ ],
+ "npsha": [
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 10.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 24.6959,
+   "p_suction_unit": "psia"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 0.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 14.6959,
+   "p_suction_unit": "psia"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 5.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 4.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 20.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 1.5,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 50.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 800000.0,
+   "rho_kg_m3": 963.0,
+   "npshr_m": 3.0,
+   "p_suction_val": 100.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 1.0,
+   "p_suction_unit": "psia"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 50000.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 30.0,
+   "p_suction_unit": "psia"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 0.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 14.7,
+   "p_suction_unit": "psia"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 6.0,
+   "p_suction_val": 100.0,
+   "p_suction_unit": "psia"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 1.0,
+   "p_suction_unit": "barg"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 1.0,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": 2.5,
+   "p_suction_unit": "kpag"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": -5.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 20000.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 3.0,
+   "p_suction_val": -10.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 0.5,
+   "hf_suction_m": 1.2,
+   "p_vapor_pa": 20000.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 8.0,
+   "p_suction_val": 1.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 1.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 3169.0,
+   "rho_kg_m3": 998.2,
+   "npshr_m": 12.0,
+   "p_suction_val": 2.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": -2.5,
+   "hf_suction_m": 2.0,
+   "p_vapor_pa": 70000.0,
+   "rho_kg_m3": 965.0,
+   "npshr_m": 3.5,
+   "p_suction_val": 0.0,
+   "p_suction_unit": "psig"
+  },
+  {
+   "patm_psia": 14.6959,
+   "z_suction_m": 2.0,
+   "hf_suction_m": 0.8,
+   "p_vapor_pa": 70000.0,
+   "rho_kg_m3": 965.0,
+   "npshr_m": 3.5,
+   "p_suction_val": 15.0,
+   "p_suction_unit": "psia"
+  }
+ ]
+}
