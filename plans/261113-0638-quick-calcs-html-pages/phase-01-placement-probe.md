@@ -1,5 +1,24 @@
 # Phase 1 — Tenant Placement Probe (Both Libraries)
 
+> **AMENDMENT 2026-11-13 (kongming-counseled, Tasks 1.2/1.3 transport):** the
+> engine's Graph lane is DEAD on this tenant — the app registration has NO
+> Microsoft Graph application roles (token decode: graph aud, `roles=None`;
+> sp aud, `roles=['Sites.Selected']`), so `resolve_site`/`upload_file` 400/401
+> for every URL shape. The SP REST lane is healthy. Probe uploads therefore go
+> via SharePoint REST with the SAME app-only SP token (probe-only, NO engine
+> changes): `POST /_api/web/folders/add('/sites/PVIAICowork/Shared%20Documents/_probes')`
+→ `POST /_api/web/GetFolderByServerRelativeUrl('/sites/PVIAICowork/Shared%20Documents/_probes')/Files/Add(url='pvu-html-probe.html', overwrite=true)`
+> (raw bytes, Content-Type `text/html`, no digest) → round-trip
+> `GET /_api/web/GetFileByServerRelativeUrl('<path>')/$value` must equal the
+> local byte length. Site Pages variant posts straight to
+> `/sites/PVIAICowork/SitePages` (root exists). Receipt shape =
+> `ServerRelativeUrl` + `UniqueId` + `Length` (NOT Graph driveItem id).
+> Taxonomy mapping: 4xx from `Files/Add` at ONE placement = probe data
+> (`UPLOAD-FAILED:<status> <placement>`); 403 at `folders/add` or across both
+> placements = access/infra failure → Failure Protocol. The Graph finding is
+> disclosed to the owner (gates the 261111-1048 Phase 9 Graph lanes; ask =
+> Graph `Sites.Selected` app role + admin consent + site-scoped grant).
+
 ## Context
 - Parent: `../plan.md` (laws 1–3 govern this phase above all).
 - Evidence base: n8d.at built-in-libraries post + our 11-Nov research (GA
