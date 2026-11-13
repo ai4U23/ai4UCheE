@@ -1,5 +1,20 @@
 # Phase 5 — Pilot Publish + Owner Ship/Kill Gate
 
+> **STOP RECORD 2026-11-13 ~07:35 ICT (Failure Protocol executed):** the
+> tenant's site permission entry for the app was removed/zeroed in the window
+> 2026-11-12 23:58–2026-11-13 00:40 UTC — `EffectiveBasePermissions` returns
+> High=0x0 Low=0x0 (every write AND read bit cleared; probe uploads had
+> succeeded 06:58 ICT). All write shapes 403 (matrix in
+> `reports/phase5-stop-2026-11-13.md`). Blocked-EXTERNAL: restoration is
+> owner-side (re-grant Write per ai4UPVU docs/activation-it-ask-round2-vi.md).
+> **Dated re-entry: owner confirms Write restored → re-run Task 5.1 Verify**
+> (tiny Files/Add 200), then proceed 5.1→5.4 normally. G2 one-pager is HELD
+> until the pilot exists. G3 remains the owner's decision — this outage is NOT
+> lane evidence and must not become a KILL. BOD side-effect expectation:
+> FAILED lines in the 06:20 cron log from 2026-11-14 are the outage signature.
+> Cleanup owed post-restore: delete probe files + `_probes` folder (paths in
+> the stop report).
+
 > **AMENDMENT 2026-11-13 (kongming-counseled, Tasks 5.1/5.4 transport):** the
 > tenant's app registration has NO Graph app roles (Phase 1 finding), so the
 > prescribed Graph content-download Verify is structurally unpassable.

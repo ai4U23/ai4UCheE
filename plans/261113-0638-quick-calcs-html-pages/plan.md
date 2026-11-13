@@ -1,7 +1,7 @@
 ---
 title: "Quick-Calcs Gadget — SharePoint HTML Pages Lane (PVU)"
 description: "Self-contained two-calculator gadget (DIPPR + NPSHa) published as a SharePoint-native HTML page: placement probe, JS port with golden-value battery, throttled perf gate, engine pilot publish, owner ship/kill decision."
-status: pending
+status: in-progress
 priority: P2
 effort: 2d
 branch: main
@@ -107,12 +107,12 @@ existing lanes; this lane is for self-contained artifacts only.
 
 | # | Phase | Status | Effort | Depends on |
 |---|-------|--------|--------|------------|
-| 0 | [Oracle defect fix (gauge conversion)](phase-00-oracle-defect-fix.md) | Pending | ~1h | G1 |
-| 1 | [Tenant placement probe (both libraries)](phase-01-placement-probe.md) | Pending | 0.25d | G1 |
-| 2 | [Calculators + single-file build](phase-02-calculators-build.md) | Pending | 0.75d | 0 |
-| 3 | [Golden-value battery (JS vs Python oracle)](phase-03-golden-battery.md) | Pending | 0.25d | 0, 2 |
-| 4 | [Throttled perf gate](phase-04-throttled-perf.md) | Pending | 0.15d | 2 |
-| 5 | [Pilot publish + owner ship/kill gate](phase-05-pilot-and-ship-kill-gate.md) | Pending | 0.25d + 30min owner | 1 green, 3, 4, G2 |
+| 0 | [Oracle defect fix (gauge conversion)](phase-00-oracle-defect-fix.md) | Completed 261113 (e7b0565) | ~1h | G1 |
+| 1 | [Tenant placement probe (both libraries)](phase-01-placement-probe.md) | Completed 261113 — LANE_GREEN placement=either (06:58 ICT evidence) | 0.25d | G1 |
+| 2 | [Calculators + single-file build](phase-02-calculators-build.md) | Completed 261113 (d6e5b4e) | 0.75d | 0 |
+| 3 | [Golden-value battery (JS vs Python oracle)](phase-03-golden-battery.md) | Completed 261113 — ALL GREEN 377/0 (7b733d6) | 0.25d | 0, 2 |
+| 4 | [Throttled perf gate](phase-04-throttled-perf.md) | Completed 261113 — p95 12-13ms (ec29072) | 0.15d | 2 |
+| 5 | [Pilot publish + owner ship/kill gate](phase-05-pilot-and-ship-kill-gate.md) | **Blocked-external 261113** — tenant write grant removed (see phase file STOP record + reports/phase5-stop-2026-11-13.md) | 0.25d + 30min owner | 1 green, 3, 4, G2 |
 
 Total: ≈1.65d + 1h engineer + ~30 min owner. Phases 0→2→{3,4} form the build
 track; Phase 1 (probe) runs parallel to it; Phase 5 is strictly last.
