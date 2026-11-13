@@ -34,7 +34,9 @@ export const COMPOUNDS = {
     search_term: 'Water',
     vp_eq101: [73.649, -7258.2, -7.3037, 4.1653e-06, 2.0, 273.16, 647.096, '2-53'],   // (C1, C2, C3, C4, C5, T_min_K, T_max_K, sec_page)
     hvap_eq106: [52053000.0, 0.3199, -0.212, 0.25795, 0.0, 273.16, 647.096, '2-120'],   // (C1_J_kmol, C2, C3, C4, C5, T_min_K, T_max_K, sec_page)
-    rhol_eq105: [17.863, 0.05861, 647.096, 0.081, 273.16, 353.15, '2-93'],   // (C1, C2, C3, C4, T_min_K, T_max_K, sec_page)
+    // Water is EXEMPT from Eq. 105 (Perry 9th Table 2-32 footnote, p. 2-99):
+    // the printed row carries the cubic (2-100) coefficients, valid 273.16-353.15 K.
+    rhol_eq105: [-13.851, 0.64038, -0.0019124, 1.8211e-06, 273.16, 353.15, '2-93'],   // (C1, C2, C3, C4, T_min_K, T_max_K, sec_page)
   },
   'benzene': {
     name: 'Benzene',
@@ -210,8 +212,12 @@ export function dipprEvaluate(compound, tempK) {
   // --- Eq. 105: liquid molar density (kmol/m^3) — evaluate_dippr_eq105_rhol
   const [r1, r2, r3, r4, rlTmin, rlTmax, rlPage] = data.rhol_eq105;
   const rlWarning = !(rlTmin <= T && T <= rlTmax);
-  const tau = Math.max(1.0 - T / r3, 1e-6);
-  const rholKmolM3 = r1 / Math.pow(r2, 1.0 + Math.pow(tau, r4));
+  // Water branch (thermo_dippr.py): Perry 9th Table 2-32 footnote (p. 2-99) —
+  // water liquid density is the cubic (2-100), NOT Eq. 105.
+  const isWater = data.name === 'Water';
+  const rholKmolM3 = isWater
+    ? r1 + r2 * T + r3 * T * T + r4 * T * T * T
+    : r1 / Math.pow(r2, 1.0 + Math.pow(Math.max(1.0 - T / r3, 1e-6), r4));
   const rhoKgM3 = rholKmolM3 * Number(data.mw);
 
   // evaluate_all_dippr_properties combines ONLY the vp and hvap warnings

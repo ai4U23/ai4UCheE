@@ -24,7 +24,11 @@ DIPPR_COMPOUNDS: dict[str, dict[str, Any]] = {
         "search_term": "Water",
         "vp_eq101": (73.649, -7258.2, -7.3037, 4.1653e-6, 2.0, 273.16, 647.096, "2-53"),
         "hvap_eq106": (5.2053e7, 0.3199, -0.212, 0.25795, 0.0, 273.16, 647.096, "2-120"),
-        "rhol_eq105": (17.863, 0.05861, 647.096, 0.081, 273.16, 353.15, "2-93"),
+        # Water is EXEMPT from Eq. 105 (Perry 9th Table 2-32 footnote, p. 2-99):
+        # liquid density uses the cubic (2-100) rho = C1 + C2*T + C3*T^2 + C4*T^3
+        # (kmol/m^3, T in K), valid 273.16-353.15 K. Printed row: -13.851,
+        # 0.64038, -0.0019124, 1.8211E-06; anchors 55.497 @ 273.16, 54.0010 @ 353.15.
+        "rhol_eq105": (-13.851, 0.64038, -0.0019124, 1.8211e-06, 273.16, 353.15, "2-93"),
     },
     "benzene": {
         "name": "Benzene",

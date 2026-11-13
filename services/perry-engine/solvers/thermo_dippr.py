@@ -119,20 +119,35 @@ def evaluate_dippr_eq105_rhol(compound: str, temp_k: float) -> dict[str, Any]:
     data = get_compound_dippr(compound)
     c1, c2, c3, c4, t_min, t_max, sec_page = data["rhol_eq105"]
     range_warning = not (t_min <= temp_k <= t_max)
-    tau = max(1.0 - temp_k / c3, 1e-6)
-    rhol_kmol_m3 = c1 / (c2 ** (1.0 + (tau**c4)))
-    rho_kg_m3 = rhol_kmol_m3 * float(data["mw"])
-    citation = f"[Perry's 9th Ed., Table 2-32 (DIPPR Eq. 105), p. {sec_page}]"
-    step = render_three_stage_equation(
-        r"\rho_{L}",
-        "C1 / (C2 ** (1 + ((1 - T / C3) ** C4)))",
-        {
+    if compound == "water":
+        # Perry 9th Table 2-32 footnote (p. 2-99): water liquid density is the
+        # cubic (2-100), NOT Eq. 105 — printed row constants, 273.16-353.15 K.
+        rhol_kmol_m3 = c1 + c2 * temp_k + c3 * temp_k**2 + c4 * temp_k**3
+        formula = "C1 + C2 * T + C3 * T**2 + C4 * T**3"
+        substitutions = {
+            "C1": (c1, r"\mathrm{kmol/m^3}", "C_{1}"),
+            "C2": (c2, r"\mathrm{kmol/(m^3 K)}", "C_{2}"),
+            "C3": (c3, r"\mathrm{kmol/(m^3 K^2)}", "C_{3}"),
+            "C4": (c4, r"\mathrm{kmol/(m^3 K^3)}", "C_{4}"),
+            "T": (temp_k, r"\mathrm{K}", "T"),
+        }
+    else:
+        tau = max(1.0 - temp_k / c3, 1e-6)
+        rhol_kmol_m3 = c1 / (c2 ** (1.0 + (tau**c4)))
+        formula = "C1 / (C2 ** (1 + ((1 - T / C3) ** C4)))"
+        substitutions = {
             "C1": (c1, r"\mathrm{kmol/m^3}", "C_{1}"),
             "C2": (c2, "", "C_{2}"),
             "C3": (c3, r"\mathrm{K}", "C_{3}"),
             "C4": (c4, "", "C_{4}"),
             "T": (temp_k, r"\mathrm{K}", "T"),
-        },
+        }
+    rho_kg_m3 = rhol_kmol_m3 * float(data["mw"])
+    citation = f"[Perry's 9th Ed., Table 2-32 (DIPPR Eq. 105), p. {sec_page}]"
+    step = render_three_stage_equation(
+        r"\rho_{L}",
+        formula,
+        substitutions,
         rhol_kmol_m3,
         r"\mathrm{kmol/m^3}",
         citation,
