@@ -32,6 +32,23 @@ BINDS=(
   "/data/artifacts:/data/artifacts"
   "/data/state:/data/state"
   "/opt/litellm-gateway/repo/contract/catalog/data-products.json:/app/catalog/data-products.json"
+  # course-native lane (plan 261114-0441 phase-01 Task 1.4): the baker bakes
+  # from the REPO pack tree (channel copies under /opt/ai4upvu/packs lack
+  # pack.meta.json/plugin.json). Read-only; the driver in-container path is
+  # /app/deploy/skill-packs (pvu-course-republish.sh PACKS_ROOT default).
+  "/opt/ai4UPVU/deploy/skill-packs:/app/deploy/skill-packs:ro"
+)
+# Law-2 bootstrap (261114): the pre-gate refuses when the LIVE container
+# lacks a declared bind — correct for drift, wrong for a deliberate first
+# addition. LIVE_REQUIRED_BINDS is what the live container must already
+# carry; BINDS is what the NEW container must carry (post-gate enforces the
+# full set). AFTER the packs bind runs live once, PROMOTE it into
+# LIVE_REQUIRED_BINDS so any future drop is caught.
+LIVE_REQUIRED_BINDS=(
+  "/data/artifacts:/data/artifacts"
+  "/data/state:/data/state"
+  "/opt/litellm-gateway/repo/contract/catalog/data-products.json:/app/catalog/data-products.json"
+  "/opt/ai4UPVU/deploy/skill-packs:/app/deploy/skill-packs:ro"
 )
 
 command -v docker >/dev/null || { echo "docker missing" >&2; exit 2; }
@@ -44,9 +61,10 @@ trap 'rm -f "$CAPTURE" "$NEWCAP" "$H1" "$H2" "$BODY"' EXIT
 docker inspect publish-mcp > "$CAPTURE"
 
 # Law 2 — the live container must itself carry every bind before we bless its capture.
-REQUIRED_BINDS="$(printf '%s\n' "${BINDS[@]}")" python3 - "$CAPTURE" <<'PY'
+REQUIRED_BINDS="$(printf '%s\n' "${LIVE_REQUIRED_BINDS[@]}")" python3 - "$CAPTURE" <<'PY'
 import json, os, sys
-mounts = {f"{m['Source']}:{m['Destination']}" for m in json.load(open(sys.argv[1]))[0]['Mounts']}
+mounts = {f"{m['Source']}:{m['Destination']}" + ("" if m.get("RW", True) else ":ro")
+            for m in json.load(open(sys.argv[1]))[0]['Mounts']}
 missing = set(os.environ['REQUIRED_BINDS'].splitlines()) - mounts
 if missing:
     print(f"REFUSING: live publish-mcp lacks binds {sorted(missing)} — fix the live state first", file=sys.stderr)
@@ -75,7 +93,8 @@ echo "[diff] env clean"
 echo "[diff] binds (261111 bind-drop class — the incident-3 axis)"
 REQUIRED_BINDS="$(printf '%s\n' "${BINDS[@]}")" python3 - "$NEWCAP" <<'PY'
 import json, os, sys
-mounts = {f"{m['Source']}:{m['Destination']}" for m in json.load(open(sys.argv[1]))[0]['Mounts']}
+mounts = {f"{m['Source']}:{m['Destination']}" + ("" if m.get("RW", True) else ":ro")
+            for m in json.load(open(sys.argv[1]))[0]['Mounts']}
 missing = set(os.environ['REQUIRED_BINDS'].splitlines()) - mounts
 if missing:
     print(f"BIND DIFF — new container lacks {sorted(missing)}", file=sys.stderr)
